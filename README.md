@@ -48,4 +48,4 @@ License
 
 Permission to modify and redistribute is granted under the terms of the Apache 2.0 license. See the [LICENSE] file for the full license.
 
-[License]: https://github.com/CycloneDX/cyclonedx-node-module/blob/master/LICENSE
+[License]: https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE
