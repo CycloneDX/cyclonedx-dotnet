@@ -1,59 +1,51 @@
-# dotnet-ossindex
+[![Build Status](https://travis-ci.org/CycloneDX/cyclonedx-dotnet.svg?branch=master)](https://travis-ci.org/CycloneDX/cyclonedx-dotnet)
+[![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)][License]
+[![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
+[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/CycloneDX_Spec)
 
-A .NET Core global tool to list vulnerable Nuget packages.
+CycloneDX module for .NET
+=========
 
-The **dotnet-ossindex** checks the packages for known vulnerabilities using the [Sonatype OSS Index API](#sonatype-oss-index).
+The CycloneDX module for .NET creates a valid CycloneDX bill-of-material document containing an aggregate of all project dependencies. CycloneDX is a lightweight BoM specification that is easily created, human readable, and simple to parse. The resulting bom.xml can be used with tools such as [OWASP Dependency-Track](https://dependencytrack.org/) for the continuous analysis of components.
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Sonatype OSS Index](#sonatype-oss-index)
+Usage
+-------------------
 
-## Installation
-
-Download and install the [.NET Core 2.1 SDK](https://www.microsoft.com/net/download) or newer. Once installed, run the following command:
-
-```bash
-dotnet tool install --global dotnet-ossindex
-```
-
-If you already have a previous version of **dotnet-ossindex** installed, you can upgrade to the latest version using the following command:
+#### Installing
 
 ```bash
-dotnet tool update --global dotnet-ossindex
+dotnet tool install --global dotnet-cyclonedx
 ```
 
-## Usage
+If you already have a previous version of **dotnet-cyclonedx** installed, you can upgrade to the latest version using the following command:
+
+```bash
+dotnet tool update --global dotnet-cyclonedx
+```
+
+#### Options
 
 ```text
-Usage: dotnet ossindex [arguments] [options]
+Usage: dotnet cyclonedx [path] -o [outputDirectory]
 
 Arguments:
   Path                        The path to a .sln, .csproj or .vbproj file
 
 Options:
-  -u|--username <USERNAME>    OSS Index Username
-  -a|--api-token <API_TOKEN>  OSS Index API Token
-  -?|-h|--help                Show help information
+  -o|--outputDirectory <OUTPUT_DIRECTORY> The directorty to write the BOM
+  -?|-h|--help                            Show help information
 ```
 
-To run the **dotnet-ossindex** tool you need to specify a solution or project file. In case you pass a solution, the tool will automatically scan all the projects for vulnerabilities.
+#### Example
+To run the **dotnet-cyclonedx** tool you need to specify a solution or project file. In case you pass a solution, the tool will aggregate all the projects.
 
 ```bash
-dotnet ossindex YourSolution.sln
+dotnet cyclonedx YourSolution.sln
 ```
 
-![Screenshot of dotnet-ossindex](screenshot.png)
+License
+-------------------
 
-### OSS Index API rate limit
+Permission to modify and redistribute is granted under the terms of the Apache 2.0 license. See the [LICENSE] file for the full license.
 
-The OSS Index REST API has a rate limit for unauthenticated requests. If you exceed the limit, you can create an account on their [website](https://ossindex.sonatype.org) and use the `--username/--api-token` options to execute authenticated requests.
-
-```bash
-dotnet ossindex YourSolution.sln --username <YOUR-USERNAME> --api-token <YOUR-API-TOKEN>
-```
-
-# Sonatype OSS Index
-
-OSS Index is a free service used by developers to identify open source dependencies and determine if there are any known, publicly disclosed, vulnerabilities. 
-
-You can read more about the service here https://ossindex.sonatype.org.
+[License]: https://github.com/CycloneDX/cyclonedx-node-module/blob/master/LICENSE
