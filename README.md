@@ -14,22 +14,22 @@ Usage
 #### Installing
 
 ```bash
-dotnet tool install --global dotnet-cyclonedx
+dotnet tool install --global CycloneDX
 ```
 
-If you already have a previous version of **dotnet-cyclonedx** installed, you can upgrade to the latest version using the following command:
+If you already have a previous version of **CycloneDX** installed, you can upgrade to the latest version using the following command:
 
 ```bash
-dotnet tool update --global dotnet-cyclonedx
+dotnet tool update --global CycloneDX
 ```
 
 #### Options
 
 ```text
-Usage: dotnet cyclonedx [path] -o [outputDirectory]
+Usage: cyclonedx [path] -o [outputDirectory]
 
 Arguments:
-  Path                        The path to a .sln, .csproj or .vbproj file
+  Path            The path to a .sln, .csproj or .vbproj file
 
 Options:
   -o|--outputDirectory <OUTPUT_DIRECTORY> The directorty to write the BOM
@@ -37,10 +37,10 @@ Options:
 ```
 
 #### Example
-To run the **dotnet-cyclonedx** tool you need to specify a solution or project file. In case you pass a solution, the tool will aggregate all the projects.
+To run the **CycloneDX** tool you need to specify a solution or project file. In case you pass a solution, the tool will aggregate all the projects.
 
 ```bash
-dotnet cyclonedx YourSolution.sln
+cyclonedx YourSolution.sln -o /output/path
 ```
 
 License
