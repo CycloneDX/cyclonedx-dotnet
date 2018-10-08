@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Swagger-Net" Version="8.3.18.1" />
+  </ItemGroup>
+
+</Project>

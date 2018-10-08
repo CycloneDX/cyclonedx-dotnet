@@ -1,0 +1,11 @@
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/bin/Release/netcoreapp2.1/CycloneDX.deps.json
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/bin/Release/netcoreapp2.1/CycloneDX.runtimeconfig.json
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/bin/Release/netcoreapp2.1/CycloneDX.runtimeconfig.dev.json
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/bin/Release/netcoreapp2.1/CycloneDX.dll
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/bin/Release/netcoreapp2.1/CycloneDX.pdb
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/obj/Release/netcoreapp2.1/CycloneDX.csprojAssemblyReference.cache
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/obj/Release/netcoreapp2.1/CycloneDX.csproj.CoreCompileInputs.cache
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/obj/Release/netcoreapp2.1/CycloneDX.AssemblyInfoInputs.cache
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/obj/Release/netcoreapp2.1/CycloneDX.AssemblyInfo.cs
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/obj/Release/netcoreapp2.1/CycloneDX.dll
+/Users/steve/Development/CycloneDX/cyclonedx-dotnet/CycloneDX/obj/Release/netcoreapp2.1/CycloneDX.pdb
