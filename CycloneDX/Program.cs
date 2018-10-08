@@ -101,7 +101,8 @@ namespace CycloneDX {
                         var regex = new Regex("(.*) = \"(.*?)\", \"(.*?)\"");
                         var match = regex.Match(line);
                         if (match.Success) {
-                            var projectFile = Path.GetFullPath(Path.Combine(solutionFolder, match.Groups[3].Value));
+                            var relativeProjectPath = match.Groups[3].Value.Replace('\\', Path.DirectorySeparatorChar);
+                            var projectFile = Path.GetFullPath(Path.Combine(solutionFolder, relativeProjectPath));
                             projects.Add(projectFile);
                         }
                     }
