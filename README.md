@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/CycloneDX/cyclonedx-dotnet.svg?branch=master)](https://travis-ci.org/CycloneDX/cyclonedx-dotnet)
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)][License]
+[![NuGet Version](https://img.shields.io/nuget/v/CycloneDX.svg)](https://www.nuget.org/packages/CycloneDX/)
 [![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/CycloneDX_Spec)
 
@@ -29,18 +30,25 @@ dotnet tool update --global CycloneDX
 Usage: cyclonedx [path] -o [outputDirectory]
 
 Arguments:
-  Path            The path to a .sln, .csproj or .vbproj file
+  Path            The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.
 
 Options:
-  -o|--outputDirectory <OUTPUT_DIRECTORY> The directorty to write the BOM
-  -?|-h|--help                            Show help information
+  -o|--out <DIR>  The directorty to write the BOM
+  -u|--url <URL>  Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).
+  -?|-h|--help    Show help information
 ```
 
-#### Example
+#### Examples
 To run the **CycloneDX** tool you need to specify a solution or project file. In case you pass a solution, the tool will aggregate all the projects.
 
+The following will create a BOM from a solution and all projects defined within:
 ```bash
-cyclonedx YourSolution.sln -o /output/path
+dotnet CycloneDX YourSolution.sln -o /output/path
+```
+
+The following will recursively scan the directory structure for packages.config and create a BOM:
+```bash
+dotnet CycloneDX /path/to/project -o /output/path
 ```
 
 License

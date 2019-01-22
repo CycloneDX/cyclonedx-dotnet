@@ -29,11 +29,14 @@ using McMaster.Extensions.CommandLineUtils;
 namespace CycloneDX {
     [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool to generate CycloneDX bill-of-material documents for use with Software Composition Analysis (SCA).")]
     class Program {
-        [Argument(0, Name = "Path", Description = "The path to a .sln, .csproj or .vbproj file")]
+        [Argument(0, Name = "Path", Description = "The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
         public string SolutionOrProjectFile { get; set; }
 
-        [Option(Description = "The directory to write bom.xml", ShortName = "o")]
+        [Option(Description = "The directory to write bom.xml", ShortName = "o", LongName = "out")]
         string outputDirectory { get; }
+
+        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).", ShortName = "u", LongName = "url")]
+        string baseUrl { get; set; }
 
         Dictionary<string, Model.Component> dependencyMap = new Dictionary<string, Model.Component>();
 
@@ -41,7 +44,11 @@ namespace CycloneDX {
             => CommandLineApplication.Execute<Program>(args);
 
         async Task<int> OnExecute() {
+            if (baseUrl == null) {
+                baseUrl = "https://api.nuget.org/v3-flatcontainer/";
+            }
             Console.WriteLine();
+            FileAttributes attr = File.GetAttributes(@SolutionOrProjectFile);
 
             if (string.IsNullOrEmpty(SolutionOrProjectFile)) {
                 Console.Error.WriteLine($"A path is required");
@@ -55,14 +62,20 @@ namespace CycloneDX {
 
             int returnCode = 1;
             if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)) {
-                var solutionFile = Path.GetFullPath(SolutionOrProjectFile);
-                returnCode = await AnalyzeSolutionAsync(solutionFile);
-            }
+                string file = Path.GetFullPath(SolutionOrProjectFile);
+                returnCode = await AnalyzeSolutionAsync(file);
 
-            if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".csproj", StringComparison.OrdinalIgnoreCase) || 
-                SolutionOrProjectFile.ToLowerInvariant().EndsWith(".vbproj", StringComparison.OrdinalIgnoreCase)) {
-                var projectFile = Path.GetFullPath(SolutionOrProjectFile);
-                returnCode = await AnalyzeProjectAsync(projectFile);
+            } else if (isSupportedProjectType(SolutionOrProjectFile)) {
+                string file = Path.GetFullPath(SolutionOrProjectFile);
+                returnCode = await AnalyzeProjectAsync(file);
+
+            } else if (SolutionOrProjectFile.ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase)) {
+                string file = Path.GetFullPath(SolutionOrProjectFile);
+                returnCode = await AnalyzeProjectAsync(file);
+
+            } else if (attr.HasFlag(FileAttributes.Directory)) {
+                string path = Path.GetFullPath(SolutionOrProjectFile);
+                returnCode = await AnalyzeDirectoryAsync(path);
             }
 
             if (returnCode == 0){
@@ -71,9 +84,14 @@ namespace CycloneDX {
                 CreateXmlDocument(dependencyMap);
                 return 0;
             } else {
-                Console.Error.WriteLine($"Only .sln, .csproj and .vbproj files are supported");
+                Console.Error.WriteLine($"Only .sln, .csproj, .vbproj, and packages.config files are supported");
                 return 1;
             }
+        }
+
+        bool isSupportedProjectType(string filename) {
+            return filename.ToLowerInvariant().EndsWith(".csproj", StringComparison.OrdinalIgnoreCase) ||
+                filename.ToLowerInvariant().EndsWith(".vbproj", StringComparison.OrdinalIgnoreCase);
         }
 
         /*
@@ -103,7 +121,9 @@ namespace CycloneDX {
                         if (match.Success) {
                             var relativeProjectPath = match.Groups[3].Value.Replace('\\', Path.DirectorySeparatorChar);
                             var projectFile = Path.GetFullPath(Path.Combine(solutionFolder, relativeProjectPath));
-                            projects.Add(projectFile);
+                            if (isSupportedProjectType(projectFile) && File.Exists(projectFile)) {
+                                projects.Add(projectFile);
+                            }
                         }
                     }
                 }
@@ -127,6 +147,21 @@ namespace CycloneDX {
         }
 
         /*
+         * Recursively analyzes a directory for packages.config files.
+         */
+        async Task<int> AnalyzeDirectoryAsync(string projectPath) {
+            string path = new FileInfo(projectPath).Directory.FullName;
+            string[] files = Directory.GetFiles(path, "packages.config", SearchOption.AllDirectories);
+            foreach (string file in files) {
+                int val = await AnalyzeProjectAsync(file);
+                if (val != 0) {
+                    return val;
+                }
+            }
+            return 0;
+        }
+
+        /*
          * Analyzes a single Project.
          */
         async Task<int> AnalyzeProjectAsync(string projectFile) {
@@ -135,7 +170,7 @@ namespace CycloneDX {
                 Console.Error.WriteLine($"Project file \"{projectFile}\" does not exist");
                 return 1;
             }
-            Console.WriteLine($"» Project: {projectFile}");
+            Console.WriteLine($"» Analyzing: {projectFile}");
             Console.WriteLine();
             Console.WriteLine("  Getting packages".PadRight(64));
             Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
@@ -144,16 +179,38 @@ namespace CycloneDX {
                     while (reader.Read()) {
                         if (reader.IsStartElement()) {
                             switch (reader.Name) {
-                                case "PackageReference":
-                                    var component = new Model.Component();
-                                    var packageName = reader["Include"];
-                                    var packageVersion = reader["Version"];
-                                    component.Name = packageName;
-                                    component.Version = packageVersion;
-                                    component.Purl = generatePackageUrl(packageName, packageVersion);
-                                    await RetrieveExtendedNugetAttributes(component, true);
-                                    components.Add(component);
-                                    break;
+                                case "PackageReference": { // For managed NuGet dependencies defined in a project (csproj/vbproj)
+                                        var component = new Model.Component();
+                                        var packageName = reader["Include"];
+                                        var packageVersion = reader["Version"];
+                                        component.Name = packageName;
+                                        component.Version = packageVersion;
+                                        component.Purl = generatePackageUrl(packageName, packageVersion);
+                                        int val = await RetrieveExtendedNugetAttributes(component, true);
+                                        if (val != 0) {
+                                            // An error occurred while fetching the unmanaged dependency from NuGet.
+                                            // Add the dependency to the component dictionary.
+                                            AddPreventDuplicates(component);
+                                        }
+                                        components.Add(component);
+                                        break;
+                                    }
+                                case "package": { // For managed NuGet dependencies defined in a seperate packages.config
+                                        var component = new Model.Component();
+                                        var packageName = reader["id"];
+                                        var packageVersion = reader["version"];
+                                        component.Name = packageName;
+                                        component.Version = packageVersion;
+                                        component.Purl = generatePackageUrl(packageName, packageVersion);
+                                        int val = await RetrieveExtendedNugetAttributes(component, true);
+                                        if (val != 0) {
+                                            // An error occurred while fetching the unmanaged dependency from NuGet.
+                                            // Add the dependency to the component dictionary.
+                                            AddPreventDuplicates(component);
+                                        }
+                                        components.Add(component);
+                                        break;
+                                    }
                             }
                         }
                     }
@@ -235,8 +292,7 @@ namespace CycloneDX {
          * updates the component.
          */
         async Task<int> RetrieveExtendedNugetAttributes(Model.Component component, bool followTransitive) {
-            var url = "https://api.nuget.org/v3-flatcontainer/" 
-                + component.Name + "/" + component.Version + "/" + component.Name + ".nuspec";
+            var url = baseUrl + component.Name + "/" + component.Version + "/" + component.Name + ".nuspec";
             Console.WriteLine("Retrieving " + component.Name + " " + component.Version);
             var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
