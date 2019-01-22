@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
@@ -231,6 +232,7 @@ namespace CycloneDX {
         XDocument CreateXmlDocument(Dictionary<string, Model.Component> components) {
             XNamespace ns = "http://cyclonedx.org/schema/bom/1.0";
             var doc = new XDocument();
+            doc.Declaration = new XDeclaration("1.0", "utf-8", null);
             var bom = new XElement(ns + "bom", new XAttribute("version", "1"));
             var com = new XElement(ns + "components");
             foreach (KeyValuePair<string, Model.Component> item in components) {
@@ -283,7 +285,9 @@ namespace CycloneDX {
             doc.Add(bom);
             var bomFile = Path.GetFullPath(outputDirectory) + Path.DirectorySeparatorChar + "bom.xml";
             Console.WriteLine("Writing to: " + bomFile);
-            doc.Save(@bomFile);
+            using (var writer = new StreamWriter(bomFile, false, new UTF8Encoding(false))) {
+                doc.Save(writer);
+            }
             return doc;
         }
 
