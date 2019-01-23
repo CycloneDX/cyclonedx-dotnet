@@ -41,4 +41,12 @@ Global
 		{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}.Release|x86.ActiveCfg = Release|Any CPU
 		{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.StandardHeader = $2
+		$0.VersionControlPolicy = $3
+		version = 0.3.2
+	EndGlobalSection
 EndGlobal
