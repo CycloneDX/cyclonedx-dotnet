@@ -103,10 +103,9 @@ namespace CycloneDX {
                 Console.Error.WriteLine($"Solution file \"{solutionFile}\" does not exist");
                 return 1;
             }
-            Console.WriteLine($"» Solution: {solutionFile}");
             Console.WriteLine();
+            Console.WriteLine($"» Solution: {solutionFile}");
             Console.WriteLine("  Getting projects".PadRight(64));
-            Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
             var solutionFolder = Path.GetDirectoryName(solutionFile);
             var projects = new List<string>();
             try {
@@ -171,10 +170,9 @@ namespace CycloneDX {
                 Console.Error.WriteLine($"Project file \"{projectFile}\" does not exist");
                 return 1;
             }
-            Console.WriteLine($"» Analyzing: {projectFile}");
             Console.WriteLine();
+            Console.WriteLine($"» Analyzing: {projectFile}");
             Console.WriteLine("  Getting packages".PadRight(64));
-            Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
             try {
                 using (XmlReader reader = XmlReader.Create(projectFile)) {
                     while (reader.Read()) {
