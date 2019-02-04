@@ -282,8 +282,9 @@ namespace CycloneDX {
             }
             bom.Add(com);
             doc.Add(bom);
-            if (!Directory.Exists(outputDirectory)) Directory.CreateDirectory(outputDirectory);
-            var bomFile = Path.GetFullPath(outputDirectory) + Path.DirectorySeparatorChar + "bom.xml";
+            var bomPath = Path.GetFullPath(outputDirectory);
+            if (!Directory.Exists(bomPath)) Directory.CreateDirectory(bomPath);
+            var bomFile =  bomPath + Path.DirectorySeparatorChar + "bom.xml";
             Console.WriteLine("Writing to: " + bomFile);
             using (var writer = new StreamWriter(bomFile, false, new UTF8Encoding(false))) {
                 doc.Save(writer);
