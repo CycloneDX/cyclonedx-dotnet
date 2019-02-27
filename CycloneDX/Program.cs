@@ -266,6 +266,7 @@ namespace CycloneDX {
                             l.Add(new XElement(ns + "license", new XElement(ns + "name", license.Name)));
                         }
                     }
+					c.Add(l);
                 }
                 if (component.Copyright != null) {
                     c.Add(new XElement(ns + "copyright", component.Copyright));
@@ -330,13 +331,34 @@ namespace CycloneDX {
                 component.Description = title;
             }
 
-            // As a final step (and before optionally fetching transitive dependencies), add the component to the dictionary.
-            AddPreventDuplicates(component);
+			// Utilize the new license expression field present in more recent packages
+			// TODO: Need to have more robust parsing to support composite expressions seen in (https://github.com/NuGet/Home/wiki/Packaging-License-within-the-nupkg#project-properties)
+			var licenseNode = metadata.SelectSingleNode("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'license']");
+			if (licenseNode?.Attributes["type"].Value == "expression")
+			{
+				var licenses = licenseNode.FirstChild.Value
+					.Replace("AND", ";")
+					.Replace("OR", ";")
+					.Replace("WITH", ";")
+					.Replace("+", "")
+					.Split(';').ToList();
+				foreach (var license in licenses)
+				{
+					component.Licenses.Add(new Model.License
+					{
+						Id = license.Trim(),
+						Name = license.Trim()
+					});
+				}
+			}
 
-            //TODO: nuspec authors thought it would be a good idea to publish the URL to the license
-            //rather than the SPDX identifier of the license itself. Genius! NOT! nuspec will need to
-            //change the spec if they wish to provide accurate license information in boms.
-            if (followTransitive) {
+			// As a final step (and before optionally fetching transitive dependencies), add the component to the dictionary.
+			AddPreventDuplicates(component);
+
+			//TODO: nuspec authors thought it would be a good idea to publish the URL to the license
+			//rather than the SPDX identifier of the license itself. Genius! NOT! nuspec will need to
+			//change the spec if they wish to provide accurate license information in boms.
+			if (followTransitive) {
                 var dependencies = metadata.SelectNodes("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'dependencies']/*[local-name() = 'dependency']");
                 foreach (XmlNode dependency in dependencies) {
                     var id = dependency.Attributes["id"];
