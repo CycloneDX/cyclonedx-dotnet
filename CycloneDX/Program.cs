@@ -355,9 +355,6 @@ namespace CycloneDX {
 			// As a final step (and before optionally fetching transitive dependencies), add the component to the dictionary.
 			AddPreventDuplicates(component);
 
-			//TODO: nuspec authors thought it would be a good idea to publish the URL to the license
-			//rather than the SPDX identifier of the license itself. Genius! NOT! nuspec will need to
-			//change the spec if they wish to provide accurate license information in boms.
 			if (followTransitive) {
                 var dependencies = metadata.SelectNodes("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'dependencies']/*[local-name() = 'dependency']");
                 foreach (XmlNode dependency in dependencies) {
