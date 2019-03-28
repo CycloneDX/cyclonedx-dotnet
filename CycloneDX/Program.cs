@@ -49,7 +49,6 @@ namespace CycloneDX {
                 baseUrl = "https://api.nuget.org/v3-flatcontainer/";
             }
             Console.WriteLine();
-            FileAttributes attr = File.GetAttributes(@SolutionOrProjectFile);
 
             if (string.IsNullOrEmpty(SolutionOrProjectFile)) {
                 Console.Error.WriteLine($"A path is required");
@@ -60,6 +59,8 @@ namespace CycloneDX {
                 Console.Error.WriteLine($"The output directory is required");
                 return 1;
             }
+
+            FileAttributes attr = File.GetAttributes(SolutionOrProjectFile);
 
             int returnCode = 1;
             if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)) {
@@ -281,7 +282,9 @@ namespace CycloneDX {
             }
             bom.Add(com);
             doc.Add(bom);
-            var bomFile = Path.GetFullPath(outputDirectory) + Path.DirectorySeparatorChar + "bom.xml";
+            var bomPath = Path.GetFullPath(outputDirectory);
+            if (!Directory.Exists(bomPath)) Directory.CreateDirectory(bomPath);
+            var bomFile =  bomPath + Path.DirectorySeparatorChar + "bom.xml";
             Console.WriteLine("Writing to: " + bomFile);
             using (var writer = new StreamWriter(bomFile, false, new UTF8Encoding(false))) {
                 doc.Save(writer);
