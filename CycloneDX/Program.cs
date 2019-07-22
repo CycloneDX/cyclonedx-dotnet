@@ -215,7 +215,7 @@ namespace CycloneDX {
 
 
 		/*
-		 * Analyzes a single Project.
+		 * Analyzes a single project for project references.
 		 */
 		async Task<List<string>> AnalyzeProjectReferenceAsync(string projectFile)
 		{
