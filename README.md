@@ -36,6 +36,7 @@ Arguments:
 Options:
   -o|--out <DIR>  The directorty to write the BOM
   -u|--url <URL>  Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).
+  -r|--recursive  To be used with a single project file, it will recursively scan project references of the supplied .csproj.	
   -?|-h|--help    Show help information
 ```
 
@@ -50,6 +51,11 @@ dotnet CycloneDX YourSolution.sln -o /output/path
 The following will recursively scan the directory structure for packages.config and create a BOM:
 ```bash
 dotnet CycloneDX /path/to/project -o /output/path
+```
+
+The following will recursively scan the project references of the supplied .csproj file, and create a BOM of all package references from all included projects:
+```bash
+dotnet CycloneDX /path/to/project/MyProject.csproj -o /output/path -r
 ```
 
 License

@@ -39,7 +39,7 @@ namespace CycloneDX {
         [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
 
-		[Option(Description = "To be used with a single project file, it will scan project references of all dependency projects.", ShortName = "r", LongName = "recursive")]
+		[Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied .csproj.", ShortName = "r", LongName = "recursive")]
 		bool scanProjectReferences { get; set; }
 
 		Dictionary<string, Model.Component> dependencyMap = new Dictionary<string, Model.Component>();
