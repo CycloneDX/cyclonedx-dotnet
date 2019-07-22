@@ -39,7 +39,10 @@ namespace CycloneDX {
         [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
 
-        Dictionary<string, Model.Component> dependencyMap = new Dictionary<string, Model.Component>();
+		[Option(Description = "To be used with a single project file, it will scan project references of all dependency projects.", ShortName = "r", LongName = "recursive")]
+		bool scanProjectReferences { get; set; }
+
+		Dictionary<string, Model.Component> dependencyMap = new Dictionary<string, Model.Component>();
 
         static int Main(string[] args)
             => CommandLineApplication.Execute<Program>(args);
@@ -63,11 +66,15 @@ namespace CycloneDX {
             FileAttributes attr = File.GetAttributes(SolutionOrProjectFile);
 
             int returnCode = 1;
-            if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)) {
-                string file = Path.GetFullPath(SolutionOrProjectFile);
-                returnCode = await AnalyzeSolutionAsync(file);
+			if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)) {
+				string file = Path.GetFullPath(SolutionOrProjectFile);
+				returnCode = await AnalyzeSolutionAsync(file);
 
-            } else if (isSupportedProjectType(SolutionOrProjectFile)) {
+			} else if (isSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences){
+				string file = Path.GetFullPath(SolutionOrProjectFile);
+				returnCode = await AnalyzeProjectReferencesAsync(file);
+
+			} else if (isSupportedProjectType(SolutionOrProjectFile)) {
                 string file = Path.GetFullPath(SolutionOrProjectFile);
                 returnCode = await AnalyzeProjectAsync(file);
 
@@ -162,10 +169,103 @@ namespace CycloneDX {
             return 0;
         }
 
-        /*
+		/*
+         * Recursively analyzes a project references of the specified project.
+         */
+		async Task<int> AnalyzeProjectReferencesAsync(string projectPath) {
+			string projectDirectory = new FileInfo(projectPath).Directory.FullName;
+
+			// Initialize the queue with the current project file
+			Queue<string> files = new Queue<string>();
+			files.Enqueue(projectPath);
+			string currentFile = string.Empty;
+
+			HashSet<string> visitedProjects = new HashSet<string>();
+
+			while (files.TryDequeue(out currentFile)) {
+				int val = await AnalyzeProjectAsync(currentFile);
+				if (val != 0)
+				{
+					return val;
+				}
+
+				// Find all project references inside of currentFile
+				List<string> foundProjectReferences = await AnalyzeProjectReferenceAsync(currentFile);
+
+				if (foundProjectReferences == null)
+					return 1;
+
+				string fullProjectReferencePath = string.Empty;
+
+				// Add unvisited projects to the queue and then analyse project async
+				// Loop through found project references
+				foreach (string projectReferencePath in foundProjectReferences) {
+					fullProjectReferencePath = Path.Combine(projectDirectory, projectReferencePath);
+
+					if (!visitedProjects.Contains(fullProjectReferencePath))
+						files.Enqueue(fullProjectReferencePath);
+				}
+
+				// Add the currentFile to list of visited projects
+				visitedProjects.Add(currentFile);
+			}
+
+			return 0;
+        }
+
+
+		/*
+		 * Analyzes a single Project.
+		 */
+		async Task<List<string>> AnalyzeProjectReferenceAsync(string projectFile)
+		{
+			if (!File.Exists(projectFile))
+			{
+				Console.Error.WriteLine($"Project file \"{projectFile}\" does not exist");
+				return null;
+			}
+			Console.WriteLine();
+			Console.WriteLine($"» Analyzing: {projectFile}");
+			Console.WriteLine("  Getting project references".PadRight(64));
+
+			var projectReferences = new List<string>();
+
+			try
+			{
+				using (XmlReader reader = XmlReader.Create(projectFile))
+				{
+					while (reader.Read())
+					{
+						if (reader.IsStartElement())
+						{
+							switch (reader.Name)
+							{
+								case "ProjectReference":
+								{ 
+									projectReferences.Add(reader["Include"]);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.Error.WriteLine($"  An unhandled exception occurred while getting the project references: {ex.Message}");
+				return null;
+			}
+			if (!projectReferences.Any())
+			{
+				Console.Error.WriteLine("  No project references found".PadRight(64));
+			}
+			return projectReferences;
+		}
+
+		/*
          * Analyzes a single Project.
          */
-        async Task<int> AnalyzeProjectAsync(string projectFile) {
+		async Task<int> AnalyzeProjectAsync(string projectFile) {
             var components = new List<Model.Component>();
             if (!File.Exists(projectFile)) {
                 Console.Error.WriteLine($"Project file \"{projectFile}\" does not exist");
