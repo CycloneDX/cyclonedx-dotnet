@@ -44,7 +44,7 @@ namespace CycloneDX {
 
 		Dictionary<string, Model.Component> dependencyMap = new Dictionary<string, Model.Component>();
 
-        static int Main(string[] args)
+		static int Main(string[] args)
             => CommandLineApplication.Execute<Program>(args);
 
         async Task<int> OnExecute() {
@@ -200,7 +200,14 @@ namespace CycloneDX {
 				// Add unvisited projects to the queue and then analyse project async
 				// Loop through found project references
 				foreach (string projectReferencePath in foundProjectReferences) {
-					fullProjectReferencePath = Path.Combine(projectDirectory, projectReferencePath);
+					// Adjust the path directory slashes to comply with the OS we're running on - change backslashes to forward slashes if on Mac or Linux, and vice versa if on Windows
+#if !Windows
+					string adjustedProjectReferencePath = projectReferencePath.Replace('\\', '/');
+#else
+					string adjustedProjectReferencePath = projectReferencePath.Replace('/', '\\');
+#endif
+					fullProjectReferencePath = Path.Combine(projectDirectory, adjustedProjectReferencePath);
+
 
 					if (!visitedProjects.Contains(fullProjectReferencePath))
 						files.Enqueue(fullProjectReferencePath);
