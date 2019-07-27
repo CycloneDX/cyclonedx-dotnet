@@ -28,7 +28,7 @@ using System.Xml.Linq;
 using McMaster.Extensions.CommandLineUtils;
 
 namespace CycloneDX {
-    [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool to generate CycloneDX bill-of-material documents for use with Software Composition Analysis (SCA).")]
+    [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBoM) from .NET projects.")]
     class Program {
         [Argument(0, Name = "Path", Description = "The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
         public string SolutionOrProjectFile { get; set; }
@@ -38,6 +38,9 @@ namespace CycloneDX {
 
         [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
+
+        [Option(Description = "Optionally omit the serial number from the resulting BOM.", ShortName = "ns", LongName = "noSerialNumber")]
+        Boolean noSerialNumber { get; set; }
 
         Dictionary<string, Model.Component> dependencyMap = new Dictionary<string, Model.Component>();
 
@@ -231,8 +234,12 @@ namespace CycloneDX {
         XDocument CreateXmlDocument(Dictionary<string, Model.Component> components) {
             XNamespace ns = "http://cyclonedx.org/schema/bom/1.1";
             var doc = new XDocument();
+            var serialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
             doc.Declaration = new XDeclaration("1.0", "utf-8", null);
-            var bom = new XElement(ns + "bom", new XAttribute("version", "1"));
+
+            var bom = (noSerialNumber) ? new XElement(ns + "bom", new XAttribute("version", "1")) :
+                new XElement(ns + "bom", new XAttribute("version", "1"), new XAttribute("serialNumber", serialNumber));
+                
             var com = new XElement(ns + "components");
             foreach (KeyValuePair<string, Model.Component> item in components) {
                 var component = item.Value;
@@ -280,7 +287,14 @@ namespace CycloneDX {
                 if (component.Purl != null) {
                     c.Add(new XElement(ns + "purl", component.Purl));
                 }
-                c.Add(new XElement(ns + "modified", false));
+                if (component.ExternalReferences != null && component.ExternalReferences.Count > 0) {
+                    var externalReferences = new XElement(ns + "externalReferences");
+                    foreach (var externalReference in component.ExternalReferences) {
+                        externalReferences.Add(new XElement(ns + "reference", new XAttribute("type", externalReference.Type), new XElement(ns + "url", externalReference.Url)));
+                    }
+                    c.Add(externalReferences);
+                }
+
                 com.Add(c);
             }
             bom.Add(com);
@@ -365,8 +379,16 @@ namespace CycloneDX {
                 });
             }
 
-			// As a final step (and before optionally fetching transitive dependencies), add the component to the dictionary.
-			AddPreventDuplicates(component);
+            var projectUrl = getNodeValue(metadata, "/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'projectUrl']");
+            if (projectUrl != null) {
+                var externalReference = new Model.ExternalReference();
+                externalReference.Type = Model.ExternalReference.WEBSITE;
+                externalReference.Url = projectUrl;
+                component.ExternalReferences.Add(externalReference);
+            }
+
+            // As a final step (and before optionally fetching transitive dependencies), add the component to the dictionary.
+            AddPreventDuplicates(component);
 
 			if (followTransitive) {
                 var dependencies = metadata.SelectNodes("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'dependencies']/*[local-name() = 'dependency']");
