@@ -31,11 +31,13 @@ namespace CycloneDX.Model {
         public string Purl { get; set; }
         public bool Modified { get; set; }
         public List<Component> Components { get; set; }
+        public List<ExternalReference> ExternalReferences { get; set; }
         public string Type { get; set; }
 
         public Component() {
             Hashes = new List<Hash>();
             Licenses = new List<License>();
+            ExternalReferences = new List<ExternalReference>();
             Components = new List<Component>();
         }
     }

@@ -34,10 +34,11 @@ Arguments:
   Path            The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.
 
 Options:
-  -o|--out <DIR>  The directorty to write the BOM
-  -u|--url <URL>  Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).
-  -r|--recursive  To be used with a single project file, it will recursively scan project references of the supplied .csproj.	
-  -?|-h|--help    Show help information
+  -o|--out <DIR>        The directorty to write the BOM
+  -u|--url <URL>        Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).
+  -r|--recursive        To be used with a single project file, it will recursively scan project references of the supplied .csproj.	
+ -ns|--noSerialNumber   Do not generate bom serial number
+  -?|-h|--help          Show help information
 ```
 
 #### Examples
