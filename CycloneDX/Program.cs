@@ -229,7 +229,7 @@ namespace CycloneDX {
          * Creates a CycloneDX BoM from the list of Components and saves it to the specified directory.
          */
         XDocument CreateXmlDocument(Dictionary<string, Model.Component> components) {
-            XNamespace ns = "http://cyclonedx.org/schema/bom/1.0";
+            XNamespace ns = "http://cyclonedx.org/schema/bom/1.1";
             var doc = new XDocument();
             doc.Declaration = new XDeclaration("1.0", "utf-8", null);
             var bom = new XElement(ns + "bom", new XAttribute("version", "1"));
@@ -265,6 +265,8 @@ namespace CycloneDX {
                             l.Add(new XElement(ns + "license", new XElement(ns + "id", license.Id)));
                         } else if (license.Name != null) {
                             l.Add(new XElement(ns + "license", new XElement(ns + "name", license.Name)));
+                        } else if (license.Url != null) {
+                            l.Add(new XElement(ns + "license", new XElement(ns + "url", license.Url)));
                         }
                     }
 					c.Add(l);
@@ -337,6 +339,7 @@ namespace CycloneDX {
 			// Utilize the new license expression field present in more recent packages
 			// TODO: Need to have more robust parsing to support composite expressions seen in (https://github.com/NuGet/Home/wiki/Packaging-License-within-the-nupkg#project-properties)
 			var licenseNode = metadata.SelectSingleNode("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'license']");
+            var licenseUrlNode = metadata.SelectSingleNode("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'licenseUrl']");
 			if (licenseNode?.Attributes["type"].Value == "expression")
 			{
 				var licenses = licenseNode.FirstChild.Value
@@ -354,6 +357,13 @@ namespace CycloneDX {
 					});
 				}
 			}
+            else if (licenseUrlNode != null) {
+                var licenseUrl = licenseUrlNode.FirstChild.Value;
+                component.Licenses.Add(new Model.License
+                {
+                    Url = licenseUrl.Trim()
+                });
+            }
 
 			// As a final step (and before optionally fetching transitive dependencies), add the component to the dictionary.
 			AddPreventDuplicates(component);
