@@ -331,6 +331,23 @@ namespace CycloneDX {
             }
             if (!components.Any()) {
                 Console.Error.WriteLine("  No packages found".PadRight(64));
+
+                // If we weren't processing a packages.config file, check if we have a packages.config in the same
+                // directory as the file we're processing
+                var fileInfo = new FileInfo(projectFile);
+
+                if (fileInfo.Name != "packages.config") {
+                    var packageFile = Path.Join(fileInfo.DirectoryName, "packages.config");
+
+                    if (File.Exists(packageFile)) {
+                        // We have a packages.config file, recurse and process it
+                        Console.Error.WriteLine("  Found packages.config. Will attempt to process".PadRight(64));
+                        var ret = await AnalyzeProjectAsync(packageFile);
+                        if (ret != 0) {
+                            return ret;
+                        }
+                    }
+                }
             }
             return 0;
         }
