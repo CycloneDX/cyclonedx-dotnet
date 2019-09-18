@@ -39,15 +39,15 @@ namespace CycloneDX {
         [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
 
-		    [Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied .csproj.", ShortName = "r", LongName = "recursive")]
-		    bool scanProjectReferences { get; set; }
+        [Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied .csproj.", ShortName = "r", LongName = "recursive")]
+        bool scanProjectReferences { get; set; }
 
         [Option(Description = "Optionally omit the serial number from the resulting BOM.", ShortName = "ns", LongName = "noSerialNumber")]
         bool noSerialNumber { get; set; }
 
         Dictionary<string, Model.Component> dependencyMap = new Dictionary<string, Model.Component>();
 
-		static int Main(string[] args)
+        static int Main(string[] args)
             => CommandLineApplication.Execute<Program>(args);
 
         async Task<int> OnExecute() {
@@ -69,15 +69,15 @@ namespace CycloneDX {
             FileAttributes attr = File.GetAttributes(SolutionOrProjectFile);
 
             int returnCode = 1;
-			if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)) {
-				string file = Path.GetFullPath(SolutionOrProjectFile);
-				returnCode = await AnalyzeSolutionAsync(file);
+            if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)) {
+                string file = Path.GetFullPath(SolutionOrProjectFile);
+                returnCode = await AnalyzeSolutionAsync(file);
 
-			} else if (isSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences){
-				string file = Path.GetFullPath(SolutionOrProjectFile);
-				returnCode = await AnalyzeProjectReferencesAsync(file);
+            } else if (isSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences) {
+                string file = Path.GetFullPath(SolutionOrProjectFile);
+                returnCode = await AnalyzeProjectReferencesAsync(file);
 
-			} else if (isSupportedProjectType(SolutionOrProjectFile)) {
+            } else if (isSupportedProjectType(SolutionOrProjectFile)) {
                 string file = Path.GetFullPath(SolutionOrProjectFile);
                 returnCode = await AnalyzeProjectAsync(file);
 
@@ -90,7 +90,7 @@ namespace CycloneDX {
                 returnCode = await AnalyzeDirectoryAsync(path);
             }
 
-            if (returnCode == 0){
+            if (returnCode == 0) {
                 Console.WriteLine();
                 Console.WriteLine("Creating CycloneDX BoM");
                 CreateXmlDocument(dependencyMap);
@@ -172,110 +172,98 @@ namespace CycloneDX {
             return 0;
         }
 
-		/*
+        /*
          * Recursively analyzes a project references of the specified project.
          */
-		async Task<int> AnalyzeProjectReferencesAsync(string projectPath) {
-			string projectDirectory = new FileInfo(projectPath).Directory.FullName;
+        async Task<int> AnalyzeProjectReferencesAsync(string projectPath) {
+            string projectDirectory = new FileInfo(projectPath).Directory.FullName;
 
-			// Initialize the queue with the current project file
-			Queue<string> files = new Queue<string>();
-			files.Enqueue(projectPath);
-			string currentFile = string.Empty;
+            // Initialize the queue with the current project file
+            Queue<string> files = new Queue<string>();
+            files.Enqueue(projectPath);
+            string currentFile = string.Empty;
 
-			HashSet<string> visitedProjects = new HashSet<string>();
+            HashSet<string> visitedProjects = new HashSet<string>();
 
-			while (files.TryDequeue(out currentFile)) {
-				int val = await AnalyzeProjectAsync(currentFile);
-				if (val != 0)
-				{
-					return val;
-				}
+            while (files.TryDequeue(out currentFile)) {
+                int val = await AnalyzeProjectAsync(currentFile);
+                if (val != 0) {
+                    return val;
+                }
 
-				// Find all project references inside of currentFile
-				List<string> foundProjectReferences = await AnalyzeProjectReferenceAsync(currentFile);
+                // Find all project references inside of currentFile
+                List<string> foundProjectReferences = await AnalyzeProjectReferenceAsync(currentFile);
 
-				if (foundProjectReferences == null)
-					return 1;
+                if (foundProjectReferences == null)
+                    return 1;
 
-				string fullProjectReferencePath = string.Empty;
+                string fullProjectReferencePath = string.Empty;
 
-				// Add unvisited projects to the queue and then analyse project async
-				// Loop through found project references
-				foreach (string projectReferencePath in foundProjectReferences) {
-					// Adjust the path directory slashes to comply with the OS we're running on - change backslashes to forward slashes if on Mac or Linux, and vice versa if on Windows
+                // Add unvisited projects to the queue and then analyse project async
+                // Loop through found project references
+                foreach (string projectReferencePath in foundProjectReferences) {
+                    // Adjust the path directory slashes to comply with the OS we're running on - change backslashes to forward slashes if on Mac or Linux, and vice versa if on Windows
 #if !Windows
-					string adjustedProjectReferencePath = projectReferencePath.Replace('\\', '/');
+                    string adjustedProjectReferencePath = projectReferencePath.Replace('\\', '/');
 #else
 					string adjustedProjectReferencePath = projectReferencePath.Replace('/', '\\');
 #endif
-					fullProjectReferencePath = Path.Combine(projectDirectory, adjustedProjectReferencePath);
+                    fullProjectReferencePath = Path.Combine(projectDirectory, adjustedProjectReferencePath);
 
 
-					if (!visitedProjects.Contains(fullProjectReferencePath))
-						files.Enqueue(fullProjectReferencePath);
-				}
+                    if (!visitedProjects.Contains(fullProjectReferencePath))
+                        files.Enqueue(fullProjectReferencePath);
+                }
 
-				// Add the currentFile to list of visited projects
-				visitedProjects.Add(currentFile);
-			}
+                // Add the currentFile to list of visited projects
+                visitedProjects.Add(currentFile);
+            }
 
-			return 0;
+            return 0;
         }
 
 
-		/*
+        /*
 		 * Analyzes a single project for project references.
 		 */
-		async Task<List<string>> AnalyzeProjectReferenceAsync(string projectFile)
-		{
-			if (!File.Exists(projectFile))
-			{
-				Console.Error.WriteLine($"Project file \"{projectFile}\" does not exist");
-				return null;
-			}
-			Console.WriteLine();
-			Console.WriteLine($"» Analyzing: {projectFile}");
-			Console.WriteLine("  Getting project references".PadRight(64));
+        async Task<List<string>> AnalyzeProjectReferenceAsync(string projectFile) {
+            if (!File.Exists(projectFile)) {
+                Console.Error.WriteLine($"Project file \"{projectFile}\" does not exist");
+                return null;
+            }
+            Console.WriteLine();
+            Console.WriteLine($"» Analyzing: {projectFile}");
+            Console.WriteLine("  Getting project references".PadRight(64));
 
-			var projectReferences = new List<string>();
+            var projectReferences = new List<string>();
 
-			try
-			{
-				using (XmlReader reader = XmlReader.Create(projectFile))
-				{
-					while (reader.Read())
-					{
-						if (reader.IsStartElement())
-						{
-							switch (reader.Name)
-							{
-								case "ProjectReference":
-								{ 
-									projectReferences.Add(reader["Include"]);
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				Console.Error.WriteLine($"  An unhandled exception occurred while getting the project references: {ex.Message}");
-				return null;
-			}
-			if (!projectReferences.Any())
-			{
-				Console.Error.WriteLine("  No project references found".PadRight(64));
-			}
-			return projectReferences;
-		}
+            try {
+                using (XmlReader reader = XmlReader.Create(projectFile)) {
+                    while (reader.Read()) {
+                        if (reader.IsStartElement()) {
+                            switch (reader.Name) {
+                                case "ProjectReference": {
+                                        projectReferences.Add(reader["Include"]);
+                                        break;
+                                    }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Console.Error.WriteLine($"  An unhandled exception occurred while getting the project references: {ex.Message}");
+                return null;
+            }
+            if (!projectReferences.Any()) {
+                Console.Error.WriteLine("  No project references found".PadRight(64));
+            }
+            return projectReferences;
+        }
 
-		/*
+        /*
          * Analyzes a single Project.
          */
-		async Task<int> AnalyzeProjectAsync(string projectFile) {
+        async Task<int> AnalyzeProjectAsync(string projectFile) {
             var components = new List<Model.Component>();
             if (!File.Exists(projectFile)) {
                 Console.Error.WriteLine($"Project file \"{projectFile}\" does not exist");
@@ -363,7 +351,7 @@ namespace CycloneDX {
 
             var bom = (noSerialNumber) ? new XElement(ns + "bom", new XAttribute("version", "1")) :
                 new XElement(ns + "bom", new XAttribute("version", "1"), new XAttribute("serialNumber", serialNumber));
-                
+
             var com = new XElement(ns + "components");
             foreach (KeyValuePair<string, Model.Component> item in components) {
                 var component = item.Value;
@@ -400,7 +388,7 @@ namespace CycloneDX {
                             l.Add(new XElement(ns + "license", new XElement(ns + "url", license.Url)));
                         }
                     }
-					c.Add(l);
+                    c.Add(l);
                 }
                 if (component.Copyright != null) {
                     c.Add(new XElement(ns + "copyright", component.Copyright));
@@ -425,7 +413,7 @@ namespace CycloneDX {
             doc.Add(bom);
             var bomPath = Path.GetFullPath(outputDirectory);
             if (!Directory.Exists(bomPath)) Directory.CreateDirectory(bomPath);
-            var bomFile =  bomPath + Path.DirectorySeparatorChar + "bom.xml";
+            var bomFile = bomPath + Path.DirectorySeparatorChar + "bom.xml";
             Console.WriteLine("Writing to: " + bomFile);
             using (var writer = new StreamWriter(bomFile, false, new UTF8Encoding(false))) {
                 doc.Save(writer);
@@ -474,31 +462,26 @@ namespace CycloneDX {
                 component.Description = title;
             }
 
-			// Utilize the new license expression field present in more recent packages
-			// TODO: Need to have more robust parsing to support composite expressions seen in (https://github.com/NuGet/Home/wiki/Packaging-License-within-the-nupkg#project-properties)
-			var licenseNode = metadata.SelectSingleNode("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'license']");
+            // Utilize the new license expression field present in more recent packages
+            // TODO: Need to have more robust parsing to support composite expressions seen in (https://github.com/NuGet/Home/wiki/Packaging-License-within-the-nupkg#project-properties)
+            var licenseNode = metadata.SelectSingleNode("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'license']");
             var licenseUrlNode = metadata.SelectSingleNode("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'licenseUrl']");
-			if (licenseNode?.Attributes["type"].Value == "expression")
-			{
-				var licenses = licenseNode.FirstChild.Value
-					.Replace("AND", ";")
-					.Replace("OR", ";")
-					.Replace("WITH", ";")
-					.Replace("+", "")
-					.Split(';').ToList();
-				foreach (var license in licenses)
-				{
-					component.Licenses.Add(new Model.License
-					{
-						Id = license.Trim(),
-						Name = license.Trim()
-					});
-				}
-			}
-            else if (licenseUrlNode != null) {
+            if (licenseNode?.Attributes["type"].Value == "expression") {
+                var licenses = licenseNode.FirstChild.Value
+                    .Replace("AND", ";")
+                    .Replace("OR", ";")
+                    .Replace("WITH", ";")
+                    .Replace("+", "")
+                    .Split(';').ToList();
+                foreach (var license in licenses) {
+                    component.Licenses.Add(new Model.License {
+                        Id = license.Trim(),
+                        Name = license.Trim()
+                    });
+                }
+            } else if (licenseUrlNode != null) {
                 var licenseUrl = licenseUrlNode.FirstChild.Value;
-                component.Licenses.Add(new Model.License
-                {
+                component.Licenses.Add(new Model.License {
                     Url = licenseUrl.Trim()
                 });
             }
@@ -514,7 +497,7 @@ namespace CycloneDX {
             // As a final step (and before optionally fetching transitive dependencies), add the component to the dictionary.
             AddPreventDuplicates(component);
 
-			if (followTransitive) {
+            if (followTransitive) {
                 var dependencies = metadata.SelectNodes("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'dependencies']/*[local-name() = 'dependency']");
                 foreach (XmlNode dependency in dependencies) {
                     var id = dependency.Attributes["id"];
@@ -533,7 +516,7 @@ namespace CycloneDX {
 
         /*
          * Creates a PackageURL from the specified package name and version. 
-         */ 
+         */
         string generatePackageUrl(string packageName, string packageVersion) {
             if (packageName == null || packageVersion == null) {
                 return null;
