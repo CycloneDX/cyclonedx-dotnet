@@ -1,4 +1,6 @@
 /.vs/
 /.vscode/
-/CycloneDX/bin/
-/CycloneDX/obj/
+bin/
+obj/
+coverage-report/
+coverage.cobertura.xml

@@ -14,9 +14,12 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-namespace CycloneDX.Model {
-    public class ExternalReference {
-    
+using System.Diagnostics.CodeAnalysis;
+
+namespace CycloneDX.Models
+{
+    public class ExternalReference
+    {
         public string Url { get; set; }
         public string Type { get; set; }
         public string Comment { get; set; }

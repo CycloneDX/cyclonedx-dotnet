@@ -14,9 +14,11 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-namespace CycloneDX.Model {
+namespace CycloneDX.Models
+{
 
-    public class License {
+    public class License
+    {
         public string Id { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
