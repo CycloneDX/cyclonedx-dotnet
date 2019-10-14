@@ -2,3 +2,5 @@
 /.vscode/
 /CycloneDX/bin/
 /CycloneDX/obj/
+/CycloneDX.Tests/bin/
+/CycloneDX.Tests/obj/
