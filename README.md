@@ -28,7 +28,7 @@ dotnet tool update --global CycloneDX
 #### Options
 
 ```text
-Usage: cyclonedx [path] -o [outputDirectory]
+Usage: CycloneDX [path] -o [outputDirectory]
 
 Arguments:
   Path            The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.

@@ -14,9 +14,10 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-namespace CycloneDX.Model {
-
-    public enum Algorithm {
+namespace CycloneDX.Models
+{
+    public enum Algorithm
+    {
         MD5,
         SHA1,
         SHA_256,
@@ -26,7 +27,8 @@ namespace CycloneDX.Model {
         SHA3_512,
     }
 
-    public class Hash {
+    public class Hash
+    {
         public Algorithm algorithm { get; }
         public string value { get; }
 
@@ -36,8 +38,10 @@ namespace CycloneDX.Model {
         }
     }
 
-    public static class AlgorithmExtensions {
-        public static string GetXmlString(this Algorithm algorithm) {
+    public static class AlgorithmExtensions
+    {
+        public static string GetXmlString(this Algorithm algorithm)
+        {
             switch (algorithm) {
                 case Algorithm.MD5:
                     return "MD5";
