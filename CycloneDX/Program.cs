@@ -26,7 +26,7 @@ using CycloneDX.Models;
 using CycloneDX.Services;
 
 namespace CycloneDX {
-    [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBoM) from .NET projects.")]
+    [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")]
     class Program {
         [Argument(0, Name = "Path", Description = "The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
         public string SolutionOrProjectFile { get; set; }
