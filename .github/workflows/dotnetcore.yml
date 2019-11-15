@@ -1,6 +1,6 @@
 name: .NET Core CI
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -13,5 +13,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 2.2.108
+    - name: Tests
+      run: dotnet test
     - name: Build with dotnet
       run: dotnet build --configuration Release
