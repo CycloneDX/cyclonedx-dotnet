@@ -34,11 +34,13 @@ namespace CycloneDX.Services
     {
         private string _baseUrl;
         private HttpClient _httpClient;
+        private IGithubService _githubService;
 
         public NugetService(HttpClient httpClient, string baseUrl = null)
         {
             _httpClient = httpClient;
             _baseUrl = baseUrl == null ? "https://api.nuget.org/v3-flatcontainer/" : baseUrl;
+            _githubService = new GithubService(httpClient);
         }
 
         /// <summary>
@@ -109,7 +111,9 @@ namespace CycloneDX.Services
             else if (licenseUrlNode != null)
             {
                 var licenseUrl = licenseUrlNode.FirstChild.Value;
-                component.Licenses.Add(new Models.License
+                var license = await _githubService.GetLicenseAsync(licenseUrl.Trim());
+                
+                component.Licenses.Add(license ?? new Models.License
                 {
                     Url = licenseUrl.Trim()
                 });
