@@ -110,8 +110,8 @@ namespace CycloneDX.Services
             }
             else if (licenseUrlNode != null)
             {
-                var licenseUrl = licenseUrlNode.FirstChild.Value;
-                var license = await _githubService.GetLicenseAsync(licenseUrl.Trim());
+                var licenseUrl = licenseUrlNode.FirstChild.Value;                
+                var license = await _githubService.GetLicenseAsync(licenseUrl.Trim(), component.Version);
                 
                 component.Licenses.Add(license ?? new Models.License
                 {
