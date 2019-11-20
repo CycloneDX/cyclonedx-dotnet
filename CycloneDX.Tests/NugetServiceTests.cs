@@ -18,7 +18,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using Moq;
 using RichardSzalay.MockHttp;
+using CycloneDX.Models;
 using CycloneDX.Services;
 
 namespace CycloneDX.Tests
@@ -40,7 +42,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             
@@ -60,7 +62,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             
@@ -81,7 +83,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             
@@ -101,7 +103,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             
@@ -121,7 +123,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             
@@ -141,7 +143,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             
@@ -161,7 +163,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             
@@ -181,7 +183,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             
@@ -201,7 +203,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             
@@ -225,7 +227,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             
@@ -250,7 +252,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond("application/xml", mockResponseContent);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
             var orderedDependencies = new List<Models.NugetPackage>(component.Dependencies);
@@ -278,7 +280,7 @@ namespace CycloneDX.Tests
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
                 .Respond(System.Net.HttpStatusCode.NotFound);
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
 
@@ -291,11 +293,47 @@ namespace CycloneDX.Tests
         {
             var mockHttp = new MockHttpMessageHandler();
             var client = mockHttp.ToHttpClient();
-            var nugetService = new NugetService(httpClient: client);
+            var nugetService = new NugetService(client, new Mock<IGithubService>().Object);
 
             var component = await nugetService.GetComponentAsync("PackageName", "");
 
             Assert.Null(component);
+        }
+
+        [Fact]
+        public async Task GetComponent_WithGithubLicense_ReturnsGithubLicense()
+        {
+            var mockResponseContent = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <licenseUrl>https://www.example.com/license</licenseUrl>
+                </metadata>
+                </package>";
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
+                .Respond("application/xml", mockResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var mockGithubService = new Mock<IGithubService>();
+            mockGithubService
+                .Setup(service => service.GetLicenseAsync(It.IsAny<string>()))
+                .ReturnsAsync(new Models.License
+                {
+                    Id = "TestLicenseId",
+                    Name = "Test License",
+                    Url = "https://www.example.com/LICENSE"
+                });
+            var nugetService = new NugetService(
+                client,
+                mockGithubService.Object);
+
+            var component = await nugetService.GetComponentAsync("PackageName", "1.2.3");
+
+            Assert.Collection(component.Licenses, 
+                item => {
+                    Assert.Equal("TestLicenseId", item.Id);
+                    Assert.Equal("Test License", item.Name);
+                    Assert.Equal("https://www.example.com/LICENSE", item.Url);
+                });
         }
     }
 }

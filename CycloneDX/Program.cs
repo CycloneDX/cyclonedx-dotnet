@@ -66,7 +66,8 @@ namespace CycloneDX {
 
             // instantiate services
             var fileDiscoveryService = new FileDiscoveryService(Program.fileSystem);
-            var nugetService = new NugetService(Program.httpClient, baseUrl);
+            var githubService = new GithubService(Program.httpClient);
+            var nugetService = new NugetService(Program.httpClient, githubService, baseUrl);
             var packagesFileService = new PackagesFileService(Program.fileSystem);
             var projectFileService = new ProjectFileService(Program.fileSystem);
             var solutionFileService = new SolutionFileService(Program.fileSystem);

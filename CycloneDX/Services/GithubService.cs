@@ -17,6 +17,7 @@
 using CycloneDX.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -27,54 +28,55 @@ namespace CycloneDX.Services
 
     public interface IGithubService
     {
-        Task<License> GetLicenseAsync(string licenseUrl, string version);
+        Task<License> GetLicenseAsync(string licenseUrl);
     }
 
-    class GithubService : IGithubService
+    public class GithubService : IGithubService
     {
 
-        private string _baseUrl;
+        private string _baseUrl = "https://api.github.com/";
         private HttpClient _httpClient;
-        private Regex _repositoryIdRegex = new Regex(@"^https?\:\/\/((github\.com)|(raw\.githubusercontent\.com))\/(?<repositoryId>[^\/]+\/[^\/]+)\/(blob\/)?master\/LICENSE.*$");
+        private List<Regex> _githubRepositoryRegexes = new List<Regex>
+        {
+            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/blob\/(?<refSpec>[^\/]+)\/LICENSE(.md)?$"),
+            new Regex(@"^https?\:\/\/raw\.githubusercontent\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/LICENSE(.md)?$"),
+        };
 
-        public GithubService(HttpClient httpClient, string baseUrl = null)
+        public GithubService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _baseUrl = baseUrl ?? "https://api.github.com/";
         }
 
         /// <summary>
         /// Tries to get a license from GitHub.
         /// </summary>
         /// <param name="licenseUrl">URL for the license file. Supporting both github.com and raw.githubusercontent.com URLs.</param>
-        /// <param name="version">Version number for the current package.</param>
         /// <returns></returns>
-        public async Task<License> GetLicenseAsync(string licenseUrl, string version)
+        public async Task<License> GetLicenseAsync(string licenseUrl)
         {
             if (licenseUrl == null) return null;
 
             // Detect correct repository id starting from URL
-            var match = _repositoryIdRegex.Match(licenseUrl);
+            Match match = null;
+
+            foreach(var regex in _githubRepositoryRegexes)
+            {
+                match = regex.Match(licenseUrl);
+                if (match.Success) break;
+            }
 
             // License is not on GitHub, we need to abort
             if (!match.Success) return null;
             var repositoryId = match.Groups["repositoryId"];
+            var refSpec = match.Groups["refSpec"];
 
-            Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and version v{version}");
+            Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec}");
 
             // Try getting license for the specified version
-            var githubLicense = await GetLicenseAsync($"{_baseUrl}repos/{repositoryId}/license?ref=v{version}");
-            if (githubLicense == null)
-            {
-                // Fallback on master version
-                Console.WriteLine($"No license found on GitHub for repository {repositoryId} and version v{version}, trying to get one from master");
+            var githubLicense = await GetGithubLicenseAsync($"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}");
 
-                githubLicense = await GetLicenseAsync($"{_baseUrl}repos/{repositoryId}/license");
-            }
-
-            // If license is still null, this means we didn't get it neither from ref or from master
             if (githubLicense == null) {
-                Console.WriteLine($"No license found on GitHub for repository {repositoryId}");
+                Console.WriteLine($"No license found on GitHub for repository {repositoryId} using ref {refSpec}");
 
                 return null;
             }
@@ -93,7 +95,7 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="githubLicenseUrl"></param>
         /// <returns></returns>
-        private async Task<GithubLicenseRoot> GetLicenseAsync(string githubLicenseUrl)
+        private async Task<GithubLicenseRoot> GetGithubLicenseAsync(string githubLicenseUrl)
         {
             var githubLicenseRequestMessage = new HttpRequestMessage(HttpMethod.Get, githubLicenseUrl);
 
