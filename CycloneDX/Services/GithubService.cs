@@ -1,4 +1,4 @@
-﻿// This file is part of the CycloneDX Tool for .NET
+// This file is part of the CycloneDX Tool for .NET
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -69,6 +69,10 @@ namespace CycloneDX.Services
             if (!match.Success) return null;
             var repositoryId = match.Groups["repositoryId"];
             var refSpec = match.Groups["refSpec"];
+
+            // GitHub API doesn't necessarily return the correct license for any ref other than master
+            // support ticket has been raised, in the meantime will ignore non-master refs
+            if (refSpec.ToString() != "master") return null;
 
             Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec}");
 
