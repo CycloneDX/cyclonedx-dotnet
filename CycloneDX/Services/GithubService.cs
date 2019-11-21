@@ -19,12 +19,15 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using License = CycloneDX.Models.License;
 
 namespace CycloneDX.Services
 {
+    public class InvalidGitHubApiCredentialsException : Exception {}
+    public class GitHubApiRateLimitExceededException : Exception {}
 
     public interface IGithubService
     {
@@ -45,6 +48,22 @@ namespace CycloneDX.Services
         public GithubService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+        }
+
+        public GithubService(HttpClient httpClient, string username, string token)
+        {
+            _httpClient = httpClient;
+
+            // implemented as per RFC 7617 https://tools.ietf.org/html/rfc7617.html
+            var userToken = string.Format("{0}:{1}", username, token);
+            var userTokenBytes = System.Text.Encoding.UTF8.GetBytes(userToken);
+            var userTokenBase64 = System.Convert.ToBase64String(userTokenBytes);
+
+            var authorizationHeader = new AuthenticationHeaderValue(
+                "Basic", 
+                userTokenBase64);
+            
+            _httpClient.DefaultRequestHeaders.Authorization = authorizationHeader;
         }
 
         /// <summary>
@@ -113,6 +132,16 @@ namespace CycloneDX.Services
             {
                 // License found, extract data
                 return JsonConvert.DeserializeObject<GithubLicenseRoot>(await githubResponse.Content.ReadAsStringAsync());
+            }
+            else if (githubResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                Console.Error.WriteLine("Invalid GitHub API credentials.");
+                throw new InvalidGitHubApiCredentialsException();
+            }
+            else if (githubResponse.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            {
+                Console.Error.WriteLine("GitHub API rate limit exceeded.");
+                throw new GitHubApiRateLimitExceededException();
             }
             else
             {

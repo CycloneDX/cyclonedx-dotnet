@@ -130,5 +130,27 @@ namespace CycloneDX.Tests
             Assert.Equal("LicenseSpdxId", license.Id);
             Assert.Equal("Test License", license.Name);
         }
+
+        [Fact]
+        public async Task GetLicense_AddsAuthorizationHeader()
+        {
+            var mockResponseContent = @"{
+                ""license"": {
+                    ""spdx_id"": ""LicenseSpdxId"",
+                    ""name"": ""Test License"",
+                }
+            }";
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp
+                .Expect("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet/license?ref=master")
+                .WithHeaders("Authorization", "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==")
+                .Respond("application/json", mockResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var githubService = new GithubService(client, "Aladdin", "open sesame");
+
+            await githubService.GetLicenseAsync("https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/master/LICENSE");
+
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
     }
 }

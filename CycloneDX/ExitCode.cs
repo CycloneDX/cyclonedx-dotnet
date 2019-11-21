@@ -5,6 +5,9 @@ namespace CycloneDX
         OK,
         InvalidOptions,
         SolutionOrProjectFileParameterMissing,
-        OutputDirectoryParameterMissing
+        OutputDirectoryParameterMissing,
+        GitHubParameterMissing,
+        InvalidGitHubApiCredentials,
+        GitHubApiRateLimitExceeded
     }
 }
