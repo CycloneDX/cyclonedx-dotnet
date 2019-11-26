@@ -43,6 +43,12 @@ namespace CycloneDX {
         [Option(Description = "Optionally omit the serial number from the resulting BOM.", ShortName = "ns", LongName = "noSerialNumber")]
         bool noSerialNumber { get; set; }
 
+        [Option(Description = "Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token", ShortName = "gu", LongName = "githubUsername")]
+        string githubUsername { get; set; }
+        [Option(Description = "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username.", ShortName = "gt", LongName = "githubToken")]
+        string githubToken { get; set; }
+
+
         static internal IFileSystem fileSystem = new FileSystem();
         static internal HttpClient httpClient = new HttpClient();
 
@@ -64,9 +70,25 @@ namespace CycloneDX {
                 return (int)ExitCode.OutputDirectoryParameterMissing;
             }
 
+            if (string.IsNullOrEmpty(githubUsername) ^ string.IsNullOrEmpty(githubToken))
+            {
+                Console.Error.WriteLine($"Both GitHub username and token are required");
+                return (int)ExitCode.GitHubParameterMissing;
+            }
+
             // instantiate services
             var fileDiscoveryService = new FileDiscoveryService(Program.fileSystem);
-            var nugetService = new NugetService(Program.httpClient, baseUrl);
+            // GitHubService requires its own HttpClient as it adds a default authorization header
+            GithubService githubService;
+            if (string.IsNullOrEmpty(githubUsername) || string.IsNullOrEmpty(githubToken))
+            {
+                githubService = new GithubService(new HttpClient());
+            }
+            else
+            {
+                githubService = new GithubService(new HttpClient(), githubUsername, githubToken);
+            }
+            var nugetService = new NugetService(Program.httpClient, githubService, baseUrl);
             var packagesFileService = new PackagesFileService(Program.fileSystem);
             var projectFileService = new ProjectFileService(Program.fileSystem);
             var solutionFileService = new SolutionFileService(Program.fileSystem);
@@ -91,7 +113,6 @@ namespace CycloneDX {
             else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
             {
                 packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath);
-
             } 
             else if (attr.HasFlag(FileAttributes.Directory))
             {
@@ -105,10 +126,21 @@ namespace CycloneDX {
 
             // get all the components from the NuGet packages
             var components = new HashSet<Component>();
-            foreach (var package in packages)
+            try
             {
-                var component = await nugetService.GetComponentAsync(package);
-                if (component != null) components.Add(component);
+                foreach (var package in packages)
+                {
+                    var component = await nugetService.GetComponentAsync(package);
+                    if (component != null) components.Add(component);
+                }
+            }
+            catch (InvalidGitHubApiCredentialsException)
+            {
+                return (int)ExitCode.InvalidGitHubApiCredentials;
+            }
+            catch (GitHubApiRateLimitExceededException)
+            {
+                return (int)ExitCode.GitHubApiRateLimitExceeded;
             }
 
             // create the BOM

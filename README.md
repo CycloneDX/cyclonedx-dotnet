@@ -38,6 +38,8 @@ Options:
   -u|--url <URL>        Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).
   -r|--recursive        To be used with a single project file, it will recursively scan project references of the supplied .csproj.	
  -ns|--noSerialNumber   Do not generate bom serial number
+ -gu|--githubUsername   Optionally provide a GitHub username for license resolution (see notes below)
+ -gt|--githubToken      Optionally provide a GitHub personal access token for license resolution
   -?|-h|--help          Show help information
 ```
 
@@ -58,6 +60,24 @@ The following will recursively scan the project references of the supplied .cspr
 ```bash
 dotnet CycloneDX /path/to/project/MyProject.csproj -o /output/path -r
 ```
+
+#### GitHub License Resolution
+SPDX license IDs can be resolved for packages that reference a supported license
+file in a GitHub repository.
+
+The GitHub license API has an unauthenticated call limit of 60 calls per hour.
+To ensure consistent output if a rate limit is exceeded BoM generation will
+fail. If you start hitting rate limits you will need to generate a personal
+access token and provide this, and your username, when running CycloneDX.
+
+To generate a token go to
+[Personal access tokens](https://github.com/settings/tokens) under
+`Settings / Developer setings`. From there select the option to
+[Generate new token](https://github.com/settings/tokens/new). No special token
+permissions are required.
+
+Due to current limitations in the GitHub API licenses will only be resolved for
+master branch license references.
 
 License
 -------------------
