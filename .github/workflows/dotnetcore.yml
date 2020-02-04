@@ -2,6 +2,10 @@ name: .NET Core CI
 
 on: [push, pull_request]
 
+  strategy:
+    matrix:
+      dotnet-version: ['2.1.803', '3.1.101']
+
 jobs:
   test:
     name: Test on ${{ matrix.os }}
@@ -15,6 +19,6 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.100
+        dotnet-version: ${{ matrix.dotnet-version }}
     - name: Tests
       run: dotnet test
