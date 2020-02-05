@@ -8,7 +8,7 @@ on: [push, pull_request]
 
 jobs:
   test:
-    name: Test on ${{ matrix.os }}
+    name: Test ${{ matrix.dotnet-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
