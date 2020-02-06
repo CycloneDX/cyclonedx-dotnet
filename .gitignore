@@ -2,5 +2,6 @@
 /.vscode/
 bin/
 obj/
+packages/
 coverage-report/
 coverage.cobertura.xml

@@ -51,11 +51,17 @@ namespace CycloneDX {
 
         static internal IFileSystem fileSystem = new FileSystem();
         static internal HttpClient httpClient = new HttpClient();
+        static internal IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem);
+        static internal IDotnetCommandService dotnetCommandService = new DotnetCommandService();
+        static internal IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
+        static internal IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
+        static internal IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
+        static internal ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
+        
+        public static async Task<int> Main(string[] args)
+            => await CommandLineApplication.ExecuteAsync<Program>(args);
 
-        static internal int Main(string[] args)
-            => CommandLineApplication.Execute<Program>(args);
-
-        async Task<int> OnExecute() {
+        async Task<int> OnExecuteAsync() {
             Console.WriteLine();
 
             // check parameter values
@@ -76,7 +82,23 @@ namespace CycloneDX {
                 return (int)ExitCode.GitHubParameterMissing;
             }
 
+            // retrieve nuget package cache paths
+            var packageCachePathsResult = dotnetUtilsService.GetPackageCachePaths();
+            if (!packageCachePathsResult.Success)
+            {
+                Console.Error.WriteLine("Unable to find local package cache locations...");
+                Console.Error.WriteLine(packageCachePathsResult.ErrorMessage);
+                return (int)ExitCode.LocalPackageCacheError;
+            }
+
+            Console.WriteLine("Found the following local nuget package cache locations:");
+            foreach (var path in packageCachePathsResult.Result)
+            {
+                Console.WriteLine($"    {path}");
+            }
+
             // instantiate services
+
             var fileDiscoveryService = new FileDiscoveryService(Program.fileSystem);
             // GitHubService requires its own HttpClient as it adds a default authorization header
             GithubService githubService;
@@ -88,10 +110,13 @@ namespace CycloneDX {
             {
                 githubService = new GithubService(new HttpClient(), githubUsername, githubToken);
             }
-            var nugetService = new NugetService(Program.httpClient, githubService, baseUrl);
-            var packagesFileService = new PackagesFileService(Program.fileSystem);
-            var projectFileService = new ProjectFileService(Program.fileSystem);
-            var solutionFileService = new SolutionFileService(Program.fileSystem);
+            var nugetService = new NugetService(
+                Program.fileSystem,
+                packageCachePathsResult.Result,
+                githubService,
+                Program.httpClient,
+                baseUrl);
+
             var packages = new HashSet<NugetPackage>();
 
             // determine what we are analyzing and do the analysis

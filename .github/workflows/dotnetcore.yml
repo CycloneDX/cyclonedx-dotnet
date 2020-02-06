@@ -3,18 +3,20 @@ name: .NET Core CI
 on: [push, pull_request]
 
 jobs:
-  test:
-    name: Test on ${{ matrix.os }}
+  tests:
+    name: ${{ matrix.tests }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        tests: [Tests, IntegrationTests]
         os: [ubuntu-latest, windows-latest, macos-latest]
+    timeout-minutes: 10
     
     steps:
     - uses: actions/checkout@v1
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 2.2.108
+        dotnet-version: 2.1.803
     - name: Tests
-      run: dotnet test
+      run: dotnet test CycloneDX.${{ matrix.tests }}

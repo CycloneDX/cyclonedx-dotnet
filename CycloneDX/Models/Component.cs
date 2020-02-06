@@ -69,7 +69,7 @@ namespace CycloneDX.Models
             }
             else
             {
-                var nameComparison = this.Name.CompareTo(other.Name);
+                var nameComparison = this.Name.ToLowerInvariant().CompareTo(other.Name.ToLowerInvariant());
                 return nameComparison == 0
                     ? this.Version.CompareTo(other.Version)
                     : nameComparison;

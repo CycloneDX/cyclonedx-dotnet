@@ -17,7 +17,9 @@
 using System.Collections.Generic;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
+using System.Threading.Tasks;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
+using Moq;
 using CycloneDX;
 using CycloneDX.Models;
 using CycloneDX.Services;
@@ -27,143 +29,44 @@ namespace CycloneDX.Tests
     public class ProgramTests
     {
         [Fact]
-        public void CallingCycloneDX_WithoutSolutionFile_ReturnsSolutionOrProjectFileParameterMissingExitCode()
+        public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsSolutionOrProjectFileParameterMissingExitCode()
         {
-            var exitCode = Program.Main(new string[] {});
+            var exitCode = await Program.Main(new string[] {});
 
             Assert.Equal((int)ExitCode.SolutionOrProjectFileParameterMissing, exitCode);
         }
 
         [Fact]
-        public void CallingCycloneDX_WithoutOutputDirectory_ReturnsOutputDirectoryParameterMissingExitCode()
+        public async Task CallingCycloneDX_WithoutOutputDirectory_ReturnsOutputDirectoryParameterMissingExitCode()
         {
-            var exitCode = Program.Main(new string[] { XFS.Path(@"c:\SolutionPath\Solution.sln") });
+            var exitCode = await Program.Main(new string[] { XFS.Path(@"c:\SolutionPath\Solution.sln") });
 
             Assert.Equal((int)ExitCode.OutputDirectoryParameterMissing, exitCode);
         }
 
         [Fact]
-        public void CallingCycloneDX_CreatesOutputDirectory()
+        public async Task CallingCycloneDX_CreatesOutputDirectory()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), new MockFileData(@"
-Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project\Project.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
-                        ")},
-                    { XFS.Path(@"c:\SolutionPath\Project\Project.csproj"), Helpers.GetProjectFileWithPackageReference("Package", "1.2.3")},
+                    { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), "" }
                 });
-            var mockHttpClient = Helpers.GetNugetMockHttpClient(new List<NugetPackage>
-            {
-                new NugetPackage { Name = "Package", Version = "1.2.3" },
-            });
+            var mockSolutionFileService = new Mock<ISolutionFileService>();
+            mockSolutionFileService
+                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<NugetPackage>());
             Program.fileSystem = mockFileSystem;
-            Program.httpClient = mockHttpClient;
+            Program.solutionFileService = mockSolutionFileService.Object;
             var args = new string[]
             {
                 XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
                 "-o", XFS.Path(@"c:\NewDirectory")
             };
 
-            var exitCode = Program.Main(args);
+            var exitCode = await Program.Main(args);
 
             Assert.Equal((int)ExitCode.OK, exitCode);
             Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\bom.xml")));
-        }
-
-        [Fact]
-        public void CallingCycloneDX_CreatesBomFromSolutionFile()
-        {
-            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-                {
-                    { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), new MockFileData(@"
-Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project1\Project1.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
-Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project2\Project2.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
-Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\Project3.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
-                        ")},
-                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReference("Package1", "1.2.3")},
-                    { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), Helpers.GetProjectFileWithPackageReference("Package2", "1.2.3")},
-                    { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), Helpers.GetProjectFileWithPackageReference("Package3", "1.2.3")},
-                });
-            var mockHttpClient = Helpers.GetNugetMockHttpClient(new List<NugetPackage>
-            {
-                new NugetPackage { Name = "Package1", Version = "1.2.3" },
-                new NugetPackage { Name = "Package2", Version = "1.2.3" },
-                new NugetPackage { Name = "Package3", Version = "1.2.3" },
-            });
-            Program.fileSystem = mockFileSystem;
-            Program.httpClient = mockHttpClient;
-            var args = new string[]
-            {
-                XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
-                "-o", XFS.Path(@"c:\SolutionPath")
-            };
-
-            var exitCode = Program.Main(args);
-
-            Assert.Equal((int)ExitCode.OK, exitCode);
-            Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\SolutionPath\bom.xml")));
-        }
-
-        [Fact]
-        public void CallingCycloneDX_CreatesBomFromDirectory()
-        {
-            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-                {
-                    { XFS.Path(@"c:\SolutionPath\Project1\packages.config"), Helpers.GetPackagesFileWithPackageReference("Package1", "1.2.3") },
-                    { XFS.Path(@"c:\SolutionPath\Project2\packages.config"), Helpers.GetPackagesFileWithPackageReference("Package2", "1.2.3") },
-                    { XFS.Path(@"c:\SolutionPath\Project3\packages.config"), Helpers.GetPackagesFileWithPackageReference("Package3", "1.2.3") },
-                });
-            var mockHttpClient = Helpers.GetNugetMockHttpClient(new List<NugetPackage>
-            {
-                new NugetPackage { Name = "Package1", Version = "1.2.3" },
-                new NugetPackage { Name = "Package2", Version = "1.2.3" },
-                new NugetPackage { Name = "Package3", Version = "1.2.3" },
-            });
-            Program.fileSystem = mockFileSystem;
-            Program.httpClient = mockHttpClient;
-            var args = new string[]
-            {
-                XFS.Path(@"c:\SolutionPath"),
-                "-o", XFS.Path(@"c:\SolutionPath")
-            };
-
-            var exitCode = Program.Main(args);
-
-            Assert.Equal((int)ExitCode.OK, exitCode);
-            Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\SolutionPath\bom.xml")));
-        }
-
-        [Fact]
-        public void CallingCycloneDX_CreatesBomFromPackagesFile()
-        {
-            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-                {
-                    { XFS.Path(@"c:\SolutionPath\Project\packages.config"), Helpers.GetPackagesFileWithPackageReferences(
-                        new List<NugetPackage> {
-                            new NugetPackage { Name = "Package1", Version = "1.2.3" },
-                            new NugetPackage { Name = "Package2", Version = "1.2.3" },
-                            new NugetPackage { Name = "Package3", Version = "1.2.3" },
-                        })
-                    },
-                });
-            var mockHttpClient = Helpers.GetNugetMockHttpClient(new List<NugetPackage>
-            {
-                new NugetPackage { Name = "Package1", Version = "1.2.3" },
-                new NugetPackage { Name = "Package2", Version = "1.2.3" },
-                new NugetPackage { Name = "Package3", Version = "1.2.3" },
-            });
-            Program.fileSystem = mockFileSystem;
-            Program.httpClient = mockHttpClient;
-            var args = new string[]
-            {
-                XFS.Path(@"c:\SolutionPath\Project\packages.config"),
-                "-o", XFS.Path(@"c:\SolutionPath")
-            };
-
-            var exitCode = Program.Main(args);
-
-            Assert.Equal((int)ExitCode.OK, exitCode);
-            Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\SolutionPath\bom.xml")));
         }
     }
 }

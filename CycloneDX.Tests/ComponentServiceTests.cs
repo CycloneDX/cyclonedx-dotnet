@@ -33,9 +33,9 @@ namespace CycloneDX.Tests
             var mockNugetService = new Mock<INugetService>();
             mockNugetService
                 .SetupSequence(service => service.GetComponentAsync(It.IsAny<NugetPackage>()))
-                .Returns(Task.FromResult(new Component { Name = "Package1", Version = "1.0.0" }))
-                .Returns(Task.FromResult(new Component { Name = "Package2", Version = "1.0.0" }))
-                .Returns(Task.FromResult(new Component { Name = "Package3", Version = "1.0.0" }));
+                .ReturnsAsync(new Component { Name = "Package1", Version = "1.0.0" })
+                .ReturnsAsync(new Component { Name = "Package2", Version = "1.0.0" })
+                .ReturnsAsync(new Component { Name = "Package3", Version = "1.0.0" });
             var nugetService = mockNugetService.Object;
             var componentService = new ComponentService(nugetService);
             var nugetPackages = new List<NugetPackage>
@@ -61,7 +61,7 @@ namespace CycloneDX.Tests
             var mockNugetService = new Mock<INugetService>();
             mockNugetService
                 .SetupSequence(service => service.GetComponentAsync(It.IsAny<NugetPackage>()))
-                .Returns(Task.FromResult(new Component {
+                .ReturnsAsync(new Component {
                     Name = "Package1",
                     Version = "1.0.0" ,
                     Dependencies = new HashSet<NugetPackage>
@@ -72,8 +72,8 @@ namespace CycloneDX.Tests
                             Version = "1.0.0"
                         }
                     }
-                }))
-                .Returns(Task.FromResult(new Component { Name = "Dependency1", Version = "1.0.0" }));
+                })
+                .ReturnsAsync(new Component { Name = "Dependency1", Version = "1.0.0" });
             var nugetService = mockNugetService.Object;
             var componentService = new ComponentService(nugetService);
             var nugetPackages = new List<NugetPackage>

@@ -15,10 +15,14 @@
 // Copyright (c) Steve Springett. All Rights Reserved.
 
 using System;
+using System.Collections.Generic;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml;
+using System.Xml.Linq;
+using NuGet.Packaging.Licenses;
+using NuspecReader = NuGet.Packaging.NuspecReader;
 using CycloneDX.Extensions;
 using CycloneDX.Models;
 
@@ -35,12 +39,43 @@ namespace CycloneDX.Services
         private string _baseUrl;
         private HttpClient _httpClient;
         private IGithubService _githubService;
+        private IFileSystem _fileSystem;
+        private List<string> _packageCachePaths;
 
-        public NugetService(HttpClient httpClient, IGithubService githubService, string baseUrl = null)
+        public NugetService(
+            IFileSystem fileSystem,
+            List<string> packageCachePaths,
+            IGithubService githubService,
+            HttpClient httpClient,
+            string baseUrl = null)
         {
+            _fileSystem = fileSystem;
+            _githubService = githubService;
+            _packageCachePaths = packageCachePaths;
+            _githubService = githubService;
             _httpClient = httpClient;
             _baseUrl = baseUrl == null ? "https://api.nuget.org/v3-flatcontainer/" : baseUrl;
-            _githubService = githubService;
+        }
+
+        internal string GetCachedNuspecFilename(string name, string version)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) return null;
+
+            var lowerName = name.ToLowerInvariant();
+            string nuspecFilename = null;
+
+            foreach (var packageCachePath in _packageCachePaths)
+            {
+                var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, version);
+                var currentFilename = _fileSystem.Path.Combine(currentDirectory, lowerName + ".nuspec");
+                if (_fileSystem.File.Exists(currentFilename))
+                {
+                    nuspecFilename = currentFilename;
+                    break;
+                }
+            }
+
+            return nuspecFilename;
         }
 
         /// <summary>
@@ -62,83 +97,80 @@ namespace CycloneDX.Services
                 Purl = Utils.GeneratePackageUrl(name, version)
             };
 
-            var url = _baseUrl + name + "/" + version + "/" + name + ".nuspec";
-            var doc = await _httpClient.GetXmlAsync(url);
+            var nuspecFilename = GetCachedNuspecFilename(name, version);
 
-            if (doc == null) return component;
+            NuspecReader nuspecReader;
 
-            var root = doc.DocumentElement;
-            var metadata = root.SelectSingleNode("/*[local-name() = 'package']/*[local-name() = 'metadata']");
-            component.Publisher = GetNodeValue(metadata, "/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'authors']");
-            component.Copyright = GetNodeValue(metadata, "/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'copyright']");
-            var title = GetNodeValue(metadata, "/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'title']");
-            var summary = GetNodeValue(metadata, "/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'summary']");
-            var description = GetNodeValue(metadata, "/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'description']");
-            if (summary != null)
+            if (nuspecFilename == null)
+            {
+                var url = _baseUrl + name + "/" + version + "/" + name + ".nuspec";
+                using (var xmlStream = await _httpClient.GetXmlStreamAsync(url))
+                {
+                    nuspecReader = new NuspecReader(xmlStream);
+                }
+            }
+            else
+            {
+                using (var xmlStream = _fileSystem.File.Open(nuspecFilename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                {
+                    nuspecReader = new NuspecReader(xmlStream);
+                }
+            }
+
+            if (nuspecReader == null) return component;
+
+            component.Publisher = nuspecReader.GetAuthors();
+            component.Copyright = nuspecReader.GetCopyright();
+            var title = nuspecReader.GetTitle();
+            var summary = nuspecReader.GetSummary();
+            var description = nuspecReader.GetDescription();
+            if (!string.IsNullOrEmpty(summary))
             {
                 component.Description = summary;
             }
-            else if (description != null)
+            else if (!string.IsNullOrEmpty(description))
             {
                 component.Description = description;
             }
-            else if (title != null)
+            else if (!string.IsNullOrEmpty(title))
             {
                 component.Description = title;
             }
 
-            // Utilize the new license expression field present in more recent packages
-            // TODO: Need to have more robust parsing to support composite expressions seen in (https://github.com/NuGet/Home/wiki/Packaging-License-within-the-nupkg#project-properties)
-            var licenseNode = metadata.SelectSingleNode("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'license']");
-            var licenseUrlNode = metadata.SelectSingleNode("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'licenseUrl']");
-            if (licenseNode?.Attributes["type"].Value == "expression")
+            var licenseMetadata = nuspecReader.GetLicenseMetadata();
+            if (licenseMetadata != null && licenseMetadata.Type == NuGet.Packaging.LicenseType.Expression)
             {
-                var licenses = licenseNode.FirstChild.Value
-                    .Replace("AND", ";")
-                    .Replace("OR", ";")
-                    .Replace("WITH", ";")
-                    .Replace("+", "")
-                    .Split(';').ToList();
-                foreach (var license in licenses)
+                Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
                 {
                     component.Licenses.Add(new Models.License
                     {
-                        Id = license.Trim(),
-                        Name = license.Trim()
+                        Id = nugetLicense.Identifier,
+                        Name = nugetLicense.Identifier
+                    });
+                };
+                licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
+            }
+            else
+            {
+                var licenseUrl = nuspecReader.GetLicenseUrl();
+                if (!string.IsNullOrEmpty(licenseUrl))
+                {
+                    var license = await _githubService.GetLicenseAsync(licenseUrl);
+                    
+                    component.Licenses.Add(license ?? new Models.License
+                    {
+                        Url = licenseUrl
                     });
                 }
             }
-            else if (licenseUrlNode != null)
-            {
-                var licenseUrl = licenseUrlNode.FirstChild.Value;
-                var license = await _githubService.GetLicenseAsync(licenseUrl.Trim());
-                
-                component.Licenses.Add(license ?? new Models.License
-                {
-                    Url = licenseUrl.Trim()
-                });
-            }
 
-            var projectUrl = GetNodeValue(metadata, "/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'projectUrl']");
+            var projectUrl = nuspecReader.GetProjectUrl();
             if (projectUrl != null)
             {
                 var externalReference = new Models.ExternalReference();
                 externalReference.Type = Models.ExternalReference.WEBSITE;
                 externalReference.Url = projectUrl;
                 component.ExternalReferences.Add(externalReference);
-            }
-
-            var dependencies = metadata.SelectNodes("/*[local-name() = 'package']/*[local-name() = 'metadata']/*[local-name() = 'dependencies']/*[local-name() = 'dependency']");
-            foreach (XmlNode dependency in dependencies) {
-                var dependencyName = dependency.Attributes["id"];
-                var dependencyVersion = dependency.Attributes["version"];
-                if (dependencyName != null && dependencyVersion != null) {
-                    var nugetDependency = new NugetPackage {
-                        Name = dependencyName.Value,
-                        Version = dependencyVersion.Value,
-                    };
-                    component.Dependencies.Add(nugetDependency);
-                }
             }
 
             return component;
@@ -153,22 +185,5 @@ namespace CycloneDX.Services
         {
             return await GetComponentAsync(package.Name, package.Version);
         }
-
-        /// <summary>
-        /// Helper method which performs null checking when querying for the value of an XML node.
-        /// </summary>
-        /// <param name="xmlNode"></param>
-        /// <param name="xpath"></param>
-        /// <returns></returns>
-        private static string GetNodeValue(XmlNode xmlNode, string xpath)
-        {
-            var node = xmlNode.SelectSingleNode(xpath);
-            if (node != null && node.FirstChild != null)
-            {
-                return node.FirstChild.Value;
-            }
-            return null;
-        }
-
     }
 }

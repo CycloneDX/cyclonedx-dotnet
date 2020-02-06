@@ -14,19 +14,19 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace CycloneDX.Extensions
 {
     public static class HttpClientExtensions
     {
         /*
-         * Simple extension method to retrieve an XmlDocument from a URL.
+         * Simple extension method to retrieve an xml stream from a URL.
          */
-        public static async Task<XmlDocument> GetXmlAsync(this HttpClient httpClient, string url)
+        public static async Task<Stream> GetXmlStreamAsync(this HttpClient httpClient, string url)
         {
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
@@ -36,10 +36,8 @@ namespace CycloneDX.Extensions
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound) return null;
             
             response.EnsureSuccessStatusCode();
-            var contentAsString = await response.Content.ReadAsStringAsync();
-            var doc = new XmlDocument();
-            doc.LoadXml(contentAsString);
-            return doc;
+            var contentStream = await response.Content.ReadAsStreamAsync();
+            return contentStream;
         }
     }
 }

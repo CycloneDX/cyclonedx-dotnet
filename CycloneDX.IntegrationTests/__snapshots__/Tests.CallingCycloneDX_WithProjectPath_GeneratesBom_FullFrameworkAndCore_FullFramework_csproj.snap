@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bom version="1" xmlns="http://cyclonedx.org/schema/bom/1.1">
+  <components>
+    <component type="library">
+      <name>Newtonsoft.Json</name>
+      <version>9.0.1</version>
+      <description><![CDATA[Json.NET is a popular high-performance JSON framework for .NET]]></description>
+      <licenses>
+        <license>
+          <url>https://raw.github.com/JamesNK/Newtonsoft.Json/master/LICENSE.md</url>
+        </license>
+      </licenses>
+      <purl>pkg:nuget/Newtonsoft.Json@9.0.1</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>http://www.newtonsoft.com/json</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>NuGet.Common</name>
+      <version>5.2.0</version>
+      <description><![CDATA[NuGet client library.]]></description>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/NuGet.Common@5.2.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://aka.ms/nugetprj</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>NuGet.Configuration</name>
+      <version>5.2.0</version>
+      <description><![CDATA[NuGet's client configuration settings implementation.]]></description>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/NuGet.Configuration@5.2.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://aka.ms/nugetprj</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>NuGet.DependencyResolver.Core</name>
+      <version>5.2.0</version>
+      <description><![CDATA[NuGet client library.]]></description>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/NuGet.DependencyResolver.Core@5.2.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://aka.ms/nugetprj</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>NuGet.Frameworks</name>
+      <version>5.2.0</version>
+      <description><![CDATA[The understanding of target frameworks for NuGet.Packaging.]]></description>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/NuGet.Frameworks@5.2.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://aka.ms/nugetprj</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>NuGet.LibraryModel</name>
+      <version>5.2.0</version>
+      <description><![CDATA[NuGet client library.]]></description>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/NuGet.LibraryModel@5.2.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://aka.ms/nugetprj</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>NuGet.Packaging</name>
+      <version>5.2.0</version>
+      <description><![CDATA[NuGet's implementation for reading nupkg package and nuspec package specification files.]]></description>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/NuGet.Packaging@5.2.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://aka.ms/nugetprj</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>NuGet.ProjectModel</name>
+      <version>5.2.0</version>
+      <description><![CDATA[NuGet client library.]]></description>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/NuGet.ProjectModel@5.2.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://aka.ms/nugetprj</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>NuGet.Protocol</name>
+      <version>5.2.0</version>
+      <description><![CDATA[NuGet client library.]]></description>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/NuGet.Protocol@5.2.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://aka.ms/nugetprj</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>NuGet.Versioning</name>
+      <version>5.2.0</version>
+      <description><![CDATA[NuGet's implementation of Semantic Versioning.]]></description>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/NuGet.Versioning@5.2.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://aka.ms/nugetprj</url>
+        </reference>
+      </externalReferences>
+    </component>
+  </components>
+</bom>

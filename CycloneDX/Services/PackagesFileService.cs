@@ -25,7 +25,7 @@ using CycloneDX.Services;
 
 namespace CycloneDX.Services
 {
-    public class PackagesFileService
+    public class PackagesFileService : IPackagesFileService
     {
         private XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings 
         {

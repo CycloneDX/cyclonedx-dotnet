@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
+using Moq;
 using CycloneDX.Services;
 
 namespace CycloneDX.Tests
@@ -34,9 +35,13 @@ namespace CycloneDX.Tests
                     { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), new MockFileData(@"
 Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project\Project.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
                         ")},
-                    { XFS.Path(@"c:\SolutionPath\Project\Project.csproj"), new MockFileData(@"<Project></Project>") },
+                    { XFS.Path(@"c:\SolutionPath\Project\Project.csproj"), Helpers.GetEmptyProjectFile() },
                 });
-            var solutionFileService = new SolutionFileService(mockFileSystem);
+            var mockProjectFileService = new Mock<IProjectFileService>();
+            mockProjectFileService
+                .Setup(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<string>());
+            var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
             var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln"));
             
@@ -54,11 +59,17 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project1\
 Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project2\Project2.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
 Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\Project3.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
                         ")},
-                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), new MockFileData(@"<Project></Project>") },
-                    { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), new MockFileData(@"<Project></Project>") },
-                    { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), new MockFileData(@"<Project></Project>") },
+                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetEmptyProjectFile() },
+                    { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), Helpers.GetEmptyProjectFile() },
+                    { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), Helpers.GetEmptyProjectFile() },
                 });
-            var solutionFileService = new SolutionFileService(mockFileSystem);
+            var mockProjectFileService = new Mock<IProjectFileService>();
+            mockProjectFileService
+                .SetupSequence(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<string>())
+                .ReturnsAsync(new HashSet<string>())
+                .ReturnsAsync(new HashSet<string>());
+            var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
             var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln"));
             var sortedProjects = new List<string>(projects);
@@ -78,14 +89,18 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\
                     { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), new MockFileData(@"
 Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project1\Project1.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
                         ")},
-                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithProjectReferences(
-                        new string[] {
-                            @"..\Project2\Project2.csproj",
-                        })
-                    },
-                    { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), new MockFileData(@"<Project></Project>")}
+                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetEmptyProjectFile() },
+                    { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), Helpers.GetEmptyProjectFile() }
                 });
-            var solutionFileService = new SolutionFileService(mockFileSystem);
+            var mockProjectFileService = new Mock<IProjectFileService>();
+            mockProjectFileService
+                .SetupSequence(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<string>
+                    {
+                        XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"),
+                    })
+                .ReturnsAsync(new HashSet<string>());
+            var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
             var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln"));
             var sortedProjects = new List<string>(projects);

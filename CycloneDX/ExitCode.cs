@@ -8,6 +8,7 @@ namespace CycloneDX
         OutputDirectoryParameterMissing,
         GitHubParameterMissing,
         InvalidGitHubApiCredentials,
-        GitHubApiRateLimitExceeded
+        GitHubApiRateLimitExceeded,
+        LocalPackageCacheError
     }
 }
