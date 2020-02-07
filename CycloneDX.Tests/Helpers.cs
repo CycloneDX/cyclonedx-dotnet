@@ -103,5 +103,10 @@ namespace CycloneDX.Tests
         {
             return GetProjectFileWithReferences(projects, null);
         }
+
+        public static MockFileData GetEmptyProjectFile()
+        {
+            return GetProjectFileWithReferences(null, null);
+        }
     }
 }

@@ -50,23 +50,23 @@ namespace CycloneDX {
             {
                 Console.WriteLine(component.Name);
                 var c = new XElement(ns + "component", new XAttribute("type", "library"));
-                if (component.Group != null)
+                if (!string.IsNullOrEmpty(component.Group))
                 {
                     c.Add(new XElement(ns + "group", component.Group));
                 }
-                if (component.Name != null)
+                if (!string.IsNullOrEmpty(component.Name))
                 {
                     c.Add(new XElement(ns + "name", component.Name));
                 }
-                if (component.Version != null)
+                if (!string.IsNullOrEmpty(component.Version))
                 {
                     c.Add(new XElement(ns + "version", component.Version));
                 }
-                if (component.Description != null)
+                if (!string.IsNullOrEmpty(component.Description))
                 {
                     c.Add(new XElement(ns + "description", new XCData(component.Description)));
                 }
-                if (component.Scope != null)
+                if (!string.IsNullOrEmpty(component.Scope))
                 {
                     c.Add(new XElement(ns + "scope", component.Scope));
                 }
@@ -98,15 +98,15 @@ namespace CycloneDX {
                     }
                     c.Add(l);
                 }
-                if (component.Copyright != null)
+                if (!string.IsNullOrEmpty(component.Copyright))
                 {
                     c.Add(new XElement(ns + "copyright", component.Copyright));
                 }
-                if (component.Cpe != null)
+                if (!string.IsNullOrEmpty(component.Cpe))
                 {
                     c.Add(new XElement(ns + "cpe", component.Cpe));
                 }
-                if (component.Purl != null)
+                if (!string.IsNullOrEmpty(component.Purl))
                 {
                     c.Add(new XElement(ns + "purl", component.Purl));
                 }

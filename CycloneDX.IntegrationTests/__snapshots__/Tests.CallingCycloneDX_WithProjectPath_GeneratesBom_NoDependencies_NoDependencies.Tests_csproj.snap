@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bom version="1" xmlns="http://cyclonedx.org/schema/bom/1.1">
+  <components>
+    <component type="library">
+      <name>Microsoft.NETCore.App</name>
+      <version>2.1.0</version>
+      <description><![CDATA[A set of .NET API's that are included in the default .NET Core application model. 
+caa7b7e2bad98e56a687fb5cbaf60825500800f7 
+When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <licenses>
+        <license>
+          <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
+      <purl>pkg:nuget/Microsoft.NETCore.App@2.1.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://dot.net/</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>Microsoft.NETCore.DotNetAppHost</name>
+      <version>2.1.0</version>
+      <description><![CDATA[Provides the .NET Core app bootstrapper intended for use in the application directory 
+caa7b7e2bad98e56a687fb5cbaf60825500800f7 
+When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <licenses>
+        <license>
+          <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
+      <purl>pkg:nuget/Microsoft.NETCore.DotNetAppHost@2.1.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://dot.net/</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>Microsoft.NETCore.DotNetHostPolicy</name>
+      <version>2.1.0</version>
+      <description><![CDATA[Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing 
+caa7b7e2bad98e56a687fb5cbaf60825500800f7 
+When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <licenses>
+        <license>
+          <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
+      <purl>pkg:nuget/Microsoft.NETCore.DotNetHostPolicy@2.1.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://dot.net/</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>Microsoft.NETCore.DotNetHostResolver</name>
+      <version>2.1.0</version>
+      <description><![CDATA[Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost 
+caa7b7e2bad98e56a687fb5cbaf60825500800f7 
+When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <licenses>
+        <license>
+          <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
+      <purl>pkg:nuget/Microsoft.NETCore.DotNetHostResolver@2.1.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://dot.net/</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>Microsoft.NETCore.Platforms</name>
+      <version>2.1.0</version>
+      <description><![CDATA[Provides runtime information required to resolve target framework, platform, and runtime specific implementations of .NETCore packages. 
+30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
+When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <licenses>
+        <license>
+          <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
+      <purl>pkg:nuget/Microsoft.NETCore.Platforms@2.1.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://dot.net/</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>Microsoft.NETCore.Targets</name>
+      <version>2.1.0</version>
+      <description><![CDATA[Provides supporting infrastructure for portable projects: support identifiers that define framework and runtime for support targets and packages that reference the minimum supported package versions when targeting these. 
+30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
+When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <licenses>
+        <license>
+          <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
+      <purl>pkg:nuget/Microsoft.NETCore.Targets@2.1.0</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://dot.net/</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library">
+      <name>NETStandard.Library</name>
+      <version>2.0.3</version>
+      <description><![CDATA[A set of standard .NET APIs that are prescribed to be used and supported together. 
+18a36291e48808fa7ef2d00a764ceb1ec95645a5 
+When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <licenses>
+        <license>
+          <url>https://github.com/dotnet/standard/blob/master/LICENSE.TXT</url>
+        </license>
+      </licenses>
+      <copyright>.NET Foundation and Contributors</copyright>
+      <purl>pkg:nuget/NETStandard.Library@2.0.3</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://dot.net/</url>
+        </reference>
+      </externalReferences>
+    </component>
+  </components>
+</bom>

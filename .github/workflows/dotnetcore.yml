@@ -2,23 +2,41 @@ name: .NET Core CI
 
 on: [push, pull_request]
 
-  strategy:
-    matrix:
-      dotnet-version: ['2.1.803', '3.1.101']
-
 jobs:
   test:
-    name: Test ${{ matrix.dotnet-version }} on ${{ matrix.os }}
+    name: ${{ matrix.tests }} ${{ matrix.framework }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        tests: [Tests, IntegrationTests]
         os: [ubuntu-latest, windows-latest, macos-latest]
+        framework: ['2.1', '3.1']
+    timeout-minutes: 30
     
     steps:
     - uses: actions/checkout@v1
-    - name: Setup .NET Core
+
+    - name: Setup .NET Core 2.1
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+        dotnet-version: 2.1.803
+  
+    - name: Setup .NET Core 3.1
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+
+    - name: Setup side by side .NET SDKs on Windows
+      if: matrix.os == 'windows-latest'
+      run: |
+        SET DOTNET_21_ROOT=%DOTNET_ROOT:3.1.101=2.1.803%
+        xcopy /s /y /d %DOTNET_31_ROOT% %DOTNET_ROOT%
+      shell: cmd
+
+    - name: Setup side by side .NET SDKs on *nix
+      if: matrix.os != 'windows-latest'
+      run: |
+        rsync -a ${DOTNET_ROOT/3.1.101/2.1.803}/* $DOTNET_ROOT/
+
     - name: Tests
-      run: dotnet test
+      run: dotnet test --framework netcoreapp${{ matrix.framework }} CycloneDX.${{ matrix.tests }}

@@ -23,15 +23,15 @@ using CycloneDX.Models;
 
 namespace CycloneDX.Services
 {
-    public class SolutionFileService
+    public class SolutionFileService : ISolutionFileService
     {
         private IFileSystem _fileSystem;
-        private ProjectFileService _projectFileService;
+        private IProjectFileService _projectFileService;
 
-        public SolutionFileService(IFileSystem fileSystem)
+        public SolutionFileService(IFileSystem fileSystem, IProjectFileService projectFileService)
         {
             _fileSystem = fileSystem;
-            _projectFileService = new ProjectFileService(_fileSystem);
+            _projectFileService = projectFileService;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace CycloneDX.Services
                     {
                         var relativeProjectPath = match.Groups[3].Value.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
                         var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
-                        projects.Add(projectFile);
+                        if (Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
                     }
                 }
             }

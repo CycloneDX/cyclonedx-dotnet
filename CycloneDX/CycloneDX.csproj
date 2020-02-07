@@ -34,9 +34,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.4.4" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.5.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="System.IO.Abstractions" Version="7.0.7" />
+    <PackageReference Include="nuget.projectmodel" Version="5.4.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>

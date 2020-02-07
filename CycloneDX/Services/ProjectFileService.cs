@@ -21,11 +21,14 @@ using System.Xml;
 using System.IO;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
+using AssetFileReader = NuGet.ProjectModel.LockFileFormat;
 using CycloneDX.Models;
 
 namespace CycloneDX.Services
 {
-    public class ProjectFileService
+    public class DotnetRestoreException : Exception {}
+
+    public class ProjectFileService : IProjectFileService
     {
         private XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings 
         {
@@ -33,12 +36,20 @@ namespace CycloneDX.Services
         };
         
         private IFileSystem _fileSystem;
-        private PackagesFileService _packagesFileService;
+        private IDotnetUtilsService _dotnetUtilsService;
+        private IPackagesFileService _packagesFileService;
+        private IProjectAssetsFileService _projectAssetsFileService;
 
-        public ProjectFileService(IFileSystem fileSystem)
+        public ProjectFileService(
+            IFileSystem fileSystem,
+            IDotnetUtilsService dotnetUtilsService,
+            IPackagesFileService packagesFileService,
+            IProjectAssetsFileService projectAssetsFileService)
         {
             _fileSystem = fileSystem;
-            _packagesFileService = new PackagesFileService(_fileSystem);
+            _dotnetUtilsService = dotnetUtilsService;
+            _packagesFileService = packagesFileService;
+            _projectAssetsFileService = projectAssetsFileService;
         }
 
         /// <summary>
@@ -54,32 +65,29 @@ namespace CycloneDX.Services
                 return new HashSet<NugetPackage>();
             }
 
+            var packages = new HashSet<NugetPackage>();
+
             Console.WriteLine();
             Console.WriteLine($"» Analyzing: {projectFilePath}");
-            Console.WriteLine("  Getting packages");
-            var packages = new HashSet<NugetPackage>();
-            using (StreamReader fileReader = _fileSystem.File.OpenText(projectFilePath))
-            {
-                using (XmlReader reader = XmlReader.Create(fileReader, _xmlReaderSettings))
-                {
-                    while (await reader.ReadAsync())
-                    {
-                        if (reader.IsStartElement() && reader.Name == "PackageReference")
-                        {
-                            var package = new NugetPackage
-                            {
-                                Name = reader["Include"],
-                                Version = reader["Version"],
-                            };
 
-                            if (!string.IsNullOrEmpty(package.Name) && !string.IsNullOrEmpty(package.Version))
-                            {
-                                packages.Add(package);
-                            }
-                        }
-                    }
-                }
+            Console.WriteLine("  Attempting to restore packages");
+            var restoreResult = _dotnetUtilsService.Restore(projectFilePath);
+
+            if (restoreResult.Success)
+            {
+                var assetsFilename = _fileSystem.Path.Combine(
+                    _fileSystem.Path.GetDirectoryName(projectFilePath),
+                    "obj", "project.assets.json");
+                
+                packages.UnionWith(_projectAssetsFileService.GetNugetPackages(assetsFilename));
             }
+            else
+            {
+                Console.WriteLine("Dotnet restore failed:");
+                Console.WriteLine(restoreResult.ErrorMessage);
+                throw new DotnetRestoreException();
+            }
+
             // if there are no project file package references look for a packages.config
             if (!packages.Any())
             {

@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
+using Moq;
 using CycloneDX.Models;
 using CycloneDX.Services;
 
@@ -28,13 +29,30 @@ namespace CycloneDX.Tests
     public class ProjectFileServiceTests
     {
         [Fact]
-        public async Task GetProjectNugetPackages_ReturnsNugetPackage()
+        public async Task GetProjectNugetPackages_WithProjectAssetsFile_ReturnsNugetPackage()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\Project.csproj"), Helpers.GetProjectFileWithPackageReference("Package", "1.2.3") },
+                    { XFS.Path(@"c:\Project\Project.csproj"), "" },
+                    { XFS.Path(@"c:\Project\obj\project.assets.json"), "" },
                 });
-            var projectFileService = new ProjectFileService(mockFileSystem);
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            mockDotnetUtilsService
+                .Setup(s => s.Restore(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult());
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            mockProjectAssetsFileService
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>()))
+                .Returns(new HashSet<NugetPackage>
+                {
+                    new NugetPackage { Name = "Package", Version = "1.2.3" },
+                });
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
 
             var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj"));
             
@@ -46,19 +64,32 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GetProjectNugetPackages_ReturnsMultipleNugetPackages()
+        public async Task GetProjectNugetPackages_WithProjectAssetsFile_ReturnsMultipleNugetPackages()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\Project.csproj"), Helpers.GetProjectFileWithPackageReferences(
-                        new List<NugetPackage> {
-                            new NugetPackage { Name = "Package1", Version = "1.2.3"},
-                            new NugetPackage { Name = "Package2", Version = "1.2.3"},
-                            new NugetPackage { Name = "Package3", Version = "1.2.3"},
-                        })
-                    },
+                    { XFS.Path(@"c:\Project\Project.csproj"), "" },
+                    { XFS.Path(@"c:\Project\obj\project.assets.json"), "" },
                 });
-            var projectFileService = new ProjectFileService(mockFileSystem);
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            mockDotnetUtilsService
+                .Setup(s => s.Restore(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult());
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            mockProjectAssetsFileService
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>()))
+                .Returns(new HashSet<NugetPackage>
+                {
+                    new NugetPackage { Name = "Package1", Version = "1.2.3" },
+                    new NugetPackage { Name = "Package2", Version = "1.2.3" },
+                    new NugetPackage { Name = "Package3", Version = "1.2.3" },
+                });
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
 
             var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj"));
             var sortedPackages = new List<NugetPackage>(packages);
@@ -71,28 +102,35 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GetProjectNugetPackages_IgnoresImplicitPackageVersions()
+        public async Task GetProjectNugetPackages_WithPackagesConfig_ReturnsNugetPackage()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\Project.csproj"), Helpers.GetProjectFileWithPackageReference("Package", "") },
+                    { XFS.Path(@"c:\Project\Project.csproj"), "" },
+                    { XFS.Path(@"c:\Project\packages.config"), "" },
                 });
-            var projectFileService = new ProjectFileService(mockFileSystem);
-
-            var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj"));
-            
-            Assert.Empty(packages);
-        }
-
-        [Fact]
-        public async Task GetProjectNugetPackages_ReturnsPackagesConfigReferences()
-        {
-            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-                {
-                    { XFS.Path(@"c:\Project\Project.csproj"), new MockFileData(@"<Project></Project>") },
-                    { XFS.Path(@"c:\Project\packages.config"), Helpers.GetPackagesFileWithPackageReference("Package", "1.2.3") },
-                });
-            var projectFileService = new ProjectFileService(mockFileSystem);
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            mockDotnetUtilsService
+                .Setup(s => s.Restore(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult());
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            mockPackageFileService
+                .Setup(s => s.GetNugetPackagesAsync(It.IsAny<string>()))
+                .ReturnsAsync(
+                    new HashSet<NugetPackage>
+                    {
+                        new NugetPackage { Name = "Package", Version = "1.2.3" },
+                    }
+                );
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            mockProjectAssetsFileService
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>()))
+                .Returns(new HashSet<NugetPackage>());
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
 
             var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj"));
             
@@ -101,6 +139,49 @@ namespace CycloneDX.Tests
                     Assert.Equal("Package", item.Name);
                     Assert.Equal("1.2.3", item.Version);
                 });
+        }
+
+        [Fact]
+        public async Task GetProjectNugetPackages_WithPackagesConfig_ReturnsMultipleNugetPackages()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+                {
+                    { XFS.Path(@"c:\Project\Project.csproj"), "" },
+                    { XFS.Path(@"c:\Project\packages.config"), "" },
+                });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            mockDotnetUtilsService
+                .Setup(s => s.Restore(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult());
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            mockPackageFileService
+                .Setup(s => s.GetNugetPackagesAsync(It.IsAny<string>()))
+                .ReturnsAsync(
+                    new HashSet<NugetPackage>
+                    {
+                    new NugetPackage { Name = "Package1", Version = "1.2.3" },
+                    new NugetPackage { Name = "Package2", Version = "1.2.3" },
+                    new NugetPackage { Name = "Package3", Version = "1.2.3" },
+                    }
+                );
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            mockProjectAssetsFileService
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>()))
+                .Returns(new HashSet<NugetPackage>());
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj"));
+            var sortedPackages = new List<NugetPackage>(packages);
+            sortedPackages.Sort();
+            
+            Assert.Collection(sortedPackages,
+                item => Assert.Equal("Package1", item.Name),
+                item => Assert.Equal("Package2", item.Name),
+                item => Assert.Equal("Package3", item.Name));
         }
 
         [Fact]
@@ -116,7 +197,14 @@ namespace CycloneDX.Tests
                         })
                     },
                 });
-            var projectFileService = new ProjectFileService(mockFileSystem);
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
 
             var projects = await projectFileService.GetProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\Project\Project.csproj"));
             var sortedProjects = new List<string>(projects);
@@ -145,7 +233,14 @@ namespace CycloneDX.Tests
                     },
                     { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), new MockFileData(@"<Project></Project>") },
                 });
-            var projectFileService = new ProjectFileService(mockFileSystem);
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
 
             var projects = await projectFileService.RecursivelyGetProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"));
             var sortedProjects = new List<string>(projects);
@@ -154,63 +249,6 @@ namespace CycloneDX.Tests
             Assert.Collection(sortedProjects,
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), item),
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), item));
-        }
-
-        [Fact]
-        public async Task RecursivelyGetProjectNugetPackages_ReturnsNugetPackages()
-        {
-            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-                {
-                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithReferences(
-                        new string[] {
-                            @"..\Project2\Project2.csproj",
-                            @"..\Project3\Project3.csproj",
-                        },
-                        new NugetPackage[] {
-                            new NugetPackage { Name = "Package1", Version = "1.2.3" },
-                            new NugetPackage { Name = "Package2", Version = "1.2.3" },
-                            new NugetPackage { Name = "Package3", Version = "1.2.3" },
-                        })
-                    },
-                    { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), Helpers.GetProjectFileWithReferences(
-                        new string[] {
-                            @"..\Project3\Project3.csproj",
-                        },
-                        new NugetPackage[] {
-                            new NugetPackage { Name = "Package1", Version = "1.2.4" },
-                        })
-                    },
-                    { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), Helpers.GetProjectFileWithReferences(
-                        null,
-                        new NugetPackage[] {
-                            new NugetPackage { Name = "Package1", Version = "1.2.3" },
-                        })
-                    },
-                });
-            var projectFileService = new ProjectFileService(mockFileSystem);
-
-            var packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"));
-            var sortedPackages = new List<NugetPackage>(packages);
-            sortedPackages.Sort();
-            
-            Assert.Collection(sortedPackages,
-                item => {
-                    Assert.Equal("Package1", item.Name);
-                    Assert.Equal("1.2.3", item.Version);
-                },
-                item => {
-                    Assert.Equal("Package1", item.Name);
-                    Assert.Equal("1.2.4", item.Version);
-                },
-                item => {
-                    Assert.Equal("Package2", item.Name);
-                    Assert.Equal("1.2.3", item.Version);
-                },
-                item => {
-                    Assert.Equal("Package3", item.Name);
-                    Assert.Equal("1.2.3", item.Version);
-                }
-            );
         }
     }
 }
