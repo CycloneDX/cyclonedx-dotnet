@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build.sh = build.sh
 		push.sh = push.sh
 		semver.txt = semver.txt
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Tests", "CycloneDX.Tests\CycloneDX.Tests.csproj", "{36E0F78F-9C64-4967-976B-9ACD072E3E92}"

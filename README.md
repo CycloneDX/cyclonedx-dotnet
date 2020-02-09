@@ -1,4 +1,5 @@
 [![Build Status](https://github.com/CycloneDX/cyclonedx-dotnet/workflows/.NET%20Core%20CI/badge.svg)](https://github.com/CycloneDX/cyclonedx-dotnet/actions?workflow=.NET+Core+CI)
+[![Docker Image](https://img.shields.io/badge/docker-image-brightgreen?style=flat&logo=docker)](https://hub.docker.com/r/cyclonedx/cyclonedx-dotnet)
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)][License]
 [![NuGet Version](https://img.shields.io/nuget/v/CycloneDX.svg)](https://www.nuget.org/packages/CycloneDX/)
 [![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
@@ -12,10 +13,11 @@ The CycloneDX module for .NET creates a valid CycloneDX bill-of-material documen
 
 This module runs on [.NET Core 2.1](https://dotnet.microsoft.com/download/dotnet-core/2.1) and [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1).
 
-Usage
--------------------
+## Usage
 
-#### Installing
+CycloneDX for .NET is distributed via NuGet and Docker Hub. 
+
+#### Installing via NuGet
 
 ```bash
 dotnet tool install --global CycloneDX
@@ -25,6 +27,18 @@ If you already have a previous version of **CycloneDX** installed, you can upgra
 
 ```bash
 dotnet tool update --global CycloneDX
+```
+
+#### Execution via DotNet
+
+```bash
+dotnet CycloneDX [OPTIONS]
+```
+
+#### Execution via Docker
+
+```bash
+docker run cyclonedx/cyclonedx-dotnet [OPTIONS]
 ```
 
 #### Options
