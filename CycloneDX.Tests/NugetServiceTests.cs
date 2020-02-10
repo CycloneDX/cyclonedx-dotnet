@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -91,6 +92,24 @@ namespace CycloneDX.Tests
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/testpackage/1.0.0/testpackage.nuspec")
                 .Respond("application/xml", mockResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var nugetService = new NugetService(
+                new MockFileSystem(),
+                new List<string>(),
+                new Mock<IGithubService>().Object,
+                client);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0");
+            
+            Assert.Equal("testpackage", component.Name);
+        }
+
+        [Fact]
+        public async Task GetComponent_FromNugetOrgWhichDoesntExist_ReturnsComponent()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.nuget.org/v3-flatcontainer/testpackage/1.0.0/testpackage.nuspec")
+                .Respond(HttpStatusCode.NotFound);
             var client = mockHttp.ToHttpClient();
             var nugetService = new NugetService(
                 new MockFileSystem(),
