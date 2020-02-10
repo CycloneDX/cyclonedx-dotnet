@@ -99,14 +99,14 @@ namespace CycloneDX.Services
 
             var nuspecFilename = GetCachedNuspecFilename(name, version);
 
-            NuspecReader nuspecReader;
+            NuspecReader nuspecReader = null;
 
             if (nuspecFilename == null)
             {
                 var url = _baseUrl + name + "/" + version + "/" + name + ".nuspec";
                 using (var xmlStream = await _httpClient.GetXmlStreamAsync(url))
                 {
-                    nuspecReader = new NuspecReader(xmlStream);
+                    if (xmlStream != null) nuspecReader = new NuspecReader(xmlStream);
                 }
             }
             else
