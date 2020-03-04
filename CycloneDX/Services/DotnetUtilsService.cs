@@ -144,7 +144,8 @@ namespace CycloneDX.Services
             {
                 return new DotnetUtilsResult
                 {
-                    ErrorMessage = commandResult.StdErr
+                    // dotnet restore only outputs to std out, not std err
+                    ErrorMessage = commandResult.StdOut
                 };
             }
         }
