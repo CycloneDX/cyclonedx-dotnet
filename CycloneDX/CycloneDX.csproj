@@ -43,6 +43,10 @@
   <ItemGroup>
     <Compile Remove="Model\EmptyClass.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CycloneDX.Core\CycloneDX.Core.csproj" />
+  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
