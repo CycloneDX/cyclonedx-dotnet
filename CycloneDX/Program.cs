@@ -123,32 +123,39 @@ namespace CycloneDX {
             var fullSolutionOrProjectFilePath = Program.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
             var attr = Program.fileSystem.File.GetAttributes(fullSolutionOrProjectFilePath);
 
-            if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+            try
             {
-                packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath);
+                if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+                {
+                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath);
+                }
+                else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
+                {
+                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath);
+                }
+                else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
+                {
+                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath);
+                }
+                else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
+                {
+                    packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath);
+                } 
+                else if (attr.HasFlag(FileAttributes.Directory))
+                {
+                    packages = await packagesFileService.RecursivelyGetNugetPackagesAsync(fullSolutionOrProjectFilePath);
+                }
+                else
+                {
+                    Console.Error.WriteLine($"Only .sln, .csproj, .vbproj, and packages.config files are supported");
+                    return (int)ExitCode.InvalidOptions;
+                }
             }
-            else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
+            catch (DotnetRestoreException)
             {
-                packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath);
+                return (int)ExitCode.DotnetRestoreFailed;
             }
-            else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
-            {
-                packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath);
-            }
-            else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
-            {
-                packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath);
-            } 
-            else if (attr.HasFlag(FileAttributes.Directory))
-            {
-                packages = await packagesFileService.RecursivelyGetNugetPackagesAsync(fullSolutionOrProjectFilePath);
-            }
-            else
-            {
-                Console.Error.WriteLine($"Only .sln, .csproj, .vbproj, and packages.config files are supported");
-                return (int)ExitCode.InvalidOptions;
-            }
-
+            
             // get all the components from the NuGet packages
             var components = new HashSet<Component>();
             try

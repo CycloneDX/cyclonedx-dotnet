@@ -9,6 +9,7 @@ namespace CycloneDX
         GitHubParameterMissing,
         InvalidGitHubApiCredentials,
         GitHubApiRateLimitExceeded,
-        LocalPackageCacheError
+        LocalPackageCacheError,
+        DotnetRestoreFailed
     }
 }
