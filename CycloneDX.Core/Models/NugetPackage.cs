@@ -15,9 +15,12 @@
 // Copyright (c) Steve Springett. All Rights Reserved.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CycloneDX.Models
 {
+    // This suppression should maybe be revisited when/if a CycloneDX library is published
+    [SuppressMessage("Microsoft.Design", "CA1036:OverrideMethodsOnComparableTypes")]
     public class NugetPackage : IComparable
     {
         public string Name { get; set; }
