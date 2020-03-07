@@ -34,7 +34,7 @@ namespace CycloneDX {
         /// <returns>CycloneDX XDocument</returns>
         public static XDocument CreateXmlDocument(HashSet<Component> components, bool noSerialNumber = false)
         {
-            XNamespace ns = "http://cyclonedx.org/schema/bom/1.1";
+            XNamespace ns = "http://cyclonedx.org/schema/bom/1.1"; // DevSkim: ignore DS137138
             var doc = new XDocument();
             var serialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
             doc.Declaration = new XDeclaration("1.0", "utf-8", null);
