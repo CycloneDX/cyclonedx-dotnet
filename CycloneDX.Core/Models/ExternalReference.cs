@@ -18,6 +18,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CycloneDX.Models
 {
+    [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")]
     public class ExternalReference
     {
         public string Url { get; set; }
