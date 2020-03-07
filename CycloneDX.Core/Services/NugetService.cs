@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Net.Http;
@@ -183,6 +184,7 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<Component> GetComponentAsync(NugetPackage package)
         {
+            Contract.Requires(package != null);
             return await GetComponentAsync(package.Name, package.Version).ConfigureAwait(false);
         }
     }
