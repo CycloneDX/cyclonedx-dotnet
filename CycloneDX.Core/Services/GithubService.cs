@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
@@ -57,7 +58,7 @@ namespace CycloneDX.Services
             _httpClient = httpClient;
 
             // implemented as per RFC 7617 https://tools.ietf.org/html/rfc7617.html
-            var userToken = string.Format("{0}:{1}", username, token);
+            var userToken = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", username, token);
             var userTokenBytes = System.Text.Encoding.UTF8.GetBytes(userToken);
             var userTokenBase64 = System.Convert.ToBase64String(userTokenBytes);
 
