@@ -18,8 +18,8 @@ namespace CycloneDX.Models
 {
     public enum Algorithm
     {
-        MD5,
-        SHA1,
+        MD5, // DevSkim: ignore DS126858
+        SHA1, // DevSkim: ignore DS126858
         SHA_256,
         SHA_384,
         SHA_512,
@@ -43,10 +43,10 @@ namespace CycloneDX.Models
         public static string GetXmlString(this Algorithm algorithm)
         {
             switch (algorithm) {
-                case Algorithm.MD5:
-                    return "MD5";
-                case Algorithm.SHA1:
-                    return "SHA-1";
+                case Algorithm.MD5:  // DevSkim: ignore DS126858
+                    return "MD5";  // DevSkim: ignore DS126858
+                case Algorithm.SHA1:  // DevSkim: ignore DS126858
+                    return "SHA-1";  // DevSkim: ignore DS126858
                 case Algorithm.SHA_256:
                     return "SHA-256";
                 case Algorithm.SHA_384:
