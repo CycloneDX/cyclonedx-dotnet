@@ -45,7 +45,7 @@ namespace CycloneDX.Tests
                 new NugetPackage { Name = "Package3", Version = "1.0.0" },
             };
 
-            var components = await componentService.RecursivelyGetComponentsAsync(nugetPackages);
+            var components = await componentService.RecursivelyGetComponentsAsync(nugetPackages).ConfigureAwait(false);
             var sortedComponents = components.OrderBy(c => c.Name).ToList();
 
             Assert.Collection(sortedComponents,
@@ -81,7 +81,7 @@ namespace CycloneDX.Tests
                 new NugetPackage { Name = "Package1", Version = "1.0.0" }
             };
 
-            var components = await componentService.RecursivelyGetComponentsAsync(nugetPackages);
+            var components = await componentService.RecursivelyGetComponentsAsync(nugetPackages).ConfigureAwait(false);
             var sortedComponents = components.OrderBy(c => c.Name).ToList();
 
             Assert.Collection(sortedComponents,

@@ -47,7 +47,7 @@ namespace CycloneDX.Services
             {
                 string line;
 
-                while ((line = await reader.ReadLineAsync()) != null)
+                while ((line = await reader.ReadLineAsync().ConfigureAwait(false)) != null)
                 {
                     if (!line.StartsWith("Project", StringComparison.OrdinalIgnoreCase))
                     {
@@ -67,7 +67,7 @@ namespace CycloneDX.Services
             var projectList = new List<string>(projects);
             foreach (var project in projectList)
             {
-                var projectReferences = await _projectFileService.RecursivelyGetProjectReferencesAsync(project);
+                var projectReferences = await _projectFileService.RecursivelyGetProjectReferencesAsync(project).ConfigureAwait(false);
                 projects.UnionWith(projectReferences);
             }
 
@@ -93,7 +93,7 @@ namespace CycloneDX.Services
 
             var packages = new HashSet<NugetPackage>();
 
-            var projectPaths = await GetSolutionProjectReferencesAsync(solutionFilePath);
+            var projectPaths = await GetSolutionProjectReferencesAsync(solutionFilePath).ConfigureAwait(false);
 
             if (projectPaths.Count == 0)
             {
@@ -107,7 +107,7 @@ namespace CycloneDX.Services
             foreach (var projectFilePath in projectPaths)
             {
                 Console.WriteLine();
-                var projectPackages = await _projectFileService.GetProjectNugetPackagesAsync(projectFilePath);
+                var projectPackages = await _projectFileService.GetProjectNugetPackagesAsync(projectFilePath).ConfigureAwait(false);
                 packages.UnionWith(projectPackages);
             }
 

@@ -31,12 +31,12 @@ namespace CycloneDX.Extensions
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
             HttpResponseMessage response;
-            response = await httpClient.GetAsync(url);
+            response = await httpClient.GetAsync(url).ConfigureAwait(false);
             
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound) return null;
             
             response.EnsureSuccessStatusCode();
-            var contentStream = await response.Content.ReadAsStreamAsync();
+            var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
             return contentStream;
         }
     }

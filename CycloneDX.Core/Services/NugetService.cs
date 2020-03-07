@@ -104,7 +104,7 @@ namespace CycloneDX.Services
             if (nuspecFilename == null)
             {
                 var url = _baseUrl + name + "/" + version + "/" + name + ".nuspec";
-                using (var xmlStream = await _httpClient.GetXmlStreamAsync(url))
+                using (var xmlStream = await _httpClient.GetXmlStreamAsync(url).ConfigureAwait(false))
                 {
                     if (xmlStream != null) nuspecReader = new NuspecReader(xmlStream);
                 }
@@ -155,7 +155,7 @@ namespace CycloneDX.Services
                 var licenseUrl = nuspecReader.GetLicenseUrl();
                 if (!string.IsNullOrEmpty(licenseUrl))
                 {
-                    var license = await _githubService.GetLicenseAsync(licenseUrl);
+                    var license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
                     
                     component.Licenses.Add(license ?? new Models.License
                     {
@@ -183,7 +183,7 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<Component> GetComponentAsync(NugetPackage package)
         {
-            return await GetComponentAsync(package.Name, package.Version);
+            return await GetComponentAsync(package.Name, package.Version).ConfigureAwait(false);
         }
     }
 }

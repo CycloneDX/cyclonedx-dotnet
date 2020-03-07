@@ -97,7 +97,7 @@ namespace CycloneDX.Services
                 if (_fileSystem.File.Exists(packagesPath))
                 {
                     Console.WriteLine("  Found packages.config. Will attempt to process");
-                    packages = await _packagesFileService.GetNugetPackagesAsync(packagesPath);
+                    packages = await _packagesFileService.GetNugetPackagesAsync(packagesPath).ConfigureAwait(false);
                 }
             }
             return packages;
@@ -110,11 +110,11 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath)
         {
-            var nugetPackages = await GetProjectNugetPackagesAsync(projectFilePath);
-            var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath);
+            var nugetPackages = await GetProjectNugetPackagesAsync(projectFilePath).ConfigureAwait(false);
+            var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
             foreach (var project in projectReferences)
             {
-                var projectNugetPackages = await GetProjectNugetPackagesAsync(project);
+                var projectNugetPackages = await GetProjectNugetPackagesAsync(project).ConfigureAwait(false);
                 nugetPackages.UnionWith(projectNugetPackages);
             }
             return nugetPackages;
@@ -144,7 +144,7 @@ namespace CycloneDX.Services
             {
                 using (XmlReader reader = XmlReader.Create(fileReader, _xmlReaderSettings))
                 {
-                    while (await reader.ReadAsync())
+                    while (await reader.ReadAsync().ConfigureAwait(false))
                     {
                         if (reader.IsStartElement() && reader.Name == "ProjectReference")
                         {
@@ -185,7 +185,7 @@ namespace CycloneDX.Services
             {
                 var currentFile = files.Dequeue();
                 // Find all project references inside of currentFile
-                var foundProjectReferences = await GetProjectReferencesAsync(currentFile);
+                var foundProjectReferences = await GetProjectReferencesAsync(currentFile).ConfigureAwait(false);
 
                 // Add unvisited project files to the queue
                 // Loop through found project references

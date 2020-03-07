@@ -31,7 +31,7 @@ namespace CycloneDX.Tests
         [Fact]
         public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsSolutionOrProjectFileParameterMissingExitCode()
         {
-            var exitCode = await Program.Main(new string[] {});
+            var exitCode = await Program.Main(new string[] {}).ConfigureAwait(false);
 
             Assert.Equal((int)ExitCode.SolutionOrProjectFileParameterMissing, exitCode);
         }
@@ -39,7 +39,7 @@ namespace CycloneDX.Tests
         [Fact]
         public async Task CallingCycloneDX_WithoutOutputDirectory_ReturnsOutputDirectoryParameterMissingExitCode()
         {
-            var exitCode = await Program.Main(new string[] { XFS.Path(@"c:\SolutionPath\Solution.sln") });
+            var exitCode = await Program.Main(new string[] { XFS.Path(@"c:\SolutionPath\Solution.sln") }).ConfigureAwait(false);
 
             Assert.Equal((int)ExitCode.OutputDirectoryParameterMissing, exitCode);
         }
@@ -63,7 +63,7 @@ namespace CycloneDX.Tests
                 "-o", XFS.Path(@"c:\NewDirectory")
             };
 
-            var exitCode = await Program.Main(args);
+            var exitCode = await Program.Main(args).ConfigureAwait(false);
 
             Assert.Equal((int)ExitCode.OK, exitCode);
             Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\bom.xml")));

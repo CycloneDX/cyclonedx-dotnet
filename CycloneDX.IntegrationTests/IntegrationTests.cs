@@ -49,7 +49,7 @@ namespace CycloneDX.IntegrationTests
                     Path.Join("Resources", directoryName),
                     "--noSerialNumber",
                     "--out", tempDir.DirectoryPath
-                });
+                }).ConfigureAwait(false);
                 // defensive assert, if this fails there is no point attempting to inspect the bom contents
                 Assert.Equal(0, exitCode);
 
@@ -72,7 +72,7 @@ namespace CycloneDX.IntegrationTests
                     Path.Join("Resources", solutionName, $"{solutionName}.sln"),
                     "--noSerialNumber",
                     "--out", tempDir.DirectoryPath
-                });
+                }).ConfigureAwait(false);
                 // defensive assert, if this fails there is no point attempting to inspect the bom contents
                 Assert.Equal(0, exitCode);
 
@@ -100,7 +100,7 @@ namespace CycloneDX.IntegrationTests
                     projectFilePath,
                     "--noSerialNumber",
                     "--out", tempDir.DirectoryPath
-                });
+                }).ConfigureAwait(false);
                 // defensive assert, if this fails there is no point attempting to inspect the bom contents
                 Assert.Equal(0, exitCode);
 
