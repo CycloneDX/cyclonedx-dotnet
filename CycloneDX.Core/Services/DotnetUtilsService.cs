@@ -25,7 +25,6 @@ namespace CycloneDX.Services
     {
         private Regex _sdkPathRegex = new Regex(@"(\S)+ \[(?<path>.*)\]");
         private Regex _globalPackageCacheLocationPath = new Regex(@"global-packages: (?<path>.*)$");
-        private Regex _projectRegex = new Regex(@"Restore completed in \S+ \S+ for (?<path>.+)\.");
 
         private IFileSystem _fileSystem;
         private IDotnetCommandService _dotnetCommandService;
