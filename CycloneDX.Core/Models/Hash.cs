@@ -14,8 +14,12 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
+using System;
+using System.Diagnostics.CodeAnalysis;
+
 namespace CycloneDX.Models
 {
+    [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")]
     public enum Algorithm
     {
         MD5,
