@@ -21,6 +21,8 @@ using System.Diagnostics.CodeAnalysis;
 namespace CycloneDX.Models
 {
     [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    // This suppression should maybe be revisited when/if a CycloneDX library is published
+    [SuppressMessage("Microsoft.Design", "CA1036:OverrideMethodsOnComparableTypes")]
     public class Component : IComparable<Component>
     {
         public string Publisher { get; set; }
