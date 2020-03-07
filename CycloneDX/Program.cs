@@ -59,7 +59,7 @@ namespace CycloneDX {
         static internal ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
         
         public static async Task<int> Main(string[] args)
-            => await CommandLineApplication.ExecuteAsync<Program>(args);
+            => await CommandLineApplication.ExecuteAsync<Program>(args).ConfigureAwait(false);
 
         async Task<int> OnExecuteAsync() {
             Console.WriteLine();
@@ -127,23 +127,23 @@ namespace CycloneDX {
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
-                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath);
+                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
-                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath);
+                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
-                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath);
+                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                 }
                 else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {
-                    packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath);
+                    packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                 } 
                 else if (attr.HasFlag(FileAttributes.Directory))
                 {
-                    packages = await packagesFileService.RecursivelyGetNugetPackagesAsync(fullSolutionOrProjectFilePath);
+                    packages = await packagesFileService.RecursivelyGetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                 }
                 else
                 {
@@ -162,7 +162,7 @@ namespace CycloneDX {
             {
                 foreach (var package in packages)
                 {
-                    var component = await nugetService.GetComponentAsync(package);
+                    var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
                     if (component != null) components.Add(component);
                 }
             }

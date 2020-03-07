@@ -36,7 +36,7 @@ namespace CycloneDX.Tests
                 });
             var packagesFileService = new PackagesFileService(mockFileSystem);
 
-            var packages = await packagesFileService.GetNugetPackagesAsync(XFS.Path(@"c:\Project\packages.config"));
+            var packages = await packagesFileService.GetNugetPackagesAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(false);
             
             Assert.Collection(packages,
                 item => {
@@ -60,7 +60,7 @@ namespace CycloneDX.Tests
                 });
             var packagesFileService = new PackagesFileService(mockFileSystem);
 
-            var packages = await packagesFileService.GetNugetPackagesAsync(XFS.Path(@"c:\Project\packages.config"));
+            var packages = await packagesFileService.GetNugetPackagesAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(false);
             var sortedPackages = new List<NugetPackage>(packages);
             sortedPackages.Sort();
 

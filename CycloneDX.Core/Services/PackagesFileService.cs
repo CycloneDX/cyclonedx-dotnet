@@ -53,7 +53,7 @@ namespace CycloneDX.Services
             {
                 using (XmlReader reader = XmlReader.Create(fileReader, _xmlReaderSettings))
                 {
-                    while (await reader.ReadAsync())
+                    while (await reader.ReadAsync().ConfigureAwait(false))
                     {
                         if (reader.IsStartElement() && reader.Name == "package")
                         {
@@ -81,7 +81,7 @@ namespace CycloneDX.Services
 
             foreach (var packageFile in packageFiles)
             {
-                var newPackages = await GetNugetPackagesAsync(packageFile);
+                var newPackages = await GetNugetPackagesAsync(packageFile).ConfigureAwait(false);
                 packages.UnionWith(newPackages);
             }
 

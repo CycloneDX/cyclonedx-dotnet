@@ -46,7 +46,7 @@ namespace CycloneDX.Services
             while (packages.Count > 0)
             {
                 var currentPackage = packages.Dequeue();
-                var component = await _nugetService.GetComponentAsync(currentPackage);
+                var component = await _nugetService.GetComponentAsync(currentPackage).ConfigureAwait(false);
 
                 if (component == null) continue;
 

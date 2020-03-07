@@ -96,7 +96,7 @@ namespace CycloneDX.Services
             Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec}");
 
             // Try getting license for the specified version
-            var githubLicense = await GetGithubLicenseAsync($"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}");
+            var githubLicense = await GetGithubLicenseAsync($"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}").ConfigureAwait(false);
 
             if (githubLicense == null) {
                 Console.WriteLine($"No license found on GitHub for repository {repositoryId} using ref {refSpec}");
@@ -127,11 +127,11 @@ namespace CycloneDX.Services
             githubLicenseRequestMessage.Headers.Accept.ParseAdd("application/json");
 
             // Send HTTP request and handle its response
-            var githubResponse = await _httpClient.SendAsync(githubLicenseRequestMessage);
+            var githubResponse = await _httpClient.SendAsync(githubLicenseRequestMessage).ConfigureAwait(false);
             if (githubResponse.IsSuccessStatusCode)
             {
                 // License found, extract data
-                return JsonConvert.DeserializeObject<GithubLicenseRoot>(await githubResponse.Content.ReadAsStringAsync());
+                return JsonConvert.DeserializeObject<GithubLicenseRoot>(await githubResponse.Content.ReadAsStringAsync().ConfigureAwait(false));
             }
             else if (githubResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
