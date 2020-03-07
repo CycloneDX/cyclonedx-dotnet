@@ -15,6 +15,7 @@
 // Copyright (c) Steve Springett. All Rights Reserved.
 
 using System;
+using System.Diagnostics.Contracts;
 
 namespace CycloneDX
 {
@@ -31,6 +32,7 @@ namespace CycloneDX
         }
 
         public static bool IsSupportedProjectType(string filename) {
+            Contract.Requires(filename != null);
             return filename.ToLowerInvariant().EndsWith(".csproj", StringComparison.OrdinalIgnoreCase) ||
                 filename.ToLowerInvariant().EndsWith(".vbproj", StringComparison.OrdinalIgnoreCase);
         }

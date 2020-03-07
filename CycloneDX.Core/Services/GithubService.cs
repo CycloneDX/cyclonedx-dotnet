@@ -18,6 +18,7 @@ using CycloneDX.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
@@ -52,6 +53,7 @@ namespace CycloneDX.Services
 
         public GithubService(HttpClient httpClient, string username, string token)
         {
+            Contract.Requires(httpClient != null);
             _httpClient = httpClient;
 
             // implemented as per RFC 7617 https://tools.ietf.org/html/rfc7617.html

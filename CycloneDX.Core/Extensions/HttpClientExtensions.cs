@@ -14,6 +14,8 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
+using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -28,6 +30,7 @@ namespace CycloneDX.Extensions
          */
         public static async Task<Stream> GetXmlStreamAsync(this HttpClient httpClient, string url)
         {
+            Contract.Requires(httpClient != null);
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
             HttpResponseMessage response;
