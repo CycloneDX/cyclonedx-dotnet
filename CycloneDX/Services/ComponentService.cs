@@ -40,12 +40,12 @@ namespace CycloneDX.Services
 
             // Initialize the queue with the current packages
             var packages = new Queue<NugetPackage>(nugetPackges);
-            NugetPackage currentPackage;
 
             var visitedNugetPackages = new HashSet<NugetPackage>();
 
-            while (packages.TryDequeue(out currentPackage))
+            while (packages.Count > 0)
             {
+                var currentPackage = packages.Dequeue();
                 var component = await _nugetService.GetComponentAsync(currentPackage);
 
                 if (component == null) continue;
