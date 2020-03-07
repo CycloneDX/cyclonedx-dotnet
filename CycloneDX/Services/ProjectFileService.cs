@@ -178,12 +178,12 @@ namespace CycloneDX.Services
             // Initialize the queue with the current project file
             var files = new Queue<string>();
             files.Enqueue(_fileSystem.FileInfo.FromFileName(projectFilePath).FullName);
-            string currentFile;
 
             var visitedProjectFiles = new HashSet<string>();
 
-            while (files.TryDequeue(out currentFile))
+            while (files.Count > 0)
             {
+                var currentFile = files.Dequeue();
                 // Find all project references inside of currentFile
                 var foundProjectReferences = await GetProjectReferencesAsync(currentFile);
 
