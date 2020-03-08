@@ -3,6 +3,30 @@ name: .NET Core CI
 on: [pull_request]
 
 jobs:
+  build-warnings:
+    name: Build warnings check
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v1
+  
+      - name: Setup .NET Core 2.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 2.1.803
+  
+      - name: Setup .NET Core 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+
+      - name: Setup side by side .NET SDKs on *nix
+        run: |
+          rsync -a ${DOTNET_ROOT/3.1.101/2.1.803}/* $DOTNET_ROOT/
+
+      - name: Build
+        run: dotnet build /WarnAsError
+
   test:
     name: Tests for .net core ${{ matrix.framework }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
