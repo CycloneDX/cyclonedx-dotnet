@@ -28,8 +28,23 @@ using License = CycloneDX.Models.License;
 
 namespace CycloneDX.Services
 {
-    public class InvalidGitHubApiCredentialsException : Exception {}
-    public class GitHubApiRateLimitExceededException : Exception {}
+    public class InvalidGitHubApiCredentialsException : Exception
+    {
+        public InvalidGitHubApiCredentialsException() : base() {}
+
+        public InvalidGitHubApiCredentialsException(string message) : base(message) {}
+
+        public InvalidGitHubApiCredentialsException(string message, Exception innerException) : base(message, innerException) {}
+    }
+
+    public class GitHubApiRateLimitExceededException : Exception
+    {
+        public GitHubApiRateLimitExceededException() : base() {}
+
+        public GitHubApiRateLimitExceededException(string message) : base(message) {}
+
+        public GitHubApiRateLimitExceededException(string message, Exception innerException) : base(message, innerException) {}
+    }
 
     public interface IGithubService
     {
@@ -139,12 +154,12 @@ namespace CycloneDX.Services
             else if (githubResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 Console.Error.WriteLine("Invalid GitHub API credentials.");
-                throw new InvalidGitHubApiCredentialsException();
+                throw new InvalidGitHubApiCredentialsException("Invalid GitHub API credentials http status code 401");
             }
             else if (githubResponse.StatusCode == System.Net.HttpStatusCode.Forbidden)
             {
                 Console.Error.WriteLine("GitHub API rate limit exceeded.");
-                throw new GitHubApiRateLimitExceededException();
+                throw new GitHubApiRateLimitExceededException("GitHub API rate limit exceeded http status code 403");
             }
             else
             {
