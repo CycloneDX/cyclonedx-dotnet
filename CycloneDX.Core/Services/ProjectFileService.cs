@@ -26,7 +26,14 @@ using CycloneDX.Models;
 
 namespace CycloneDX.Services
 {
-    public class DotnetRestoreException : Exception {}
+    public class DotnetRestoreException : Exception
+    {
+        public DotnetRestoreException() : base() {}
+        
+        public DotnetRestoreException(string message) : base(message) {}
+        
+        public DotnetRestoreException(string message, Exception innerException) : base(message, innerException) {}
+    }
 
     public class ProjectFileService : IProjectFileService
     {
@@ -85,7 +92,7 @@ namespace CycloneDX.Services
             {
                 Console.WriteLine("Dotnet restore failed:");
                 Console.WriteLine(restoreResult.ErrorMessage);
-                throw new DotnetRestoreException();
+                throw new DotnetRestoreException($"Dotnet restore failed with message: {restoreResult.ErrorMessage}");
             }
 
             // if there are no project file package references look for a packages.config
