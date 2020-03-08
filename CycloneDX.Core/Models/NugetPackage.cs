@@ -57,9 +57,9 @@ namespace CycloneDX.Models
             }
             else
             {
-                var nameComparison = this.Name.CompareTo(other.Name);
+                var nameComparison = string.Compare(this.Name, other.Name, StringComparison.Ordinal);
                 return nameComparison == 0
-                    ? this.Version.CompareTo(other.Version)
+                    ? string.Compare(this.Version, other.Version, StringComparison.Ordinal)
                     : nameComparison;
             }
         }

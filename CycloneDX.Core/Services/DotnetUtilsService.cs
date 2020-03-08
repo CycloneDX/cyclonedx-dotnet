@@ -91,7 +91,7 @@ namespace CycloneDX.Services
         private string CombineErrorMessages(string currentErrorMessage, string additionalErrorMessage)
         {
             if (additionalErrorMessage == null) return currentErrorMessage;
-            if (currentErrorMessage == "")
+            if (currentErrorMessage.Length == 0)
             {
                 return additionalErrorMessage;
             }
