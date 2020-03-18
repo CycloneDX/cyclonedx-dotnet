@@ -51,7 +51,6 @@ namespace CycloneDX.Services
             string baseUrl = null)
         {
             _fileSystem = fileSystem;
-            _githubService = githubService;
             _packageCachePaths = packageCachePaths;
             _githubService = githubService;
             _httpClient = httpClient;
@@ -156,12 +155,22 @@ namespace CycloneDX.Services
                 var licenseUrl = nuspecReader.GetLicenseUrl();
                 if (!string.IsNullOrEmpty(licenseUrl))
                 {
-                    var license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
+                    Models.License license = null;
                     
-                    component.Licenses.Add(license ?? new Models.License
+                    if (_githubService != null)
                     {
-                        Url = licenseUrl
-                    });
+                        license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
+                    }
+
+                    if (license == null)
+                    {
+                        license = new Models.License
+                        {
+                            Url = licenseUrl
+                        };
+                    }
+                    
+                    component.Licenses.Add(license);
                 }
             }
 

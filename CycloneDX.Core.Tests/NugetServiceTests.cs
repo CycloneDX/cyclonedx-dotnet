@@ -159,5 +159,34 @@ namespace CycloneDX.Tests
                     Assert.Equal("https://www.example.com/LICENSE", item.Url);
                 });
         }
+
+        [Fact]
+        public async Task GetComponent_WithGithubLicenseResolutionDisabled_DoesntResolveGithubLicense()
+        {
+            var mockResponseContent = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <licenseUrl>https://www.example.com/license</licenseUrl>
+                </metadata>
+                </package>";
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.nuget.org/v3-flatcontainer/PackageName/1.2.3/PackageName.nuspec")
+                .Respond("application/xml", mockResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var nugetService = new NugetService(
+                new MockFileSystem(),
+                new List<string>(),
+                null,
+                client);
+
+            var component = await nugetService.GetComponentAsync("PackageName", "1.2.3").ConfigureAwait(false);
+
+            Assert.Collection(component.Licenses, 
+                item => {
+                    Assert.Null(item.Id);
+                    Assert.Null(item.Name);
+                    Assert.Equal("https://www.example.com/license", item.Url);
+                });
+        }
     }
 }
