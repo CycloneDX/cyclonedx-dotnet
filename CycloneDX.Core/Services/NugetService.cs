@@ -51,7 +51,6 @@ namespace CycloneDX.Services
             string baseUrl = null)
         {
             _fileSystem = fileSystem;
-            _githubService = githubService;
             _packageCachePaths = packageCachePaths;
             _githubService = githubService;
             _httpClient = httpClient;
