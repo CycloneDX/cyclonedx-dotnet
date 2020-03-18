@@ -47,6 +47,8 @@ namespace CycloneDX {
         string githubUsername { get; set; }
         [Option(Description = "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username.", ShortName = "gt", LongName = "githubToken")]
         string githubToken { get; set; }
+        [Option(Description = "Optionally disable GitHub license resolution.", ShortName = "dgl", LongName = "disableGithubLicenses")]
+        bool disableGithubLicenses { get; set; }
 
 
         static internal IFileSystem fileSystem = new FileSystem();
@@ -100,15 +102,18 @@ namespace CycloneDX {
             // instantiate services
 
             var fileDiscoveryService = new FileDiscoveryService(Program.fileSystem);
-            // GitHubService requires its own HttpClient as it adds a default authorization header
-            GithubService githubService;
-            if (string.IsNullOrEmpty(githubUsername) || string.IsNullOrEmpty(githubToken))
+            GithubService githubService = null;
+            if (!disableGithubLicenses)
             {
-                githubService = new GithubService(new HttpClient());
-            }
-            else
-            {
-                githubService = new GithubService(new HttpClient(), githubUsername, githubToken);
+                // GitHubService requires its own HttpClient as it adds a default authorization header
+                if (string.IsNullOrEmpty(githubUsername) || string.IsNullOrEmpty(githubToken))
+                {
+                    githubService = new GithubService(new HttpClient());
+                }
+                else
+                {
+                    githubService = new GithubService(new HttpClient(), githubUsername, githubToken);
+                }
             }
             var nugetService = new NugetService(
                 Program.fileSystem,
