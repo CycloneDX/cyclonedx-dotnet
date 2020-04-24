@@ -36,10 +36,7 @@ namespace CycloneDX.Models
         public string Copyright { get; set; }
         public string Cpe { get; set; }
         public string Purl { get; set; }
-        public bool Modified { get; set; }
-        public List<Component> Components { get; set; } = new List<Component>();
         public List<ExternalReference> ExternalReferences { get; set; } = new List<ExternalReference>();
-        public string Type { get; set; }
         public HashSet<NugetPackage> Dependencies { get; set; } = new HashSet<NugetPackage>();
 
         public override bool Equals(object obj)
