@@ -34,7 +34,6 @@ namespace CycloneDX.Models
         public List<Hash> Hashes { get; set; } = new List<Hash>();
         public List<License> Licenses { get; set; } = new List<License>();
         public string Copyright { get; set; }
-        public string Cpe { get; set; }
         public string Purl { get; set; }
         public List<ExternalReference> ExternalReferences { get; set; } = new List<ExternalReference>();
         public HashSet<NugetPackage> Dependencies { get; set; } = new HashSet<NugetPackage>();
