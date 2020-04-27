@@ -15,7 +15,8 @@
 // Copyright (c) Steve Springett. All Rights Reserved.
 
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using CycloneDX.Models;
@@ -32,24 +33,25 @@ namespace CycloneDX {
         /// <param name="components">Components that should be included in the BOM</param>
         /// <param name="noSerialNumber">Optionally omit the serial number from the resulting BOM</param>
         /// <returns>CycloneDX XDocument</returns>
-        public static XDocument CreateXmlDocument(HashSet<Component> components, bool noSerialNumber = false)
+        public static string CreateXmlDocument(Bom bom)
         {
+            Contract.Requires(bom != null);
+
             XNamespace ns = "http://cyclonedx.org/schema/bom/1.1";
             var doc = new XDocument();
-            var serialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
             doc.Declaration = new XDeclaration("1.0", "utf-8", null);
 
-            var bom = (noSerialNumber) ? new XElement(ns + "bom", new XAttribute("version", "1")) :
-                new XElement(ns + "bom", new XAttribute("version", "1"), new XAttribute("serialNumber", serialNumber));
+            var bomElement = (string.IsNullOrEmpty(bom.SerialNumber)) ? new XElement(ns + "bom", new XAttribute("version", bom.Version)) :
+                new XElement(ns + "bom", new XAttribute("version", bom.Version), new XAttribute("serialNumber", bom.SerialNumber));
 
-            var sortedComponents = components.ToList();
+            var sortedComponents = bom.Components.ToList();
             sortedComponents.Sort();
 
             var com = new XElement(ns + "components");
             foreach (var component in sortedComponents)
             {
                 Console.WriteLine(component.Name);
-                var c = new XElement(ns + "component", new XAttribute("type", "library"));
+                var c = new XElement(ns + "component", new XAttribute("type", component.Type));
                 if (!string.IsNullOrEmpty(component.Group))
                 {
                     c.Add(new XElement(ns + "group", component.Group));
@@ -118,9 +120,15 @@ namespace CycloneDX {
 
                 com.Add(c);
             }
-            bom.Add(com);
-            doc.Add(bom);
-            return doc;
+            bomElement.Add(com);
+
+            doc.Add(bomElement);
+
+            using (var sw = new Utf8StringWriter())
+            {
+                doc.Save(sw);
+                return sw.ToString();
+            }
         }
     }
 }
