@@ -102,10 +102,6 @@ namespace CycloneDX {
                 {
                     c.Add(new XElement(ns + "copyright", component.Copyright));
                 }
-                if (!string.IsNullOrEmpty(component.Cpe))
-                {
-                    c.Add(new XElement(ns + "cpe", component.Cpe));
-                }
                 if (!string.IsNullOrEmpty(component.Purl))
                 {
                     c.Add(new XElement(ns + "purl", component.Purl));
