@@ -183,7 +183,11 @@ namespace CycloneDX {
             // create the BOM
             Console.WriteLine();
             Console.WriteLine("Creating CycloneDX BoM");
-            var bomXml = BomService.CreateXmlDocument(components, noSerialNumber);
+            var bom = new Bom();
+            if (!noSerialNumber) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
+            bom.Components = components;
+
+            var bomContents = BomService.CreateXmlDocument(bom);
 
             // check if the output directory exists and create it if needed
             var bomPath = Program.fileSystem.Path.GetFullPath(outputDirectory);
@@ -193,10 +197,7 @@ namespace CycloneDX {
             // write the BOM to disk
             var bomFile = Program.fileSystem.Path.Combine(bomPath, "bom.xml");
             Console.WriteLine("Writing to: " + bomFile);
-            using (var fileStream = Program.fileSystem.FileStream.Create(bomFile, FileMode.Create))
-            using (var writer = new StreamWriter(fileStream, new UTF8Encoding(false))) {
-                bomXml.Save(writer);
-            }
+            Program.fileSystem.File.WriteAllText(bomFile, bomContents);
 
             return 0;
         }

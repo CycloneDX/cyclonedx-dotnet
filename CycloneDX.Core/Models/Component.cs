@@ -27,6 +27,7 @@ namespace CycloneDX.Models
     {
         public string Publisher { get; set; }
         public string Group { get; set; }
+        public string Type { get; set; } = "library";
         public string Name { get; set; }
         public string Version { get; set; }
         public string Description { get; set; }
