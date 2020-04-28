@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace CycloneDX.Models
 {
@@ -32,11 +33,13 @@ namespace CycloneDX.Models
         public string Version { get; set; }
         public string Description { get; set; }
         public string Scope { get; set; }
+        [JsonIgnore]
         public List<Hash> Hashes { get; set; } = new List<Hash>();
         public List<License> Licenses { get; set; } = new List<License>();
         public string Copyright { get; set; }
         public string Purl { get; set; }
         public List<ExternalReference> ExternalReferences { get; set; } = new List<ExternalReference>();
+        [JsonIgnore]
         public HashSet<NugetPackage> Dependencies { get; set; } = new HashSet<NugetPackage>();
 
         public override bool Equals(object obj)

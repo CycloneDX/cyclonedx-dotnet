@@ -52,6 +52,7 @@ Arguments:
 
 Options:
   -o|--out <DIR>                The directorty to write the BOM
+  -j|--json                     Produce a JSON BOM instead of XML (preview feature)
   -u|--url <URL>                Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).
   -r|--recursive                To be used with a single project file, it will recursively scan project references of the supplied .csproj.	
  -ns|--noSerialNumber           Do not generate bom serial number
@@ -79,7 +80,14 @@ The following will recursively scan the project references of the supplied .cspr
 dotnet CycloneDX /path/to/project/MyProject.csproj -o /output/path -r
 ```
 
+#### JSON Output
+
+Produce a JSON bill of materials file instead of XML.
+
+This is currently a preview feature. The JSON specification is in draft and subject to change.
+
 #### GitHub License Resolution
+
 SPDX license IDs can be resolved for packages that reference a supported license
 file in a GitHub repository.
 

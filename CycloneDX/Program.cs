@@ -31,8 +31,11 @@ namespace CycloneDX {
         [Argument(0, Name = "Path", Description = "The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
         public string SolutionOrProjectFile { get; set; }
 
-        [Option(Description = "The directory to write bom.xml", ShortName = "o", LongName = "out")]
+        [Option(Description = "The directorty to write the BOM", ShortName = "o", LongName = "out")]
         string outputDirectory { get; }
+
+        [Option(Description = "Produce a JSON BOM instead of XML (preview feature)", ShortName = "j", LongName = "json")]
+        bool json { get; }
 
         [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
@@ -187,7 +190,7 @@ namespace CycloneDX {
             if (!noSerialNumber) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
             bom.Components = components;
 
-            var bomContents = BomService.CreateXmlDocument(bom);
+            var bomContents = BomService.CreateDocument(bom, json);
 
             // check if the output directory exists and create it if needed
             var bomPath = Program.fileSystem.Path.GetFullPath(outputDirectory);
@@ -195,9 +198,9 @@ namespace CycloneDX {
                 Program.fileSystem.Directory.CreateDirectory(bomPath);
 
             // write the BOM to disk
-            var bomFile = Program.fileSystem.Path.Combine(bomPath, "bom.xml");
-            Console.WriteLine("Writing to: " + bomFile);
-            Program.fileSystem.File.WriteAllText(bomFile, bomContents);
+            var bomFilename = Program.fileSystem.Path.Combine(bomPath, json ? "bom.json" : "bom.xml");
+            Console.WriteLine("Writing to: " + bomFilename);
+            Program.fileSystem.File.WriteAllText(bomFilename, bomContents);
 
             return 0;
         }

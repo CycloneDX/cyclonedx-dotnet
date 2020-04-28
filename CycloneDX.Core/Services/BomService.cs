@@ -18,6 +18,7 @@ using System;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Xml.Linq;
 using CycloneDX.Models;
 
@@ -27,6 +28,40 @@ namespace CycloneDX {
     /// </summary>
     public static class BomService
     {
+        public static string CreateDocument(Bom bom, bool json)
+        {
+            if (json)
+            {
+                return CreateJsonDocument(bom);
+            }
+            else
+            {
+                return CreateXmlDocument(bom);
+            }
+        }
+
+        /// <summary>
+        /// Creates a CycloneDX BOM from the list of components
+        /// </summary>
+        /// <param name="components">Components that should be included in the BOM</param>
+        /// <param name="noSerialNumber">Optionally omit the serial number from the resulting BOM</param>
+        /// <returns>CycloneDX XDocument</returns>
+        public static string CreateJsonDocument(Bom bom)
+        {
+            Contract.Requires(bom != null);
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                IgnoreNullValues = true,
+            };
+
+            var jsonBom = JsonSerializer.Serialize(bom, options);
+
+            return jsonBom;
+        }
+        
         /// <summary>
         /// Creates a CycloneDX BOM from the list of components
         /// </summary>
