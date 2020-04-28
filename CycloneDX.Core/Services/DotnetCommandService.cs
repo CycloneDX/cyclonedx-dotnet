@@ -77,7 +77,7 @@ namespace CycloneDX.Services
             }
         }
         
-        private async Task ConsumeStreamReaderAsync(StreamReader reader, StringBuilder lines)
+        private static async Task ConsumeStreamReaderAsync(StreamReader reader, StringBuilder lines)
         {
             await Task.Yield();
 
