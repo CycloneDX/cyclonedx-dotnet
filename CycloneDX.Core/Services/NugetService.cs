@@ -121,6 +121,11 @@ namespace CycloneDX.Services
 
             component.Publisher = nuspecReader.GetAuthors();
             component.Copyright = nuspecReader.GetCopyright();
+            // this prevents empty copyright values in the JSON BOM
+            if (string.IsNullOrEmpty(component.Copyright))
+            {
+                component.Copyright = null;
+            }
             var title = nuspecReader.GetTitle();
             var summary = nuspecReader.GetSummary();
             var description = nuspecReader.GetDescription();
