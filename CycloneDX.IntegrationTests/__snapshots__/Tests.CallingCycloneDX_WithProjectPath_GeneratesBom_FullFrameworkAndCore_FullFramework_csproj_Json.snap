@@ -1,0 +1,227 @@
+﻿{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.2",
+  "serialNumber": "",
+  "version": 1,
+  "components": [
+    {
+      "publisher": "James Newton-King",
+      "type": "library",
+      "name": "Newtonsoft.Json",
+      "version": "9.0.1",
+      "description": "Json.NET is a popular high-performance JSON framework for .NET",
+      "licenses": [
+        {
+          "license": {
+            "url": "https://raw.github.com/JamesNK/Newtonsoft.Json/master/LICENSE.md"
+          }
+        }
+      ],
+      "purl": "pkg:nuget/Newtonsoft.Json@9.0.1",
+      "externalReferences": [
+        {
+          "url": "http://www.newtonsoft.com/json",
+          "type": "website"
+        }
+      ]
+    },
+    {
+      "publisher": "Microsoft",
+      "type": "library",
+      "name": "NuGet.Common",
+      "version": "5.2.0",
+      "description": "NuGet client library.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+      "purl": "pkg:nuget/NuGet.Common@5.2.0",
+      "externalReferences": [
+        {
+          "url": "https://aka.ms/nugetprj",
+          "type": "website"
+        }
+      ]
+    },
+    {
+      "publisher": "Microsoft",
+      "type": "library",
+      "name": "NuGet.Configuration",
+      "version": "5.2.0",
+      "description": "NuGet\u0027s client configuration settings implementation.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+      "purl": "pkg:nuget/NuGet.Configuration@5.2.0",
+      "externalReferences": [
+        {
+          "url": "https://aka.ms/nugetprj",
+          "type": "website"
+        }
+      ]
+    },
+    {
+      "publisher": "Microsoft",
+      "type": "library",
+      "name": "NuGet.DependencyResolver.Core",
+      "version": "5.2.0",
+      "description": "NuGet client library.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+      "purl": "pkg:nuget/NuGet.DependencyResolver.Core@5.2.0",
+      "externalReferences": [
+        {
+          "url": "https://aka.ms/nugetprj",
+          "type": "website"
+        }
+      ]
+    },
+    {
+      "publisher": "Microsoft",
+      "type": "library",
+      "name": "NuGet.Frameworks",
+      "version": "5.2.0",
+      "description": "The understanding of target frameworks for NuGet.Packaging.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+      "purl": "pkg:nuget/NuGet.Frameworks@5.2.0",
+      "externalReferences": [
+        {
+          "url": "https://aka.ms/nugetprj",
+          "type": "website"
+        }
+      ]
+    },
+    {
+      "publisher": "Microsoft",
+      "type": "library",
+      "name": "NuGet.LibraryModel",
+      "version": "5.2.0",
+      "description": "NuGet client library.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+      "purl": "pkg:nuget/NuGet.LibraryModel@5.2.0",
+      "externalReferences": [
+        {
+          "url": "https://aka.ms/nugetprj",
+          "type": "website"
+        }
+      ]
+    },
+    {
+      "publisher": "Microsoft",
+      "type": "library",
+      "name": "NuGet.Packaging",
+      "version": "5.2.0",
+      "description": "NuGet\u0027s implementation for reading nupkg package and nuspec package specification files.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+      "purl": "pkg:nuget/NuGet.Packaging@5.2.0",
+      "externalReferences": [
+        {
+          "url": "https://aka.ms/nugetprj",
+          "type": "website"
+        }
+      ]
+    },
+    {
+      "publisher": "Microsoft",
+      "type": "library",
+      "name": "NuGet.ProjectModel",
+      "version": "5.2.0",
+      "description": "NuGet client library.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+      "purl": "pkg:nuget/NuGet.ProjectModel@5.2.0",
+      "externalReferences": [
+        {
+          "url": "https://aka.ms/nugetprj",
+          "type": "website"
+        }
+      ]
+    },
+    {
+      "publisher": "Microsoft",
+      "type": "library",
+      "name": "NuGet.Protocol",
+      "version": "5.2.0",
+      "description": "NuGet client library.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+      "purl": "pkg:nuget/NuGet.Protocol@5.2.0",
+      "externalReferences": [
+        {
+          "url": "https://aka.ms/nugetprj",
+          "type": "website"
+        }
+      ]
+    },
+    {
+      "publisher": "Microsoft",
+      "type": "library",
+      "name": "NuGet.Versioning",
+      "version": "5.2.0",
+      "description": "NuGet\u0027s implementation of Semantic Versioning.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+      "purl": "pkg:nuget/NuGet.Versioning@5.2.0",
+      "externalReferences": [
+        {
+          "url": "https://aka.ms/nugetprj",
+          "type": "website"
+        }
+      ]
+    }
+  ]
+}

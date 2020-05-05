@@ -27,6 +27,24 @@ namespace CycloneDX.IntegrationTests
 {
     public class Tests
     {
+        private string[] ArgsHelper(string path, string output, bool json)
+        {
+                var args = new List<string> {
+                    path,
+                    "--noSerialNumber",
+                    "--out", output
+                };
+                if (json) args.Add("--json");
+                return args.ToArray();
+        }
+
+        private async Task<int> CallCycloneDX(string path, string output, bool json)
+        {
+            var args = ArgsHelper(path, output, json);
+            var exitCode = await Program.Main(args).ConfigureAwait(false);
+            return exitCode;
+        }
+
         private void AssertEqualIgnoringSpaces(string expected, string actual)
         {
             var exp = Regex.Replace(expected, @"\n\s*", "");
@@ -35,78 +53,102 @@ namespace CycloneDX.IntegrationTests
         }
 
         [Theory]
-        [InlineData("CSharp")]
-        [InlineData("FullFrameworkAndCore")]
-        [InlineData("NoDependencies")]
-        [InlineData("Vb")]
-        public async Task CallingCycloneDX_WithDirectoryPath_GeneratesBom(string directoryName)
+        [InlineData("CSharp", false)]
+        [InlineData("CSharp", true)]
+        [InlineData("FullFrameworkAndCore", false)]
+        [InlineData("FullFrameworkAndCore", true)]
+        [InlineData("NoDependencies", false)]
+        [InlineData("NoDependencies", true)]
+        [InlineData("Vb", false)]
+        [InlineData("Vb", true)]
+        public async Task CallingCycloneDX_WithDirectoryPath_GeneratesBom(
+            string directoryName, bool json)
         {
             // a lot of these are actually empty boms
             // .net core doesn't use packages.config
             using (var tempDir = new TempDirectory())
             {
-                var exitCode = await Program.Main(new string[] {
+                var exitCode = await CallCycloneDX(
                     Path.Join("Resources", directoryName),
-                    "--noSerialNumber",
-                    "--out", tempDir.DirectoryPath
-                }).ConfigureAwait(false);
+                    tempDir.DirectoryPath,
+                    json);
                 // defensive assert, if this fails there is no point attempting to inspect the bom contents
                 Assert.Equal(0, exitCode);
 
-                var bomContents = File.ReadAllText(Path.Combine(tempDir.DirectoryPath, "bom.xml"));
+                var bomContents = File.ReadAllText(Path.Combine(
+                    tempDir.DirectoryPath, json ? "bom.json" : "bom.xml"));
 
-                Snapshot.Match(bomContents, SnapshotNameExtension.Create(directoryName));
+                Snapshot.Match(bomContents, SnapshotNameExtension.Create(
+                    directoryName, (json ? "Json" : "Xml")));
             }
         }
 
         [Theory]
-        [InlineData("CSharp")]
-        [InlineData("FullFrameworkAndCore")]
-        [InlineData("NoDependencies")]
-        [InlineData("Vb")]
-        public async Task CallingCycloneDX_WithSolutionFilePath_GeneratesBom(string solutionName)
+        [InlineData("CSharp", false)]
+        [InlineData("CSharp", true)]
+        [InlineData("FullFrameworkAndCore", false)]
+        [InlineData("FullFrameworkAndCore", true)]
+        [InlineData("NoDependencies", false)]
+        [InlineData("NoDependencies", true)]
+        [InlineData("Vb", false)]
+        [InlineData("Vb", true)]
+        public async Task CallingCycloneDX_WithSolutionFilePath_GeneratesBom(
+            string solutionName, bool json)
         {
             using (var tempDir = new TempDirectory())
             {
-                var exitCode = await Program.Main(new string[] {
+                var exitCode = await CallCycloneDX(
                     Path.Join("Resources", solutionName, $"{solutionName}.sln"),
-                    "--noSerialNumber",
-                    "--out", tempDir.DirectoryPath
-                }).ConfigureAwait(false);
+                    tempDir.DirectoryPath,
+                    json);
                 // defensive assert, if this fails there is no point attempting to inspect the bom contents
                 Assert.Equal(0, exitCode);
 
-                var bomContents = File.ReadAllText(Path.Combine(tempDir.DirectoryPath, "bom.xml"));
+                var bomContents = File.ReadAllText(Path.Combine(
+                    tempDir.DirectoryPath, json ? "bom.json" : "bom.xml"));
 
-                Snapshot.Match(bomContents, SnapshotNameExtension.Create(solutionName));
+                Snapshot.Match(bomContents, SnapshotNameExtension.Create(
+                    solutionName, json ? "Json" : "Xml"));
             }
         }
 
         [Theory]
-        [InlineData("CSharp", "CSharp", "csproj")]
-        [InlineData("FullFrameworkAndCore", "DotnetCore", "csproj")]
-        [InlineData("FullFrameworkAndCore", "FullFramework", "csproj")]
-        [InlineData("NoDependencies", "NoDependencies", "csproj")]
-        [InlineData("NoDependencies", "NoDependencies.Tests", "csproj")]
-        [InlineData("Vb", "Vb", "vbproj")]
-        public async Task CallingCycloneDX_WithProjectPath_GeneratesBom(string solutionName, string projectName, string projectFileExtension)
+        [InlineData("CSharp", "CSharp", "csproj", false)]
+        [InlineData("CSharp", "CSharp", "csproj", true)]
+        [InlineData("FullFrameworkAndCore", "DotnetCore", "csproj", false)]
+        [InlineData("FullFrameworkAndCore", "DotnetCore", "csproj", true)]
+        [InlineData("FullFrameworkAndCore", "FullFramework", "csproj", false)]
+        [InlineData("FullFrameworkAndCore", "FullFramework", "csproj", true)]
+        [InlineData("NoDependencies", "NoDependencies", "csproj", false)]
+        [InlineData("NoDependencies", "NoDependencies", "csproj", true)]
+        [InlineData("NoDependencies", "NoDependencies.Tests", "csproj", false)]
+        [InlineData("NoDependencies", "NoDependencies.Tests", "csproj", true)]
+        [InlineData("Vb", "Vb", "vbproj", false)]
+        [InlineData("Vb", "Vb", "vbproj", true)]
+        public async Task CallingCycloneDX_WithProjectPath_GeneratesBom(
+            string solutionName,
+            string projectName,
+            string projectFileExtension,
+            bool json)
         {
             using (var tempDir = new TempDirectory())
             {
                 var projectFilePath = Path.Join(
                         Path.Join("Resources", solutionName, projectName),
                         $"{projectName}.{projectFileExtension}");
-                var exitCode = await Program.Main(new string[] {
+                var exitCode = await CallCycloneDX(
                     projectFilePath,
-                    "--noSerialNumber",
-                    "--out", tempDir.DirectoryPath
-                }).ConfigureAwait(false);
+                    tempDir.DirectoryPath,
+                    json);
                 // defensive assert, if this fails there is no point attempting to inspect the bom contents
                 Assert.Equal(0, exitCode);
 
-                var bomContents = File.ReadAllText(Path.Combine(tempDir.DirectoryPath, "bom.xml"));
+                var bomContents = File.ReadAllText(Path.Combine(
+                    tempDir.DirectoryPath, json ? "bom.json" : "bom.xml"));
 
-                Snapshot.Match(bomContents, SnapshotNameExtension.Create(solutionName, projectName, projectFileExtension));
+                Snapshot.Match(bomContents, SnapshotNameExtension.Create(
+                    solutionName, projectName, projectFileExtension, 
+                    json ? "Json" : "Xml"));
             }
         }
     }
