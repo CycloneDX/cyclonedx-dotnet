@@ -147,10 +147,14 @@ namespace CycloneDX.Services
             {
                 Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
                 {
-                    component.Licenses.Add(new Models.License
+                    var license = new Models.License
                     {
                         Id = nugetLicense.Identifier,
                         Name = nugetLicense.Identifier
+                    };
+                    component.Licenses.Add(new ComponentLicense
+                    {
+                        License = license
                     });
                 };
                 licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
@@ -175,7 +179,10 @@ namespace CycloneDX.Services
                         };
                     }
                     
-                    component.Licenses.Add(license);
+                    component.Licenses.Add(new ComponentLicense
+                    {
+                        License = license
+                    });
                 }
             }
 
