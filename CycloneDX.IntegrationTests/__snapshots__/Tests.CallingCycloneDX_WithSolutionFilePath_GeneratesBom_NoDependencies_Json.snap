@@ -1,7 +1,6 @@
 ﻿{
   "bomFormat": "CycloneDX",
   "specVersion": "1.2",
-  "serialNumber": "",
   "version": 1,
   "components": [
     {
