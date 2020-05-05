@@ -14,17 +14,11 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System.Text.Json.Serialization;
-
-using CycloneDX.JsonConverters;
-
 namespace CycloneDX.Models
 {
-    [JsonConverter(typeof(LicenseConverter))]
-    public class License
+
+    public class ComponentLicense
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Url { get; set; }
+        public License License { get; set; }
     }
 }

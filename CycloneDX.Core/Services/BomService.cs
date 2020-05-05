@@ -118,8 +118,9 @@ namespace CycloneDX {
                 if (component.Licenses != null && component.Licenses.Count > 0)
                 {
                     var l = new XElement(ns + "licenses");
-                    foreach (var license in component.Licenses)
+                    foreach (var componentLicense in component.Licenses)
                     {
+                        var license = componentLicense.License;
                         if (license.Id != null)
                         {
                             l.Add(new XElement(ns + "license", new XElement(ns + "id", license.Id)));

@@ -35,7 +35,7 @@ namespace CycloneDX.Models
         public string Scope { get; set; }
         [JsonIgnore]
         public List<Hash> Hashes { get; set; } = new List<Hash>();
-        public List<License> Licenses { get; set; } = new List<License>();
+        public List<ComponentLicense> Licenses { get; set; } = new List<ComponentLicense>();
         public string Copyright { get; set; }
         public string Purl { get; set; }
         public List<ExternalReference> ExternalReferences { get; set; } = new List<ExternalReference>();

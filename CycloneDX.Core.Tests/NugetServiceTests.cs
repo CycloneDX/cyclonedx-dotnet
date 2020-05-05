@@ -154,9 +154,9 @@ namespace CycloneDX.Tests
 
             Assert.Collection(component.Licenses, 
                 item => {
-                    Assert.Equal("TestLicenseId", item.Id);
-                    Assert.Equal("Test License", item.Name);
-                    Assert.Equal("https://www.example.com/LICENSE", item.Url);
+                    Assert.Equal("TestLicenseId", item.License.Id);
+                    Assert.Equal("Test License", item.License.Name);
+                    Assert.Equal("https://www.example.com/LICENSE", item.License.Url);
                 });
         }
 
@@ -183,9 +183,9 @@ namespace CycloneDX.Tests
 
             Assert.Collection(component.Licenses, 
                 item => {
-                    Assert.Null(item.Id);
-                    Assert.Null(item.Name);
-                    Assert.Equal("https://www.example.com/license", item.Url);
+                    Assert.Null(item.License.Id);
+                    Assert.Null(item.License.Name);
+                    Assert.Equal("https://www.example.com/license", item.License.Url);
                 });
         }
     }
