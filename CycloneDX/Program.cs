@@ -34,7 +34,7 @@ namespace CycloneDX {
         [Option(Description = "The directorty to write the BOM", ShortName = "o", LongName = "out")]
         string outputDirectory { get; }
 
-        [Option(Description = "Produce a JSON BOM instead of XML (preview feature)", ShortName = "j", LongName = "json")]
+        [Option(Description = "Produce a JSON BOM instead of XML", ShortName = "j", LongName = "json")]
         bool json { get; }
 
         [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).", ShortName = "u", LongName = "url")]
