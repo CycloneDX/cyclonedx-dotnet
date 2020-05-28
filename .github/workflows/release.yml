@@ -1,0 +1,80 @@
+name: Release
+
+on:
+  repository_dispatch:
+    types: release
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v1
+  
+      - name: Setup .NET Core 2.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 2.1.803
+  
+      - name: Setup .NET Core 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+
+      - name: Setup side by side .NET SDKs on *nix
+        run: |
+          rsync -a ${DOTNET_ROOT/3.1.101/2.1.803}/* $DOTNET_ROOT/
+      
+      # The tests should have already been run during the PR workflow, so this is really just a sanity check
+      - name: Tests
+        run: dotnet test
+
+      - name: Package release
+        id: package_release
+        run: |
+          VERSION=`cat semver.txt`
+          OUTPUT=./nupkgs
+          echo "##[set-output name=version;]$VERSION"
+          echo "##[set-output name=package_name;]CycloneDX.$VERSION.nupkg"
+          echo "##[set-output name=package_filename;]$OUTPUT/CycloneDX.$VERSION.nupkg"
+          REPO=cyclonedx/cyclonedx-dotnet
+          dotnet build --configuration Release
+          dotnet pack CycloneDX/CycloneDX.csproj --configuration Release --version-suffix $VERSION --output $OUTPUT
+          docker build -f Dockerfile --build-arg VERSION=$VERSION -t $REPO:$VERSION -t $REPO:latest .
+
+      - name: Publish package
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" ${{ steps.package_release.outputs.package_filename }}
+
+      - name: Publish docker image
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        run: |
+          REPO=cyclonedx/cyclonedx-dotnet
+          docker login --username coderpatros --password "$DOCKER_TOKEN"
+          docker push $REPO:latest
+          docker push $REPO:${{ steps.package_release.outputs.version }}
+
+      - name: Create github release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_name: Release ${{ steps.package_release.outputs.version }}
+          draft: false
+          prerelease: false
+
+      - name: Upload package to github release
+        id: upload-release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.package_release.outputs.package_filename }}
+          asset_name: ${{ steps.package_release.outputs.package_name }}
+          asset_content_type: application/zip
