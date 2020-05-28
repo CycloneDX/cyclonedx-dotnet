@@ -43,20 +43,20 @@ jobs:
           dotnet pack CycloneDX/CycloneDX.csproj --configuration Release --version-suffix $VERSION --output $OUTPUT
           docker build -f Dockerfile --build-arg VERSION=$VERSION -t $REPO:$VERSION -t $REPO:latest .
 
-      - name: Publish package
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: |
-          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" ${{ steps.package_release.outputs.package_filename }}
+      # - name: Publish package
+      #   env:
+      #     NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      #   run: |
+      #     dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" ${{ steps.package_release.outputs.package_filename }}
 
-      - name: Publish docker image
-        env:
-          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-        run: |
-          REPO=cyclonedx/cyclonedx-dotnet
-          docker login --username coderpatros --password "$DOCKER_TOKEN"
-          docker push $REPO:latest
-          docker push $REPO:${{ steps.package_release.outputs.version }}
+      # - name: Publish docker image
+      #   env:
+      #     DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      #   run: |
+      #     REPO=cyclonedx/cyclonedx-dotnet
+      #     docker login --username coderpatros --password "$DOCKER_TOKEN"
+      #     docker push $REPO:latest
+      #     docker push $REPO:${{ steps.package_release.outputs.version }}
 
       - name: Create github release
         id: create_release
@@ -64,6 +64,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tag_name: v${{ steps.package_release.outputs.version }}
           release_name: Release ${{ steps.package_release.outputs.version }}
           draft: false
           prerelease: false
