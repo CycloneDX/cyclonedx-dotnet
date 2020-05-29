@@ -46,8 +46,8 @@ jobs:
       - name: Generate SBOMs
         run: |
           dotnet tool install --global CycloneDX --version ${{ steps.package_release.outputs.version }} --add-source ./nupkgs
-          dotnet CycloneDX --out ./ ./
-          dotnet CycloneDX --json --out ./ ./
+          dotnet CycloneDX --out ./ ./CycloneDX.sln
+          dotnet CycloneDX --json --out ./ ./CycloneDX.sln
 
       - name: Publish package
         env:
