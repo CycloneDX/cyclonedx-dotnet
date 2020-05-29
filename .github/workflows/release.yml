@@ -43,6 +43,12 @@ jobs:
           dotnet pack CycloneDX/CycloneDX.csproj --configuration Release --version-suffix $VERSION --output $OUTPUT
           docker build -f Dockerfile --build-arg VERSION=$VERSION -t $REPO:$VERSION -t $REPO:latest .
 
+      - name: Generate SBOMs
+        run: |
+          dotnet tool install --global CycloneDX --version ${{ steps.package_release.outputs.version }} --add-source ./nupkgs
+          dotnet CycloneDX --out ./ ./
+          dotnet CycloneDX --json --out ./ ./
+
       - name: Publish package
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
@@ -64,12 +70,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          release_name: Release ${{ steps.package_release.outputs.version }}
+          release_name: ${{ steps.package_release.outputs.version }}
           draft: false
           prerelease: false
 
       - name: Upload package to github release
-        id: upload-release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -79,3 +84,23 @@ jobs:
           asset_path: ${{ steps.package_release.outputs.package_filename }}
           asset_name: ${{ steps.package_release.outputs.package_name }}
           asset_content_type: application/zip
+
+      - name: Upload XML SBOM to github release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: bom.xml
+          asset_name: bom.xml
+          asset_content_type: application/xml
+
+      - name: Upload JSON SBOM to github release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: bom.json
+          asset_name: bom.json
+          asset_content_type: application/json
