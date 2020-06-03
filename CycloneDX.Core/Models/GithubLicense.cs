@@ -1,77 +1,78 @@
-﻿namespace CycloneDX.Models
+﻿using System;
+using System.Text.Json.Serialization;
+
+namespace CycloneDX.Models
 {
-    using System;
-    using Newtonsoft.Json;
 
     public partial class GithubLicenseRoot
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("path")]
+        [JsonPropertyName("path")]
         public string Path { get; set; }
 
-        [JsonProperty("sha")]
+        [JsonPropertyName("sha")]
         public string Sha { get; set; }
 
-        [JsonProperty("size")]
+        [JsonPropertyName("size")]
         public long Size { get; set; }
 
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public Uri Url { get; set; }
 
-        [JsonProperty("html_url")]
+        [JsonPropertyName("html_url")]
         public Uri HtmlUrl { get; set; }
 
-        [JsonProperty("git_url")]
+        [JsonPropertyName("git_url")]
         public Uri GitUrl { get; set; }
 
-        [JsonProperty("download_url")]
+        [JsonPropertyName("download_url")]
         public Uri DownloadUrl { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("content")]
+        [JsonPropertyName("content")]
         public string Content { get; set; }
 
-        [JsonProperty("encoding")]
+        [JsonPropertyName("encoding")]
         public string Encoding { get; set; }
 
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public Links Links { get; set; }
 
-        [JsonProperty("license")]
+        [JsonPropertyName("license")]
         public GithubLicense License { get; set; }
     }
 
     public partial class GithubLicense
     {
-        [JsonProperty("key")]
+        [JsonPropertyName("key")]
         public string Key { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("spdx_id")]
+        [JsonPropertyName("spdx_id")]
         public string SpdxId { get; set; }
 
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public Uri Url { get; set; }
 
-        [JsonProperty("node_id")]
+        [JsonPropertyName("node_id")]
         public string NodeId { get; set; }
     }
 
     public partial class Links
     {
-        [JsonProperty("self")]
+        [JsonPropertyName("self")]
         public Uri Self { get; set; }
 
-        [JsonProperty("git")]
+        [JsonPropertyName("git")]
         public Uri Git { get; set; }
 
-        [JsonProperty("html")]
+        [JsonPropertyName("html")]
         public Uri Html { get; set; }
     }
 }

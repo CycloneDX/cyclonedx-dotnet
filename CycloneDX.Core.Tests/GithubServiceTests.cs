@@ -32,7 +32,7 @@ namespace CycloneDX.Tests
             var mockResponseContent = @"{
                 ""license"": {
                     ""spdx_id"": ""LicenseSpdxId"",
-                    ""name"": ""Test License"",
+                    ""name"": ""Test License""
                 }
             }";
             var mockHttp = new MockHttpMessageHandler();
@@ -53,7 +53,7 @@ namespace CycloneDX.Tests
             var mockResponseContent = @"{
                 ""license"": {
                     ""spdx_id"": ""LicenseSpdxId"",
-                    ""name"": ""Test License"",
+                    ""name"": ""Test License""
                 }
             }";
             var mockHttp = new MockHttpMessageHandler();
@@ -74,7 +74,7 @@ namespace CycloneDX.Tests
             var mockResponseContent = @"{
                 ""license"": {
                     ""spdx_id"": ""LicenseSpdxId"",
-                    ""name"": ""Test License"",
+                    ""name"": ""Test License""
                 }
             }";
             var mockHttp = new MockHttpMessageHandler();
@@ -95,7 +95,7 @@ namespace CycloneDX.Tests
             var mockResponseContent = @"{
                 ""license"": {
                     ""spdx_id"": ""LicenseSpdxId"",
-                    ""name"": ""Test License"",
+                    ""name"": ""Test License""
                 }
             }";
             var mockHttp = new MockHttpMessageHandler();
@@ -116,7 +116,7 @@ namespace CycloneDX.Tests
             var mockResponseContent = @"{
                 ""license"": {
                     ""spdx_id"": ""LicenseSpdxId"",
-                    ""name"": ""Test License"",
+                    ""name"": ""Test License""
                 }
             }";
             var mockHttp = new MockHttpMessageHandler();
@@ -137,7 +137,7 @@ namespace CycloneDX.Tests
             var mockResponseContent = @"{
                 ""license"": {
                     ""spdx_id"": ""LicenseSpdxId"",
-                    ""name"": ""Test License"",
+                    ""name"": ""Test License""
                 }
             }";
             var mockHttp = new MockHttpMessageHandler();
