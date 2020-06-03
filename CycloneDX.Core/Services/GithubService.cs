@@ -15,7 +15,6 @@
 // Copyright (c) Steve Springett. All Rights Reserved.
 
 using CycloneDX.Models;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -23,6 +22,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
+using System.Text.Json;
 using System.Threading.Tasks;
 using License = CycloneDX.Models.License;
 
@@ -149,7 +149,7 @@ namespace CycloneDX.Services
             if (githubResponse.IsSuccessStatusCode)
             {
                 // License found, extract data
-                return JsonConvert.DeserializeObject<GithubLicenseRoot>(await githubResponse.Content.ReadAsStringAsync().ConfigureAwait(false));
+                return JsonSerializer.Deserialize<GithubLicenseRoot>(await githubResponse.Content.ReadAsStringAsync().ConfigureAwait(false));
             }
             else if (githubResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
