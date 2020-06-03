@@ -71,6 +71,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           release_name: ${{ steps.package_release.outputs.version }}
+          tag_name: v${{ steps.package_release.outputs.version }}
           draft: false
           prerelease: false
 
@@ -79,7 +80,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.package_release.outputs.version }}
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ steps.package_release.outputs.package_filename }}
           asset_name: ${{ steps.package_release.outputs.package_name }}
