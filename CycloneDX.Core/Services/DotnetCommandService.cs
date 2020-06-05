@@ -52,7 +52,7 @@ namespace CycloneDX.Services
                 var outputTask = ConsumeStreamReaderAsync(p.StandardOutput, output);
                 var errorTask = ConsumeStreamReaderAsync(p.StandardError, errors);
 
-                var processExited = p.WaitForExit(60000);
+                var processExited = p.WaitForExit(300000);
 
                 if (processExited)
                 {
