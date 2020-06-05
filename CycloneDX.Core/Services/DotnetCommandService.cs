@@ -16,6 +16,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,7 @@ namespace CycloneDX.Services
 
         public DotnetCommandResult Run(string workingDirectory, string arguments)
         {
+            Contract.Requires(arguments != null);
             var psi = new ProcessStartInfo(DotNetExe.FullPathOrDefault(), arguments)
             {
                 CreateNoWindow = true,
@@ -46,7 +48,6 @@ namespace CycloneDX.Services
             
             using (var p = Process.Start(psi))
             {
-                var exitCode = 0;
                 var output = new StringBuilder();
                 var errors = new StringBuilder();
                 var outputTask = ConsumeStreamReaderAsync(p.StandardOutput, output);
@@ -56,24 +57,26 @@ namespace CycloneDX.Services
 
                 if (processExited)
                 {
-                    exitCode = p.ExitCode;
+                    Task.WaitAll(outputTask, errorTask);
+
+                    return new DotnetCommandResult
+                    {
+                        ExitCode = p.ExitCode,
+                        StdOut = output.ToString(),
+                        StdErr = errors.ToString()
+                    };
                 }
                 else
                 {
                     p.Kill();
-                    exitCode = -1;
+                    return new DotnetCommandResult
+                    {
+                        ExitCode = -1,
+                        StdOut = arguments.StartsWith("restore ", System.StringComparison.InvariantCulture) ?
+                            $"Timeout running dotnet restore, try running \"dotnet restore\" before \"dotnet CycloneDX\""
+                            : $"Timeout running dotnet {arguments}",
+                    };
                 }
-
-                Task.WaitAll(outputTask, errorTask);
-
-                var result = new DotnetCommandResult
-                {
-                    ExitCode = exitCode,
-                    StdOut = output.ToString(),
-                    StdErr = errors.ToString()
-                };
-
-                return result;
             }
         }
         
