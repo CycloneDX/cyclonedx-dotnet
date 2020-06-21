@@ -106,7 +106,7 @@ jobs:
           asset_content_type: application/json
       
       - name: Upload SBOM to Dependency-Track
-        uses: coderpatros/upload-bom-to-dependency-track
+        uses: coderpatros/upload-bom-to-dependency-track@master
         with:
           serverhostname: cyclonedx-dependency-track.azurewebsites.net
           apikey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
