@@ -50,6 +50,8 @@ namespace CycloneDX {
         string githubUsername { get; set; }
         [Option(Description = "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username.", ShortName = "gt", LongName = "githubToken")]
         string githubToken { get; set; }
+        [Option(Description = "Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions.", ShortName = "gbt", LongName = "githubBearerToken")]
+        string githubBearerToken { get; set; }
         [Option(Description = "Optionally disable GitHub license resolution.", ShortName = "dgl", LongName = "disableGithubLicenses")]
         bool disableGithubLicenses { get; set; }
 
@@ -109,7 +111,11 @@ namespace CycloneDX {
             if (!disableGithubLicenses)
             {
                 // GitHubService requires its own HttpClient as it adds a default authorization header
-                if (string.IsNullOrEmpty(githubUsername) || string.IsNullOrEmpty(githubToken))
+                if (!string.IsNullOrEmpty(githubBearerToken))
+                {
+                    githubService = new GithubService(new HttpClient(), githubBearerToken);
+                }
+                else if (string.IsNullOrEmpty(githubUsername) || string.IsNullOrEmpty(githubToken))
                 {
                     githubService = new GithubService(new HttpClient());
                 }

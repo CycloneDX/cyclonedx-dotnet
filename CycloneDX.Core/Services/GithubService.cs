@@ -84,6 +84,18 @@ namespace CycloneDX.Services
             _httpClient.DefaultRequestHeaders.Authorization = authorizationHeader;
         }
 
+        public GithubService(HttpClient httpClient, string bearerToken)
+        {
+            Contract.Requires(httpClient != null);
+            _httpClient = httpClient;
+
+            var authorizationHeader = new AuthenticationHeaderValue(
+                "Bearer", 
+                bearerToken);
+            
+            _httpClient.DefaultRequestHeaders.Authorization = authorizationHeader;
+        }
+
         /// <summary>
         /// Tries to get a license from GitHub.
         /// </summary>
