@@ -112,3 +112,4 @@ jobs:
           apikey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
           projectname: cyclonedx-dotnet
           projectversion: ${{ steps.package_release.outputs.version }}
+          autocreate: true
