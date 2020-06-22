@@ -53,8 +53,10 @@ jobs:
           path: ./CycloneDX.sln
 
       - name: Generate JSON SBOM
-        run: |
-          dotnet CycloneDX --json --out ./ ./CycloneDX.sln
+        uses: CycloneDX/cyclonedx-dotnet-generatebom@master
+        with:
+          path: ./CycloneDX.sln
+          json: true
 
       - name: Publish package
         env:
