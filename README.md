@@ -58,6 +58,7 @@ Options:
  -ns|--noSerialNumber           Do not generate bom serial number
  -gu|--githubUsername           Optionally provide a GitHub username for license resolution (see notes below)
  -gt|--githubToken              Optionally provide a GitHub personal access token for license resolution
+ -gbt|--githubBearerToken       Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions.
  -dgl|--disableGithubLicenses   Optionally disable GitHub license resolution
   -?|-h|--help                  Show help information
 ```
