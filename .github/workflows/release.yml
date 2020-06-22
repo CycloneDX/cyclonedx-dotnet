@@ -51,12 +51,14 @@ jobs:
         uses: CycloneDX/cyclonedx-dotnet-generatebom@master
         with:
           path: ./CycloneDX.sln
+          githubBearerToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate JSON SBOM
         uses: CycloneDX/cyclonedx-dotnet-generatebom@master
         with:
           path: ./CycloneDX.sln
           json: true
+          githubBearerToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish package
         env:
