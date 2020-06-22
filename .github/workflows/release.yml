@@ -43,10 +43,17 @@ jobs:
           dotnet pack CycloneDX/CycloneDX.csproj --configuration Release --version-suffix $VERSION --output $OUTPUT
           docker build -f Dockerfile --build-arg VERSION=$VERSION -t $REPO:$VERSION -t $REPO:latest .
 
-      - name: Generate SBOMs
+      - name: Install newly generated version of CLI tool
         run: |
           dotnet tool install --global CycloneDX --version ${{ steps.package_release.outputs.version }} --add-source ./nupkgs
-          dotnet CycloneDX --out ./ ./CycloneDX.sln
+
+      - name: Generate XML SBOM
+        uses: CycloneDX/cyclonedx-dotnet-generatebom@master
+        with:
+          path: ./CycloneDX.sln
+
+      - name: Generate JSON SBOM
+        run: |
           dotnet CycloneDX --json --out ./ ./CycloneDX.sln
 
       - name: Publish package
@@ -104,8 +111,16 @@ jobs:
           asset_path: bom.json
           asset_name: bom.json
           asset_content_type: application/json
-      
-      - name: Upload SBOM to Dependency-Track
+
+      - name: Upload latest SBOM to Dependency-Track
+        uses: coderpatros/upload-bom-to-dependency-track@master
+        with:
+          serverhostname: cyclonedx-dependency-track.azurewebsites.net
+          apikey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
+          projectname: cyclonedx-dotnet
+          projectversion: latest
+
+      - name: Upload version SBOM to Dependency-Track
         uses: coderpatros/upload-bom-to-dependency-track@master
         with:
           serverhostname: cyclonedx-dependency-track.azurewebsites.net
