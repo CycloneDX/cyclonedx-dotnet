@@ -48,13 +48,13 @@ jobs:
           dotnet tool install --global CycloneDX --version ${{ steps.package_release.outputs.version }} --add-source ./nupkgs
 
       - name: Generate XML SBOM
-        uses: CycloneDX/cyclonedx-dotnet-generatebom@master
+        uses: CycloneDX/gh-dotnet-generate-sbom@master
         with:
           path: ./CycloneDX.sln
           githubBearerToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate JSON SBOM
-        uses: CycloneDX/cyclonedx-dotnet-generatebom@master
+        uses: CycloneDX/gh-dotnet-generate-sbom@master
         with:
           path: ./CycloneDX.sln
           json: true
