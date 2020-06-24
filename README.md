@@ -7,8 +7,8 @@
 [![Group Discussion](https://img.shields.io/badge/discussion-groups.io-blue.svg)](https://groups.io/g/CycloneDX)
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/CycloneDX_Spec)
 
-CycloneDX module for .NET
-=========
+# CycloneDX module for .NET
+
 
 The CycloneDX module for .NET creates a valid CycloneDX bill-of-material document containing an aggregate of all project dependencies. CycloneDX is a lightweight BOM specification that is easily created, human readable, and simple to parse.
 
@@ -100,9 +100,23 @@ permissions are required.
 Due to current limitations in the GitHub API licenses will only be resolved for
 master branch license references.
 
-License
--------------------
+## License
 
 Permission to modify and redistribute is granted under the terms of the Apache 2.0 license. See the [LICENSE] file for the full license.
 
 [License]: https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE
+
+## Contributing
+
+Pull requests are welcome. But please read the
+[CycloneDX contributing guidelines](https://github.com/CycloneDX/.github/blob/master/CONTRIBUTING.md) first.
+
+To build and test the solution locally you should have .NET core 2.1 and 3.1
+installed. Standard commands like `dotnet build` and `dotnet test` work.
+
+It is generally expected that pull requests will include relevant tests.
+Tests are automatically run on Windows, MacOS and Linux for every pull request.
+And build warnings will be break the build.
+
+If you are having trouble debugging a test that is failing for a platform you
+don't have access to please us know.
