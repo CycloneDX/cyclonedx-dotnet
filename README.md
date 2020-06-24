@@ -7,8 +7,8 @@
 [![Group Discussion](https://img.shields.io/badge/discussion-groups.io-blue.svg)](https://groups.io/g/CycloneDX)
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/CycloneDX_Spec)
 
-CycloneDX module for .NET
-=========
+# CycloneDX module for .NET
+
 
 The CycloneDX module for .NET creates a valid CycloneDX bill-of-material document containing an aggregate of all project dependencies. CycloneDX is a lightweight BOM specification that is easily created, human readable, and simple to parse.
 
@@ -100,8 +100,7 @@ permissions are required.
 Due to current limitations in the GitHub API licenses will only be resolved for
 master branch license references.
 
-License
--------------------
+## License
 
 Permission to modify and redistribute is granted under the terms of the Apache 2.0 license. See the [LICENSE] file for the full license.
 
