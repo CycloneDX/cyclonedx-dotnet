@@ -13,16 +13,16 @@ jobs:
       - name: Setup .NET Core 2.1
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 2.1.803
+          dotnet-version: 2.1.807
   
       - name: Setup .NET Core 3.1
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.101
+          dotnet-version: 3.1.301
 
       - name: Setup side by side .NET SDKs on *nix
         run: |
-          rsync -a ${DOTNET_ROOT/3.1.101/2.1.803}/* $DOTNET_ROOT/
+          rsync -a ${DOTNET_ROOT/3.1.301/2.1.807}/* $DOTNET_ROOT/
 
       - name: Build
         run: dotnet build /WarnAsError
@@ -42,24 +42,24 @@ jobs:
     - name: Setup .NET Core 2.1
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 2.1.803
+        dotnet-version: 2.1.807
   
     - name: Setup .NET Core 3.1
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.1.301
 
     - name: Setup side by side .NET SDKs on Windows
       if: matrix.os == 'windows-latest'
       run: |
-        SET DOTNET_21_ROOT=%DOTNET_ROOT:3.1.101=2.1.803%
+        SET DOTNET_21_ROOT=%DOTNET_ROOT:3.1.301=2.1.807%
         xcopy /s /y /d %DOTNET_31_ROOT% %DOTNET_ROOT%
       shell: cmd
 
     - name: Setup side by side .NET SDKs on *nix
       if: matrix.os != 'windows-latest'
       run: |
-        rsync -a ${DOTNET_ROOT/3.1.101/2.1.803}/* $DOTNET_ROOT/
+        rsync -a ${DOTNET_ROOT/3.1.301/2.1.807}/* $DOTNET_ROOT/
 
     - name: Tests
       run: dotnet test --framework netcoreapp${{ matrix.framework }}
