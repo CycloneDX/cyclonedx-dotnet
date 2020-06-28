@@ -15,7 +15,7 @@ jobs:
       - name: Setup .NET Core 2.1
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 2.1.803
+          dotnet-version: 2.1.807
   
       - name: Setup .NET Core 3.1
         uses: actions/setup-dotnet@v1
@@ -24,7 +24,7 @@ jobs:
 
       - name: Setup side by side .NET SDKs on *nix
         run: |
-          rsync -a ${DOTNET_ROOT/3.1.101/2.1.803}/* $DOTNET_ROOT/
+          rsync -a ${DOTNET_ROOT/3.1.101/2.1.807}/* $DOTNET_ROOT/
       
       # The tests should have already been run during the PR workflow, so this is really just a sanity check
       - name: Tests
