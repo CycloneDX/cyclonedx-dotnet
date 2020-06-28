@@ -20,9 +20,15 @@ jobs:
         with:
           dotnet-version: 3.1.101
 
+      - name: Setup .NET Core 5.0 preview
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.100-preview.5.20279.10
+      
       - name: Setup side by side .NET SDKs on *nix
         run: |
-          rsync -a ${DOTNET_ROOT/3.1.101/2.1.803}/* $DOTNET_ROOT/
+          rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/2.1.803}/* $DOTNET_ROOT/
+          rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/3.1.101}/* $DOTNET_ROOT/
 
       - name: Build
         run: dotnet build /WarnAsError
@@ -33,7 +39,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        framework: ['2.1', '3.1']
+        framework: ['2.1', '3.1', '5.0']
     timeout-minutes: 30
     
     steps:
@@ -49,17 +55,25 @@ jobs:
       with:
         dotnet-version: 3.1.101
 
+    - name: Setup .NET Core 5.0 preview
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100-preview.5.20279.10
+      
     - name: Setup side by side .NET SDKs on Windows
       if: matrix.os == 'windows-latest'
       run: |
-        SET DOTNET_21_ROOT=%DOTNET_ROOT:3.1.101=2.1.803%
+        SET DOTNET_21_ROOT=%DOTNET_ROOT:5.0.100-preview.5.20279.10=2.1.803%
+        SET DOTNET_31_ROOT=%DOTNET_ROOT:5.0.100-preview.5.20279.10=3.1.101%
+        xcopy /s /y /d %DOTNET_21_ROOT% %DOTNET_ROOT%
         xcopy /s /y /d %DOTNET_31_ROOT% %DOTNET_ROOT%
       shell: cmd
 
     - name: Setup side by side .NET SDKs on *nix
       if: matrix.os != 'windows-latest'
       run: |
-        rsync -a ${DOTNET_ROOT/3.1.101/2.1.803}/* $DOTNET_ROOT/
+        rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/2.1.803}/* $DOTNET_ROOT/
+        rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/3.1.101}/* $DOTNET_ROOT/
 
     - name: Tests
       run: dotnet test --framework netcoreapp${{ matrix.framework }}
