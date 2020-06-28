@@ -34,7 +34,7 @@ jobs:
       uses: coderpatros/setup-dotnet@sxs
       with:
         dotnet-version: 2.1.807,3.1.301,5.0.100-preview.5.20279.10
-  
+
     - name: Tests
       run: |
         dotnet test --framework netcoreapp${{ matrix.framework }}
