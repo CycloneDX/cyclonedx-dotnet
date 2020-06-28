@@ -13,12 +13,12 @@ jobs:
       - name: Setup .NET Core 2.1
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 2.1.803
+          dotnet-version: 2.1.807
   
       - name: Setup .NET Core 3.1
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.101
+          dotnet-version: 3.1.301
 
       - name: Setup .NET Core 5.0 preview
         uses: actions/setup-dotnet@v1
@@ -27,8 +27,8 @@ jobs:
       
       - name: Setup side by side .NET SDKs on *nix
         run: |
-          rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/2.1.803}/* $DOTNET_ROOT/
-          rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/3.1.101}/* $DOTNET_ROOT/
+          rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/2.1.807}/* $DOTNET_ROOT/
+          rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/3.1.301}/* $DOTNET_ROOT/
 
       - name: Build
         run: dotnet build /WarnAsError
@@ -48,12 +48,12 @@ jobs:
     - name: Setup .NET Core 2.1
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 2.1.803
+        dotnet-version: 2.1.807
   
     - name: Setup .NET Core 3.1
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.1.301
 
     - name: Setup .NET Core 5.0 preview
       uses: actions/setup-dotnet@v1
@@ -63,8 +63,8 @@ jobs:
     - name: Setup side by side .NET SDKs on Windows
       if: matrix.os == 'windows-latest'
       run: |
-        SET DOTNET_21_ROOT=%DOTNET_ROOT:5.0.100-preview.5.20279.10=2.1.803%
-        SET DOTNET_31_ROOT=%DOTNET_ROOT:5.0.100-preview.5.20279.10=3.1.101%
+        SET DOTNET_21_ROOT=%DOTNET_ROOT:5.0.100-preview.5.20279.10=2.1.807%
+        SET DOTNET_31_ROOT=%DOTNET_ROOT:5.0.100-preview.5.20279.10=3.1.301%
         xcopy /s /y /d %DOTNET_21_ROOT% %DOTNET_ROOT%
         xcopy /s /y /d %DOTNET_31_ROOT% %DOTNET_ROOT%
       shell: cmd
@@ -72,8 +72,8 @@ jobs:
     - name: Setup side by side .NET SDKs on *nix
       if: matrix.os != 'windows-latest'
       run: |
-        rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/2.1.803}/* $DOTNET_ROOT/
-        rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/3.1.101}/* $DOTNET_ROOT/
+        rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/2.1.807}/* $DOTNET_ROOT/
+        rsync -a ${DOTNET_ROOT/5.0.100-preview.5.20279.10/3.1.301}/* $DOTNET_ROOT/
 
     - name: Tests
       run: dotnet test --framework netcoreapp${{ matrix.framework }}
