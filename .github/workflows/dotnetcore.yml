@@ -10,11 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
   
-      - name: Setup .NET Core
-        uses: coderpatros/setup-dotnet@sxs
-        with:
-          dotnet-version: 2.1.807,3.1.301
-
       - name: Build
         run: dotnet build /WarnAsError
 
@@ -29,11 +24,6 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-
-    - name: Setup .NET Core
-      uses: coderpatros/setup-dotnet@sxs
-      with:
-        dotnet-version: 2.1.807,3.1.301
 
     - name: Tests
       run: dotnet test --framework netcoreapp${{ matrix.framework }}
