@@ -24,6 +24,8 @@ jobs:
           echo "##[set-output name=version;]$VERSION"
           echo "##[set-output name=package_name;]CycloneDX.$VERSION.nupkg"
           echo "##[set-output name=package_filename;]$OUTPUT/CycloneDX.$VERSION.nupkg"
+          echo "##[set-output name=package_symbols_name;]CycloneDX.$VERSION.snupkg"
+          echo "##[set-output name=package_symbols_filename;]$OUTPUT/CycloneDX.$VERSION.snupkg"
           REPO=cyclonedx/cyclonedx-dotnet
           dotnet build --configuration Release
           dotnet pack CycloneDX/CycloneDX.csproj --configuration Release --version-suffix $VERSION --output $OUTPUT
@@ -80,6 +82,16 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ steps.package_release.outputs.package_filename }}
           asset_name: ${{ steps.package_release.outputs.package_name }}
+          asset_content_type: application/zip
+
+      - name: Upload package symbols to github release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.package_release.outputs.package_symbols_filename }}
+          asset_name: ${{ steps.package_release.outputs.package_symbols_name }}
           asset_content_type: application/zip
 
       - name: Upload XML SBOM to github release
