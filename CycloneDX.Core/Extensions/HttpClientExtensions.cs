@@ -37,6 +37,10 @@ namespace CycloneDX.Extensions
             response = await httpClient.GetAsync(url).ConfigureAwait(false);
             
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound) return null;
+
+            // JFrog's Artifactory tends to return 405 errors instead of 404
+            // errors when something can't be found.
+            if (response.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed) return null;
             
             response.EnsureSuccessStatusCode();
             var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
