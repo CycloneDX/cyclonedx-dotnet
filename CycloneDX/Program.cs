@@ -31,7 +31,7 @@ namespace CycloneDX {
         [Argument(0, Name = "Path", Description = "The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
         public string SolutionOrProjectFile { get; set; }
 
-        [Option(Description = "The directorty to write the BOM", ShortName = "o", LongName = "out")]
+        [Option(Description = "The directory to write the BOM", ShortName = "o", LongName = "out")]
         string outputDirectory { get; }
 
         [Option(Description = "Produce a JSON BOM instead of XML", ShortName = "j", LongName = "json")]
