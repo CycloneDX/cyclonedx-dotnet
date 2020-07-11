@@ -4,6 +4,28 @@
   "version": 1,
   "components": [
     {
+      "publisher": "tonerdo",
+      "type": "library",
+      "name": "coverlet.msbuild",
+      "version": "2.9.0",
+      "description": "Coverlet is a cross platform code coverage library for .NET, with support for line, branch and method coverage.",
+      "scope": "excluded",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:nuget/coverlet.msbuild@2.9.0",
+      "externalReferences": [
+        {
+          "url": "https://github.com/coverlet-coverage/coverlet",
+          "type": "website"
+        }
+      ]
+    },
+    {
       "publisher": "Microsoft",
       "type": "library",
       "name": "Microsoft.NETCore.App",

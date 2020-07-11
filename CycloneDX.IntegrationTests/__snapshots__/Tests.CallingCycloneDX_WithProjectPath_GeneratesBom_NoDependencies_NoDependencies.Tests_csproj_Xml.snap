@@ -7,6 +7,7 @@
       <description><![CDATA[A set of .NET API's that are included in the default .NET Core application model. 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -26,6 +27,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[Provides the .NET Core app bootstrapper intended for use in the application directory 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>excluded</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -45,6 +47,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>excluded</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -64,6 +67,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>excluded</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -83,6 +87,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[Provides runtime information required to resolve target framework, platform, and runtime specific implementations of .NETCore packages. 
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -102,6 +107,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[Provides supporting infrastructure for portable projects: support identifiers that define framework and runtime for support targets and packages that reference the minimum supported package versions when targeting these. 
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -121,6 +127,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[A set of standard .NET APIs that are prescribed to be used and supported together. 
 18a36291e48808fa7ef2d00a764ceb1ec95645a5 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/standard/blob/master/LICENSE.TXT</url>

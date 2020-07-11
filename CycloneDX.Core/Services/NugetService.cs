@@ -31,7 +31,7 @@ namespace CycloneDX.Services
 {
     public interface INugetService
     {
-        Task<Component> GetComponentAsync(string name, string version);
+        Task<Component> GetComponentAsync(string name, string version, string scope);
         Task<Component> GetComponentAsync(NugetPackage nugetPackage);
     }
 
@@ -84,7 +84,7 @@ namespace CycloneDX.Services
         /// <param name="name">NuGet package name</param>
         /// <param name="version">Package version</param>
         /// <returns></returns>
-        public async Task<Component> GetComponentAsync(string name, string version)
+        public async Task<Component> GetComponentAsync(string name, string version, string scope)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) return null;
 
@@ -94,6 +94,7 @@ namespace CycloneDX.Services
             {
                 Name = name,
                 Version = version,
+                Scope = scope,
                 Purl = Utils.GeneratePackageUrl(name, version)
             };
 
@@ -206,7 +207,7 @@ namespace CycloneDX.Services
         public async Task<Component> GetComponentAsync(NugetPackage package)
         {
             Contract.Requires(package != null);
-            return await GetComponentAsync(package.Name, package.Version).ConfigureAwait(false);
+            return await GetComponentAsync(package.Name, package.Version, package.Scope).ConfigureAwait(false);
         }
     }
 }
