@@ -65,6 +65,8 @@ namespace CycloneDX {
         [Option(Description = "Optionally disable GitHub license resolution", ShortName = "dgl", LongName = "disable-github-licenses")]
         bool disableGithubLicenses { get; set; }
 
+        [Option(Description = "dotnet command timeout in milliseconds (primarily used for long dotnet restore operations)", ShortName = "dct", LongName = "dotnet-command-timeout")]
+        int dotnetCommandTimeout { get; set; } = 300000;
 
         static internal IFileSystem fileSystem = new FileSystem();
         static internal HttpClient httpClient = new HttpClient();
@@ -99,6 +101,8 @@ namespace CycloneDX {
                 Console.Error.WriteLine($"Both GitHub username and token are required");
                 return (int)ExitCode.GitHubParameterMissing;
             }
+
+            dotnetCommandService.TimeoutMilliseconds = dotnetCommandTimeout;
 
             // retrieve nuget package cache paths
             var packageCachePathsResult = dotnetUtilsService.GetPackageCachePaths();

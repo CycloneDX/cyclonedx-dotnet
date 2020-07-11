@@ -21,6 +21,7 @@ namespace CycloneDX.Services
 {
     public interface IDotnetCommandService
     {
+        int TimeoutMilliseconds { get; set; }
         DotnetCommandResult Run(string arguments);
         DotnetCommandResult Run(string workingDirectory, string arguments);
     }

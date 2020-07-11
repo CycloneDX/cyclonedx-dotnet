@@ -27,6 +27,8 @@ namespace CycloneDX.Services
 {
     public class DotnetCommandService : IDotnetCommandService
     {
+        public int TimeoutMilliseconds { get; set; } = 300000;
+
         public DotnetCommandService() {}
         
         public DotnetCommandResult Run(string arguments)
@@ -53,7 +55,7 @@ namespace CycloneDX.Services
                 var outputTask = ConsumeStreamReaderAsync(p.StandardOutput, output);
                 var errorTask = ConsumeStreamReaderAsync(p.StandardError, errors);
 
-                var processExited = p.WaitForExit(300000);
+                var processExited = p.WaitForExit(TimeoutMilliseconds);
 
                 if (processExited)
                 {
