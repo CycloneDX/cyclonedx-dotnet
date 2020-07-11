@@ -28,7 +28,7 @@ using CycloneDX.Services;
 namespace CycloneDX {
     [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")]
     class Program {
-        [Argument(0, Name = "Path", Description = "The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
+        [Argument(0, Name = "path", Description = "The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
         public string SolutionOrProjectFile { get; set; }
 
         [Option(Description = "The directory to write the BOM", ShortName = "o", LongName = "out")]
@@ -37,22 +37,32 @@ namespace CycloneDX {
         [Option(Description = "Produce a JSON BOM instead of XML", ShortName = "j", LongName = "json")]
         bool json { get; }
 
-        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).", ShortName = "u", LongName = "url")]
+        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
 
-        [Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied .csproj.", ShortName = "r", LongName = "recursive")]
+        [Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied .csproj", ShortName = "r", LongName = "recursive")]
         bool scanProjectReferences { get; set; }
 
-        [Option(Description = "Optionally omit the serial number from the resulting BOM.", ShortName = "ns", LongName = "noSerialNumber")]
+        [Option(Description = "DEPRECATED: Optionally omit the serial number from the resulting BOM", ShowInHelpText = false, ShortName = "nsdeprecated", LongName = "noSerialNumber")]
+        bool noSerialNumberDeprecated { get; set; }
+        [Option(Description = "Optionally omit the serial number from the resulting BOM", ShortName = "ns", LongName = "no-serial-number")]
         bool noSerialNumber { get; set; }
 
-        [Option(Description = "Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token", ShortName = "gu", LongName = "githubUsername")]
+        [Option(Description = "DEPRECATED: Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token", ShowInHelpText = false, ShortName = "gudeprecated", LongName = "githubUsername")]
+        string githubUsernameDeprecated { get; set; }
+        [Option(Description = "Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token", ShortName = "gu", LongName = "github-username")]
         string githubUsername { get; set; }
-        [Option(Description = "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username.", ShortName = "gt", LongName = "githubToken")]
+        [Option(Description = "DEPRECATED: Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username", ShowInHelpText = false, ShortName = "gtdeprecated", LongName = "githubToken")]
+        string githubTokenDeprecated { get; set; }
+        [Option(Description = "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username", ShortName = "gt", LongName = "github-token")]
         string githubToken { get; set; }
-        [Option(Description = "Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions.", ShortName = "gbt", LongName = "githubBearerToken")]
+        [Option(Description = "DEPRECATED: Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions", ShowInHelpText = false, ShortName = "gbtdeprecated", LongName = "githubBearerToken")]
+        string githubBearerTokenDeprecated { get; set; }
+        [Option(Description = "Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions", ShortName = "gbt", LongName = "github-bearer-token")]
         string githubBearerToken { get; set; }
-        [Option(Description = "Optionally disable GitHub license resolution.", ShortName = "dgl", LongName = "disableGithubLicenses")]
+        [Option(Description = "DEPRECATED: Optionally disable GitHub license resolution", ShowInHelpText = false, ShortName = "dgldeprecated", LongName = "disableGithubLicenses")]
+        bool disableGithubLicensesDeprecated { get; set; }
+        [Option(Description = "Optionally disable GitHub license resolution", ShortName = "dgl", LongName = "disable-github-licenses")]
         bool disableGithubLicenses { get; set; }
 
 
@@ -83,7 +93,8 @@ namespace CycloneDX {
                 return (int)ExitCode.OutputDirectoryParameterMissing;
             }
 
-            if (string.IsNullOrEmpty(githubUsername) ^ string.IsNullOrEmpty(githubToken))
+            if ((string.IsNullOrEmpty(githubUsername) ^ string.IsNullOrEmpty(githubToken))
+                || (string.IsNullOrEmpty(githubUsernameDeprecated) ^ string.IsNullOrEmpty(githubTokenDeprecated)))
             {
                 Console.Error.WriteLine($"Both GitHub username and token are required");
                 return (int)ExitCode.GitHubParameterMissing;
@@ -108,20 +119,28 @@ namespace CycloneDX {
 
             var fileDiscoveryService = new FileDiscoveryService(Program.fileSystem);
             GithubService githubService = null;
-            if (!disableGithubLicenses)
+            if (!(disableGithubLicenses || disableGithubLicensesDeprecated))
             {
                 // GitHubService requires its own HttpClient as it adds a default authorization header
                 if (!string.IsNullOrEmpty(githubBearerToken))
                 {
                     githubService = new GithubService(new HttpClient(), githubBearerToken);
                 }
-                else if (string.IsNullOrEmpty(githubUsername) || string.IsNullOrEmpty(githubToken))
+                else if (!string.IsNullOrEmpty(githubBearerTokenDeprecated))
                 {
-                    githubService = new GithubService(new HttpClient());
+                    githubService = new GithubService(new HttpClient(), githubBearerTokenDeprecated);
+                }
+                else if (!string.IsNullOrEmpty(githubUsername))
+                {
+                    githubService = new GithubService(new HttpClient(), githubUsername, githubToken);
+                }
+                else if (!string.IsNullOrEmpty(githubUsernameDeprecated))
+                {
+                    githubService = new GithubService(new HttpClient(), githubUsernameDeprecated, githubTokenDeprecated);
                 }
                 else
                 {
-                    githubService = new GithubService(new HttpClient(), githubUsername, githubToken);
+                    githubService = new GithubService(new HttpClient());
                 }
             }
             var nugetService = new NugetService(
@@ -193,7 +212,7 @@ namespace CycloneDX {
             Console.WriteLine();
             Console.WriteLine("Creating CycloneDX BoM");
             var bom = new Bom();
-            if (!noSerialNumber) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
+            if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
             bom.Components = components;
 
             var bomContents = BomService.CreateDocument(bom, json);
