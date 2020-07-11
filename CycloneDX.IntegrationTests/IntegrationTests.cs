@@ -92,6 +92,8 @@ namespace CycloneDX.IntegrationTests
         [InlineData("NoDependencies", true)]
         [InlineData("Vb", false)]
         [InlineData("Vb", true)]
+        [InlineData("ProjectWithDevelopmentDependencies", false)]
+        [InlineData("ProjectWithDevelopmentDependencies", true)]
         public async Task CallingCycloneDX_WithSolutionFilePath_GeneratesBom(
             string solutionName, bool json)
         {
@@ -125,6 +127,8 @@ namespace CycloneDX.IntegrationTests
         [InlineData("NoDependencies", "NoDependencies.Tests", "csproj", true)]
         [InlineData("Vb", "Vb", "vbproj", false)]
         [InlineData("Vb", "Vb", "vbproj", true)]
+        [InlineData("ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies", "csproj", false)]
+        [InlineData("ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies", "csproj", true)]
         public async Task CallingCycloneDX_WithProjectPath_GeneratesBom(
             string solutionName,
             string projectName,
