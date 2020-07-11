@@ -33,34 +33,34 @@ dotnet tool update --global CycloneDX
 #### Execution via DotNet
 
 ```bash
-dotnet CycloneDX [OPTIONS]
+dotnet CycloneDX <path> -o <OUTPUT_DIRECTORY>
 ```
 
 #### Execution via Docker
 
 ```bash
-docker run cyclonedx/cyclonedx-dotnet [OPTIONS]
+docker run cyclonedx/cyclonedx-dotnet [OPTIONS] <path>
 ```
 
 #### Options
 
 ```text
-Usage: CycloneDX [path] -o [outputDirectory]
+Usage: dotnet CycloneDX [options] <path>
 
 Arguments:
-  Path            The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.
+  path                                              The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files
 
 Options:
-  -o|--out <DIR>                The directorty to write the BOM
-  -j|--json                     Produce a JSON BOM instead of XML
-  -u|--url <URL>                Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required).
-  -r|--recursive                To be used with a single project file, it will recursively scan project references of the supplied .csproj.	
- -ns|--noSerialNumber           Do not generate bom serial number
- -gu|--githubUsername           Optionally provide a GitHub username for license resolution (see notes below)
- -gt|--githubToken              Optionally provide a GitHub personal access token for license resolution
- -gbt|--githubBearerToken       Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions.
- -dgl|--disableGithubLicenses   Optionally disable GitHub license resolution
-  -?|-h|--help                  Show help information
+  -o|--out <OUTPUT_DIRECTORY>                       The directory to write the BOM
+  -j|--json                                         Produce a JSON BOM instead of XML
+  -u|--url <BASE_URL>                               Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)
+  -r|--recursive                                    To be used with a single project file, it will recursively scan project references of the supplied .csproj
+  -ns|--no-serial-number                            Optionally omit the serial number from the resulting BOM
+  -gu|--github-username <GITHUB_USERNAME>           Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token
+  -gt|--github-token <GITHUB_TOKEN>                 Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username
+  -gbt|--github-bearer-token <GITHUB_BEARER_TOKEN>  Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions
+  -dgl|--disable-github-licenses                    Optionally disable GitHub license resolution
+  -?|-h|--help                                      Show help information
 ```
 
 #### Examples
