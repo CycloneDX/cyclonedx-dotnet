@@ -9,6 +9,7 @@
       "name": "Microsoft.AspNetCore.Antiforgery",
       "version": "2.0.0",
       "description": "An antiforgery system for ASP.NET Core designed to generate and validate tokens to prevent Cross-Site Request Forgery attacks.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -31,6 +32,7 @@
       "name": "Microsoft.AspNetCore.Authentication.Abstractions",
       "version": "2.0.0",
       "description": "ASP.NET Core common types used by the various authentication components.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -53,6 +55,7 @@
       "name": "Microsoft.AspNetCore.Authentication.Core",
       "version": "2.0.0",
       "description": "ASP.NET Core common types used by the various authentication middleware components.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -75,6 +78,7 @@
       "name": "Microsoft.AspNetCore.Authorization",
       "version": "2.0.0",
       "description": "ASP.NET Core authorization classes.\nCommonly used types:\nMicrosoft.AspNetCore.Authorization.AllowAnonymousAttribute\nMicrosoft.AspNetCore.Authorization.AuthorizeAttribute",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -97,6 +101,7 @@
       "name": "Microsoft.AspNetCore.Authorization.Policy",
       "version": "2.0.0",
       "description": "ASP.NET Core authorization policy helper classes.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -119,6 +124,7 @@
       "name": "Microsoft.AspNetCore.Cors",
       "version": "2.0.0",
       "description": "CORS middleware and policy for ASP.NET Core to enable cross-origin resource sharing.\nCommonly used types:\nMicrosoft.AspNetCore.Cors.DisableCorsAttribute\nMicrosoft.AspNetCore.Cors.EnableCorsAttribute",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -141,6 +147,7 @@
       "name": "Microsoft.AspNetCore.Cryptography.Internal",
       "version": "2.0.0",
       "description": "Infrastructure for ASP.NET Core cryptographic packages. Applications and libraries should not reference this package directly.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -163,6 +170,7 @@
       "name": "Microsoft.AspNetCore.DataProtection",
       "version": "2.0.0",
       "description": "ASP.NET Core logic to protect and unprotect data, similar to DPAPI.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -185,6 +193,7 @@
       "name": "Microsoft.AspNetCore.DataProtection.Abstractions",
       "version": "2.0.0",
       "description": "ASP.NET Core data protection abstractions.\nCommonly used types:\nMicrosoft.AspNetCore.DataProtection.IDataProtectionProvider\nMicrosoft.AspNetCore.DataProtection.IDataProtector",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -207,6 +216,7 @@
       "name": "Microsoft.AspNetCore.Diagnostics.Abstractions",
       "version": "2.0.0",
       "description": "ASP.NET Core diagnostics middleware abstractions and feature interface definitions.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -229,6 +239,7 @@
       "name": "Microsoft.AspNetCore.Hosting.Abstractions",
       "version": "2.0.0",
       "description": "ASP.NET Core hosting and startup abstractions for web applications.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -251,6 +262,7 @@
       "name": "Microsoft.AspNetCore.Hosting.Server.Abstractions",
       "version": "2.0.0",
       "description": "ASP.NET Core hosting server abstractions for web applications.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -273,6 +285,7 @@
       "name": "Microsoft.AspNetCore.Html.Abstractions",
       "version": "2.0.0",
       "description": "ASP.NET Core HTML abstractions used for building HTML content.\nCommonly used types:\nMicrosoft.AspNetCore.Html.HtmlString\nMicrosoft.AspNetCore.Html.IHtmlContent",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -295,6 +308,7 @@
       "name": "Microsoft.AspNetCore.Http",
       "version": "2.0.0",
       "description": "ASP.NET Core default HTTP feature implementations.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -317,6 +331,7 @@
       "name": "Microsoft.AspNetCore.Http.Abstractions",
       "version": "2.0.0",
       "description": "ASP.NET Core HTTP object model for HTTP requests and responses and also common extension methods for registering middleware in an IApplicationBuilder.\nCommonly used types:\nMicrosoft.AspNetCore.Builder.IApplicationBuilder\nMicrosoft.AspNetCore.Http.HttpContext\nMicrosoft.AspNetCore.Http.HttpRequest\nMicrosoft.AspNetCore.Http.HttpResponse",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -339,6 +354,7 @@
       "name": "Microsoft.AspNetCore.Http.Extensions",
       "version": "2.0.0",
       "description": "ASP.NET Core common extension methods for HTTP abstractions, HTTP headers, HTTP request/response, and session state.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -361,6 +377,7 @@
       "name": "Microsoft.AspNetCore.Http.Features",
       "version": "2.0.0",
       "description": "ASP.NET Core HTTP feature interface definitions.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -383,6 +400,7 @@
       "name": "Microsoft.AspNetCore.HttpOverrides",
       "version": "2.0.0",
       "description": "ASP.NET Core basic middleware for supporting HTTP method overrides. Includes:\n* X-Forwarded-* headers to forward headers from a proxy.\n* HTTP method override header.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -405,6 +423,7 @@
       "name": "Microsoft.AspNetCore.JsonPatch",
       "version": "2.0.0",
       "description": "ASP.NET Core support for JSON PATCH.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -427,6 +446,7 @@
       "name": "Microsoft.AspNetCore.Localization",
       "version": "2.0.0",
       "description": "ASP.NET Core middleware for automatically applying culture information to HTTP requests. Culture information can be specified in the HTTP header, query string, cookie, or custom source.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -449,6 +469,7 @@
       "name": "Microsoft.AspNetCore.Mvc",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC is a web framework that gives you a powerful, patterns-based way to build dynamic websites and web APIs. ASP.NET Core MVC enables a clean separation of concerns and gives you full control over markup.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -471,6 +492,7 @@
       "name": "Microsoft.AspNetCore.Mvc.Abstractions",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC abstractions and interfaces for action invocation and dispatching, authorization, action filters, formatters, model binding, routing, validation, and more.\nCommonly used types:\nMicrosoft.AspNetCore.Mvc.IActionResult",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -493,6 +515,7 @@
       "name": "Microsoft.AspNetCore.Mvc.ApiExplorer",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC API explorer functionality for discovering metadata such as the list of controllers and actions, and their URLs and allowed HTTP methods.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -515,6 +538,7 @@
       "name": "Microsoft.AspNetCore.Mvc.Core",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC core components. Contains common action result types, attribute routing, application model conventions, API explorer, application parts, filters, formatters, model binding, and more.\nCommonly used types:\nMicrosoft.AspNetCore.Mvc.AreaAttribute\nMicrosoft.AspNetCore.Mvc.BindAttribute\nMicrosoft.AspNetCore.Mvc.ControllerBase\nMicrosoft.AspNetCore.Mvc.FromBodyAttribute\nMicrosoft.AspNetCore.Mvc.FromFormAttribute\nMicrosoft.AspNetCore.Mvc.RequireHttpsAttribute\nMicrosoft.AspNetCore.Mvc.RouteAttribute",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -537,6 +561,7 @@
       "name": "Microsoft.AspNetCore.Mvc.Cors",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC cross-origin resource sharing (CORS) features.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -559,6 +584,7 @@
       "name": "Microsoft.AspNetCore.Mvc.DataAnnotations",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC metadata and validation system using System.ComponentModel.DataAnnotations.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -581,6 +607,7 @@
       "name": "Microsoft.AspNetCore.Mvc.Formatters.Json",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC formatters for JSON input and output and for JSON PATCH input using Json.NET.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -603,6 +630,7 @@
       "name": "Microsoft.AspNetCore.Mvc.Localization",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC features that enable globalization and localization of applications.\nCommonly used types:\nMicrosoft.AspNetCore.Mvc.Localization.IHtmlLocalizer\u003CTResource\u003E\nMicrosoft.AspNetCore.Mvc.Localization.IViewLocalizer",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -625,6 +653,7 @@
       "name": "Microsoft.AspNetCore.Mvc.Razor",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC Razor view engine for CSHTML files.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -647,6 +676,7 @@
       "name": "Microsoft.AspNetCore.Mvc.Razor.Extensions",
       "version": "2.0.0",
       "description": "ASP.NET Core design time hosting infrastructure for the Razor view engine.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -669,6 +699,7 @@
       "name": "Microsoft.AspNetCore.Mvc.RazorPages",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC Razor Pages.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -691,6 +722,7 @@
       "name": "Microsoft.AspNetCore.Mvc.TagHelpers",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC default tag helpers. Contains tag helpers for anchor tags, HTML input elements, caching, scripts, links (for CSS), and more.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -713,6 +745,7 @@
       "name": "Microsoft.AspNetCore.Mvc.ViewFeatures",
       "version": "2.0.0",
       "description": "ASP.NET Core MVC view rendering features. Contains common types used in most MVC applications as well as view rendering features such as view engines, views, view components, and HTML helpers.\nCommonly used types:\nMicrosoft.AspNetCore.Mvc.Controller\nMicrosoft.AspNetCore.Mvc.ValidateAntiForgeryTokenAttribute\nMicrosoft.AspNetCore.Mvc.ViewComponent",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -735,6 +768,7 @@
       "name": "Microsoft.AspNetCore.Razor",
       "version": "2.0.0",
       "description": "Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor parser and code generation infrastructure.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -757,6 +791,7 @@
       "name": "Microsoft.AspNetCore.Razor.Language",
       "version": "2.0.0",
       "description": "Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor parser and code generation infrastructure.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -779,6 +814,7 @@
       "name": "Microsoft.AspNetCore.Razor.Runtime",
       "version": "2.0.0",
       "description": "Runtime components for rendering Razor pages and implementing tag helpers.\n\nCommonly used types:\nMicrosoft.AspNetCore.Razor.TagHelpers.HtmlAttributeNameAttribute\nMicrosoft.AspNetCore.Razor.TagHelpers.HtmlTargetElementAttribute\nMicrosoft.AspNetCore.Razor.TagHelpers.ITagHelper",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -801,6 +837,7 @@
       "name": "Microsoft.AspNetCore.ResponseCaching.Abstractions",
       "version": "2.0.0",
       "description": "ASP.NET Core response caching middleware abstractions and feature interface definitions.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -823,6 +860,7 @@
       "name": "Microsoft.AspNetCore.Routing",
       "version": "2.0.0",
       "description": "ASP.NET Core middleware for routing requests to application logic and for generating links.\nCommonly used types:\nMicrosoft.AspNetCore.Routing.Route\nMicrosoft.AspNetCore.Routing.RouteCollection",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -845,6 +883,7 @@
       "name": "Microsoft.AspNetCore.Routing.Abstractions",
       "version": "2.0.0",
       "description": "ASP.NET Core abstractions for routing requests to application logic and for generating links.\nCommonly used types:\nMicrosoft.AspNetCore.Routing.IRouter\nMicrosoft.AspNetCore.Routing.RouteData",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -867,6 +906,7 @@
       "name": "Microsoft.AspNetCore.Server.IISIntegration",
       "version": "2.0.0",
       "description": "ASP.NET Core components for working with the IIS AspNetCoreModule.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -889,6 +929,7 @@
       "name": "Microsoft.AspNetCore.WebUtilities",
       "version": "2.0.0",
       "description": "ASP.NET Core utilities, such as for working with forms, multipart messages, and query strings.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -911,6 +952,7 @@
       "name": "Microsoft.CodeAnalysis.Analyzers",
       "version": "1.1.0",
       "description": "Analyzers for .NET Compiler Platform (\u0022Roslyn\u0022)",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -932,6 +974,7 @@
       "name": "Microsoft.CodeAnalysis.Common",
       "version": "2.3.1",
       "description": "A shared package used by the Microsoft .NET Compiler Platform (\u0022Roslyn\u0022).",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -953,6 +996,7 @@
       "name": "Microsoft.CodeAnalysis.CSharp",
       "version": "2.3.1",
       "description": ".NET Compiler Platform (\u0022Roslyn\u0022) support for C#, Microsoft.CodeAnalysis.CSharp.dll.\n\n      More details at https://aka.ms/roslyn-packages",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -974,6 +1018,7 @@
       "name": "Microsoft.CodeAnalysis.Razor",
       "version": "2.0.0",
       "description": "Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor design-time infrastructure.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -996,6 +1041,7 @@
       "name": "Microsoft.CSharp",
       "version": "4.4.0",
       "description": "Provides support for compilation and code generation, including dynamic, using the C# language.\n\nCommonly Used Types:\nMicrosoft.CSharp.RuntimeBinder.Binder\nMicrosoft.CSharp.RuntimeBinder.RuntimeBinderException\nMicrosoft.CSharp.RuntimeBinder.CSharpArgumentInfo\nMicrosoft.CSharp.RuntimeBinder.CSharpArgumentInfoFlags\nMicrosoft.CSharp.RuntimeBinder.CSharpBinderFlags\n \n8321c729934c0f8be754953439b88e6e1c120c24 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1018,6 +1064,7 @@
       "name": "Microsoft.DotNet.PlatformAbstractions",
       "version": "2.0.0",
       "description": "Abstractions for making code that uses file system and environment testable.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1040,6 +1087,7 @@
       "name": "Microsoft.Extensions.Caching.Abstractions",
       "version": "2.0.0",
       "description": "Caching abstractions for in-memory cache and distributed cache.\nCommonly used types:\nMicrosoft.Extensions.Caching.Distributed.IDistributedCache\nMicrosoft.Extensions.Caching.Memory.IMemoryCache",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1062,6 +1110,7 @@
       "name": "Microsoft.Extensions.Caching.Memory",
       "version": "2.0.0",
       "description": "In-memory cache implementation of Microsoft.Extensions.Caching.Memory.IMemoryCache.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1084,6 +1133,7 @@
       "name": "Microsoft.Extensions.Configuration.Abstractions",
       "version": "2.0.0",
       "description": "Abstractions of key-value pair based configuration.\nCommonly used types:\nMicrosoft.Extensions.Configuration.IConfiguration\nMicrosoft.Extensions.Configuration.IConfigurationBuilder\nMicrosoft.Extensions.Configuration.IConfigurationProvider\nMicrosoft.Extensions.Configuration.IConfigurationRoot\nMicrosoft.Extensions.Configuration.IConfigurationSection",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1106,6 +1156,7 @@
       "name": "Microsoft.Extensions.DependencyInjection",
       "version": "2.0.0",
       "description": "Default implementation of dependency injection for Microsoft.Extensions.DependencyInjection.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1128,6 +1179,7 @@
       "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
       "version": "2.0.0",
       "description": "Abstractions for dependency injection.\nCommonly used types:\nMicrosoft.Extensions.DependencyInjection.IServiceCollection",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1150,6 +1202,7 @@
       "name": "Microsoft.Extensions.DependencyModel",
       "version": "2.0.0",
       "description": "Abstractions for reading \u0060.deps\u0060 files.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1172,6 +1225,7 @@
       "name": "Microsoft.Extensions.FileProviders.Abstractions",
       "version": "2.0.0",
       "description": "Abstractions of files and directories.\nCommonly used types:\nMicrosoft.Extensions.FileProviders.IDirectoryContents\nMicrosoft.Extensions.FileProviders.IFileInfo\nMicrosoft.Extensions.FileProviders.IFileProvider",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1194,6 +1248,7 @@
       "name": "Microsoft.Extensions.FileProviders.Composite",
       "version": "2.0.0",
       "description": "Composite file and directory providers for Microsoft.Extensions.FileProviders.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1216,6 +1271,7 @@
       "name": "Microsoft.Extensions.FileSystemGlobbing",
       "version": "2.0.0",
       "description": "File system globbing to find files matching a specified pattern.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1238,6 +1294,7 @@
       "name": "Microsoft.Extensions.Hosting.Abstractions",
       "version": "2.0.0",
       "description": ".NET Core hosting and startup abstractions for applications.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1260,6 +1317,7 @@
       "name": "Microsoft.Extensions.Localization",
       "version": "2.0.0",
       "description": "Application localization services and default implementation based on ResourceManager to load localized assembly resources.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1282,6 +1340,7 @@
       "name": "Microsoft.Extensions.Localization.Abstractions",
       "version": "2.0.0",
       "description": "Abstractions of application localization services.\nCommonly used types:\nMicrosoft.Extensions.Localization.IStringLocalizer\nMicrosoft.Extensions.Localization.IStringLocalizer\u003CT\u003E",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1304,6 +1363,7 @@
       "name": "Microsoft.Extensions.Logging.Abstractions",
       "version": "2.0.0",
       "description": "Logging abstractions for Microsoft.Extensions.Logging.\nCommonly used types:\nMicrosoft.Extensions.Logging.ILogger\nMicrosoft.Extensions.Logging.ILoggerFactory\nMicrosoft.Extensions.Logging.ILogger\u003CTCategoryName\u003E\nMicrosoft.Extensions.Logging.LogLevel\nMicrosoft.Extensions.Logging.Logger\u003CT\u003E\nMicrosoft.Extensions.Logging.LoggerMessage\nMicrosoft.Extensions.Logging.Abstractions.NullLogger",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1326,6 +1386,7 @@
       "name": "Microsoft.Extensions.ObjectPool",
       "version": "2.0.0",
       "description": "A simple object pool implementation.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1348,6 +1409,7 @@
       "name": "Microsoft.Extensions.Options",
       "version": "2.0.0",
       "description": "Provides a strongly typed way of specifying and accessing settings using dependency injection.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1370,6 +1432,7 @@
       "name": "Microsoft.Extensions.Primitives",
       "version": "2.0.0",
       "description": "Primitives shared by framework extensions. Commonly used types include:\nMicrosoft.Extensions.Primitives.IChangeToken\nMicrosoft.Extensions.Primitives.StringValues\nMicrosoft.Extensions.Primitives.StringSegment",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1392,6 +1455,7 @@
       "name": "Microsoft.Extensions.WebEncoders",
       "version": "2.0.0",
       "description": "Contains registration and configuration APIs to add the core framework encoders to a dependency injection container.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1414,6 +1478,7 @@
       "name": "Microsoft.Net.Http.Headers",
       "version": "2.0.0",
       "description": "HTTP header parser implementations.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1436,6 +1501,7 @@
       "name": "Microsoft.NETCore.App",
       "version": "2.1.0",
       "description": "A set of .NET API\u0027s that are included in the default .NET Core application model. \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1458,6 +1524,7 @@
       "name": "Microsoft.NETCore.DotNetAppHost",
       "version": "2.1.0",
       "description": "Provides the .NET Core app bootstrapper intended for use in the application directory \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1480,6 +1547,7 @@
       "name": "Microsoft.NETCore.DotNetHostPolicy",
       "version": "2.1.0",
       "description": "Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1502,6 +1570,7 @@
       "name": "Microsoft.NETCore.DotNetHostResolver",
       "version": "2.1.0",
       "description": "Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1524,6 +1593,7 @@
       "name": "Microsoft.NETCore.Platforms",
       "version": "2.1.0",
       "description": "Provides runtime information required to resolve target framework, platform, and runtime specific implementations of .NETCore packages. \n30ab651fcb4354552bd4891619a0bdd81e0ebdbf \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1546,6 +1616,7 @@
       "name": "Microsoft.NETCore.Targets",
       "version": "2.1.0",
       "description": "Provides supporting infrastructure for portable projects: support identifiers that define framework and runtime for support targets and packages that reference the minimum supported package versions when targeting these. \n30ab651fcb4354552bd4891619a0bdd81e0ebdbf \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1568,6 +1639,7 @@
       "name": "Microsoft.Win32.Primitives",
       "version": "4.3.0",
       "description": "Provides common types for Win32-based libraries.\n\nCommonly Used Types:\nSystem.ComponentModel.Win32Exception\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1590,6 +1662,7 @@
       "name": "Microsoft.Win32.Registry",
       "version": "4.4.0",
       "description": "Provides support for accessing and modifying the Windows Registry.\n\nCommonly Used Types:\nMicrosoft.Win32.RegistryKey\nMicrosoft.Win32.Registry\nMicrosoft.Win32.RegistryValueKind\nMicrosoft.Win32.RegistryHive\nMicrosoft.Win32.RegistryView\n \n8321c729934c0f8be754953439b88e6e1c120c24 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1612,6 +1685,7 @@
       "name": "NETStandard.Library",
       "version": "2.0.3",
       "description": "A set of standard .NET APIs that are prescribed to be used and supported together. \n18a36291e48808fa7ef2d00a764ceb1ec95645a5 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1634,6 +1708,7 @@
       "name": "Newtonsoft.Json",
       "version": "10.0.1",
       "description": "Json.NET is a popular high-performance JSON framework for .NET",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1655,6 +1730,7 @@
       "name": "Newtonsoft.Json.Bson",
       "version": "1.0.1",
       "description": "Json.NET BSON adds support for reading and writing BSON",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1677,6 +1753,7 @@
       "name": "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1699,6 +1776,7 @@
       "name": "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1721,6 +1799,7 @@
       "name": "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1743,6 +1822,7 @@
       "name": "runtime.native.System",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1765,6 +1845,7 @@
       "name": "runtime.native.System.IO.Compression",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1787,6 +1868,7 @@
       "name": "runtime.native.System.Net.Http",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1809,6 +1891,7 @@
       "name": "runtime.native.System.Net.Security",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1831,6 +1914,7 @@
       "name": "runtime.native.System.Security.Cryptography.Apple",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1853,6 +1937,7 @@
       "name": "runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -1875,6 +1960,7 @@
       "name": "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1897,6 +1983,7 @@
       "name": "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1919,6 +2006,7 @@
       "name": "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1941,6 +2029,7 @@
       "name": "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1963,6 +2052,7 @@
       "name": "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -1985,6 +2075,7 @@
       "name": "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -2007,6 +2098,7 @@
       "name": "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -2029,6 +2121,7 @@
       "name": "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -2051,6 +2144,7 @@
       "name": "System.AppContext",
       "version": "4.3.0",
       "description": "Provides the System.AppContext class, which allows access to the BaseDirectory property and other application specific data.\n\nCommonly Used Types:\nSystem.AppContext\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2073,6 +2167,7 @@
       "name": "System.Buffers",
       "version": "4.4.0",
       "description": "Provides resource pooling of any type for performance-critical applications that allocate and deallocate objects frequently.\n\nCommonly Used Types:\nSystem.Buffers.ArrayPool\u003CT\u003E\n \n8321c729934c0f8be754953439b88e6e1c120c24 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2095,6 +2190,7 @@
       "name": "System.Collections",
       "version": "4.3.0",
       "description": "Provides classes that define generic collections, which allow developers to create strongly typed collections that provide better type safety and performance than non-generic strongly typed collections.\n\nCommonly Used Types:\nSystem.Collections.Generic.List\u003CT\u003E\nSystem.Collections.Generic.Dictionary\u003CTKey, TValue\u003E\nSystem.Collections.Generic.Queue\u003CT\u003E\nSystem.Collections.Generic.Stack\u003CT\u003E\nSystem.Collections.Generic.HashSet\u003CT\u003E\nSystem.Collections.Generic.LinkedList\u003CT\u003E\nSystem.Collections.Generic.EqualityComparer\u003CT\u003E\nSystem.Collections.Generic.Comparer\u003CT\u003E\nSystem.Collections.Generic.SortedDictionary\u003CTKey, TValue\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2117,6 +2213,7 @@
       "name": "System.Collections.Concurrent",
       "version": "4.3.0",
       "description": "Provides several thread-safe collection classes that should be used in place of the corresponding types in the System.Collections.NonGeneric and System.Collections packages whenever multiple threads are accessing the collection concurrently.\n\nCommonly Used Types:\nSystem.Collections.Concurrent.ConcurrentDictionary\u003CTKey, TValue\u003E\nSystem.Collections.Concurrent.ConcurrentQueue\u003CT\u003E\nSystem.Collections.Concurrent.ConcurrentBag\u003CT\u003E\nSystem.Collections.Concurrent.BlockingCollection\u003CT\u003E\nSystem.Collections.Concurrent.ConcurrentStack\u003CT\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2139,6 +2236,7 @@
       "name": "System.Collections.Immutable",
       "version": "1.3.1",
       "description": "This package provides collections that are thread safe and guaranteed to never change their contents, also known as immutable collections. Like strings, any methods that perform modifications will not change the existing instance but instead return a new instance. For efficiency reasons, the implementation uses a sharing mechanism to ensure that newly created instances share as much data as possible with the previous instance while ensuring that operations have a predictable time complexity.\n\nCommonly Used Types:\nSystem.Collections.Immutable.ImmutableArray\nSystem.Collections.Immutable.ImmutableArray\u003CT\u003E\nSystem.Collections.Immutable.ImmutableDictionary\nSystem.Collections.Immutable.ImmutableDictionary\u003CTKey,TValue\u003E\nSystem.Collections.Immutable.ImmutableHashSet\nSystem.Collections.Immutable.ImmutableHashSet\u003CT\u003E\nSystem.Collections.Immutable.ImmutableList\nSystem.Collections.Immutable.ImmutableList\u003CT\u003E\nSystem.Collections.Immutable.ImmutableQueue\nSystem.Collections.Immutable.ImmutableQueue\u003CT\u003E\nSystem.Collections.Immutable.ImmutableSortedDictionary\nSystem.Collections.Immutable.ImmutableSortedDictionary\u003CTKey,TValue\u003E\nSystem.Collections.Immutable.ImmutableSortedSet\nSystem.Collections.Immutable.ImmutableSortedSet\u003CT\u003E\nSystem.Collections.Immutable.ImmutableStack\nSystem.Collections.Immutable.ImmutableStack\u003CT\u003E",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2161,6 +2259,7 @@
       "name": "System.Collections.NonGeneric",
       "version": "4.3.0",
       "description": "Provides classes that define older non-generic collections of objects, such as lists, queues, hash tables and dictionaries. Developers should prefer the generic collections in the System.Collections package.\n\nCommonly Used Types:\nSystem.Collections.ArrayList\nSystem.Collections.Hashtable\nSystem.Collections.CollectionBase\nSystem.Collections.ReadOnlyCollectionBase\nSystem.Collections.Stack\nSystem.Collections.SortedList\nSystem.Collections.DictionaryBase\nSystem.Collections.Queue\nSystem.Collections.Comparer\nSystem.Collections.CaseInsensitiveComparer\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2183,6 +2282,7 @@
       "name": "System.Collections.Specialized",
       "version": "4.3.0",
       "description": "Provides older specialized non-generic collections; for example, a linked list dictionary, a bit vector, and collections that contain only strings.\n\nCommonly Used Types:\nSystem.Collections.Specialized.NameValueCollection\nSystem.Collections.Specialized.NameObjectCollectionBase\nSystem.Collections.Specialized.StringCollection\nSystem.Collections.Specialized.IOrderedDictionary\nSystem.Collections.Specialized.HybridDictionary\nSystem.Collections.Specialized.OrderedDictionary\nSystem.Collections.Specialized.ListDictionary\nSystem.Collections.Specialized.StringDictionary\nSystem.Collections.Specialized.BitVector32\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2205,6 +2305,7 @@
       "name": "System.ComponentModel",
       "version": "4.3.0",
       "description": "Provides interfaces for the editing and change tracking of objects used as data sources.\n\nCommonly Used Types:\nSystem.ComponentModel.CancelEventArgs\nSystem.IServiceProvider\nSystem.ComponentModel.IEditableObject\nSystem.ComponentModel.IChangeTracking\nSystem.ComponentModel.IRevertibleChangeTracking\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2227,6 +2328,7 @@
       "name": "System.ComponentModel.Annotations",
       "version": "4.4.0",
       "description": "Provides attributes that are used to define metadata for objects used as data sources.\n\nCommonly Used Types:\nSystem.ComponentModel.DataAnnotations.ValidationResult\nSystem.ComponentModel.DataAnnotations.IValidatableObject\nSystem.ComponentModel.DataAnnotations.ValidationAttribute\nSystem.ComponentModel.DataAnnotations.RequiredAttribute\nSystem.ComponentModel.DataAnnotations.StringLengthAttribute\nSystem.ComponentModel.DataAnnotations.DisplayAttribute\nSystem.ComponentModel.DataAnnotations.RegularExpressionAttribute\nSystem.ComponentModel.DataAnnotations.DataTypeAttribute\nSystem.ComponentModel.DataAnnotations.RangeAttribute\nSystem.ComponentModel.DataAnnotations.KeyAttribute\n \n8321c729934c0f8be754953439b88e6e1c120c24 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2249,6 +2351,7 @@
       "name": "System.ComponentModel.Primitives",
       "version": "4.3.0",
       "description": "Provides interfaces that are used to implement the run-time and design-time behavior of components.\n\nCommonly Used Types:\nSystem.ComponentModel.IComponent\nSystem.ComponentModel.IContainer\nSystem.ComponentModel.ISite\nSystem.ComponentModel.ComponentCollection\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2271,6 +2374,7 @@
       "name": "System.ComponentModel.TypeConverter",
       "version": "4.3.0",
       "description": "Provides the System.ComponentModel.TypeConverter class, which represents a unified way of converting types of values to other types.\n\nCommonly Used Types:\nSystem.ComponentModel.TypeConverter\nSystem.ComponentModel.TypeConverterAttribute\nSystem.ComponentModel.PropertyDescriptor\nSystem.ComponentModel.StringConverter\nSystem.ComponentModel.ITypeDescriptorContext\nSystem.ComponentModel.EnumConverter\nSystem.ComponentModel.TypeDescriptor\nSystem.ComponentModel.Int32Converter\nSystem.ComponentModel.BooleanConverter\nSystem.ComponentModel.DoubleConverter\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2293,6 +2397,7 @@
       "name": "System.Console",
       "version": "4.3.0",
       "description": "Provides the System.Console class, which represents the standard input, output and error streams for console applications.\n\nCommonly Used Types:\nSystem.Console\nSystem.ConsoleColor\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2315,6 +2420,7 @@
       "name": "System.Diagnostics.Debug",
       "version": "4.3.0",
       "description": "Provides classes and attributes that allows basic interaction with a debugger.\n\nCommonly Used Types:\nSystem.Diagnostics.Debug\nSystem.Diagnostics.DebuggerStepThroughAttribute\nSystem.Diagnostics.Debugger\nSystem.Diagnostics.DebuggerDisplayAttribute\nSystem.Diagnostics.DebuggerBrowsableAttribute\nSystem.Diagnostics.DebuggerBrowsableState\nSystem.Diagnostics.DebuggerHiddenAttribute\nSystem.Diagnostics.DebuggerNonUserCodeAttribute\nSystem.Diagnostics.DebuggerTypeProxyAttribute\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2337,6 +2443,7 @@
       "name": "System.Diagnostics.DiagnosticSource",
       "version": "4.4.1",
       "description": "Provides Classes that allow you to decouple code logging rich (unserializable) diagnostics/telemetry (e.g. framework) from code that consumes it (e.g. tools)\n\nCommonly Used Types:\nSystem.Diagnostics.DiagnosticListener\nSystem.Diagnostics.DiagnosticSource\n \n8321c729934c0f8be754953439b88e6e1c120c24",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2359,6 +2466,7 @@
       "name": "System.Diagnostics.FileVersionInfo",
       "version": "4.3.0",
       "description": "Provides the System.Diagnostics.FileVersionInfo class, which allows access to Win32 version resource information for a physical file on disk.\n\nCommonly Used Types:\nSystem.Diagnostics.FileVersionInfo\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2381,6 +2489,7 @@
       "name": "System.Diagnostics.StackTrace",
       "version": "4.3.0",
       "description": "Provides the System.Diagnostics.StackTrace class, which allows interaction with local and remote processes.\n\nCommonly Used Types:\nSystem.Diagnostics.StackFrame\nSystem.Diagnostics.StackTrace\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2403,6 +2512,7 @@
       "name": "System.Diagnostics.Tools",
       "version": "4.3.0",
       "description": "Provides attributes, such as GeneratedCodeAttribute and SuppresMessageAttribute, that are emitted or consumed by analysis tools.\n\nCommonly Used Types:\nSystem.CodeDom.Compiler.GeneratedCodeAttribute\nSystem.Diagnostics.CodeAnalysis.SuppressMessageAttribute\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2425,6 +2535,7 @@
       "name": "System.Diagnostics.Tracing",
       "version": "4.3.0",
       "description": "Provides class that enable you to create high performance tracing events to be captured by event tracing for Windows (ETW).\n\nCommonly Used Types:\nSystem.Diagnostics.Tracing.EventSource\nSystem.Diagnostics.Tracing.EventListener\nSystem.Diagnostics.Tracing.EventLevel\nSystem.Diagnostics.Tracing.EventKeywords\nSystem.Diagnostics.Tracing.EventWrittenEventArgs\nSystem.Diagnostics.Tracing.EventAttribute\nSystem.Diagnostics.Tracing.EventSourceAttribute\nSystem.Diagnostics.Tracing.NonEventAttribute\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2447,6 +2558,7 @@
       "name": "System.Dynamic.Runtime",
       "version": "4.3.0",
       "description": "Provides classes and interfaces that support the Dynamic Language Runtime (DLR).\n\nCommonly Used Types:\nSystem.Runtime.CompilerServices.CallSite\nSystem.Runtime.CompilerServices.CallSite\u003CT\u003E\nSystem.Dynamic.IDynamicMetaObjectProvider\nSystem.Dynamic.DynamicMetaObject\nSystem.Dynamic.SetMemberBinder\nSystem.Dynamic.GetMemberBinder\nSystem.Dynamic.ExpandoObject\nSystem.Dynamic.DynamicObject\nSystem.Runtime.CompilerServices.CallSiteBinder\nSystem.Runtime.CompilerServices.ConditionalWeakTable\u003CTKey, TValue\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2469,6 +2581,7 @@
       "name": "System.Globalization",
       "version": "4.3.0",
       "description": "Provides classes that define culture-related information, including language, country/region, calendars in use, format patterns for dates, currency, and numbers, and sort order for strings.\n\nCommonly Used Types:\nSystem.Globalization.DateTimeFormatInfo\nSystem.Globalization.CultureInfo\nSystem.Globalization.NumberFormatInfo\nSystem.Globalization.CalendarWeekRule\nSystem.Globalization.TextInfo\nSystem.Globalization.Calendar\nSystem.Globalization.CompareInfo\nSystem.Globalization.CompareOptions\nSystem.Globalization.UnicodeCategory\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2491,6 +2604,7 @@
       "name": "System.Globalization.Calendars",
       "version": "4.3.0",
       "description": "Provides classes for performing date calculations using specific calendars, including the Gregorian, Julian, Hijri and Korean calendars.\n\nCommonly Used Types:\nSystem.Globalization.HijriCalendar\nSystem.Globalization.GregorianCalendar\nSystem.Globalization.HebrewCalendar\nSystem.Globalization.KoreanCalendar\nSystem.Globalization.ThaiBuddhistCalendar\nSystem.Globalization.TaiwanCalendar\nSystem.Globalization.JapaneseCalendar\nSystem.Globalization.GregorianCalendarTypes\nSystem.Globalization.PersianCalendar\nSystem.Globalization.UmAlQuraCalendar\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2513,6 +2627,7 @@
       "name": "System.Globalization.Extensions",
       "version": "4.3.0",
       "description": "Provides classes for performing Unicode string normalization, culture-specific string comparisons and support the use of non-ASCII characters for Internet domain names.\n\nCommonly Used Types:\nSystem.StringNormalizationExtensions\nSystem.Text.NormalizationForm\nSystem.Globalization.IdnMapping\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2535,6 +2650,7 @@
       "name": "System.IO",
       "version": "4.3.0",
       "description": "Provides base input and output (I/O) types, including System.IO.Stream, System.IO.StreamReader and System.IO.StreamWriter, that allow reading and writing to data streams\n\nCommonly Used Types:\nSystem.IO.Stream\nSystem.IO.EndOfStreamException\nSystem.IO.MemoryStream\nSystem.IO.StreamReader\nSystem.IO.StreamWriter\nSystem.IO.StringWriter\nSystem.IO.TextWriter\nSystem.IO.TextReader\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2557,6 +2673,7 @@
       "name": "System.IO.Compression",
       "version": "4.3.0",
       "description": "Provides classes that support the compression and decompression of streams.\n\nCommonly Used Types:\nSystem.IO.Compression.DeflateStream\nSystem.IO.Compression.GZipStream\nSystem.IO.Compression.CompressionMode\nSystem.IO.Compression.CompressionLevel\nSystem.IO.Compression.ZipArchiveEntry\nSystem.IO.Compression.ZipArchive\nSystem.IO.Compression.ZipArchiveMode\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2579,6 +2696,7 @@
       "name": "System.IO.FileSystem",
       "version": "4.3.0",
       "description": "Provides types that allow reading and writing to files and types that provide basic file and directory support.\n\nCommonly Used Types:\nSystem.IO.FileStream\nSystem.IO.FileInfo\nSystem.IO.DirectoryInfo\nSystem.IO.FileSystemInfo\nSystem.IO.File\nSystem.IO.Directory\nSystem.IO.SearchOption\nSystem.IO.FileOptions\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2601,6 +2719,7 @@
       "name": "System.IO.FileSystem.Primitives",
       "version": "4.3.0",
       "description": "Provides common enumerations and exceptions for path-based I/O libraries.\n\nCommonly Used Types:\nSystem.IO.DirectoryNotFoundException\nSystem.IO.FileAccess\nSystem.IO.FileLoadException\nSystem.IO.PathTooLongException\nSystem.IO.FileMode\nSystem.IO.FileShare\nSystem.IO.FileAttributes\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2623,6 +2742,7 @@
       "name": "System.Linq",
       "version": "4.3.0",
       "description": "Provides classes and interfaces that supports queries that use Language-Integrated Query (LINQ).\n\nCommonly Used Types:\nSystem.Linq.Enumerable\nSystem.Linq.IGrouping\u003CTKey, TElement\u003E\nSystem.Linq.IOrderedEnumerable\u003CTElement\u003E\nSystem.Linq.ILookup\u003CTKey, TElement\u003E\nSystem.Linq.Lookup\u003CTKey, TElement\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2645,6 +2765,7 @@
       "name": "System.Linq.Expressions",
       "version": "4.3.0",
       "description": "Provides classes, interfaces and enumerations that enable language-level code expressions to be represented as objects in the form of expression trees.\n\nCommonly Used Types:\nSystem.Linq.IQueryable\u003CT\u003E\nSystem.Linq.IQueryable\nSystem.Linq.Expressions.Expression\u003CTDelegate\u003E\nSystem.Linq.Expressions.Expression\nSystem.Linq.Expressions.ExpressionVisitor\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2667,6 +2788,7 @@
       "name": "System.Net.Http",
       "version": "4.3.1",
       "description": "Provides a programming interface for modern HTTP applications, including HTTP client components that allow applications to consume web services over HTTP and HTTP components that can be used by both clients and servers for parsing HTTP headers.\n\nCommonly Used Types:\nSystem.Net.Http.HttpResponseMessage\nSystem.Net.Http.DelegatingHandler\nSystem.Net.Http.HttpRequestException\nSystem.Net.Http.HttpClient\nSystem.Net.Http.MultipartContent\nSystem.Net.Http.Headers.HttpContentHeaders\nSystem.Net.Http.HttpClientHandler\nSystem.Net.Http.StreamContent\nSystem.Net.Http.FormUrlEncodedContent\nSystem.Net.Http.HttpMessageHandler\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2689,6 +2811,7 @@
       "name": "System.Net.Primitives",
       "version": "4.3.0",
       "description": "Provides common types for network-based libraries, including System.Net.IPAddress, System.Net.IPEndPoint, and System.Net.CookieContainer.\n\nCommonly Used Types:\nSystem.Net.HttpStatusCode\nSystem.Net.Sockets.SocketError\nSystem.Net.Cookie\nSystem.Net.Sockets.SocketException\nSystem.Net.IPEndPoint\nSystem.Net.ICredentials\nSystem.Net.NetworkCredential\nSystem.Net.IPAddress\nSystem.Net.CookieCollection\nSystem.Net.CookieContainer\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2711,6 +2834,7 @@
       "name": "System.Net.Security",
       "version": "4.3.0",
       "description": "Provides types, such as System.Net.Security.SslStream, that uses SSL/TLS protocols to provide secure network communication between client and server endpoints.\n\nCommonly Used Types:\nSystem.Net.Security.SslStream\nSystem.Net.Security.ExtendedProtectionPolicy\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2733,6 +2857,7 @@
       "name": "System.ObjectModel",
       "version": "4.3.0",
       "description": "Provides types and interfaces that allow the creation of observable types that provide notifications to clients when changes are made to it.\n\nCommonly Used Types:\nSystem.ComponentModel.INotifyPropertyChanged\nSystem.Collections.ObjectModel.ObservableCollection\u003CT\u003E\nSystem.ComponentModel.PropertyChangedEventHandler\nSystem.Windows.Input.ICommand\nSystem.Collections.Specialized.INotifyCollectionChanged\nSystem.Collections.Specialized.NotifyCollectionChangedEventArgs\nSystem.Collections.Specialized.NotifyCollectionChangedEventHandler\nSystem.Collections.ObjectModel.KeyedCollection\u003CTKey, TItem\u003E\nSystem.ComponentModel.PropertyChangedEventArgs\nSystem.Collections.ObjectModel.ReadOnlyDictionary\u003CTKey, TValue\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2755,6 +2880,7 @@
       "name": "System.Reflection",
       "version": "4.3.0",
       "description": "Provides types that retrieve information about assemblies, modules, members, parameters, and other entities in managed code by examining their metadata. These types also can be used to manipulate instances of loaded types, for example to hook up events or to invoke methods.\n\nCommonly Used Types:\nSystem.Reflection.MethodInfo\nSystem.Reflection.PropertyInfo\nSystem.Reflection.ParameterInfo\nSystem.Reflection.FieldInfo\nSystem.Reflection.ConstructorInfo\nSystem.Reflection.Assembly\nSystem.Reflection.MemberInfo\nSystem.Reflection.EventInfo\nSystem.Reflection.Module\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2777,6 +2903,7 @@
       "name": "System.Reflection.Emit",
       "version": "4.3.0",
       "description": "Provides classes that allow a compiler or tool to emit metadata and optionally generate a PE file on disk. The primary clients of these classes are script engines and compilers.\n\nCommonly Used Types:\nSystem.Reflection.Emit.AssemblyBuilder\nSystem.Reflection.Emit.FieldBuilder\nSystem.Reflection.Emit.TypeBuilder\nSystem.Reflection.Emit.MethodBuilder\nSystem.Reflection.Emit.ConstructorBuilder\nSystem.Reflection.Emit.GenericTypeParameterBuilder\nSystem.Reflection.Emit.ModuleBuilder\nSystem.Reflection.Emit.PropertyBuilder\nSystem.Reflection.Emit.AssemblyBuilderAccess\nSystem.Reflection.Emit.EventBuilder\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2799,6 +2926,7 @@
       "name": "System.Reflection.Emit.ILGeneration",
       "version": "4.3.0",
       "description": "Provides classes that allow a compiler or tool to emit Microsoft intermediate language (MSIL). The primary clients of these classes are script engines and compilers.\n\nCommonly Used Types:\nSystem.Reflection.Emit.ILGenerator\nSystem.Reflection.Emit.Label\nSystem.Reflection.Emit.CustomAttributeBuilder\nSystem.Reflection.Emit.LocalBuilder\nSystem.Reflection.Emit.ParameterBuilder\nSystem.Reflection.Emit.SignatureHelper\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2821,6 +2949,7 @@
       "name": "System.Reflection.Emit.Lightweight",
       "version": "4.3.0",
       "description": "Provides the System.Reflection.Emit.DynamicMethod class, which represents a dynamic method that can be compiled, executed, and discarded. Discarded methods are available for garbage collection.\n\nCommonly Used Types:\nSystem.Reflection.Emit.DynamicMethod\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2843,6 +2972,7 @@
       "name": "System.Reflection.Extensions",
       "version": "4.3.0",
       "description": "Provides custom attribute extension methods for System.Reflection types.\n\nCommonly Used Types:\nSystem.Reflection.InterfaceMapping\nSystem.Reflection.CustomAttributeExtensions\nSystem.Reflection.RuntimeReflectionExtensions\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2865,6 +2995,7 @@
       "name": "System.Reflection.Metadata",
       "version": "1.4.2",
       "description": "This packages provides a low-level .NET (ECMA-335) metadata reader. It\u0027s geared for performance and is the ideal choice for building higher-level libraries that intend to provide their own object model, such as compilers.\n\nCommonly Used Types:\nSystem.Reflection.Metadata.MetadataReader\nSystem.Reflection.PortableExecutable.PEReader",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2887,6 +3018,7 @@
       "name": "System.Reflection.Primitives",
       "version": "4.3.0",
       "description": "Provides common enumerations for reflection-based libraries.\n\nCommonly Used Types:\nSystem.Reflection.FieldAttributes\nSystem.Reflection.Emit.OpCode\nSystem.Reflection.TypeAttributes\nSystem.Reflection.MethodAttributes\nSystem.Reflection.CallingConventions\nSystem.Reflection.PropertyAttributes\nSystem.Reflection.EventAttributes\nSystem.Reflection.ParameterAttributes\nSystem.Reflection.GenericParameterAttributes\nSystem.Reflection.MethodImplAttributes\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2909,6 +3041,7 @@
       "name": "System.Reflection.TypeExtensions",
       "version": "4.3.0",
       "description": "Provides extensions methods for System.Type that are designed to be source-compatible with older framework reflection-based APIs.\n\nCommonly Used Types:\nSystem.Reflection.TypeExtensions\nSystem.Reflection.BindingFlags\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2931,6 +3064,7 @@
       "name": "System.Resources.ResourceManager",
       "version": "4.3.0",
       "description": "Provides classes and attributes that allow developers to create, store, and manage various culture-specific resources used in an application.\n\nCommonly Used Types:\nSystem.Resources.ResourceManager\nSystem.Resources.NeutralResourcesLanguageAttribute\nSystem.Resources.SatelliteContractVersionAttribute\nSystem.Resources.MissingManifestResourceException\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2953,6 +3087,7 @@
       "name": "System.Runtime",
       "version": "4.3.0",
       "description": "Provides the fundamental primitives, classes and base classes that define commonly-used value and reference data types, events and event handlers, interfaces, attributes, and exceptions. This packages represents the core package, and provides the minimal set of types required to build a managed application.\n\nCommonly Used Types:\nSystem.Object\nSystem.Exception\nSystem.Int16\nSystem.Int32\nSystem.Int64\nSystem.Enum\nSystem.String\nSystem.Char\nSystem.Boolean\nSystem.SByte\nSystem.Byte\nSystem.DateTime\nSystem.DateTimeOffset\nSystem.Single\nSystem.Double\nSystem.UInt16\nSystem.UInt32\nSystem.UInt64\nSystem.IDisposable\nSystem.Uri\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2975,6 +3110,7 @@
       "name": "System.Runtime.CompilerServices.Unsafe",
       "version": "4.4.0",
       "description": "Provides the System.Runtime.CompilerServices.Unsafe class, which provides generic, low-level functionality for manipulating pointers.\n\nCommonly Used Types:\nSystem.Runtime.CompilerServices.Unsafe\n \n8321c729934c0f8be754953439b88e6e1c120c24 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -2997,6 +3133,7 @@
       "name": "System.Runtime.Extensions",
       "version": "4.3.0",
       "description": "Provides commonly-used classes for performing mathematical functions, conversions, string comparisons and querying environment information.\n\nCommonly Used Types:\nSystem.Math\nSystem.Environment\nSystem.Random\nSystem.Progress\u003CT\u003E\nSystem.Convert\nSystem.Diagnostics.Stopwatch\nSystem.Runtime.Versioning.FrameworkName\nSystem.StringComparer\nSystem.IO.Path\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3019,6 +3156,7 @@
       "name": "System.Runtime.Handles",
       "version": "4.3.0",
       "description": "Provides base classes, including System.Runtime.InteropServices.CriticalHandle and System.Runtime.InteropServices.SafeHandle, for types that represent operating system handles.\n\nCommonly Used Types:\nSystem.Runtime.InteropServices.SafeHandle\nMicrosoft.Win32.SafeHandles.SafeWaitHandle\nSystem.Runtime.InteropServices.CriticalHandle\nSystem.Threading.WaitHandleExtensions\nSystem.IO.HandleInheritability\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3041,6 +3179,7 @@
       "name": "System.Runtime.InteropServices",
       "version": "4.3.0",
       "description": "Provides types that support COM interop and platform invoke services.\n\nCommonly Used Types:\nSystem.Runtime.InteropServices.GCHandle\nSystem.Runtime.InteropServices.GuidAttribute\nSystem.Runtime.InteropServices.COMException\nSystem.DllNotFoundException\nSystem.Runtime.InteropServices.DllImportAttribute\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3063,6 +3202,7 @@
       "name": "System.Runtime.InteropServices.RuntimeInformation",
       "version": "4.0.0",
       "description": "Provides APIs to query about runtime and OS information.\n\nCommonly Used Types:\nSystem.Runtime.InteropServices.RuntimeInformation\nSystem.Runtime.InteropServices.OSPlatform\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3085,6 +3225,7 @@
       "name": "System.Runtime.Numerics",
       "version": "4.3.0",
       "description": "Provides the numeric types System.Numerics.BigInteger and System.Numerics.Complex, which complement the numeric primitives, such as System.Byte, System.Double and System.Int32.\n\nCommonly Used Types:\nSystem.Numerics.BigInteger\nSystem.Numerics.Complex\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3107,6 +3248,7 @@
       "name": "System.Runtime.Serialization.Formatters",
       "version": "4.3.0",
       "description": "Provides common types for libraries that support runtime serialization.\n\nCommonly Used Types:\nSystem.SerializableAttribute\nSystem.Runtime.Serialization.ISerializable\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3129,6 +3271,7 @@
       "name": "System.Runtime.Serialization.Primitives",
       "version": "4.3.0",
       "description": "Provides common types, including System.Runtime.Serialization.DataContractAttribute, for libraries that support data contract serialization.\n\nCommonly Used Types:\nSystem.Runtime.Serialization.StreamingContext\nSystem.Runtime.Serialization.OnDeserializingAttribute\nSystem.Runtime.Serialization.OnDeserializedAttribute\nSystem.Runtime.Serialization.OnSerializingAttribute\nSystem.Runtime.Serialization.OnSerializedAttribute\nSystem.Runtime.Serialization.EnumMemberAttribute\nSystem.Runtime.Serialization.DataMemberAttribute\nSystem.Runtime.Serialization.DataContractAttribute\nSystem.Runtime.Serialization.IgnoreDataMemberAttribute\nSystem.Runtime.Serialization.SerializationException\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3151,6 +3294,7 @@
       "name": "System.Security.AccessControl",
       "version": "4.4.0",
       "description": "Provides base classes that enable managing access and audit control lists on securable objects.\n\nCommonly Used Types:\nSystem.Security.AccessControl.AccessRule\nSystem.Security.AccessControl.AuditRule\nSystem.Security.AccessControl.ObjectAccessRule\nSystem.Security.AccessControl.ObjectAuditRule\nSystem.Security.AccessControl.ObjectSecurity\n \n8321c729934c0f8be754953439b88e6e1c120c24 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3173,6 +3317,7 @@
       "name": "System.Security.Claims",
       "version": "4.3.0",
       "description": "Provides classes that implement claims-based identity in the .NET Framework, including classes that represent claims, claims-based identities, and claims-based principals.\n\nCommonly Used Types:\nSystem.Security.Principal.GenericIdentity\nSystem.Security.Claims.Claim\nSystem.Security.Claims.ClaimsIdentity\nSystem.Security.Claims.ClaimsPrincipal\nSystem.Security.Principal.GenericPrincipal\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3195,6 +3340,7 @@
       "name": "System.Security.Cryptography.Algorithms",
       "version": "4.3.0",
       "description": "Provides base types for cryptographic algorithms, including hashing, encryption, and signing operations.\n\nCommonly Used Types:\nSystem.Security.Cryptography.Aes\nSystem.Security.Cryptography.RSA\nSystem.Security.Cryptography.RSAParameters\nSystem.Security.Cryptography.HMACSHA1\nSystem.Security.Cryptography.SHA256\nSystem.Security.Cryptography.SHA1\nSystem.Security.Cryptography.SHA512\nSystem.Security.Cryptography.SHA384\nSystem.Security.Cryptography.HMACSHA256\nSystem.Security.Cryptography.MD5\nSystem.Security.Cryptography.HMACSHA384\nSystem.Security.Cryptography.HMACSHA512\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3217,6 +3363,7 @@
       "name": "System.Security.Cryptography.Cng",
       "version": "4.3.0",
       "description": "Provides cryptographic algorithm implementations and key management with Windows Cryptographic Next Generation API (CNG).\n\nCommonly Used Types:\nSystem.Security.Cryptography.RSACng\nSystem.Security.Cryptography.ECDsaCng\nSystem.Security.Cryptography.CngKey\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3239,6 +3386,7 @@
       "name": "System.Security.Cryptography.Csp",
       "version": "4.3.0",
       "description": "Provides cryptographic algorithm implementations and key management with Windows Cryptographic API (CryptoAPI).\n\nCommonly Used Types:\nSystem.Security.Cryptography.RSACryptoServiceProvider\nSystem.Security.Cryptography.CspParameters\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3261,6 +3409,7 @@
       "name": "System.Security.Cryptography.Encoding",
       "version": "4.3.0",
       "description": "Provides types for representing Abstract Syntax Notation One (ASN.1)-encoded data.\n\nCommonly Used Types:\nSystem.Security.Cryptography.AsnEncodedData\nSystem.Security.Cryptography.Oid\nSystem.Security.Cryptography.OidCollection\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3283,6 +3432,7 @@
       "name": "System.Security.Cryptography.OpenSsl",
       "version": "4.3.0",
       "description": "Provides cryptographic algorithm implementations and key management for non-Windows systems with OpenSSL.\n\nCommonly Used Types:\nSystem.Security.Cryptography.RSAOpenSsl\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3305,6 +3455,7 @@
       "name": "System.Security.Cryptography.Primitives",
       "version": "4.3.0",
       "description": "Provides common types for the cryptographic libraries.\n\nCommonly Used Types:\nSystem.Security.Cryptography.ICryptoTransform\nSystem.Security.Cryptography.AsymmetricAlgorithm\nSystem.Security.Cryptography.SymmetricAlgorithm\nSystem.Security.Cryptography.HashAlgorithm\nSystem.Security.Cryptography.KeyedHashAlgorithm\nSystem.Security.Cryptography.HMAC\nSystem.Security.Cryptography.KeySizes\nSystem.Security.Cryptography.CryptographicException\nSystem.Security.Cryptography.CipherMode\nSystem.Security.Cryptography.PaddingMode\nSystem.Security.Cryptography.CryptoStream\nSystem.Security.Cryptography.CryptoStreamMode\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3327,6 +3478,7 @@
       "name": "System.Security.Cryptography.X509Certificates",
       "version": "4.3.0",
       "description": "Provides types for reading, exporting and verifying Authenticode X.509 v3 certificates. These certificates are signed with a private key that uniquely and positively identifies the holder of the certificate.\n\nCommonly Used Types:\nSystem.Security.Cryptography.X509Certificates.X509Certificate2\nSystem.Security.Cryptography.X509Certificates.X509Certificate\nSystem.Security.Cryptography.X509Certificates.X509ContentType\nSystem.Security.Cryptography.X509Certificates.StoreLocation\nSystem.Security.Cryptography.X509Certificates.StoreName\nSystem.Security.Cryptography.X509Certificates.X509FindType\nSystem.Security.Cryptography.X509Certificates.X509ChainStatus\nSystem.Security.Cryptography.X509Certificates.X509Certificate2Collection\nSystem.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension\nSystem.Security.Cryptography.X509Certificates.X509Chain\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3349,6 +3501,7 @@
       "name": "System.Security.Cryptography.Xml",
       "version": "4.4.0",
       "description": "Provides classes to support the creation and validation of XML digital signatures. The classes in this namespace implement the World Wide Web Consortium Recommendation, \u0022XML-Signature Syntax and Processing\u0022, described at http://www.w3.org/TR/xmldsig-core/.\n\nCommonly Used Types:\nSystem.Security.Cryptography.Xml.CipherData\nSystem.Security.Cryptography.Xml.CipherReference\nSystem.Security.Cryptography.Xml.DataObject\nSystem.Security.Cryptography.Xml.DataReference\nSystem.Security.Cryptography.Xml.DSAKeyValue\nSystem.Security.Cryptography.Xml.EncryptedData\nSystem.Security.Cryptography.Xml.EncryptedKey\nSystem.Security.Cryptography.Xml.EncryptedReference\nSystem.Security.Cryptography.Xml.EncryptedType\nSystem.Security.Cryptography.Xml.EncryptedXml\nSystem.Security.Cryptography.Xml.EncryptionMethod\nSystem.Security.Cryptography.Xml.EncryptionProperty\nSystem.Security.Cryptography.Xml.EncryptionPropertyCollection\nSystem.Security.Cryptography.Xml.KeyInfo\nSystem.Security.Cryptography.Xml.KeyInfoClause\nSystem.Security.Cryptography.Xml.KeyInfoEncryptedKey\nSystem.Security.Cryptography.Xml.KeyInfoName\nSystem.Security.Cryptography.Xml.KeyInfoNode\nSystem.Security.Cryptography.Xml.KeyInfoRetrievalMethod\nSystem.Security.Cryptography.Xml.KeyInfoX509Data\nSystem.Security.Cryptography.Xml.KeyReference\nSystem.Security.Cryptography.Xml.Reference\nSystem.Security.Cryptography.Xml.ReferenceList\nSystem.Security.Cryptography.Xml.RSAKeyValue\nSystem.Security.Cryptography.Xml.Signature\nSystem.Security.Cryptography.Xml.SignedInfo\nSystem.Security.Cryptography.Xml.SignedXml\nSystem.Security.Cryptography.Xml.Transform\nSystem.Security.Cryptography.Xml.TransformChain\nSystem.Security.Cryptography.Xml.XmlDecryptionTransform\nSystem.Security.Cryptography.Xml.XmlDsigBase64Transform\nSystem.Security.Cryptography.Xml.XmlDsigC14NTransform\nSystem.Security.Cryptography.Xml.XmlDsigC14NWithCommentsTransform\nSystem.Security.Cryptography.Xml.XmlDsigEnvelopedSignatureTransform\nSystem.Security.Cryptography.Xml.XmlDsigExcC14NTransform\nSystem.Security.Cryptography.Xml.XmlDsigExcC14NWithCommentsTransform\nSystem.Security.Cryptography.Xml.XmlDsigXPathTransform\nSystem.Security.Cryptography.Xml.XmlDsigXsltTransform\nSystem.Security.Cryptography.Xml.XmlLicenseTransform\n \n8321c729934c0f8be754953439b88e6e1c120c24 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3371,6 +3524,7 @@
       "name": "System.Security.Principal",
       "version": "4.3.0",
       "description": "Provides the base interfaces for principal and identity objects that represents the security context under which code is running.\n\nCommonly Used Types:\nSystem.Security.Principal.IPrincipal\nSystem.Security.Principal.IIdentity\nSystem.Security.Principal.TokenImpersonationLevel\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3393,6 +3547,7 @@
       "name": "System.Security.Principal.Windows",
       "version": "4.4.0",
       "description": "Provides classes for retrieving the current Windows user and for interacting with Windows users and groups.\n\nCommonly Used Types:\nSystem.Security.Principal.WindowsIdentity\nSystem.Security.Principal.SecurityIdentifier\nSystem.Security.Principal.NTAccount\nSystem.Security.Principal.WindowsPrincipal\nSystem.Security.Principal.IdentityReference\nSystem.Security.Principal.IdentityNotMappedException\nSystem.Security.Principal.WindowsBuiltInRole\nSystem.Security.Principal.WellKnownSidType\n \n8321c729934c0f8be754953439b88e6e1c120c24 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3415,6 +3570,7 @@
       "name": "System.Text.Encoding",
       "version": "4.3.0",
       "description": "Provides base abstract encoding classes for converting blocks of characters to and from blocks of bytes.\n\nCommonly Used Types:\nSystem.Text.Encoding\nSystem.Text.DecoderFallbackException\nSystem.Text.Decoder\nSystem.Text.EncoderFallbackException\nSystem.Text.Encoder\nSystem.Text.EncoderFallback\nSystem.Text.EncoderFallbackBuffer\nSystem.Text.DecoderFallback\nSystem.Text.DecoderFallbackBuffer\nSystem.Text.DecoderExceptionFallback\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3437,6 +3593,7 @@
       "name": "System.Text.Encoding.CodePages",
       "version": "4.3.0",
       "description": "Provides support for code-page based encodings, including Windows-1252, Shift-JIS, and GB2312.\n\nCommonly Used Types:\nSystem.Text.CodePagesEncodingProvider\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3459,6 +3616,7 @@
       "name": "System.Text.Encoding.Extensions",
       "version": "4.3.0",
       "description": "Provides support for specific encodings, including ASCII, UTF-7, UTF-8, UTF-16, and UTF-32.\n\nCommonly Used Types:\nSystem.Text.UTF8Encoding\nSystem.Text.UnicodeEncoding\nSystem.Text.ASCIIEncoding\nSystem.Text.UTF7Encoding\nSystem.Text.UTF32Encoding\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3481,6 +3639,7 @@
       "name": "System.Text.Encodings.Web",
       "version": "4.4.0",
       "description": "Provides types for encoding and escaping strings for use in JavaScript, HyperText Markup Language (HTML), and uniform resource locators (URL).\n\nCommonly Used Types:\nSystem.Text.Encodings.Web.HtmlEncoder\nSystem.Text.Encodings.Web.UrlEncoder\nSystem.Text.Encodings.Web.JavaScriptEncoder\n \n8321c729934c0f8be754953439b88e6e1c120c24 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3503,6 +3662,7 @@
       "name": "System.Text.RegularExpressions",
       "version": "4.3.0",
       "description": "Provides the System.Text.RegularExpressions.Regex class, an implementation of a regular expression engine.\n\nCommonly Used Types:\nSystem.Text.RegularExpressions.Regex\nSystem.Text.RegularExpressions.RegexOptions\nSystem.Text.RegularExpressions.Match\nSystem.Text.RegularExpressions.Group\nSystem.Text.RegularExpressions.Capture\nSystem.Text.RegularExpressions.MatchEvaluator\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3525,6 +3685,7 @@
       "name": "System.Threading",
       "version": "4.3.0",
       "description": "Provides the fundamental synchronization primitives, including System.Threading.Monitor and System.Threading.Mutex, that are required when writing asynchronous code.\n\nCommonly Used Types:\nSystem.Threading.Monitor\nSystem.Threading.SynchronizationContext\nSystem.Threading.ManualResetEvent\nSystem.Threading.AutoResetEvent\nSystem.Threading.ThreadLocal\u003CT\u003E\nSystem.Threading.EventWaitHandle\nSystem.Threading.SemaphoreSlim\nSystem.Threading.Mutex\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3547,6 +3708,7 @@
       "name": "System.Threading.Tasks",
       "version": "4.3.0",
       "description": "Provides types that simplify the work of writing concurrent and asynchronous code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.Task\u003CTResult\u003E\nSystem.Runtime.CompilerServices.TaskAwaiter\u003CTResult\u003E\nSystem.Threading.Tasks.TaskCompletionSource\u003CTResult\u003E\nSystem.Threading.Tasks.Task\nSystem.OperationCanceledException\nSystem.AggregateException\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3569,6 +3731,7 @@
       "name": "System.Threading.Tasks.Extensions",
       "version": "4.3.0",
       "description": "Provides additional types that simplify the work of writing concurrent and asynchronous code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.ValueTask\u003CTResult\u003E",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3591,6 +3754,7 @@
       "name": "System.Threading.Tasks.Parallel",
       "version": "4.3.0",
       "description": "Provides the System.Threading.Tasks.Parallel class, which adds support for running loops and iterators in parallel.\n\nCommonly Used Types:\nSystem.Threading.Tasks.Parallel\nSystem.Threading.Tasks.ParallelLoopState\nSystem.Threading.Tasks.ParallelLoopResult\nSystem.Threading.Tasks.ParallelOptions\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3613,6 +3777,7 @@
       "name": "System.Threading.Thread",
       "version": "4.3.0",
       "description": "Provides the System.Threading.Thread class, which allows developers to create and control a thread, set its priority, and get its state.\n\nCommonly Used Types:\nSystem.Threading.Thread\nSystem.Threading.ThreadStart\nSystem.Threading.ParameterizedThreadStart\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3635,6 +3800,7 @@
       "name": "System.Threading.ThreadPool",
       "version": "4.3.0",
       "description": "Provides the System.Threading.ThreadPool class, which contains a pool of threads that can be used to execute tasks, post work items, wait on behalf of other threads, and process timers.\n\nCommonly Used Types:\nSystem.Threading.ThreadPool\nSystem.Threading.WaitOrTimerCallback\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3657,6 +3823,7 @@
       "name": "System.ValueTuple",
       "version": "4.3.0",
       "description": "Provides the System.ValueTuple structs, which implement the underlying types for C# 7 tuples.\n\nCommonly Used Types:\nSystem.ValueTuple\nSystem.ValueTuple\u003CT1\u003E\nSystem.ValueTuple\u003CT1, T2\u003E\nSystem.ValueTuple\u003CT1, T2, T3\u003E\nSystem.ValueTuple\u003CT1, T2, T3, T4\u003E\nSystem.ValueTuple\u003CT1, T2, T3, T4, T5\u003E\nSystem.ValueTuple\u003CT1, T2, T3, T4, T5, T6\u003E\nSystem.ValueTuple\u003CT1, T2, T3, T4, T5, T6, T7\u003E\nSystem.ValueTuple\u003CT1, T2, T3, T4, T5, T6, T7, TRest\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3679,6 +3846,7 @@
       "name": "System.Xml.ReaderWriter",
       "version": "4.3.0",
       "description": "Provides provides a fast, non-cached, forward-only way to read and write Extensible Markup Language (XML) data.\n\nCommonly Used Types:\nSystem.Xml.XmlNodeType\nSystem.Xml.XmlException\nSystem.Xml.XmlReader\nSystem.Xml.XmlWriter\nSystem.Xml.IXmlLineInfo\nSystem.Xml.XmlNameTable\nSystem.Xml.IXmlNamespaceResolver\nSystem.Xml.XmlNamespaceManager\nSystem.Xml.XmlQualifiedName\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3701,6 +3869,7 @@
       "name": "System.Xml.XDocument",
       "version": "4.3.0",
       "description": "Provides the classes for Language-Integrated Query (LINQ) to Extensible Markup Language (XML). LINQ to XML is an in-memory XML programming interface that enables you to modify XML documents efficiently and easily.\n\nCommonly Used Types:\nSystem.Xml.Linq.XElement\nSystem.Xml.Linq.XAttribute\nSystem.Xml.Linq.XDocument\nSystem.Xml.Linq.XText\nSystem.Xml.Linq.XNode\nSystem.Xml.Linq.XContainer\nSystem.Xml.Linq.XComment\nSystem.Xml.Linq.XObject\nSystem.Xml.Linq.XProcessingInstruction\nSystem.Xml.Linq.XDocumentType\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3723,6 +3892,7 @@
       "name": "System.Xml.XmlDocument",
       "version": "4.3.0",
       "description": "Provides an older in-memory Extensible Markup Language (XML) programming interface that enables you to modify XML documents. Developers should prefer the classes in the System.Xml.XDocument package.\n\nCommonly Used Types:\nSystem.Xml.XmlNode\nSystem.Xml.XmlElement\nSystem.Xml.XmlAttribute\nSystem.Xml.XmlDocument\nSystem.Xml.XmlDeclaration\nSystem.Xml.XmlText\nSystem.Xml.XmlComment\nSystem.Xml.XmlNodeList\nSystem.Xml.XmlWhitespace\nSystem.Xml.XmlCDataSection\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3745,6 +3915,7 @@
       "name": "System.Xml.XPath",
       "version": "4.3.0",
       "description": "Provides the classes that define a cursor model for navigating and editing Extensible Markup Language (XML) information items as instances of the XQuery 1.0 and XPath 2.0 Data Model.\n\nCommonly Used Types:\nSystem.Xml.XPath.XPathNavigator\nSystem.Xml.XPath.IXPathNavigable\nSystem.Xml.XPath.XPathNodeType\nSystem.Xml.XPath.XPathNodeIterator\nSystem.Xml.XPath.XPathExpression\nSystem.Xml.XPath.XPathResultType\nSystem.Xml.XPath.XPathException\nSystem.Xml.XPath.XPathDocument\nSystem.Xml.XPath.XPathItem\nSystem.Xml.XPath.XPathNamespaceScope\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -3767,6 +3938,7 @@
       "name": "System.Xml.XPath.XDocument",
       "version": "4.3.0",
       "description": "Provides extension methods that add System.Xml.XPath support to the System.Xml.XDocument package.\n\nCommonly Used Types:\nSystem.Xml.XPath.Extensions\nSystem.Xml.XPath.XDocumentExtensions\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {

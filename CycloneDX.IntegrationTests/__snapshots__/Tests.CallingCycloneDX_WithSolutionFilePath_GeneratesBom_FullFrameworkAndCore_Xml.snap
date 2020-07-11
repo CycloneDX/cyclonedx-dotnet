@@ -7,6 +7,7 @@
       <description><![CDATA[A set of .NET API's that are included in the default .NET Core application model. 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -26,6 +27,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[Provides the .NET Core app bootstrapper intended for use in the application directory 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>excluded</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -45,6 +47,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>excluded</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -64,6 +67,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>excluded</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -83,6 +87,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[Provides runtime information required to resolve target framework, platform, and runtime specific implementations of .NETCore packages. 
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -102,6 +107,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[Provides supporting infrastructure for portable projects: support identifiers that define framework and runtime for support targets and packages that reference the minimum supported package versions when targeting these. 
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -124,6 +130,7 @@ Commonly Used Types:
 System.ComponentModel.Win32Exception
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -150,6 +157,7 @@ Microsoft.Win32.RegistryHive
 Microsoft.Win32.RegistryView
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -169,6 +177,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <description><![CDATA[A set of standard .NET APIs that are prescribed to be used and supported together. 
 18a36291e48808fa7ef2d00a764ceb1ec95645a5 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>https://github.com/dotnet/standard/blob/master/LICENSE.TXT</url>
@@ -186,6 +195,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <name>Newtonsoft.Json</name>
       <version>12.0.3</version>
       <description><![CDATA[Json.NET is a popular high-performance JSON framework for .NET]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <id>MIT</id>
@@ -236,6 +246,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <name>NuGet.Common</name>
       <version>5.4.0</version>
       <description><![CDATA[NuGet client library.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -270,6 +281,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <name>NuGet.Configuration</name>
       <version>5.4.0</version>
       <description><![CDATA[NuGet's client configuration settings implementation.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -304,6 +316,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <name>NuGet.DependencyResolver.Core</name>
       <version>5.4.0</version>
       <description><![CDATA[NuGet client library.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -338,6 +351,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <name>NuGet.Frameworks</name>
       <version>5.4.0</version>
       <description><![CDATA[The understanding of target frameworks for NuGet.Packaging.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -372,6 +386,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <name>NuGet.LibraryModel</name>
       <version>5.4.0</version>
       <description><![CDATA[NuGet client library.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -406,6 +421,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <name>NuGet.Packaging</name>
       <version>5.4.0</version>
       <description><![CDATA[NuGet's implementation for reading nupkg package and nuspec package specification files.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -440,6 +456,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <name>NuGet.ProjectModel</name>
       <version>5.4.0</version>
       <description><![CDATA[NuGet client library.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -474,6 +491,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <name>NuGet.Protocol</name>
       <version>5.4.0</version>
       <description><![CDATA[NuGet client library.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -508,6 +526,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <name>NuGet.Versioning</name>
       <version>5.4.0</version>
       <description><![CDATA[NuGet's implementation of Semantic Versioning.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -526,6 +545,7 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       <version>4.3.0</version>
       <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -556,6 +576,7 @@ System.Collections.Generic.Comparer<T>
 System.Collections.Generic.SortedDictionary<TKey, TValue>
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -586,6 +607,7 @@ System.Diagnostics.DebuggerNonUserCodeAttribute
 System.Diagnostics.DebuggerTypeProxyAttribute
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -611,6 +633,7 @@ System.Diagnostics.ProcessStartInfo
 System.Diagnostics.ProcessThread
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -642,6 +665,7 @@ System.Runtime.CompilerServices.CallSiteBinder
 System.Runtime.CompilerServices.ConditionalWeakTable<TKey, TValue>
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -672,6 +696,7 @@ System.Globalization.CompareOptions
 System.Globalization.UnicodeCategory
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -701,6 +726,7 @@ System.IO.TextWriter
 System.IO.TextReader
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -730,6 +756,7 @@ System.IO.SearchOption
 System.IO.FileOptions
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -758,6 +785,7 @@ System.IO.FileShare
 System.IO.FileAttributes
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -784,6 +812,7 @@ System.Linq.ILookup<TKey, TElement>
 System.Linq.Lookup<TKey, TElement>
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -810,6 +839,7 @@ System.Linq.Expressions.Expression
 System.Linq.Expressions.ExpressionVisitor
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -841,6 +871,7 @@ System.ComponentModel.PropertyChangedEventArgs
 System.Collections.ObjectModel.ReadOnlyDictionary<TKey, TValue>
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -871,6 +902,7 @@ System.Reflection.EventInfo
 System.Reflection.Module
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -902,6 +934,7 @@ System.Reflection.Emit.AssemblyBuilderAccess
 System.Reflection.Emit.EventBuilder
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -929,6 +962,7 @@ System.Reflection.Emit.ParameterBuilder
 System.Reflection.Emit.SignatureHelper
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -951,6 +985,7 @@ Commonly Used Types:
 System.Reflection.Emit.DynamicMethod
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -975,6 +1010,7 @@ System.Reflection.CustomAttributeExtensions
 System.Reflection.RuntimeReflectionExtensions
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1006,6 +1042,7 @@ System.Reflection.GenericParameterAttributes
 System.Reflection.MethodImplAttributes
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1029,6 +1066,7 @@ System.Reflection.TypeExtensions
 System.Reflection.BindingFlags
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1054,6 +1092,7 @@ System.Resources.SatelliteContractVersionAttribute
 System.Resources.MissingManifestResourceException
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1095,6 +1134,7 @@ System.IDisposable
 System.Uri
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1125,6 +1165,7 @@ System.StringComparer
 System.IO.Path
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1151,6 +1192,7 @@ System.Threading.WaitHandleExtensions
 System.IO.HandleInheritability
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1177,6 +1219,7 @@ System.DllNotFoundException
 System.Runtime.InteropServices.DllImportAttribute
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1210,6 +1253,7 @@ System.Security.Cryptography.CryptoStream
 System.Security.Cryptography.CryptoStreamMode
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1233,6 +1277,7 @@ System.Security.Cryptography.DataProtectionScope
 System.Security.Cryptography.ProtectedData
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1264,6 +1309,7 @@ System.Text.DecoderFallbackBuffer
 System.Text.DecoderExceptionFallback
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1290,6 +1336,7 @@ System.Text.UTF7Encoding
 System.Text.UTF32Encoding
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1319,6 +1366,7 @@ System.Threading.SemaphoreSlim
 System.Threading.Mutex
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1346,6 +1394,7 @@ System.OperationCanceledException
 System.AggregateException
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1370,6 +1419,7 @@ System.Threading.ThreadStart
 System.Threading.ParameterizedThreadStart
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1393,6 +1443,7 @@ System.Threading.ThreadPool
 System.Threading.WaitOrTimerCallback
  
 When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <scope>required</scope>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>

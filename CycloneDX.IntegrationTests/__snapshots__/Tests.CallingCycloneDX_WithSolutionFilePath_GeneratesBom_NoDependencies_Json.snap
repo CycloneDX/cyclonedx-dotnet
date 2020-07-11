@@ -9,6 +9,7 @@
       "name": "Microsoft.NETCore.App",
       "version": "2.1.0",
       "description": "A set of .NET API\u0027s that are included in the default .NET Core application model. \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -31,6 +32,7 @@
       "name": "Microsoft.NETCore.DotNetAppHost",
       "version": "2.1.0",
       "description": "Provides the .NET Core app bootstrapper intended for use in the application directory \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -53,6 +55,7 @@
       "name": "Microsoft.NETCore.DotNetHostPolicy",
       "version": "2.1.0",
       "description": "Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -75,6 +78,7 @@
       "name": "Microsoft.NETCore.DotNetHostResolver",
       "version": "2.1.0",
       "description": "Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "excluded",
       "licenses": [
         {
           "license": {
@@ -97,6 +101,7 @@
       "name": "Microsoft.NETCore.Platforms",
       "version": "2.1.0",
       "description": "Provides runtime information required to resolve target framework, platform, and runtime specific implementations of .NETCore packages. \n30ab651fcb4354552bd4891619a0bdd81e0ebdbf \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -119,6 +124,7 @@
       "name": "Microsoft.NETCore.Targets",
       "version": "2.1.0",
       "description": "Provides supporting infrastructure for portable projects: support identifiers that define framework and runtime for support targets and packages that reference the minimum supported package versions when targeting these. \n30ab651fcb4354552bd4891619a0bdd81e0ebdbf \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
@@ -141,6 +147,7 @@
       "name": "NETStandard.Library",
       "version": "2.0.3",
       "description": "A set of standard .NET APIs that are prescribed to be used and supported together. \n18a36291e48808fa7ef2d00a764ceb1ec95645a5 \nWhen using NuGet 3.x this package requires at least version 3.4.",
+      "scope": "required",
       "licenses": [
         {
           "license": {
