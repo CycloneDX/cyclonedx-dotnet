@@ -44,26 +44,29 @@ namespace CycloneDX.Services
                 {
                     foreach (var library in targetRuntime.Libraries)
                     {
-                        var package = new NugetPackage
+                        if (library.Type != "project")
                         {
-                            Name = library.Name,
-                            Version = library.Version.ToNormalizedString(),
-                            Scope = "required",
-                        };
-                        // is this only a development dependency
-                        if (
-                            library.CompileTimeAssemblies.Count == 0
-                            && library.ContentFiles.Count == 0
-                            && library.EmbedAssemblies.Count == 0
-                            && library.FrameworkAssemblies.Count == 0
-                            && library.NativeLibraries.Count == 0
-                            && library.ResourceAssemblies.Count == 0
-                            && library.ToolsAssemblies.Count == 0
-                        )
-                        {
-                            package.Scope = "excluded";
+                            var package = new NugetPackage
+                            {
+                                Name = library.Name,
+                                Version = library.Version.ToNormalizedString(),
+                                Scope = "required",
+                            };
+                            // is this only a development dependency
+                            if (
+                                library.CompileTimeAssemblies.Count == 0
+                                && library.ContentFiles.Count == 0
+                                && library.EmbedAssemblies.Count == 0
+                                && library.FrameworkAssemblies.Count == 0
+                                && library.NativeLibraries.Count == 0
+                                && library.ResourceAssemblies.Count == 0
+                                && library.ToolsAssemblies.Count == 0
+                            )
+                            {
+                                package.Scope = "excluded";
+                            }
+                            packages.Add(package);
                         }
-                        packages.Add(package);
                     }
                 }
             }

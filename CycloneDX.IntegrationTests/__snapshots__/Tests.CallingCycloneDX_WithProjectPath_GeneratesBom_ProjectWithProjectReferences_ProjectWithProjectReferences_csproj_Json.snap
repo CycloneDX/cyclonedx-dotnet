@@ -1197,15 +1197,6 @@
           "type": "website"
         }
       ]
-    },
-    {
-      "type": "library",
-      "name": "ProjectReference",
-      "version": "1.0.0",
-      "scope": "required",
-      "licenses": [],
-      "purl": "pkg:nuget/ProjectReference@1.0.0",
-      "externalReferences": []
     }
   ]
 }

@@ -389,12 +389,6 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
-      <name>ProjectReference</name>
-      <version>1.0.0</version>
-      <scope>required</scope>
-      <purl>pkg:nuget/ProjectReference@1.0.0</purl>
-    </component>
-    <component type="library">
       <name>runtime.native.System</name>
       <version>4.3.0</version>
       <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
