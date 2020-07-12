@@ -159,5 +159,24 @@ namespace CycloneDX.IntegrationTests
                     json ? "Json" : "Xml"));
             }
         }
+
+        [Fact]
+        public async Task CallingCycloneDX_ExcludesDevelopmentDependencies()
+        {
+            using (var tempDir = new TempDirectory())
+            {
+                var exitCode = await CallCycloneDX(
+                    Path.Join("Resources", "ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies.sln"),
+                    tempDir.DirectoryPath,
+                    json: false);
+                // defensive assert, if this fails there is no point attempting to inspect the bom contents
+                Assert.Equal(0, exitCode);
+
+                var bomContents = File.ReadAllText(Path.Combine(
+                    tempDir.DirectoryPath, "bom.xml"));
+
+                Snapshot.Match(bomContents);
+            }
+        }
     }
 }
