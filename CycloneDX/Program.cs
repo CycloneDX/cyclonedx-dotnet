@@ -37,6 +37,9 @@ namespace CycloneDX {
         [Option(Description = "Produce a JSON BOM instead of XML", ShortName = "j", LongName = "json")]
         bool json { get; }
 
+        [Option(Description = "Exclude development dependencies from the BOM", ShortName = "d", LongName = "exclude-dev")]
+        bool excludeDev { get; }
+
         [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
 
@@ -200,7 +203,12 @@ namespace CycloneDX {
                 foreach (var package in packages)
                 {
                     var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
-                    if (component != null) components.Add(component);
+                    if (component != null
+                        && (component.Scope != "excluded" || !excludeDev)
+                    )
+                    {
+                        components.Add(component);
+                    }
                 }
             }
             catch (InvalidGitHubApiCredentialsException)
