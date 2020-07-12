@@ -88,7 +88,7 @@ SPDX license IDs can be resolved for packages that reference a supported license
 file in a GitHub repository.
 
 The GitHub license API has an unauthenticated call limit of 60 calls per hour.
-To ensure consistent output if a rate limit is exceeded BoM generation will
+To ensure consistent output if a rate limit is exceeded BOM generation will
 fail. If you start hitting rate limits you will need to generate a personal
 access token and provide this, and your username, when running CycloneDX.
 
