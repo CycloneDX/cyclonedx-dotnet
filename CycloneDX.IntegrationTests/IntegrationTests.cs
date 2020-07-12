@@ -27,7 +27,7 @@ namespace CycloneDX.IntegrationTests
 {
     public class Tests
     {
-        private string[] ArgsHelper(string path, string output, bool json)
+        private string[] ArgsHelper(string path, string output, bool json, bool excludeDev)
         {
                 var args = new List<string> {
                     path,
@@ -35,12 +35,13 @@ namespace CycloneDX.IntegrationTests
                     "--out", output
                 };
                 if (json) args.Add("--json");
+                if (excludeDev) args.Add("--exclude-dev");
                 return args.ToArray();
         }
 
-        private async Task<int> CallCycloneDX(string path, string output, bool json)
+        private async Task<int> CallCycloneDX(string path, string output, bool json, bool excludeDev)
         {
-            var args = ArgsHelper(path, output, json);
+            var args = ArgsHelper(path, output, json, excludeDev);
             var exitCode = await Program.Main(args).ConfigureAwait(false);
             return exitCode;
         }
@@ -71,7 +72,8 @@ namespace CycloneDX.IntegrationTests
                 var exitCode = await CallCycloneDX(
                     Path.Join("Resources", directoryName),
                     tempDir.DirectoryPath,
-                    json);
+                    json,
+                    false);
                 // defensive assert, if this fails there is no point attempting to inspect the bom contents
                 Assert.Equal(0, exitCode);
 
@@ -104,7 +106,8 @@ namespace CycloneDX.IntegrationTests
                 var exitCode = await CallCycloneDX(
                     Path.Join("Resources", solutionName, $"{solutionName}.sln"),
                     tempDir.DirectoryPath,
-                    json);
+                    json,
+                    false);
                 // defensive assert, if this fails there is no point attempting to inspect the bom contents
                 Assert.Equal(0, exitCode);
 
@@ -147,7 +150,8 @@ namespace CycloneDX.IntegrationTests
                 var exitCode = await CallCycloneDX(
                     projectFilePath,
                     tempDir.DirectoryPath,
-                    json);
+                    json,
+                    false);
                 // defensive assert, if this fails there is no point attempting to inspect the bom contents
                 Assert.Equal(0, exitCode);
 
@@ -168,7 +172,8 @@ namespace CycloneDX.IntegrationTests
                 var exitCode = await CallCycloneDX(
                     Path.Join("Resources", "ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies.sln"),
                     tempDir.DirectoryPath,
-                    json: false);
+                    json: false,
+                    excludeDev: true);
                 // defensive assert, if this fails there is no point attempting to inspect the bom contents
                 Assert.Equal(0, exitCode);
 

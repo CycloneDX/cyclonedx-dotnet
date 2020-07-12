@@ -53,6 +53,7 @@ Arguments:
 Options:
   -o|--out <OUTPUT_DIRECTORY>                       The directory to write the BOM
   -j|--json                                         Produce a JSON BOM instead of XML
+  -d|--exclude-dev                                  Exclude development dependencies from the BOM
   -u|--url <BASE_URL>                               Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)
   -r|--recursive                                    To be used with a single project file, it will recursively scan project references of the supplied .csproj
   -ns|--no-serial-number                            Optionally omit the serial number from the resulting BOM

@@ -2,23 +2,6 @@
 <bom version="1" xmlns="http://cyclonedx.org/schema/bom/1.1">
   <components>
     <component type="library">
-      <name>coverlet.msbuild</name>
-      <version>2.9.0</version>
-      <description><![CDATA[Coverlet is a cross platform code coverage library for .NET, with support for line, branch and method coverage.]]></description>
-      <scope>excluded</scope>
-      <licenses>
-        <license>
-          <id>MIT</id>
-        </license>
-      </licenses>
-      <purl>pkg:nuget/coverlet.msbuild@2.9.0</purl>
-      <externalReferences>
-        <reference type="website">
-          <url>https://github.com/coverlet-coverage/coverlet</url>
-        </reference>
-      </externalReferences>
-    </component>
-    <component type="library">
       <name>Microsoft.NETCore.App</name>
       <version>2.1.0</version>
       <description><![CDATA[A set of .NET API's that are included in the default .NET Core application model. 
@@ -32,66 +15,6 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </licenses>
       <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
       <purl>pkg:nuget/Microsoft.NETCore.App@2.1.0</purl>
-      <externalReferences>
-        <reference type="website">
-          <url>https://dot.net/</url>
-        </reference>
-      </externalReferences>
-    </component>
-    <component type="library">
-      <name>Microsoft.NETCore.DotNetAppHost</name>
-      <version>2.1.0</version>
-      <description><![CDATA[Provides the .NET Core app bootstrapper intended for use in the application directory 
-caa7b7e2bad98e56a687fb5cbaf60825500800f7 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
-      <scope>excluded</scope>
-      <licenses>
-        <license>
-          <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
-        </license>
-      </licenses>
-      <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
-      <purl>pkg:nuget/Microsoft.NETCore.DotNetAppHost@2.1.0</purl>
-      <externalReferences>
-        <reference type="website">
-          <url>https://dot.net/</url>
-        </reference>
-      </externalReferences>
-    </component>
-    <component type="library">
-      <name>Microsoft.NETCore.DotNetHostPolicy</name>
-      <version>2.1.0</version>
-      <description><![CDATA[Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing 
-caa7b7e2bad98e56a687fb5cbaf60825500800f7 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
-      <scope>excluded</scope>
-      <licenses>
-        <license>
-          <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
-        </license>
-      </licenses>
-      <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
-      <purl>pkg:nuget/Microsoft.NETCore.DotNetHostPolicy@2.1.0</purl>
-      <externalReferences>
-        <reference type="website">
-          <url>https://dot.net/</url>
-        </reference>
-      </externalReferences>
-    </component>
-    <component type="library">
-      <name>Microsoft.NETCore.DotNetHostResolver</name>
-      <version>2.1.0</version>
-      <description><![CDATA[Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost 
-caa7b7e2bad98e56a687fb5cbaf60825500800f7 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
-      <scope>excluded</scope>
-      <licenses>
-        <license>
-          <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
-        </license>
-      </licenses>
-      <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
-      <purl>pkg:nuget/Microsoft.NETCore.DotNetHostResolver@2.1.0</purl>
       <externalReferences>
         <reference type="website">
           <url>https://dot.net/</url>
