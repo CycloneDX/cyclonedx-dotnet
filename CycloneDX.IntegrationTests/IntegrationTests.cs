@@ -31,7 +31,7 @@ namespace CycloneDX.IntegrationTests
         {
                 var args = new List<string> {
                     path,
-                    "--noSerialNumber",
+                    "--no-serial-number",
                     "--out", output
                 };
                 if (json) args.Add("--json");
