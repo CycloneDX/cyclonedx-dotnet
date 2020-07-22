@@ -117,7 +117,7 @@ installed. Standard commands like `dotnet build` and `dotnet test` work.
 
 It is generally expected that pull requests will include relevant tests.
 Tests are automatically run on Windows, MacOS and Linux for every pull request.
-And build warnings will be break the build.
+And build warnings will break the build.
 
 If you are having trouble debugging a test that is failing for a platform you
 don't have access to please us know.
