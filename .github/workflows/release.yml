@@ -1,14 +1,7 @@
 name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version'
-        required: true
-      body:
-        description: 'Release description'
-        required: true
+  workflow_dispatch
 
 jobs:
   release:
@@ -25,7 +18,7 @@ jobs:
       - name: Package release
         id: package_release
         run: |
-          VERSION=${{ github.event.inputs.version }}
+          VERSION=`cat semver.txt`
           OUTPUT=./nupkgs
           echo "##[set-output name=version;]$VERSION"
           echo "##[set-output name=package_name;]CycloneDX.$VERSION.nupkg"
