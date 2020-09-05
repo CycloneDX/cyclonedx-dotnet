@@ -1,3 +1,22 @@
+# This workflow is used for publishing the NuGet package and Docker image.
+#
+# Before triggering a release the `semver.txt` file should be updated in the
+# relevant branch.
+#
+# When commiting the version change in `semver.txt` the commit message is
+# important as it will be used for the release in GitHub.
+#
+# For an example commit browse to
+# https://github.com/CycloneDX/cyclonedx-dotnet/commit/d110af854371374460430bb8438225a7d7a84274.
+# 
+# The resulting release is here
+# https://github.com/CycloneDX/cyclonedx-dotnet/releases/tag/v1.0.0.
+#
+# Releases are triggered manually. This can be done by browsing to
+# https://github.com/CycloneDX/cyclonedx-dotnet/actions?query=workflow%3ARelease
+# and selecting "Run workflow". If releasing a patch for a previous version
+# make sure the correct branch is selected. It will default to the default
+# branch.
 name: Release
 
 on:
@@ -15,6 +34,7 @@ jobs:
       - name: Tests
         run: dotnet test
 
+      # Build and package everything, including the Docker image
       - name: Package release
         id: package_release
         run: |
@@ -28,6 +48,7 @@ jobs:
           dotnet pack CycloneDX/CycloneDX.csproj --configuration Release --version-suffix $VERSION --output $OUTPUT
           docker build -f Dockerfile --build-arg VERSION=$VERSION -t $REPO:$VERSION -t $REPO:latest .
 
+      # We install the newly generated tool as bit of a "smoke test" and to generate an SBOM for the release
       - name: Install newly generated version of CLI tool
         run: |
           dotnet tool install --global CycloneDX --version ${{ steps.package_release.outputs.version }} --add-source ./nupkgs
@@ -45,13 +66,13 @@ jobs:
           json: true
           github-bearer-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish package
+      - name: Publish package to NuGet
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
           dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" ${{ steps.package_release.outputs.package_filename }}
 
-      - name: Publish docker image
+      - name: Publish Docker image to Docker Hub
         env:
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
         run: |
@@ -60,7 +81,7 @@ jobs:
           docker push $REPO:latest
           docker push $REPO:${{ steps.package_release.outputs.version }}
 
-      - name: Create github release
+      - name: Create github release and git tag for release
         id: create_release
         uses: actions/create-release@v1
         env:

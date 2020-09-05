@@ -1,8 +1,16 @@
+# For details of what checks are run for PRs please refer below
 name: .NET Core CI
 
 on: [pull_request]
 
 jobs:
+  # Fail if there are build warnings
+  #
+  # As a general code quality check we use FxCop analyzers.
+  #
+  # To check for build warnings locally you may need to run a clean build.
+  #
+  # This can be done by running `dotnet clean` before running `dotnet build`
   build-warnings:
     name: Build warnings check
     runs-on: ubuntu-latest
@@ -13,6 +21,18 @@ jobs:
       - name: Build
         run: dotnet build /WarnAsError
 
+  # Fail if there are any failed tests
+  #
+  # We support all current LTS versions of .NET Core and Windows, Mac and Linux.
+  #
+  # To check for failing tests locally run `dotnet test`.
+  #
+  # Although you can build previous versions of .NET Core projects with the
+  # latest SDK you can't run them. So to run tests for all target versions you
+  # will need all current LTS version runtimes installed.
+  #
+  # If installing all required runtimes is problematic you can specify a
+  # particular version like this `dotnet test --framework netcoreapp2.1`.
   test:
     name: Tests for .net core ${{ matrix.framework }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
