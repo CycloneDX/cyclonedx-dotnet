@@ -46,6 +46,15 @@ namespace CycloneDX.Services
         public GitHubApiRateLimitExceededException(string message, Exception innerException) : base(message, innerException) {}
     }
 
+    public class GitHubLicenseResolutionException : Exception
+    {
+        public GitHubLicenseResolutionException() : base() {}
+
+        public GitHubLicenseResolutionException(string message) : base(message) {}
+
+        public GitHubLicenseResolutionException(string message, Exception innerException) : base(message, innerException) {}
+    }
+
     public interface IGithubService
     {
         Task<License> GetLicenseAsync(string licenseUrl);
@@ -126,7 +135,17 @@ namespace CycloneDX.Services
             Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec}");
 
             // Try getting license for the specified version
-            var githubLicense = await GetGithubLicenseAsync($"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}").ConfigureAwait(false);
+            GithubLicenseRoot githubLicense = null;
+            try
+            {
+                githubLicense = await GetGithubLicenseAsync($"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}").ConfigureAwait(false);
+            }
+            catch (HttpRequestException exc)
+            {
+                Console.Error.WriteLine($"GitHub license resolution failed: {exc.Message}");
+                Console.Error.WriteLine("For offline environments use --disable-github-licenses to disable GitHub license resolution.");
+                throw new GitHubLicenseResolutionException("GitHub license resolution failed.", exc);
+            }
 
             if (githubLicense == null) {
                 Console.WriteLine($"No license found on GitHub for repository {repositoryId} using ref {refSpec}");
