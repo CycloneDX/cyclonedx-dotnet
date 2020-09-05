@@ -219,6 +219,10 @@ namespace CycloneDX {
             {
                 return (int)ExitCode.GitHubApiRateLimitExceeded;
             }
+            catch (GitHubLicenseResolutionException)
+            {
+                return (int)ExitCode.GitHubLicenseResolutionFailed;
+            }
 
             // create the BOM
             Console.WriteLine();
