@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO.Abstractions;
 using CycloneDX.Models;
+using CycloneDX.Core;
 
 namespace CycloneDX.Services
 {
@@ -59,7 +60,7 @@ namespace CycloneDX.Services
                     {
                         var relativeProjectPath = match.Groups[3].Value.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
                         var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
-                        if (Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
+                        if (Core.Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
                     }
                 }
             }
