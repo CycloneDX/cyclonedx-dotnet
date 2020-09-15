@@ -17,7 +17,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace CycloneDX.Models
+namespace CycloneDX.Core.Models
 {
     // This suppression should maybe be revisited when/if a CycloneDX library is published
     [SuppressMessage("Microsoft.Design", "CA1036:OverrideMethodsOnComparableTypes")]
@@ -47,7 +47,7 @@ namespace CycloneDX.Models
 
         public override int GetHashCode()
         {
-            return Utils.GeneratePackageUrl(Name, Version).GetHashCode();
+            return CycloneDX.Models.Utils.GeneratePackageUrl(Name, Version).GetHashCode();
         }
 
         public int CompareTo(NugetPackage other)

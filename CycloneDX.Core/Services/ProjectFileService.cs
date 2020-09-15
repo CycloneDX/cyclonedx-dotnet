@@ -21,8 +21,7 @@ using System.Xml;
 using System.IO;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-using AssetFileReader = NuGet.ProjectModel.LockFileFormat;
-using CycloneDX.Models;
+using CycloneDX.Core.Models;
 
 namespace CycloneDX.Services
 {

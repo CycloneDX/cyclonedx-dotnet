@@ -20,8 +20,7 @@ using System.Xml;
 using System.IO;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-using CycloneDX.Models;
-using CycloneDX.Services;
+using CycloneDX.Core.Models;
 
 namespace CycloneDX.Services
 {

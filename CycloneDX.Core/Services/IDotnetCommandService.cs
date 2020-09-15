@@ -14,7 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
 using DotnetCommandResult = CycloneDX.Core.Models.DotnetCommandResult;
 
 namespace CycloneDX.Services

@@ -20,6 +20,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using CycloneDX.Models;
+using CycloneDX.Core.Models;
 using CycloneDX.Services;
 using Moq;
 
@@ -52,41 +53,6 @@ namespace CycloneDX.Tests
                 item => Assert.Equal("Package1", item.Name),
                 item => Assert.Equal("Package2", item.Name),
                 item => Assert.Equal("Package3", item.Name)
-            );
-        }
-
-        [Fact]
-        public async Task RecursivelyGetComponents_ReturnsComponentsAndDependencies()
-        {
-            var mockNugetService = new Mock<INugetService>();
-            mockNugetService
-                .SetupSequence(service => service.GetComponentAsync(It.IsAny<NugetPackage>()))
-                .ReturnsAsync(new Component {
-                    Name = "Package1",
-                    Version = "1.0.0" ,
-                    Dependencies = new HashSet<NugetPackage>
-                    {
-                        new NugetPackage
-                        {
-                            Name = "Dependency1",
-                            Version = "1.0.0"
-                        }
-                    }
-                })
-                .ReturnsAsync(new Component { Name = "Dependency1", Version = "1.0.0" });
-            var nugetService = mockNugetService.Object;
-            var componentService = new ComponentService(nugetService);
-            var nugetPackages = new List<NugetPackage>
-            {
-                new NugetPackage { Name = "Package1", Version = "1.0.0" }
-            };
-
-            var components = await componentService.RecursivelyGetComponentsAsync(nugetPackages).ConfigureAwait(false);
-            var sortedComponents = components.OrderBy(c => c.Name).ToList();
-
-            Assert.Collection(sortedComponents,
-                item => Assert.Equal("Dependency1", item.Name),
-                item => Assert.Equal("Package1", item.Name)
             );
         }
     }

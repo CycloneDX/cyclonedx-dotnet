@@ -18,14 +18,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO.Abstractions;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using NuGet.Packaging.Licenses;
 using NuspecReader = NuGet.Packaging.NuspecReader;
 using CycloneDX.Extensions;
 using CycloneDX.Models;
+using CycloneDX.Core.Models;
 
 namespace CycloneDX.Services
 {

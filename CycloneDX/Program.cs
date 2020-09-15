@@ -19,11 +19,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using CycloneDX.Models;
-using CycloneDX.Core;
+using CycloneDX.Core.Models;
 using CycloneDX.Services;
 
 namespace CycloneDX {
