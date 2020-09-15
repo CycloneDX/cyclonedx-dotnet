@@ -14,7 +14,7 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-namespace CycloneDX.Models
+namespace CycloneDX.Core.Models
 {
     public class DotnetUtilsResult
     {

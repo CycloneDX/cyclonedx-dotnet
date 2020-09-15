@@ -16,7 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using CycloneDX.Models;
+using CycloneDX.Core.Models;
 
 namespace CycloneDX.Services
 {

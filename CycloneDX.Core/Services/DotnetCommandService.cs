@@ -21,7 +21,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
-using DotnetCommandResult = CycloneDX.Models.DotnetCommandResult;
+using DotnetCommandResult = CycloneDX.Core.Models.DotnetCommandResult;
 
 namespace CycloneDX.Services
 {

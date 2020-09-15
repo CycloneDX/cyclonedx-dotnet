@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace CycloneDX.Models
+namespace CycloneDX.Core.Models
 {
 
     public partial class GithubLicenseRoot
