@@ -106,14 +106,6 @@ namespace CycloneDX {
                 {
                     c.Add(new XElement(ns + "scope", component.Scope));
                 }
-                if (component.Hashes != null && component.Hashes.Count > 0)
-                {
-                    var h = new XElement(ns + "hashes");
-                    foreach (var hash in component.Hashes)
-                    {
-                        h.Add(new XElement(ns + "hash", hash.value, new XAttribute("alg", Models.AlgorithmExtensions.GetXmlString(hash.algorithm))));
-                    }
-                }
                 if (component.Licenses != null && component.Licenses.Count > 0)
                 {
                     var l = new XElement(ns + "licenses");

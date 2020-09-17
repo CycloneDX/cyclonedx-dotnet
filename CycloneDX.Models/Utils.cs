@@ -14,9 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
-using System.Diagnostics.Contracts;
-
 namespace CycloneDX.Models
 {
     public static class Utils

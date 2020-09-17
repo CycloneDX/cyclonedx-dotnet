@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
 
 namespace CycloneDX.Models
 {
@@ -33,8 +32,6 @@ namespace CycloneDX.Models
         public string Version { get; set; }
         public string Description { get; set; }
         public string Scope { get; set; }
-        [JsonIgnore]
-        public List<Hash> Hashes { get; set; } = new List<Hash>();
         public List<ComponentLicense> Licenses { get; set; } = new List<ComponentLicense>();
         public string Copyright { get; set; }
         public string Purl { get; set; }
