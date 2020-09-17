@@ -21,7 +21,7 @@ using System.Text.Json.Serialization;
 
 using License = CycloneDX.Models.License;
 
-namespace CycloneDX.JsonConverters
+namespace CycloneDX.Json
 {
 
     public class LicenseConverter : JsonConverter<License>
