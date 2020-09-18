@@ -18,8 +18,8 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace CycloneDX {
-    public class Utf8StringWriter : StringWriter
+namespace CycloneDX.Xml {
+    internal class Utf8StringWriter : StringWriter
     {
         public override Encoding Encoding => Encoding.UTF8;
     }

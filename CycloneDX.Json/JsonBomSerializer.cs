@@ -14,10 +14,8 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
 using System.Diagnostics.Contracts;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 using Bom = CycloneDX.Models.Bom;
 

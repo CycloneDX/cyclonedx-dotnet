@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CycloneDX.Models\CycloneDX.Models.csproj" />
     <ProjectReference Include="..\CycloneDX.Json\CycloneDX.Json.csproj" />
+    <ProjectReference Include="..\CycloneDX.Xml\CycloneDX.Xml.csproj" />
   </ItemGroup>
 
 </Project>
