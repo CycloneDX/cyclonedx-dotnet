@@ -14,17 +14,32 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using CycloneDX.Core.Models;
+using System.Diagnostics.Contracts;
+using System.Text.Json;
 
-namespace CycloneDX.Services
+using Bom = CycloneDX.Models.Bom;
+
+namespace CycloneDX.Json
 {
-    public interface IProjectFileService
+
+    public static class JsonBomSerializer
     {
-        Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath);
-        Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath);
-        Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);
-        Task<HashSet<string>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
+        public static string Serialize(Bom bom)
+        {
+            Contract.Requires(bom != null);
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                IgnoreNullValues = true,
+            };
+
+            options.Converters.Add(new LicenseConverter());
+
+            var jsonBom = JsonSerializer.Serialize(bom, options);
+
+            return jsonBom;
+        }
     }
 }

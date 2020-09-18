@@ -12,7 +12,12 @@
     </PackageReference>
     <PackageReference Include="nuget.projectmodel" Version="5.6.0" />
     <PackageReference Include="System.IO.Abstractions" Version="12.1.9" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CycloneDX.Models\CycloneDX.Models.csproj" />
+    <ProjectReference Include="..\CycloneDX.Json\CycloneDX.Json.csproj" />
+    <ProjectReference Include="..\CycloneDX.Xml\CycloneDX.Xml.csproj" />
   </ItemGroup>
 
 </Project>

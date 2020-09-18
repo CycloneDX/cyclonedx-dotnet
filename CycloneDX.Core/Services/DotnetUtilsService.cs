@@ -13,11 +13,11 @@
 // limitations under the License.
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
-using System;
+
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
-using CycloneDX.Models;
+using CycloneDX.Core.Models;
 
 namespace CycloneDX.Services
 {

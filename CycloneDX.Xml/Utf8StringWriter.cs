@@ -14,17 +14,13 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using CycloneDX.Core.Models;
+using System;
+using System.IO;
+using System.Text;
 
-namespace CycloneDX.Services
-{
-    public interface IProjectFileService
+namespace CycloneDX.Xml {
+    internal class Utf8StringWriter : StringWriter
     {
-        Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath);
-        Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath);
-        Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);
-        Task<HashSet<string>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
+        public override Encoding Encoding => Encoding.UTF8;
     }
 }

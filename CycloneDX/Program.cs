@@ -19,10 +19,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using CycloneDX.Models;
+using CycloneDX.Core.Models;
 using CycloneDX.Services;
 
 namespace CycloneDX {
@@ -169,11 +169,11 @@ namespace CycloneDX {
                 {
                     packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                 }
-                else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
+                else if (Core.Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
                     packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                 }
-                else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
+                else if (Core.Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
                     packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                 }

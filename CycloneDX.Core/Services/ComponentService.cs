@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CycloneDX.Models;
+using CycloneDX.Core.Models;
 
 namespace CycloneDX.Services
 {
@@ -51,15 +52,6 @@ namespace CycloneDX.Services
                 if (component == null) continue;
 
                 components.Add(component);
-
-                // Add unvisited NuGet package dependencies to the queue
-                foreach (var dependency in component.Dependencies)
-                {
-                    if (!visitedNugetPackages.Contains(dependency))
-                    {
-                        packages.Enqueue(dependency);
-                    }
-                }
 
                 // Add the current NuGet package to list of visited packages
                 visitedNugetPackages.Add(currentPackage);

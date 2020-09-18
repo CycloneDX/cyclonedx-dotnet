@@ -14,7 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using CycloneDX.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -24,6 +23,7 @@ using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Threading.Tasks;
+using CycloneDX.Core.Models;
 using License = CycloneDX.Models.License;
 
 namespace CycloneDX.Services
