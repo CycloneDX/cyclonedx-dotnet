@@ -31,7 +31,44 @@ namespace CycloneDX.Json
             Type typeToConvert,
             JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            if (reader.TokenType == JsonTokenType.Null)
+            {
+                return null;
+            }
+            else if (reader.TokenType != JsonTokenType.StartObject)
+            {
+                throw new JsonException();
+            }
+
+            var license = new License();
+
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                {
+                    return license;
+                }
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException();
+                }
+
+                var propertyName = reader.GetString();
+                reader.Read();
+                var propertyValue = reader.GetString();
+
+                if (propertyName == "id")
+                    license.Id = propertyValue;
+                else if (propertyName == "name")
+                    license.Name = propertyValue;
+                else if (propertyName == "url")
+                    license.Url = propertyValue;
+                else
+                    throw new JsonException($"Invalid property name: {propertyName}");
+            }
+
+            throw new JsonException();
         }
 
         public override void Write(
