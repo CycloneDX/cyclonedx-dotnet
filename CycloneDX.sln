@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Models", "Cyclone
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Xml", "CycloneDX.Xml\CycloneDX.Xml.csproj", "{079527D3-4BDC-43C8-9890-9491CBC37C34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Json.Tests", "CycloneDX.Json.Tests\CycloneDX.Json.Tests.csproj", "{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -138,6 +140,18 @@ Global
 		{079527D3-4BDC-43C8-9890-9491CBC37C34}.Release|x64.Build.0 = Release|Any CPU
 		{079527D3-4BDC-43C8-9890-9491CBC37C34}.Release|x86.ActiveCfg = Release|Any CPU
 		{079527D3-4BDC-43C8-9890-9491CBC37C34}.Release|x86.Build.0 = Release|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Debug|x64.Build.0 = Debug|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Debug|x86.Build.0 = Debug|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Release|x64.ActiveCfg = Release|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Release|x64.Build.0 = Release|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
