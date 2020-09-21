@@ -25,11 +25,11 @@ namespace CycloneDX.Models
     public class Bom
     {
         public string BomFormat => "CycloneDX";
-        public string SpecVersion => "1.2";
+        public string SpecVersion { get; set; } = "1.2";
         public string SerialNumber { get; set; }
         public int Version { get; set; } = 1;
         //TODO metadata
-        public HashSet<Component> Components { get; set; }
+        public HashSet<Component> Components { get; set; } = new HashSet<Component>();
         //TODO externalReferences
         //TODO dependencies
     }
