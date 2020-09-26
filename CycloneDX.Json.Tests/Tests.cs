@@ -9,16 +9,17 @@ namespace CycloneDX.Json.Tests
 {
     public class Tests
     {
-        [Fact]
-        public void JsonRoundTripTest()
+        [Theory]
+        [InlineData("bom")]
+        public void JsonRoundTripTest(string filename)
         {
-            var resourceFilename = Path.Join("Resources", "bom.json");
+            var resourceFilename = Path.Join("Resources", filename + ".json");
             var jsonBom = File.ReadAllText(resourceFilename);
 
             var bom = JsonBomDeserializer.Deserialize(jsonBom);
             jsonBom = JsonBomSerializer.Serialize(bom);
 
-            Snapshot.Match(jsonBom);
+            Snapshot.Match(jsonBom, SnapshotNameExtension.Create(filename));
         }
     }
 }
