@@ -29,7 +29,7 @@ namespace CycloneDX.Xml
         {
             Contract.Requires(bom != null);
 
-            XNamespace ns = "http://cyclonedx.org/schema/bom/1.1";
+            XNamespace ns = "http://cyclonedx.org/schema/bom/1.2";
             var doc = new XDocument();
             doc.Declaration = new XDeclaration("1.0", "utf-8", null);
 

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<bom version="1" serialNumber="urn:uuid:f9bcf38b-e331-48b3-a541-28f5352a4509" xmlns="http://cyclonedx.org/schema/bom/1.1">
+<bom version="1" serialNumber="urn:uuid:f9bcf38b-e331-48b3-a541-28f5352a4509" xmlns="http://cyclonedx.org/schema/bom/1.2">
   <components>
     <component type="library">
       <name>CycloneDX.Core</name>
