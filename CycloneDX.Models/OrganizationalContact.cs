@@ -14,23 +14,12 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
 namespace CycloneDX.Models
 {
-    [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-    [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-    public class Bom
+    public class OrganizationalContact
     {
-        public string BomFormat => "CycloneDX";
-        public string SpecVersion { get; set; }
-        public string SerialNumber { get; set; }
-        public int Version { get; set; } = 1;
-        public Metadata Metadata { get; set; }
-        public HashSet<Component> Components { get; set; } = new HashSet<Component>();
-        //TODO externalReferences
-        //TODO dependencies
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
     }
 }
