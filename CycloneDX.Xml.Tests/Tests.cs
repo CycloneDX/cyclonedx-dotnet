@@ -11,6 +11,7 @@ namespace CycloneDX.Xml.Tests
     {
         [Theory] 
         [InlineData("bom")] 
+        [InlineData("valid-metadata-author-1.2")]
         public void XmlRoundTripTest(string filename)
         {
             var resourceFilename = Path.Join("Resources", filename + ".xml");
