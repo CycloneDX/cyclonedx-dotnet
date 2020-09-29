@@ -25,7 +25,7 @@ namespace CycloneDX.Models
     public class Bom
     {
         public string BomFormat => "CycloneDX";
-        public string SpecVersion { get; set; }
+        public string SpecVersion { get; set; } = "1.2";
         public string SerialNumber { get; set; }
         public int Version { get; set; } = 1;
         public Metadata Metadata { get; set; }

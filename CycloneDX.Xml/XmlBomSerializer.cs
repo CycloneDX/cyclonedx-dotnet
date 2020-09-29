@@ -30,7 +30,7 @@ namespace CycloneDX.Xml
             Contract.Requires(bom != null);
 
             // hacky work around for incomplete spec multi-version support, JSON defaults to v1.2
-            XNamespace ns = "http://cyclonedx.org/schema/bom/" + (string.IsNullOrEmpty(bom.SpecVersion) ? "1.1" : bom.SpecVersion);
+            XNamespace ns = "http://cyclonedx.org/schema/bom/" + bom.SpecVersion;
             var doc = new XDocument();
             doc.Declaration = new XDeclaration("1.0", "utf-8", null);
 

@@ -26,11 +26,6 @@ namespace CycloneDX.Json
     {
         public static string Serialize(Bom bom)
         {
-            // hacky workaround for current not complete spec multi-version support
-            // the XML serializer defaults to version 1.1
-            var bomSpecVersion = bom.SpecVersion;
-            if (string.IsNullOrEmpty(bomSpecVersion)) bom.SpecVersion = "1.2";
-
             Contract.Requires(bom != null);
 
             var options = new JsonSerializerOptions
@@ -44,8 +39,6 @@ namespace CycloneDX.Json
 
             var jsonBom = JsonSerializer.Serialize(bom, options);
 
-            bom.SpecVersion = bomSpecVersion;
-            
             return jsonBom;
         }
     }
