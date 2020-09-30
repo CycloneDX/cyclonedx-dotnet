@@ -42,6 +42,17 @@ namespace CycloneDX.Xml
             bom.Version = int.Parse(doc.DocumentElement.Attributes["version"]?.InnerText);
             bom.SerialNumber = doc.DocumentElement.Attributes["serialNumber"]?.InnerText;
 
+            var xmlMetadataNode = doc.SelectSingleNode("/cdx:bom/cdx:metadata", nsmgr);
+            if (xmlMetadataNode != null)
+            {
+                bom.Metadata = new Metadata();
+                var xmlAuthorNodes = xmlMetadataNode.SelectNodes("cdx:authors/cdx:author", nsmgr);
+                for (var i=0; i<xmlAuthorNodes.Count; i++)
+                {
+                    bom.Metadata.Authors.Add(GetOrganizationalContact(xmlAuthorNodes[i]));
+                }
+            }
+
             var xmlComponentNodes = doc.SelectNodes("/cdx:bom/cdx:components/cdx:component", nsmgr);
             for (var i=0; i<xmlComponentNodes.Count; i++)
             {
@@ -106,6 +117,17 @@ namespace CycloneDX.Xml
             externalReference.Url = externalReferenceXmlNode["url"]?.InnerText;
 
             return externalReference;
+        }
+
+        private static OrganizationalContact GetOrganizationalContact(XmlNode organizationalContactXmlNode)
+        {
+            var organizationalContact = new OrganizationalContact();
+
+            organizationalContact.Email = organizationalContactXmlNode["email"]?.InnerText;
+            organizationalContact.Name = organizationalContactXmlNode["name"]?.InnerText;
+            organizationalContact.Phone = organizationalContactXmlNode["phone"]?.InnerText;
+
+            return organizationalContact;
         }
     }
 }

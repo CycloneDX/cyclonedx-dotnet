@@ -29,12 +29,41 @@ namespace CycloneDX.Xml
         {
             Contract.Requires(bom != null);
 
-            XNamespace ns = "http://cyclonedx.org/schema/bom/1.1";
+            // hacky work around for incomplete spec multi-version support, JSON defaults to v1.2
+            XNamespace ns = "http://cyclonedx.org/schema/bom/" + (string.IsNullOrEmpty(bom.SpecVersion) ? "1.1" : bom.SpecVersion);
             var doc = new XDocument();
             doc.Declaration = new XDeclaration("1.0", "utf-8", null);
 
             var bomElement = (string.IsNullOrEmpty(bom.SerialNumber)) ? new XElement(ns + "bom", new XAttribute("version", bom.Version)) :
                 new XElement(ns + "bom", new XAttribute("version", bom.Version), new XAttribute("serialNumber", bom.SerialNumber));
+
+            if (bom.Metadata != null)
+            {
+                var meta = new XElement(ns + "metadata");
+                if (bom.Metadata.Authors != null && bom.Metadata.Authors.Count > 0)
+                {
+                    var authors = new XElement(ns + "authors");
+                    foreach (var author in bom.Metadata.Authors)
+                    {
+                        var a = new XElement(ns + "author");
+                        if (!string.IsNullOrEmpty(author.Name))
+                        {
+                            a.Add(new XElement(ns + "name", author.Name));
+                        }
+                        if (!string.IsNullOrEmpty(author.Email))
+                        {
+                            a.Add(new XElement(ns + "email", author.Email));
+                        }
+                        if (!string.IsNullOrEmpty(author.Phone))
+                        {
+                            a.Add(new XElement(ns + "phone", author.Phone));
+                        }
+                        authors.Add(a);
+                    }
+                    meta.Add(authors);
+                }
+                bomElement.Add(meta);
+            }
 
             var sortedComponents = bom.Components.ToList();
             sortedComponents.Sort();

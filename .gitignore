@@ -5,3 +5,4 @@ obj/
 packages/
 coverage-report/
 coverage.cobertura.xml
+*/__snapshots__/__mismatch__/
