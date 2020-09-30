@@ -9,16 +9,17 @@ namespace CycloneDX.Xml.Tests
 {
     public class XmlBomDeserializerTests
     {
-        [Fact]
-        public void XmlRoundTripTest()
+        [Theory] 
+        [InlineData("bom")] 
+        public void XmlRoundTripTest(string filename)
         {
-            var resourceFilename = Path.Join("Resources", "bom.xml");
+            var resourceFilename = Path.Join("Resources", filename + ".xml");
             var xmlBom = File.ReadAllText(resourceFilename);
 
             var bom = XmlBomDeserializer.Deserialize(xmlBom);
             xmlBom = XmlBomSerializer.Serialize(bom);
 
-            Snapshot.Match(xmlBom);
+            Snapshot.Match(xmlBom, SnapshotNameExtension.Create(filename));
         }
     }
 }
