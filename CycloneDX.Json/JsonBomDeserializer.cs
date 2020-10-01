@@ -33,6 +33,7 @@ namespace CycloneDX.Json
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
 
+            options.Converters.Add(new DateTimeConverter());
             options.Converters.Add(new LicenseConverter());
 
             var bom = JsonSerializer.Deserialize<Bom>(jsonBom, options);

@@ -14,6 +14,8 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
@@ -46,7 +48,15 @@ namespace CycloneDX.Xml
             if (xmlMetadataNode != null)
             {
                 bom.Metadata = new Metadata();
+
+                var xmlTimestampNode = xmlMetadataNode.SelectSingleNode("cdx:timestamp", nsmgr);
+                if (xmlTimestampNode != null)
+                {
+                    bom.Metadata.Timestamp = DateTime.Parse(xmlTimestampNode.InnerText);
+                }
+
                 var xmlAuthorNodes = xmlMetadataNode.SelectNodes("cdx:authors/cdx:author", nsmgr);
+                if (xmlAuthorNodes.Count > 0) bom.Metadata.Authors = new List<OrganizationalContact>();
                 for (var i=0; i<xmlAuthorNodes.Count; i++)
                 {
                     bom.Metadata.Authors.Add(GetOrganizationalContact(xmlAuthorNodes[i]));

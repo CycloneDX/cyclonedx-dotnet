@@ -40,6 +40,11 @@ namespace CycloneDX.Xml
             if (bom.Metadata != null)
             {
                 var meta = new XElement(ns + "metadata");
+                if (bom.Metadata.Timestamp != null)
+                {
+                    meta.Add(new XElement(ns + "timestamp", bom.Metadata.Timestamp?.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")));
+                }
+
                 if (bom.Metadata.Authors != null && bom.Metadata.Authors.Count > 0)
                 {
                     var authors = new XElement(ns + "authors");

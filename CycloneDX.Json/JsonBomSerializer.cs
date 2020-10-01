@@ -35,6 +35,7 @@ namespace CycloneDX.Json
                 IgnoreNullValues = true,
             };
 
+            options.Converters.Add(new DateTimeConverter());
             options.Converters.Add(new LicenseConverter());
 
             var jsonBom = JsonSerializer.Serialize(bom, options);
