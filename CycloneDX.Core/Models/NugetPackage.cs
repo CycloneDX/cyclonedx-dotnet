@@ -30,7 +30,7 @@ namespace CycloneDX.Core.Models
         public override bool Equals(object obj)
         {
             var other = obj as NugetPackage;
-            return this.Equals(other);
+            return Equals(other);
         }
 
         public bool Equals(NugetPackage other)
@@ -39,10 +39,8 @@ namespace CycloneDX.Core.Models
             {
                 return false;
             }
-            else
-            {
-                return this.Name == other.Name && this.Version == other.Version;
-            }
+
+            return Name == other.Name && Version == other.Version;
         }
 
         public override int GetHashCode()
@@ -56,13 +54,11 @@ namespace CycloneDX.Core.Models
             {
                 return 1;
             }
-            else
-            {
-                var nameComparison = string.Compare(this.Name, other.Name, StringComparison.Ordinal);
-                return nameComparison == 0
-                    ? string.Compare(this.Version, other.Version, StringComparison.Ordinal)
-                    : nameComparison;
-            }
+
+            var nameComparison = string.Compare(Name, other.Name, StringComparison.Ordinal);
+            return nameComparison == 0
+                ? string.Compare(Version, other.Version, StringComparison.Ordinal)
+                : nameComparison;
         }
 
         public int CompareTo(object obj)

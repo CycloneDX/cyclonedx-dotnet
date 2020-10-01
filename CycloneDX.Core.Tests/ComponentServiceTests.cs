@@ -14,15 +14,8 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
-using CycloneDX.Models;
 using CycloneDX.Core.Models;
 using CycloneDX.Services;
-using Moq;
 
 namespace CycloneDX.Tests
 {
@@ -43,7 +36,7 @@ namespace CycloneDX.Tests
             {
                 new NugetPackage { Name = "Package1", Version = "1.0.0" },
                 new NugetPackage { Name = "Package2", Version = "1.0.0" },
-                new NugetPackage { Name = "Package3", Version = "1.0.0" },
+                new NugetPackage { Name = "Package3", Version = "1.0.0" }
             };
 
             var components = await componentService.RecursivelyGetComponentsAsync(nugetPackages).ConfigureAwait(false);

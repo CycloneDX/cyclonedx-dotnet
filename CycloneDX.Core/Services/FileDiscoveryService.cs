@@ -22,7 +22,7 @@ namespace CycloneDX.Services
 {
     public class FileDiscoveryService
     {
-        private IFileSystem _fileSystem;
+        private readonly IFileSystem _fileSystem;
 
         public FileDiscoveryService(IFileSystem fileSystem)
         {
@@ -38,6 +38,5 @@ namespace CycloneDX.Services
         {
             return _fileSystem.Directory.GetFiles(directory, "packages.config", SearchOption.AllDirectories);
         }
-
     }
 }

@@ -14,9 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using Xunit;
-using CycloneDX.Models;
-
 namespace CycloneDX.Tests
 {
     public class ComponentTests
@@ -27,12 +24,12 @@ namespace CycloneDX.Tests
             var component1 = new Component
             {
                 Name = "Package",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
             var component2 = new Component
             {
                 Name = "Package",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
 
             Assert.True(component1.Equals((object)component2));
@@ -44,12 +41,12 @@ namespace CycloneDX.Tests
             var component1 = new Component
             {
                 Name = "Package",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
             var component2 = new Component
             {
                 Name = "Package",
-                Version = "1.2.4",
+                Version = "1.2.4"
             };
 
             Assert.False(component1.Equals((object)component2));
@@ -61,12 +58,12 @@ namespace CycloneDX.Tests
             var component1 = new Component
             {
                 Name = "Package1",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
             var component2 = new Component
             {
                 Name = "Package2",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
 
             Assert.False(component1.Equals((object)component2));
@@ -78,7 +75,7 @@ namespace CycloneDX.Tests
             var component = new Component
             {
                 Name = "Package",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
 
             // cast null as string to flex Equals(object obj) and Equals(NugetPackage other)
@@ -91,12 +88,12 @@ namespace CycloneDX.Tests
             var component1 = new Component
             {
                 Name = "Package1",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
             var component2 = new Component
             {
                 Name = "Package2",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
 
             Assert.Equal(-1, component1.CompareTo(component2));
@@ -108,12 +105,12 @@ namespace CycloneDX.Tests
             var component1 = new Component
             {
                 Name = "Package",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
             var component2 = new Component
             {
                 Name = "Package",
-                Version = "1.2.4",
+                Version = "1.2.4"
             };
 
             Assert.Equal(-1, component1.CompareTo(component2));
@@ -125,7 +122,7 @@ namespace CycloneDX.Tests
             var component = new Component
             {
                 Name = "Package1",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
 
             // cast null as string to flex CompareTo(object obj) and CompareTo(NugetPackage other)

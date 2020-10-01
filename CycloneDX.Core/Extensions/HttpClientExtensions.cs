@@ -14,7 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net.Http;
@@ -33,15 +32,17 @@ namespace CycloneDX.Extensions
             Contract.Requires(httpClient != null);
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
-            HttpResponseMessage response;
-            response = await httpClient.GetAsync(url).ConfigureAwait(false);
+            var response = await httpClient.GetAsync(url).ConfigureAwait(false);
             
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound) return null;
+            switch (response.StatusCode)
+            {
+                case System.Net.HttpStatusCode.NotFound:
+                // JFrog's Artifactory tends to return 405 errors instead of 404
+                // errors when something can't be found.
+                case System.Net.HttpStatusCode.MethodNotAllowed:
+                    return null;
+            }
 
-            // JFrog's Artifactory tends to return 405 errors instead of 404
-            // errors when something can't be found.
-            if (response.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed) return null;
-            
             response.EnsureSuccessStatusCode();
             var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
             return contentStream;

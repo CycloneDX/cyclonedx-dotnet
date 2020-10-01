@@ -23,7 +23,6 @@ using License = CycloneDX.Models.License;
 
 namespace CycloneDX.Json
 {
-
     public class LicenseConverter : JsonConverter<License>
     {
         public override License Read(
@@ -35,7 +34,8 @@ namespace CycloneDX.Json
             {
                 return null;
             }
-            else if (reader.TokenType != JsonTokenType.StartObject)
+
+            if (reader.TokenType != JsonTokenType.StartObject)
             {
                 throw new JsonException();
             }
@@ -58,14 +58,20 @@ namespace CycloneDX.Json
                 reader.Read();
                 var propertyValue = reader.GetString();
 
-                if (propertyName == "id")
-                    license.Id = propertyValue;
-                else if (propertyName == "name")
-                    license.Name = propertyValue;
-                else if (propertyName == "url")
-                    license.Url = propertyValue;
-                else
-                    throw new JsonException($"Invalid property name: {propertyName}");
+                switch (propertyName)
+                {
+                    case "id":
+                        license.Id = propertyValue;
+                        break;
+                    case "name":
+                        license.Name = propertyValue;
+                        break;
+                    case "url":
+                        license.Url = propertyValue;
+                        break;
+                    default:
+                        throw new JsonException($"Invalid property name: {propertyName}");
+                }
             }
 
             throw new JsonException();

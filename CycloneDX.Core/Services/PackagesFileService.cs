@@ -14,7 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
 using System.Collections.Generic;
 using System.Xml;
 using System.IO;
@@ -26,13 +25,13 @@ namespace CycloneDX.Services
 {
     public class PackagesFileService : IPackagesFileService
     {
-        private XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings 
+        private readonly XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings 
         {
             Async = true
         };
         
-        private IFileSystem _fileSystem;
-        private FileDiscoveryService _fileDiscoveryService;
+        private readonly IFileSystem _fileSystem;
+        private readonly FileDiscoveryService _fileDiscoveryService;
 
         public PackagesFileService(IFileSystem fileSystem)
         {
@@ -59,7 +58,7 @@ namespace CycloneDX.Services
                             packages.Add(new NugetPackage
                             {
                                 Name = reader["id"],
-                                Version = reader["version"],
+                                Version = reader["version"]
                             });
                         }
                     }

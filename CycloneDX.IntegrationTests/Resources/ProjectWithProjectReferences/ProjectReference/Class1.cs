@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ProjectReference
+﻿namespace ProjectReference
 {
     public class Class1
     {

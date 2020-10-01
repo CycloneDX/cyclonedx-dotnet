@@ -40,7 +40,7 @@ namespace CycloneDX.Models
         public override bool Equals(object obj)
         {
             var other = obj as Component;
-            return this.Equals(other);
+            return Equals(other);
         }
 
         public bool Equals(Component other)
@@ -49,10 +49,8 @@ namespace CycloneDX.Models
             {
                 return false;
             }
-            else
-            {
-                return this.Name == other.Name && this.Version == other.Version;
-            }
+
+            return Name == other.Name && Version == other.Version;
         }
 
         public override int GetHashCode()
@@ -66,13 +64,11 @@ namespace CycloneDX.Models
             {
                 return 1;
             }
-            else
-            {
-                var nameComparison = string.Compare(this.Name.ToUpperInvariant(), other.Name.ToUpperInvariant(), StringComparison.Ordinal);
-                return nameComparison == 0
-                    ? string.Compare(this.Version, other.Version, StringComparison.Ordinal)
-                    : nameComparison;
-            }
+
+            var nameComparison = string.Compare(Name.ToUpperInvariant(), other.Name.ToUpperInvariant(), StringComparison.Ordinal);
+            return nameComparison == 0
+                ? string.Compare(Version, other.Version, StringComparison.Ordinal)
+                : nameComparison;
         }
 
         public int CompareTo(object obj)

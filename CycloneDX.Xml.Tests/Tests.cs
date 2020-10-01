@@ -1,9 +1,4 @@
-using System;
 using System.IO;
-using Xunit;
-using Snapshooter;
-using Snapshooter.Xunit;
-using CycloneDX.Xml;
 
 namespace CycloneDX.Xml.Tests
 {

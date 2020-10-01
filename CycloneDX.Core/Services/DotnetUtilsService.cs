@@ -23,11 +23,11 @@ namespace CycloneDX.Services
 {
     public class DotnetUtilsService : IDotnetUtilsService
     {
-        private Regex _sdkPathRegex = new Regex(@"(\S)+ \[(?<path>.*)\]");
-        private Regex _globalPackageCacheLocationPath = new Regex(@"global-packages: (?<path>.*)$");
+        private readonly Regex _sdkPathRegex = new Regex(@"(\S)+ \[(?<path>.*)\]");
+        private readonly Regex _globalPackageCacheLocationPath = new Regex(@"global-packages: (?<path>.*)$");
 
-        private IFileSystem _fileSystem;
-        private IDotnetCommandService _dotnetCommandService;
+        private readonly IFileSystem _fileSystem;
+        private readonly IDotnetCommandService _dotnetCommandService;
 
         public DotnetUtilsService(IFileSystem fileSystem, IDotnetCommandService dotNetCommandService)
         {
@@ -39,47 +39,49 @@ namespace CycloneDX.Services
         {
             var commandResult = _dotnetCommandService.Run("--list-sdks");
 
-            if (commandResult.Success)
-            {
-                var match = _sdkPathRegex.Match(commandResult.StdOut);
-                if (match.Success)
+            if (!commandResult.Success)
+                return new DotnetUtilsResult<string>
                 {
-                    var fallbackPath = _fileSystem.Path.Combine(match.Groups["path"].ToString(), "NuGetFallbackFolder");
-                    if (_fileSystem.Directory.Exists(fallbackPath))
-                    {
-                        return new DotnetUtilsResult<string>
-                        {
-                            Result = fallbackPath
-                        };
-                    }
-                    else
-                    {
-                        return new DotnetUtilsResult<string>();
-                    }
-                }
+                    ErrorMessage = commandResult.StdErr
+                };
+
+            var match = _sdkPathRegex.Match(commandResult.StdOut);
+            if (!match.Success)
+                return new DotnetUtilsResult<string>
+                {
+                    ErrorMessage = commandResult.StdErr
+                };
+
+            var fallbackPath = _fileSystem.Path.Combine(match.Groups["path"].ToString(), "NuGetFallbackFolder");
+            if (_fileSystem.Directory.Exists(fallbackPath))
+            {
+                return new DotnetUtilsResult<string>
+                {
+                    Result = fallbackPath
+                };
             }
 
-            return new DotnetUtilsResult<string>
-            {
-                ErrorMessage = commandResult.StdErr
-            };
+            return new DotnetUtilsResult<string>();
         }
 
         internal DotnetUtilsResult<string> GetGlobalPackagesCacheLocation()
         {
             var commandResult = _dotnetCommandService.Run("nuget locals global-packages --list");
 
-            if (commandResult.Success)
-            {
-                var match = _globalPackageCacheLocationPath.Match(commandResult.StdOut);
-                if (match.Success)
+            if (!commandResult.Success)
+                return new DotnetUtilsResult<string>
                 {
-                    return new DotnetUtilsResult<string>
-                    {
-                        // on Windows (at least) the path will have a carriage return
-                        Result = match.Groups["path"].ToString().Trim()
-                    };
-                }
+                    ErrorMessage = commandResult.StdErr
+                };
+
+            var match = _globalPackageCacheLocationPath.Match(commandResult.StdOut);
+            if (match.Success)
+            {
+                return new DotnetUtilsResult<string>
+                {
+                    // on Windows (at least) the path will have a carriage return
+                    Result = match.Groups["path"].ToString().Trim()
+                };
             }
 
             return new DotnetUtilsResult<string>
@@ -91,14 +93,7 @@ namespace CycloneDX.Services
         private static string CombineErrorMessages(string currentErrorMessage, string additionalErrorMessage)
         {
             if (additionalErrorMessage == null) return currentErrorMessage;
-            if (currentErrorMessage.Length == 0)
-            {
-                return additionalErrorMessage;
-            }
-            else
-            {
-                return $"{currentErrorMessage}\n{additionalErrorMessage}";
-            }
+            return currentErrorMessage.Length == 0 ? additionalErrorMessage : $"{currentErrorMessage}\n{additionalErrorMessage}";
         }
 
         public DotnetUtilsResult<List<string>> GetPackageCachePaths()
@@ -116,37 +111,32 @@ namespace CycloneDX.Services
                     Result = result
                 };
             }
-            else
+
+            var errorMessage = "";
+            errorMessage = CombineErrorMessages(errorMessage, cacheLocation.ErrorMessage);
+            errorMessage = CombineErrorMessages(errorMessage, fallbackLocation.ErrorMessage);
+            return new DotnetUtilsResult<List<string>>
             {
-                var errorMessage = "";
-                errorMessage = CombineErrorMessages(errorMessage, cacheLocation.ErrorMessage);
-                errorMessage = CombineErrorMessages(errorMessage, fallbackLocation.ErrorMessage);
-                return new DotnetUtilsResult<List<string>>
-                {
-                    ErrorMessage = errorMessage
-                };
-            }
+                ErrorMessage = errorMessage
+            };
         }
 
         public DotnetUtilsResult Restore(string path)
         {
             var arguments = "restore";
             if (!string.IsNullOrEmpty(path)) arguments = $"{arguments} \"{path}\"";
-
             var commandResult = _dotnetCommandService.Run(arguments);
 
             if (commandResult.Success)
             {
                 return new DotnetUtilsResult();
             }
-            else
+
+            return new DotnetUtilsResult
             {
-                return new DotnetUtilsResult
-                {
-                    // dotnet restore only outputs to std out, not std err
-                    ErrorMessage = commandResult.StdOut
-                };
-            }
+                // dotnet restore only outputs to std out, not std err
+                ErrorMessage = commandResult.StdOut
+            };
         }
     }
 }

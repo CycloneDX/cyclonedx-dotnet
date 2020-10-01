@@ -124,7 +124,7 @@ namespace CycloneDX {
 
             // instantiate services
 
-            var fileDiscoveryService = new FileDiscoveryService(Program.fileSystem);
+            var fileDiscoveryService = new FileDiscoveryService(fileSystem);
             GithubService githubService = null;
             if (!(disableGithubLicenses || disableGithubLicensesDeprecated))
             {
@@ -151,17 +151,17 @@ namespace CycloneDX {
                 }
             }
             var nugetService = new NugetService(
-                Program.fileSystem,
+                fileSystem,
                 packageCachePathsResult.Result,
                 githubService,
-                Program.httpClient,
+                httpClient,
                 baseUrl);
 
             var packages = new HashSet<NugetPackage>();
 
             // determine what we are analyzing and do the analysis
-            var fullSolutionOrProjectFilePath = Program.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
-            var attr = Program.fileSystem.File.GetAttributes(fullSolutionOrProjectFilePath);
+            var fullSolutionOrProjectFilePath = fileSystem.Path.GetFullPath(SolutionOrProjectFile);
+            var attr = fileSystem.File.GetAttributes(fullSolutionOrProjectFilePath);
 
             try
             {
@@ -177,7 +177,7 @@ namespace CycloneDX {
                 {
                     packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                 }
-                else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
+                else if (fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {
                     packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                 } 
@@ -228,20 +228,20 @@ namespace CycloneDX {
             Console.WriteLine();
             Console.WriteLine("Creating CycloneDX BOM");
             var bom = new Bom();
-            if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
+            if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + Guid.NewGuid().ToString();
             bom.Components = components;
 
             var bomContents = BomService.CreateDocument(bom, json);
 
             // check if the output directory exists and create it if needed
-            var bomPath = Program.fileSystem.Path.GetFullPath(outputDirectory);
-            if (!Program.fileSystem.Directory.Exists(bomPath))
-                Program.fileSystem.Directory.CreateDirectory(bomPath);
+            var bomPath = fileSystem.Path.GetFullPath(outputDirectory);
+            if (!fileSystem.Directory.Exists(bomPath))
+                fileSystem.Directory.CreateDirectory(bomPath);
 
             // write the BOM to disk
-            var bomFilename = Program.fileSystem.Path.Combine(bomPath, json ? "bom.json" : "bom.xml");
+            var bomFilename = fileSystem.Path.Combine(bomPath, json ? "bom.json" : "bom.xml");
             Console.WriteLine("Writing to: " + bomFilename);
-            Program.fileSystem.File.WriteAllText(bomFilename, bomContents);
+            fileSystem.File.WriteAllText(bomFilename, bomContents);
 
             return 0;
         }

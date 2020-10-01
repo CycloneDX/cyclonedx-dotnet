@@ -14,13 +14,7 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
-using System.IO.Abstractions.TestingHelpers;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
-using Moq;
 using CycloneDX.Services;
 
 namespace CycloneDX.Tests
@@ -35,7 +29,7 @@ namespace CycloneDX.Tests
                     { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), new MockFileData(@"
 Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project\Project.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
                         ")},
-                    { XFS.Path(@"c:\SolutionPath\Project\Project.csproj"), Helpers.GetEmptyProjectFile() },
+                    { XFS.Path(@"c:\SolutionPath\Project\Project.csproj"), Helpers.GetEmptyProjectFile() }
                 });
             var mockProjectFileService = new Mock<IProjectFileService>();
             mockProjectFileService
@@ -61,7 +55,7 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\
                         ")},
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetEmptyProjectFile() },
                     { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), Helpers.GetEmptyProjectFile() },
-                    { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), Helpers.GetEmptyProjectFile() },
+                    { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), Helpers.GetEmptyProjectFile() }
                 });
             var mockProjectFileService = new Mock<IProjectFileService>();
             mockProjectFileService
@@ -97,7 +91,7 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project1\
                 .SetupSequence(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
                 .ReturnsAsync(new HashSet<string>
                     {
-                        XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"),
+                        XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj")
                     })
                 .ReturnsAsync(new HashSet<string>());
             var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);

@@ -14,14 +14,7 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
-using System.IO.Abstractions.TestingHelpers;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
-using Moq;
-using CycloneDX.Models;
 using CycloneDX.Core.Models;
 using CycloneDX.Services;
 
@@ -35,7 +28,7 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\Project\Project.csproj"), "" },
-                    { XFS.Path(@"c:\Project\obj\project.assets.json"), "" },
+                    { XFS.Path(@"c:\Project\obj\project.assets.json"), "" }
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
@@ -47,7 +40,7 @@ namespace CycloneDX.Tests
                 .Setup(s => s.GetNugetPackages(It.IsAny<string>()))
                 .Returns(new HashSet<NugetPackage>
                 {
-                    new NugetPackage { Name = "Package", Version = "1.2.3" },
+                    new NugetPackage { Name = "Package", Version = "1.2.3" }
                 });
             var projectFileService = new ProjectFileService(
                 mockFileSystem,
@@ -70,7 +63,7 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\Project\Project.csproj"), "" },
-                    { XFS.Path(@"c:\Project\obj\project.assets.json"), "" },
+                    { XFS.Path(@"c:\Project\obj\project.assets.json"), "" }
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
@@ -84,7 +77,7 @@ namespace CycloneDX.Tests
                 {
                     new NugetPackage { Name = "Package1", Version = "1.2.3" },
                     new NugetPackage { Name = "Package2", Version = "1.2.3" },
-                    new NugetPackage { Name = "Package3", Version = "1.2.3" },
+                    new NugetPackage { Name = "Package3", Version = "1.2.3" }
                 });
             var projectFileService = new ProjectFileService(
                 mockFileSystem,
@@ -108,7 +101,7 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\Project\Project.csproj"), "" },
-                    { XFS.Path(@"c:\Project\packages.config"), "" },
+                    { XFS.Path(@"c:\Project\packages.config"), "" }
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
@@ -120,7 +113,7 @@ namespace CycloneDX.Tests
                 .ReturnsAsync(
                     new HashSet<NugetPackage>
                     {
-                        new NugetPackage { Name = "Package", Version = "1.2.3" },
+                        new NugetPackage { Name = "Package", Version = "1.2.3" }
                     }
                 );
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
@@ -148,7 +141,7 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\Project\Project.csproj"), "" },
-                    { XFS.Path(@"c:\Project\packages.config"), "" },
+                    { XFS.Path(@"c:\Project\packages.config"), "" }
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
@@ -162,7 +155,7 @@ namespace CycloneDX.Tests
                     {
                     new NugetPackage { Name = "Package1", Version = "1.2.3" },
                     new NugetPackage { Name = "Package2", Version = "1.2.3" },
-                    new NugetPackage { Name = "Package3", Version = "1.2.3" },
+                    new NugetPackage { Name = "Package3", Version = "1.2.3" }
                     }
                 );
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
@@ -194,9 +187,9 @@ namespace CycloneDX.Tests
                         new string[] {
                             @"..\Project1\Project1.csproj",
                             @"..\Project2\Project2.csproj",
-                            @"..\Project3\Project3.csproj",
+                            @"..\Project3\Project3.csproj"
                         })
-                    },
+                    }
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             var mockPackageFileService = new Mock<IPackagesFileService>();
@@ -224,15 +217,15 @@ namespace CycloneDX.Tests
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithProjectReferences(
                         new string[] {
-                            @"..\Project2\Project2.csproj",
+                            @"..\Project2\Project2.csproj"
                         })
                     },
                     { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), Helpers.GetProjectFileWithProjectReferences(
                         new string[] {
-                            @"..\Project3\Project3.csproj",
+                            @"..\Project3\Project3.csproj"
                         })
                     },
-                    { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), new MockFileData(@"<Project></Project>") },
+                    { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), new MockFileData(@"<Project></Project>") }
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             var mockPackageFileService = new Mock<IPackagesFileService>();

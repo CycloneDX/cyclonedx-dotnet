@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NuGet.Packaging.Licenses;
@@ -36,11 +37,11 @@ namespace CycloneDX.Services
 
     public class NugetService : INugetService
     {
-        private string _baseUrl;
-        private HttpClient _httpClient;
-        private IGithubService _githubService;
-        private IFileSystem _fileSystem;
-        private List<string> _packageCachePaths;
+        private readonly string _baseUrl;
+        private readonly HttpClient _httpClient;
+        private readonly IGithubService _githubService;
+        private readonly IFileSystem _fileSystem;
+        private readonly List<string> _packageCachePaths;
 
         public NugetService(
             IFileSystem fileSystem,
@@ -53,7 +54,7 @@ namespace CycloneDX.Services
             _packageCachePaths = packageCachePaths;
             _githubService = githubService;
             _httpClient = httpClient;
-            _baseUrl = baseUrl == null ? "https://api.nuget.org/v3-flatcontainer/" : baseUrl;
+            _baseUrl = baseUrl ?? "https://api.nuget.org/v3-flatcontainer/";
         }
 
         internal string GetCachedNuspecFilename(string name, string version)
@@ -61,20 +62,8 @@ namespace CycloneDX.Services
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) return null;
 
             var lowerName = name.ToLowerInvariant();
-            string nuspecFilename = null;
 
-            foreach (var packageCachePath in _packageCachePaths)
-            {
-                var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, version);
-                var currentFilename = _fileSystem.Path.Combine(currentDirectory, lowerName + ".nuspec");
-                if (_fileSystem.File.Exists(currentFilename))
-                {
-                    nuspecFilename = currentFilename;
-                    break;
-                }
-            }
-
-            return nuspecFilename;
+            return _packageCachePaths.Select(packageCachePath => _fileSystem.Path.Combine(packageCachePath, lowerName, version)).Select(currentDirectory => _fileSystem.Path.Combine(currentDirectory, lowerName + ".nuspec")).FirstOrDefault(currentFilename => _fileSystem.File.Exists(currentFilename));
         }
 
         /// <summary>
@@ -145,26 +134,20 @@ namespace CycloneDX.Services
             var licenseMetadata = nuspecReader.GetLicenseMetadata();
             if (licenseMetadata != null && licenseMetadata.Type == NuGet.Packaging.LicenseType.Expression)
             {
-                Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
+                void LicenseProcessor(NuGetLicense nugetLicense)
                 {
-                    var license = new Models.License
-                    {
-                        Id = nugetLicense.Identifier,
-                        Name = nugetLicense.Identifier
-                    };
-                    component.Licenses.Add(new ComponentLicense
-                    {
-                        License = license
-                    });
-                };
-                licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
+                    var license = new License {Id = nugetLicense.Identifier, Name = nugetLicense.Identifier};
+                    component.Licenses.Add(new ComponentLicense {License = license});
+                }
+
+                licenseMetadata.LicenseExpression.OnEachLeafNode(LicenseProcessor, null);
             }
             else
             {
                 var licenseUrl = nuspecReader.GetLicenseUrl();
                 if (!string.IsNullOrEmpty(licenseUrl))
                 {
-                    Models.License license = null;
+                    License license = null;
                     
                     if (_githubService != null)
                     {
@@ -173,7 +156,7 @@ namespace CycloneDX.Services
 
                     if (license == null)
                     {
-                        license = new Models.License
+                        license = new License
                         {
                             Url = licenseUrl
                         };
@@ -187,13 +170,15 @@ namespace CycloneDX.Services
             }
 
             var projectUrl = nuspecReader.GetProjectUrl();
-            if (projectUrl != null)
+            if (projectUrl == null) 
+                return component;
+
+            var externalReference = new ExternalReference
             {
-                var externalReference = new Models.ExternalReference();
-                externalReference.Type = Models.ExternalReference.WEBSITE;
-                externalReference.Url = projectUrl;
-                component.ExternalReferences.Add(externalReference);
-            }
+                Type = ExternalReference.WEBSITE, 
+                Url = projectUrl
+            };
+            component.ExternalReferences.Add(externalReference);
 
             return component;
         }

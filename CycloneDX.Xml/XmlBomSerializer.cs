@@ -30,9 +30,9 @@ namespace CycloneDX.Xml
             Contract.Requires(bom != null);
 
             // hacky work around for incomplete spec multi-version support, JSON defaults to v1.2
-            XNamespace ns = "http://cyclonedx.org/schema/bom/" + (string.IsNullOrEmpty(bom.SpecVersion) ? "1.1" : bom.SpecVersion);
-            var doc = new XDocument();
-            doc.Declaration = new XDeclaration("1.0", "utf-8", null);
+            XNamespace ns =
+                $"http://cyclonedx.org/schema/bom/{(string.IsNullOrEmpty(bom.SpecVersion) ? "1.1" : bom.SpecVersion)}";
+            var doc = new XDocument { Declaration = new XDeclaration("1.0", "utf-8", null) };
 
             var bomElement = (string.IsNullOrEmpty(bom.SerialNumber)) ? new XElement(ns + "bom", new XAttribute("version", bom.Version)) :
                 new XElement(ns + "bom", new XAttribute("version", bom.Version), new XAttribute("serialNumber", bom.SerialNumber));
@@ -95,9 +95,8 @@ namespace CycloneDX.Xml
                 if (component.Licenses != null && component.Licenses.Count > 0)
                 {
                     var l = new XElement(ns + "licenses");
-                    foreach (var componentLicense in component.Licenses)
+                    foreach (var license in component.Licenses.Select(componentLicense => componentLicense.License))
                     {
-                        var license = componentLicense.License;
                         if (license.Id != null)
                         {
                             l.Add(new XElement(ns + "license", new XElement(ns + "id", license.Id)));

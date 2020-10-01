@@ -14,17 +14,7 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
-using System.Collections.Generic;
-using System.IO.Abstractions.TestingHelpers;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Xunit;
-using Moq;
-using RichardSzalay.MockHttp;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
-using CycloneDX.Models;
 using CycloneDX.Services;
 
 namespace CycloneDX.Tests
@@ -37,12 +27,12 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
             {
                 { XFS.Path(@"c:\nugetcache1\dummypackage\1.2.3\dummypackage.nuspec"), "" },
-                { XFS.Path(@"c:\nugetcache2\testpackage\1.2.3\testpackage.nuspec"), "" },
+                { XFS.Path(@"c:\nugetcache2\testpackage\1.2.3\testpackage.nuspec"), "" }
             });
             var cachePaths = new List<string>
             {
                 XFS.Path(@"c:\nugetcache1"),
-                XFS.Path(@"c:\nugetcache2"),
+                XFS.Path(@"c:\nugetcache2")
             };
             var mockGithubService = new Mock<IGithubService>();
             var nugetService = new NugetService(
@@ -67,7 +57,7 @@ namespace CycloneDX.Tests
                 </package>";
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
             {
-                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) }
             });
             var nugetService = new NugetService(
                 mockFileSystem,

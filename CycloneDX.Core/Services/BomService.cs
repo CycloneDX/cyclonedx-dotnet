@@ -18,7 +18,8 @@ using CycloneDX.Models;
 using CycloneDX.Json;
 using CycloneDX.Xml;
 
-namespace CycloneDX {
+namespace CycloneDX
+{
     /// <summary>
     /// Service to generate bill of materials
     /// </summary>
@@ -26,14 +27,7 @@ namespace CycloneDX {
     {
         public static string CreateDocument(Bom bom, bool json)
         {
-            if (json)
-            {
-                return JsonBomSerializer.Serialize(bom);
-            }
-            else
-            {
-                return XmlBomSerializer.Serialize(bom);
-            }
+            return json ? JsonBomSerializer.Serialize(bom) : XmlBomSerializer.Serialize(bom);
         }
     }
 }

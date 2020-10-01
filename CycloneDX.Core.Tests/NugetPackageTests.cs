@@ -14,7 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using Xunit;
 using CycloneDX.Core.Models;
 
 namespace CycloneDX.Tests
@@ -27,12 +26,12 @@ namespace CycloneDX.Tests
             var nugetPackage1 = new NugetPackage
             {
                 Name = "Package",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
             var nugetPackage2 = new NugetPackage
             {
                 Name = "Package",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
 
             Assert.True(nugetPackage1.Equals((object)nugetPackage2));
@@ -44,12 +43,12 @@ namespace CycloneDX.Tests
             var nugetPackage1 = new NugetPackage
             {
                 Name = "Package",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
             var nugetPackage2 = new NugetPackage
             {
                 Name = "Package",
-                Version = "1.2.4",
+                Version = "1.2.4"
             };
 
             Assert.False(nugetPackage1.Equals((object)nugetPackage2));
@@ -61,12 +60,12 @@ namespace CycloneDX.Tests
             var nugetPackage1 = new NugetPackage
             {
                 Name = "Package1",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
             var nugetPackage2 = new NugetPackage
             {
                 Name = "Package2",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
 
             Assert.False(nugetPackage1.Equals((object)nugetPackage2));
@@ -78,7 +77,7 @@ namespace CycloneDX.Tests
             var nugetPackage1 = new NugetPackage
             {
                 Name = "Package",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
 
             // cast null as string to flex Equals(object obj) and Equals(NugetPackage other)
@@ -91,12 +90,12 @@ namespace CycloneDX.Tests
             var nugetPackage1 = new NugetPackage
             {
                 Name = "Package1",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
             var nugetPackage2 = new NugetPackage
             {
                 Name = "Package2",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
 
             Assert.Equal(-1, nugetPackage1.CompareTo(nugetPackage2));
@@ -108,12 +107,12 @@ namespace CycloneDX.Tests
             var nugetPackage1 = new NugetPackage
             {
                 Name = "Package",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
             var nugetPackage2 = new NugetPackage
             {
                 Name = "Package",
-                Version = "1.2.4",
+                Version = "1.2.4"
             };
 
             Assert.Equal(-1, nugetPackage1.CompareTo(nugetPackage2));
@@ -125,7 +124,7 @@ namespace CycloneDX.Tests
             var nugetPackage = new NugetPackage
             {
                 Name = "Package1",
-                Version = "1.2.3",
+                Version = "1.2.3"
             };
 
             // cast null as string to flex CompareTo(object obj) and CompareTo(NugetPackage other)

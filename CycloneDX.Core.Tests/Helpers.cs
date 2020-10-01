@@ -14,10 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System.Collections.Generic;
-using System.Net.Http;
-using System.IO.Abstractions.TestingHelpers;
-using RichardSzalay.MockHttp;
 using CycloneDX.Core.Models;
 
 namespace CycloneDX.Tests

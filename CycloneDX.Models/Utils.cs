@@ -21,8 +21,10 @@ namespace CycloneDX.Models
         /*
          * Creates a PackageURL from the specified package name and version. 
          */
-        public static string GeneratePackageUrl(string packageName, string packageVersion) {
-            if (packageName == null || packageVersion == null) {
+        public static string GeneratePackageUrl(string packageName, string packageVersion)
+        {
+            if (packageName == null || packageVersion == null)
+            {
                 return null;
             }
             return $"pkg:nuget/{packageName}@{packageVersion}";

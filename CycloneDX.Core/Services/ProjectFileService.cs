@@ -27,7 +27,8 @@ namespace CycloneDX.Services
 {
     public class DotnetRestoreException : Exception
     {
-        public DotnetRestoreException() : base() {}
+        public DotnetRestoreException()
+        {}
         
         public DotnetRestoreException(string message) : base(message) {}
         
@@ -36,15 +37,15 @@ namespace CycloneDX.Services
 
     public class ProjectFileService : IProjectFileService
     {
-        private XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings 
+        private readonly XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings 
         {
             Async = true
         };
         
-        private IFileSystem _fileSystem;
-        private IDotnetUtilsService _dotnetUtilsService;
-        private IPackagesFileService _packagesFileService;
-        private IProjectAssetsFileService _projectAssetsFileService;
+        private readonly IFileSystem _fileSystem;
+        private readonly IDotnetUtilsService _dotnetUtilsService;
+        private readonly IPackagesFileService _packagesFileService;
+        private readonly IProjectAssetsFileService _projectAssetsFileService;
 
         public ProjectFileService(
             IFileSystem fileSystem,
@@ -67,7 +68,7 @@ namespace CycloneDX.Services
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
-                Console.Error.WriteLine($"Project file \"{projectFilePath}\" does not exist");
+                await Console.Error.WriteLineAsync($"Project file \"{projectFilePath}\" does not exist").ConfigureAwait(false);
                 return new HashSet<NugetPackage>();
             }
 
@@ -95,17 +96,18 @@ namespace CycloneDX.Services
             }
 
             // if there are no project file package references look for a packages.config
-            if (!packages.Any())
-            {
-                Console.WriteLine("  No packages found");
-                var directoryPath = _fileSystem.Path.GetDirectoryName(projectFilePath);
-                var packagesPath = _fileSystem.Path.Combine(directoryPath, "packages.config");
-                if (_fileSystem.File.Exists(packagesPath))
-                {
-                    Console.WriteLine("  Found packages.config. Will attempt to process");
-                    packages = await _packagesFileService.GetNugetPackagesAsync(packagesPath).ConfigureAwait(false);
-                }
-            }
+            if (packages.Any()) 
+                return packages;
+
+            Console.WriteLine("  No packages found");
+            var directoryPath = _fileSystem.Path.GetDirectoryName(projectFilePath);
+            var packagesPath = _fileSystem.Path.Combine(directoryPath, "packages.config");
+
+            if (!_fileSystem.File.Exists(packagesPath)) 
+                return packages;
+
+            Console.WriteLine("  Found packages.config. Will attempt to process");
+            packages = await _packagesFileService.GetNugetPackagesAsync(packagesPath).ConfigureAwait(false);
             return packages;
         }
 
@@ -135,7 +137,7 @@ namespace CycloneDX.Services
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
-                Console.Error.WriteLine($"Project file \"{projectFilePath}\" does not exist");
+                await Console.Error.WriteLineAsync($"Project file \"{projectFilePath}\" does not exist").ConfigureAwait(false);
                 return new HashSet<string>();
             }
 
@@ -155,7 +157,7 @@ namespace CycloneDX.Services
                         if (reader.IsStartElement() && reader.Name == "ProjectReference")
                         {
                             var relativeProjectReference = 
-                                reader["Include"].Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
+                                reader["Include"]?.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
                             var fullProjectReference = _fileSystem.Path.Combine(projectDirectory, relativeProjectReference);
                             var absoluteProjectReference = _fileSystem.Path.GetFullPath(fullProjectReference);
                             projectReferences.Add(absoluteProjectReference);
@@ -166,7 +168,7 @@ namespace CycloneDX.Services
 
             if (projectReferences.Count == 0)
             {
-                Console.Error.WriteLine("  No project references found");
+                await Console.Error.WriteLineAsync("  No project references found").ConfigureAwait(false);
             }
 
             return projectReferences;
@@ -195,19 +197,15 @@ namespace CycloneDX.Services
 
                 // Add unvisited project files to the queue
                 // Loop through found project references
-                foreach (string projectReferencePath in foundProjectReferences)
+                foreach (var projectReferencePath in foundProjectReferences.Where(projectReferencePath => !visitedProjectFiles.Contains(projectReferencePath)))
                 {
-                    if (!visitedProjectFiles.Contains(projectReferencePath))
-                    {
-                        files.Enqueue(projectReferencePath);
-                        projectReferences.Add(projectReferencePath);
-                    }
+                    files.Enqueue(projectReferencePath);
+                    projectReferences.Add(projectReferencePath);
                 }
 
                 // Add the currentFile to list of visited projects
                 visitedProjectFiles.Add(currentFile);
             }
-
             return projectReferences;
         }
     }

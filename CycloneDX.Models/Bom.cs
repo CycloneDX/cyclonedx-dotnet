@@ -14,7 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 

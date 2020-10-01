@@ -21,8 +21,8 @@ namespace CycloneDX.IntegrationTests
 {
     class TempDirectory : IDisposable
     {
-        private string tempPath;
-        private string tempDirName;
+        private readonly string tempPath;
+        private readonly string tempDirName;
 
         public TempDirectory()
         {

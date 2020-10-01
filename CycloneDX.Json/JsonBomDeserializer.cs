@@ -21,7 +21,6 @@ using Bom = CycloneDX.Models.Bom;
 
 namespace CycloneDX.Json
 {
-
     public static class JsonBomDeserializer
     {
         public static Bom Deserialize(string jsonBom)
@@ -30,7 +29,7 @@ namespace CycloneDX.Json
 
             var options = new JsonSerializerOptions
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
             options.Converters.Add(new LicenseConverter());

@@ -23,7 +23,7 @@ namespace CycloneDX.Services
 {
     public class ComponentService
     {
-        private INugetService _nugetService;
+        private readonly INugetService _nugetService;
 
         public ComponentService(INugetService nugetService)
         {
@@ -33,14 +33,14 @@ namespace CycloneDX.Services
         /// <summary>
         /// Recursively retrieve all components and their dependencies from NuGet packages
         /// </summary>
-        /// <param name="projectFilePath"></param>
+        /// <param name="nugetPackages"></param>
         /// <returns></returns>
-        public async Task<HashSet<Component>> RecursivelyGetComponentsAsync(IEnumerable<NugetPackage> nugetPackges)
+        public async Task<HashSet<Component>> RecursivelyGetComponentsAsync(IEnumerable<NugetPackage> nugetPackages)
         {
             var components = new HashSet<Component>();
 
             // Initialize the queue with the current packages
-            var packages = new Queue<NugetPackage>(nugetPackges);
+            var packages = new Queue<NugetPackage>(nugetPackages);
 
             var visitedNugetPackages = new HashSet<NugetPackage>();
 
@@ -59,6 +59,5 @@ namespace CycloneDX.Services
 
             return components;
         }
-
     }
 }

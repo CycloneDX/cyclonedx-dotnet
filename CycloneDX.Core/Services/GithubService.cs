@@ -30,7 +30,8 @@ namespace CycloneDX.Services
 {
     public class InvalidGitHubApiCredentialsException : Exception
     {
-        public InvalidGitHubApiCredentialsException() : base() {}
+        public InvalidGitHubApiCredentialsException()
+        {}
 
         public InvalidGitHubApiCredentialsException(string message) : base(message) {}
 
@@ -39,7 +40,8 @@ namespace CycloneDX.Services
 
     public class GitHubApiRateLimitExceededException : Exception
     {
-        public GitHubApiRateLimitExceededException() : base() {}
+        public GitHubApiRateLimitExceededException()
+        {}
 
         public GitHubApiRateLimitExceededException(string message) : base(message) {}
 
@@ -48,7 +50,8 @@ namespace CycloneDX.Services
 
     public class GitHubLicenseResolutionException : Exception
     {
-        public GitHubLicenseResolutionException() : base() {}
+        public GitHubLicenseResolutionException()
+        {}
 
         public GitHubLicenseResolutionException(string message) : base(message) {}
 
@@ -68,7 +71,7 @@ namespace CycloneDX.Services
         private List<Regex> _githubRepositoryRegexes = new List<Regex>
         {
             new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/blob\/(?<refSpec>[^\/]+)\/LICENSE(\.((md)|(txt)))?$"),
-            new Regex(@"^https?\:\/\/raw\.githubusercontent\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/LICENSE(\.((md)|(txt)))?$"),
+            new Regex(@"^https?\:\/\/raw\.githubusercontent\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/LICENSE(\.((md)|(txt)))?$")
         };
 
         public GithubService(HttpClient httpClient)
@@ -84,7 +87,7 @@ namespace CycloneDX.Services
             // implemented as per RFC 7617 https://tools.ietf.org/html/rfc7617.html
             var userToken = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", username, token);
             var userTokenBytes = System.Text.Encoding.UTF8.GetBytes(userToken);
-            var userTokenBase64 = System.Convert.ToBase64String(userTokenBytes);
+            var userTokenBase64 = Convert.ToBase64String(userTokenBytes);
 
             var authorizationHeader = new AuthenticationHeaderValue(
                 "Basic", 
@@ -142,8 +145,8 @@ namespace CycloneDX.Services
             }
             catch (HttpRequestException exc)
             {
-                Console.Error.WriteLine($"GitHub license resolution failed: {exc.Message}");
-                Console.Error.WriteLine("For offline environments use --disable-github-licenses to disable GitHub license resolution.");
+                await Console.Error.WriteLineAsync($"GitHub license resolution failed: {exc.Message}").ConfigureAwait(false);
+                await Console.Error.WriteLineAsync("For offline environments use --disable-github-licenses to disable GitHub license resolution.").ConfigureAwait(false);
                 throw new GitHubLicenseResolutionException("GitHub license resolution failed.", exc);
             }
 
@@ -182,22 +185,20 @@ namespace CycloneDX.Services
                 // License found, extract data
                 return JsonSerializer.Deserialize<GithubLicenseRoot>(await githubResponse.Content.ReadAsStringAsync().ConfigureAwait(false));
             }
-            else if (githubResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+
+            if (githubResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                Console.Error.WriteLine("Invalid GitHub API credentials.");
+                await Console.Error.WriteLineAsync("Invalid GitHub API credentials.").ConfigureAwait(false);
                 throw new InvalidGitHubApiCredentialsException("Invalid GitHub API credentials http status code 401");
             }
-            else if (githubResponse.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            if (githubResponse.StatusCode == System.Net.HttpStatusCode.Forbidden)
             {
-                Console.Error.WriteLine("GitHub API rate limit exceeded.");
+                await Console.Error.WriteLineAsync("GitHub API rate limit exceeded.").ConfigureAwait(false);
                 throw new GitHubApiRateLimitExceededException("GitHub API rate limit exceeded http status code 403");
             }
-            else
-            {
-                // License not found or any other error with GitHub APIs.
-                Console.WriteLine($"GitHub API failed with status code {githubResponse.StatusCode} and message {githubResponse.ReasonPhrase}.");
-                return null;
-            }
+            // License not found or any other error with GitHub APIs.
+            Console.WriteLine($"GitHub API failed with status code {githubResponse.StatusCode} and message {githubResponse.ReasonPhrase}.");
+            return null;
         }
     }
 }

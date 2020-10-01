@@ -15,9 +15,7 @@
 // Copyright (c) Steve Springett. All Rights Reserved.
 
 using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Xml;
-using System.Xml.Linq;
 using CycloneDX.Models;
 
 namespace CycloneDX.Xml
@@ -97,11 +95,12 @@ namespace CycloneDX.Xml
 
         private static ComponentLicense GetLicense(XmlNode licenseXmlNode)
         {
-            var license = new License();
-
-            license.Id = licenseXmlNode["id"]?.InnerText;
-            license.Name = licenseXmlNode["name"]?.InnerText;
-            license.Url = licenseXmlNode["url"]?.InnerText;
+            var license = new License
+            {
+                Id = licenseXmlNode["id"]?.InnerText,
+                Name = licenseXmlNode["name"]?.InnerText,
+                Url = licenseXmlNode["url"]?.InnerText
+            };
 
             return new ComponentLicense
             {
@@ -111,21 +110,23 @@ namespace CycloneDX.Xml
 
         private static ExternalReference GetExternalReference(XmlNode externalReferenceXmlNode)
         {
-            var externalReference = new ExternalReference();
-
-            externalReference.Type = externalReferenceXmlNode.Attributes["type"]?.InnerText;
-            externalReference.Url = externalReferenceXmlNode["url"]?.InnerText;
+            var externalReference = new ExternalReference
+            {
+                Type = externalReferenceXmlNode.Attributes["type"]?.InnerText,
+                Url = externalReferenceXmlNode["url"]?.InnerText
+            };
 
             return externalReference;
         }
 
         private static OrganizationalContact GetOrganizationalContact(XmlNode organizationalContactXmlNode)
         {
-            var organizationalContact = new OrganizationalContact();
-
-            organizationalContact.Email = organizationalContactXmlNode["email"]?.InnerText;
-            organizationalContact.Name = organizationalContactXmlNode["name"]?.InnerText;
-            organizationalContact.Phone = organizationalContactXmlNode["phone"]?.InnerText;
+            var organizationalContact = new OrganizationalContact
+            {
+                Email = organizationalContactXmlNode["email"]?.InnerText,
+                Name = organizationalContactXmlNode["name"]?.InnerText,
+                Phone = organizationalContactXmlNode["phone"]?.InnerText
+            };
 
             return organizationalContact;
         }

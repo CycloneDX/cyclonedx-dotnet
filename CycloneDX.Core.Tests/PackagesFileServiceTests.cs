@@ -14,11 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
-using System.IO.Abstractions.TestingHelpers;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using CycloneDX.Core.Models;
 using CycloneDX.Services;
@@ -32,7 +27,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\packages.config"), Helpers.GetPackagesFileWithPackageReference("Package", "1.2.3") },
+                    { XFS.Path(@"c:\Project\packages.config"), Helpers.GetPackagesFileWithPackageReference("Package", "1.2.3") }
                 });
             var packagesFileService = new PackagesFileService(mockFileSystem);
 
@@ -54,9 +49,9 @@ namespace CycloneDX.Tests
                         new List<NugetPackage> {
                             new NugetPackage { Name = "Package1", Version = "1.2.3"},
                             new NugetPackage { Name = "Package2", Version = "1.2.3"},
-                            new NugetPackage { Name = "Package3", Version = "1.2.3"},
+                            new NugetPackage { Name = "Package3", Version = "1.2.3"}
                         })
-                    },
+                    }
                 });
             var packagesFileService = new PackagesFileService(mockFileSystem);
 

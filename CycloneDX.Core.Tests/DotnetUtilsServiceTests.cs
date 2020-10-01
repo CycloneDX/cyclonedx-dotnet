@@ -14,14 +14,7 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
-using System.Collections.Generic;
-using System.IO.Abstractions;
-using System.IO.Abstractions.TestingHelpers;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
-using System.Threading.Tasks;
-using Xunit;
-using Moq;
 using CycloneDX.Core.Models;
 using CycloneDX.Services;
 

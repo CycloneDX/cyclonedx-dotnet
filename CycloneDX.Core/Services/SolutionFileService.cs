@@ -25,8 +25,8 @@ namespace CycloneDX.Services
 {
     public class SolutionFileService : ISolutionFileService
     {
-        private IFileSystem _fileSystem;
-        private IProjectFileService _projectFileService;
+        private readonly IFileSystem _fileSystem;
+        private readonly IProjectFileService _projectFileService;
 
         public SolutionFileService(IFileSystem fileSystem, IProjectFileService projectFileService)
         {
@@ -55,12 +55,12 @@ namespace CycloneDX.Services
                     }
                     var regex = new Regex("(.*) = \"(.*?)\", \"(.*?)\"");
                     var match = regex.Match(line);
-                    if (match.Success)
-                    {
-                        var relativeProjectPath = match.Groups[3].Value.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
-                        var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
-                        if (Core.Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
-                    }
+                    if (!match.Success) 
+                        continue;
+
+                    var relativeProjectPath = match.Groups[3].Value.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
+                    var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
+                    if (Core.Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
                 }
             }
 
@@ -83,7 +83,7 @@ namespace CycloneDX.Services
         {
             if (!_fileSystem.File.Exists(solutionFilePath))
             {
-                Console.Error.WriteLine($"Solution file \"{solutionFilePath}\" does not exist");
+                await Console.Error.WriteLineAsync($"Solution file \"{solutionFilePath}\" does not exist").ConfigureAwait(false);
                 return new HashSet<NugetPackage>();
             }
 
@@ -97,7 +97,7 @@ namespace CycloneDX.Services
 
             if (projectPaths.Count == 0)
             {
-                Console.Error.WriteLine("  No projects found");
+                await Console.Error.WriteLineAsync("  No projects found").ConfigureAwait(false);
             }
             else
             {

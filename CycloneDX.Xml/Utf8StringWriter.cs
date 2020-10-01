@@ -14,11 +14,11 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
 using System.IO;
 using System.Text;
 
-namespace CycloneDX.Xml {
+namespace CycloneDX.Xml
+{
     internal class Utf8StringWriter : StringWriter
     {
         public override Encoding Encoding => Encoding.UTF8;

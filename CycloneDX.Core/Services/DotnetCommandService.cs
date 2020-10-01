@@ -28,8 +28,6 @@ namespace CycloneDX.Services
     {
         public int TimeoutMilliseconds { get; set; } = 300000;
 
-        public DotnetCommandService() {}
-        
         public DotnetCommandResult Run(string arguments)
         {
             return Run(Directory.GetCurrentDirectory(), arguments);
@@ -67,17 +65,15 @@ namespace CycloneDX.Services
                         StdErr = errors.ToString()
                     };
                 }
-                else
+
+                p.Kill();
+                return new DotnetCommandResult
                 {
-                    p.Kill();
-                    return new DotnetCommandResult
-                    {
-                        ExitCode = -1,
-                        StdOut = arguments.StartsWith("restore ", System.StringComparison.InvariantCulture) ?
-                            $"Timeout running dotnet restore, try running \"dotnet restore\" before \"dotnet CycloneDX\""
-                            : $"Timeout running dotnet {arguments}",
-                    };
-                }
+                    ExitCode = -1,
+                    StdOut = arguments.StartsWith("restore ", System.StringComparison.InvariantCulture) ?
+                        $"Timeout running dotnet restore, try running \"dotnet restore\" before \"dotnet CycloneDX\""
+                        : $"Timeout running dotnet {arguments}"
+                };
             }
         }
         

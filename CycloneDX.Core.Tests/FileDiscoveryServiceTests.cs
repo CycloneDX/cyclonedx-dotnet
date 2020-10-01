@@ -14,9 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System.Collections.Generic;
-using Xunit;
-using System.IO.Abstractions.TestingHelpers;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using CycloneDX.Services;
 
@@ -29,7 +26,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\packages.config"), new MockFileData("")},
+                    { XFS.Path(@"c:\Project\packages.config"), new MockFileData("")}
                 });
             var fileDiscoveryService = new FileDiscoveryService(mockFileSystem);
 
@@ -44,7 +41,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\something.config"), new MockFileData("")},
+                    { XFS.Path(@"c:\Project\something.config"), new MockFileData("")}
                 });
             var fileDiscoveryService = new FileDiscoveryService(mockFileSystem);
 
@@ -58,7 +55,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\Subdirectory\packages.config"), new MockFileData("")},
+                    { XFS.Path(@"c:\Project\Subdirectory\packages.config"), new MockFileData("")}
                 });
             var fileDiscoveryService = new FileDiscoveryService(mockFileSystem);
 
@@ -74,7 +71,7 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\Project\packages.config"), new MockFileData("")},
-                    { XFS.Path(@"c:\Project\Subdirectory\packages.config"), new MockFileData("")},
+                    { XFS.Path(@"c:\Project\Subdirectory\packages.config"), new MockFileData("")}
                 });
             var fileDiscoveryService = new FileDiscoveryService(mockFileSystem);
 

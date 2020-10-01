@@ -14,14 +14,10 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Xunit;
-using Snapshooter;
-using Snapshooter.Xunit;
 
 namespace CycloneDX.IntegrationTests
 {

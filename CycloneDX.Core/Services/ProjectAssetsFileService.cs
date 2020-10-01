@@ -14,7 +14,6 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using AssetFileReader = NuGet.ProjectModel.LockFileFormat;
@@ -24,7 +23,7 @@ namespace CycloneDX.Services
 {
     public class ProjectAssetsFileService : IProjectAssetsFileService 
     {
-        private IFileSystem _fileSystem;
+        private readonly IFileSystem _fileSystem;
 
         public ProjectAssetsFileService(IFileSystem fileSystem)
         {
@@ -35,42 +34,41 @@ namespace CycloneDX.Services
         {
             var packages = new HashSet<NugetPackage>();
 
-            if (_fileSystem.File.Exists(projectAssetsFilePath))
-            {
-                var assetFileReader = new AssetFileReader();
-                var assetsFile = assetFileReader.Read(projectAssetsFilePath);
+            if (!_fileSystem.File.Exists(projectAssetsFilePath)) 
+                return packages;
 
-                foreach (var targetRuntime in assetsFile.Targets)
+            var assetFileReader = new AssetFileReader();
+            var assetsFile = assetFileReader.Read(projectAssetsFilePath);
+
+            foreach (var targetRuntime in assetsFile.Targets)
+            {
+                foreach (var library in targetRuntime.Libraries)
                 {
-                    foreach (var library in targetRuntime.Libraries)
+                    if (library.Type == "project") 
+                        continue;
+
+                    var package = new NugetPackage
                     {
-                        if (library.Type != "project")
-                        {
-                            var package = new NugetPackage
-                            {
-                                Name = library.Name,
-                                Version = library.Version.ToNormalizedString(),
-                                Scope = "required",
-                            };
-                            // is this only a development dependency
-                            if (
-                                library.CompileTimeAssemblies.Count == 0
-                                && library.ContentFiles.Count == 0
-                                && library.EmbedAssemblies.Count == 0
-                                && library.FrameworkAssemblies.Count == 0
-                                && library.NativeLibraries.Count == 0
-                                && library.ResourceAssemblies.Count == 0
-                                && library.ToolsAssemblies.Count == 0
-                            )
-                            {
-                                package.Scope = "excluded";
-                            }
-                            packages.Add(package);
-                        }
+                        Name = library.Name,
+                        Version = library.Version.ToNormalizedString(),
+                        Scope = "required"
+                    };
+                    // is this only a development dependency
+                    if (
+                        library.CompileTimeAssemblies.Count == 0
+                        && library.ContentFiles.Count == 0
+                        && library.EmbedAssemblies.Count == 0
+                        && library.FrameworkAssemblies.Count == 0
+                        && library.NativeLibraries.Count == 0
+                        && library.ResourceAssemblies.Count == 0
+                        && library.ToolsAssemblies.Count == 0
+                    )
+                    {
+                        package.Scope = "excluded";
                     }
+                    packages.Add(package);
                 }
             }
-
             return packages;
         }
     }

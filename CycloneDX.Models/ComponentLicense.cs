@@ -16,7 +16,6 @@
 
 namespace CycloneDX.Models
 {
-
     public class ComponentLicense
     {
         public License License { get; set; }
