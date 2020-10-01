@@ -14,8 +14,13 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
+using System.Collections.Generic;
+using System.IO.Abstractions.TestingHelpers;
+using System.Threading.Tasks;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using CycloneDX.Services;
+using Moq;
+using Xunit;
 
 namespace CycloneDX.Tests
 {

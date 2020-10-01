@@ -1,3 +1,8 @@
+using System.IO;
+using Snapshooter;
+using Snapshooter.Xunit;
+using Xunit;
+
 namespace CycloneDX.Json.Tests
 {
     public class Tests

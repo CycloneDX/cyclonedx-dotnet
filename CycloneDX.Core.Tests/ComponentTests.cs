@@ -14,6 +14,9 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
+using CycloneDX.Models;
+using Xunit;
+
 namespace CycloneDX.Tests
 {
     public class ComponentTests

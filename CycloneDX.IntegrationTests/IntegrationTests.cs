@@ -18,6 +18,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Snapshooter;
+using Snapshooter.Xunit;
+using Xunit;
 
 namespace CycloneDX.IntegrationTests
 {
