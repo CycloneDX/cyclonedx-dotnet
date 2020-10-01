@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bom version="1" serialNumber="urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79" xmlns="http://cyclonedx.org/schema/bom/1.2">
+  <metadata>
+    <timestamp>2020-04-07T07:01:00Z</timestamp>
+  </metadata>
+  <components />
+</bom>
