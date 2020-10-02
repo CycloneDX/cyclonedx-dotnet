@@ -52,17 +52,18 @@ Arguments:
   path                                              The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files
 
 Options:
-  -o|--out <OUTPUT_DIRECTORY>                       The directory to write the BOM
-  -j|--json                                         Produce a JSON BOM instead of XML
-  -d|--exclude-dev                                  Exclude development dependencies from the BOM
-  -u|--url <BASE_URL>                               Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)
-  -r|--recursive                                    To be used with a single project file, it will recursively scan project references of the supplied .csproj
-  -ns|--no-serial-number                            Optionally omit the serial number from the resulting BOM
-  -gu|--github-username <GITHUB_USERNAME>           Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token
-  -gt|--github-token <GITHUB_TOKEN>                 Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username
-  -gbt|--github-bearer-token <GITHUB_BEARER_TOKEN>  Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions
-  -dgl|--disable-github-licenses                    Optionally disable GitHub license resolution
-  -?|-h|--help                                      Show help information
+  -o|--out <OUTPUT_DIRECTORY>                                            The directory to write the BOM
+  -j|--json                                                              Produce a JSON BOM instead of XML
+  -d|--exclude-dev                                                       Exclude development dependencies from the BOM
+  -u|--url <BASE_URL>                                                    Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)
+  -r|--recursive                                                         To be used with a single project file, it will recursively scan project references of the supplied .csproj
+  -ns|--no-serial-number                                                 Optionally omit the serial number from the resulting BOM
+  -gu|--github-username <GITHUB_USERNAME>                                Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token
+  -gt|--github-token <GITHUB_TOKEN>                                      Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username
+  -gbt|--github-bearer-token <GITHUB_BEARER_TOKEN>                       Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions
+  -dgl|--disable-github-licenses                                         Optionally disable GitHub license resolution
+  -biop|--base-intermediate-output-path <BASE_INTERMEDIATE_OUTPUT_PATH>  Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated.
+  -?|-h|--help                                                           Show help information
 ```
 
 #### Examples
