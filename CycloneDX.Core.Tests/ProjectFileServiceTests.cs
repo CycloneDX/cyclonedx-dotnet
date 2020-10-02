@@ -32,8 +32,8 @@ namespace CycloneDX.Tests
         [Fact]
         public void GetPropertyUseProjectFileName()
         {
-          string outputPath = ProjectFileService.GetProjectProperty(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.Core.csproj", @"C:\github\cyclonedx-dotnet\artifacts");
-          Assert.Equal(@"C:\github\cyclonedx-dotnet\artifacts\obj\CycloneDX.Core", outputPath);
+          string outputPath = ProjectFileService.GetProjectProperty(XFS.Path(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.Core.csproj"), XFS.Path(@"C:\github\cyclonedx-dotnet\artifacts"));
+          Assert.Equal(XFS.Path(@"C:\github\cyclonedx-dotnet\artifacts\obj\CycloneDX.Core"), outputPath);
         }
 
         [Fact]
