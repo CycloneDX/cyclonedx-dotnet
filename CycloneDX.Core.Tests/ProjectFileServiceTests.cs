@@ -29,11 +29,13 @@ namespace CycloneDX.Tests
 {
     public class ProjectFileServiceTests
     {
-        [Fact]
-        public void GetPropertyUseProjectFileName()
+        [Theory]
+        [InlineData(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.Core.csproj", "", @"C:\github\cyclonedx-dotnet\Core\obj")]
+        [InlineData(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.Core.csproj", @"C:\github\cyclonedx-dotnet\artifacts", @"C:\github\cyclonedx-dotnet\artifacts\obj\CycloneDX.Core")]
+        public void GetPropertyUseProjectFileName(string projectFilePath, string baseIntermediateOutputPath, string expected)
         {
-          string outputPath = ProjectFileService.GetProjectProperty(XFS.Path(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.Core.csproj"), XFS.Path(@"C:\github\cyclonedx-dotnet\artifacts"));
-          Assert.Equal(XFS.Path(@"C:\github\cyclonedx-dotnet\artifacts\obj\CycloneDX.Core"), outputPath);
+          string outputPath = ProjectFileService.GetProjectProperty(XFS.Path(projectFilePath), XFS.Path(baseIntermediateOutputPath));
+          Assert.Equal(XFS.Path(expected), outputPath);
         }
 
         [Fact]
