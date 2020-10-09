@@ -30,6 +30,13 @@ namespace CycloneDX.Tests
     public class ProjectFileServiceTests
     {
         [Fact]
+        public void GetPropertyUseProjectFileName()
+        {
+          string outputPath = ProjectFileService.GetProjectProperty(XFS.Path(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.Core.csproj"), XFS.Path(@"C:\github\cyclonedx-dotnet\artifacts"));
+          Assert.Equal(XFS.Path(@"C:\github\cyclonedx-dotnet\artifacts\obj\CycloneDX.Core"), outputPath);
+        }
+
+        [Fact]
         public async Task GetProjectNugetPackages_WithProjectAssetsFile_ReturnsNugetPackage()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
@@ -55,7 +62,7 @@ namespace CycloneDX.Tests
                 mockPackageFileService.Object,
                 mockProjectAssetsFileService.Object);
 
-            var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj")).ConfigureAwait(false);
+            var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj"),"").ConfigureAwait(false);
             
             Assert.Collection(packages,
                 item => {
@@ -92,7 +99,7 @@ namespace CycloneDX.Tests
                 mockPackageFileService.Object,
                 mockProjectAssetsFileService.Object);
 
-            var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj")).ConfigureAwait(false);
+            var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj"), "").ConfigureAwait(false);
             var sortedPackages = new List<NugetPackage>(packages);
             sortedPackages.Sort();
             
@@ -133,7 +140,7 @@ namespace CycloneDX.Tests
                 mockPackageFileService.Object,
                 mockProjectAssetsFileService.Object);
 
-            var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj")).ConfigureAwait(false);
+            var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj"), "").ConfigureAwait(false);
             
             Assert.Collection(packages,
                 item => {
@@ -175,7 +182,7 @@ namespace CycloneDX.Tests
                 mockPackageFileService.Object,
                 mockProjectAssetsFileService.Object);
 
-            var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj")).ConfigureAwait(false);
+            var packages = await projectFileService.GetProjectNugetPackagesAsync(XFS.Path(@"c:\Project\Project.csproj"), "").ConfigureAwait(false);
             var sortedPackages = new List<NugetPackage>(packages);
             sortedPackages.Sort();
             

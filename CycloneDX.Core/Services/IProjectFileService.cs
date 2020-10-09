@@ -22,8 +22,8 @@ namespace CycloneDX.Services
 {
     public interface IProjectFileService
     {
-        Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath);
-        Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath);
+        Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath);
+        Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath);
         Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);
         Task<HashSet<string>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
     }
