@@ -1,7 +1,7 @@
 # For details of what checks are run for PRs please refer below
 name: .NET Core CI
 
-on: [pull_request]
+on: [pull_request, workflow_dispatch]
 
 jobs:
   # Fail if there are build warnings
