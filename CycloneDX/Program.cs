@@ -40,6 +40,9 @@ namespace CycloneDX {
         [Option(Description = "Exclude development dependencies from the BOM", ShortName = "d", LongName = "exclude-dev")]
         bool excludeDev { get; }
 
+        [Option(Description = "Exclude test projects from the BOM", ShortName = "t", LongName = "exclude-test-projects")]
+        bool excludetestprojects { get; }
+
         [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
 
@@ -73,9 +76,6 @@ namespace CycloneDX {
 
         [Option(Description = "Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated.", ShortName = "biop", LongName = "base-intermediate-output-path")]
         public string baseIntermediateOutputPath { get; }
-
-        [Option(Description = "Exclude test projects from the BOM", ShortName = "t", LongName = "exclude-test-projects")]
-        bool excludetestprojects { get; }
 
     static internal IFileSystem fileSystem = new FileSystem();
         static internal HttpClient httpClient = new HttpClient();
