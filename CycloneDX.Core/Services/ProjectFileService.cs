@@ -86,6 +86,8 @@ namespace CycloneDX.Services
           return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
         }
       }
+
+
       /// <summary>
       /// Analyzes a single Project file for NuGet package references.
       /// </summary>
