@@ -3,42 +3,21 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
-    <ReleaseVersion>0.5.0</ReleaseVersion>
-    <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
-    <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
-    <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
+    <PackageId>CycloneDX</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(IsWindows)'=='true'">
+  <PropertyGroup Condition="'$(OsEnvironment )'=='windows'">
     <DefineConstants>Windows</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(IsOSX)'=='true'">
+  <PropertyGroup Condition="'$(OsEnvironment )'=='osx'">
     <DefineConstants>OSX</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(IsLinux)'=='true'">
+  <PropertyGroup Condition="'$(OsEnvironment )'=='linux'">
     <DefineConstants>Linux</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup>
-    <Authors>Steve Springett</Authors>
-    <Copyright>Copyright (c) Steve Springett</Copyright>
-    <Description>A .NET Core global tool to generate CycloneDX bill-of-material documents for use with Software Composition Analysis (SCA).</Description>
-    <PackageId>CycloneDX</PackageId>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/CycloneDX/cyclonedx-dotnet</PackageProjectUrl>
-    <PackageReleaseNotes>See $(PackageProjectUrl)/blob/master/CHANGELOG.md#$(VersionSuffix.Replace('.','')) for release notes.</PackageReleaseNotes>
-    <PackageVersion>$(VersionSuffix)</PackageVersion>
-    <PackAsTool>true</PackAsTool>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/CycloneDX/cyclonedx-dotnet.git</RepositoryUrl>
-    <ToolCommandName>dotnet-CycloneDX</ToolCommandName>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="System.IO.Abstractions" Version="12.2.2" />
   </ItemGroup>
 
