@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bom version="1" serialNumber="urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79" xmlns="http://cyclonedx.org/schema/bom/1.2">
+  <metadata>
+    <manufacture>
+      <name>Acme, Inc.</name>
+      <url>https://example.com</url>
+      <contact>
+        <name>Acme Professional Services</name>
+        <email>professional.services@example.com</email>
+      </contact>
+    </manufacture>
+  </metadata>
+  <components />
+</bom>

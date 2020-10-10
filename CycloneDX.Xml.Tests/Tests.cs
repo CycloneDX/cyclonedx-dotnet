@@ -10,8 +10,10 @@ namespace CycloneDX.Xml.Tests
     public class XmlBomDeserializerTests
     {
         [Theory] 
-        [InlineData("bom")] 
+        [InlineData("bom")]
         [InlineData("valid-metadata-author-1.2")]
+        [InlineData("valid-metadata-manufacture-1.2")]
+        [InlineData("valid-metadata-supplier-1.2")]
         [InlineData("valid-metadata-timestamp-1.2")]
         public void XmlRoundTripTest(string filename)
         {

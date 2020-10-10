@@ -21,7 +21,7 @@ namespace CycloneDX.Models
     public class OrganizationalEntity
     {
         public string Name { get; set; }
-        public IEnumerable<string> Url { get; set; }
-        public IEnumerable<OrganizationalContact> Contact { get; set; }
+        public List<string> Url { get; set; }
+        public List<OrganizationalContact> Contact { get; set; }
     }
 }

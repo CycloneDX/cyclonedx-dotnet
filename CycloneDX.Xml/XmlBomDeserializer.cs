@@ -61,6 +61,19 @@ namespace CycloneDX.Xml
                 {
                     bom.Metadata.Authors.Add(GetOrganizationalContact(xmlAuthorNodes[i]));
                 }
+
+                var xmlManufactureNode = xmlMetadataNode.SelectSingleNode("cdx:manufacture", nsmgr);
+                if (xmlManufactureNode != null)
+                {
+                    bom.Metadata.Manufacture = GetOrgnizationalEntity(xmlManufactureNode, nsmgr);
+                }
+
+                var xmlSupplierNode = xmlMetadataNode.SelectSingleNode("cdx:supplier", nsmgr);
+                if (xmlSupplierNode != null)
+                {
+                    bom.Metadata.Supplier = GetOrgnizationalEntity(xmlSupplierNode, nsmgr);
+                }
+
             }
 
             var xmlComponentNodes = doc.SelectNodes("/cdx:bom/cdx:components/cdx:component", nsmgr);
@@ -70,6 +83,38 @@ namespace CycloneDX.Xml
             }
 
             return bom;
+        }
+
+        private static OrganizationalEntity GetOrgnizationalEntity(XmlNode organizationalEntityXmlNode, XmlNamespaceManager nsmgr)
+        {
+            var entity = new OrganizationalEntity();
+            if (organizationalEntityXmlNode == null) return entity;
+
+            entity.Name = organizationalEntityXmlNode.SelectSingleNode("cdx:name", nsmgr)?.InnerText;
+            
+            var urlXmlNodes = organizationalEntityXmlNode.SelectNodes("cdx:url", nsmgr);
+            if (urlXmlNodes.Count > 0)
+            {
+                entity.Url = new List<string>();
+                for (var i=0; i<urlXmlNodes.Count; i++)
+                {
+                    var urlXmlNode = urlXmlNodes[i];
+                    entity.Url.Add(urlXmlNode.InnerText);
+                }
+            }
+
+            var contactXmlNodes = organizationalEntityXmlNode.SelectNodes("cdx:contact", nsmgr);
+            if (contactXmlNodes.Count > 0)
+            {
+                entity.Contact = new List<OrganizationalContact>();
+                for (var i=0; i<urlXmlNodes.Count; i++)
+                {
+                    var contactXmlNode = contactXmlNodes[i];
+                    entity.Contact.Add(GetOrganizationalContact(contactXmlNode));
+                }
+            }
+
+            return entity;
         }
 
         private static Component GetComponent(XmlNode componentXmlNode, XmlNamespaceManager nsmgr)
