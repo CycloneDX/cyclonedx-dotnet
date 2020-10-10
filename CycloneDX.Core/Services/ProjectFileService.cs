@@ -104,7 +104,7 @@ namespace CycloneDX.Services
             var packages = new HashSet<NugetPackage>();
 
             Console.WriteLine();
-            Console.WriteLine($"» Analyzing: {projectFilePath}");
+            Console.WriteLine($"ï¿½ Analyzing: {projectFilePath}");
 
             if (excludeTestProjects && IsTestProject(projectFilePath))
             {
@@ -177,7 +177,7 @@ namespace CycloneDX.Services
             }
 
             Console.WriteLine();
-            Console.WriteLine($"» Analyzing: {projectFilePath}");
+            Console.WriteLine($"ï¿½ Analyzing: {projectFilePath}");
             Console.WriteLine("  Getting project references");
 
             var projectReferences = new HashSet<string>();
