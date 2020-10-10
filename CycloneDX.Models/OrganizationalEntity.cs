@@ -14,17 +14,14 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using System;
 using System.Collections.Generic;
 
 namespace CycloneDX.Models
 {
-    public class Metadata
+    public class OrganizationalEntity
     {
-        public DateTime? Timestamp { get; set; } = null;
-        public List<OrganizationalContact> Authors { get; set; }
-        public Component Component { get; set; }
-        public OrganizationalEntity Manufacture { get; set; }
-        public OrganizationalEntity Supplier { get; set; }
+        public string Name { get; set; }
+        public IEnumerable<string> Url { get; set; }
+        public IEnumerable<OrganizationalContact> Contact { get; set; }
     }
 }
