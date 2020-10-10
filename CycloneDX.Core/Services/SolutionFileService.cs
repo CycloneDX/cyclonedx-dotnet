@@ -79,7 +79,7 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="solutionFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> GetSolutionNugetPackages(string solutionFilePath)
+        public async Task<HashSet<NugetPackage>> GetSolutionNugetPackages(string solutionFilePath, string baseIntermediateOutputPath)
         {
             if (!_fileSystem.File.Exists(solutionFilePath))
             {
@@ -107,7 +107,7 @@ namespace CycloneDX.Services
             foreach (var projectFilePath in projectPaths)
             {
                 Console.WriteLine();
-                var projectPackages = await _projectFileService.GetProjectNugetPackagesAsync(projectFilePath).ConfigureAwait(false);
+                var projectPackages = await _projectFileService.GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath).ConfigureAwait(false);
                 packages.UnionWith(projectPackages);
             }
 

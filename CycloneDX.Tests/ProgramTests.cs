@@ -53,7 +53,7 @@ namespace CycloneDX.Tests
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
-                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>()))
+                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new HashSet<NugetPackage>());
             Program.fileSystem = mockFileSystem;
             Program.solutionFileService = mockSolutionFileService.Object;
