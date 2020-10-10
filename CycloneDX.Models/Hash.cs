@@ -16,16 +16,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CycloneDX.Models
 {
-    public class Metadata
+    public class Hash
     {
-        public DateTime? Timestamp { get; set; } = null;
-        public List<Tool> Tools { get; set; }
-        public List<OrganizationalContact> Authors { get; set; }
-        public Component Component { get; set; }
-        public OrganizationalEntity Manufacture { get; set; }
-        public OrganizationalEntity Supplier { get; set; }
+        public string Alg { get; set; }
+        public string Content { get; set; }
     }
 }
