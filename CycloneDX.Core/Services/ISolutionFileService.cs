@@ -23,6 +23,6 @@ namespace CycloneDX.Services
     public interface ISolutionFileService
     {
         Task<HashSet<string>> GetSolutionProjectReferencesAsync(string solutionFilePath);
-        Task<HashSet<NugetPackage>> GetSolutionNugetPackages(string solutionFilePath, string baseIntermediateOutputPath, bool excludeDev);
+        Task<HashSet<NugetPackage>> GetSolutionNugetPackages(string solutionFilePath, string baseIntermediateOutputPath, bool excludeTestProjects);
     }
 }

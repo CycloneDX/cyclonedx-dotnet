@@ -91,7 +91,7 @@ namespace CycloneDX.Services
       /// </summary>
       /// <param name="projectFilePath"></param>
       /// <returns></returns>
-      public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeDev)
+      public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects)
       {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
@@ -104,7 +104,7 @@ namespace CycloneDX.Services
             Console.WriteLine();
             Console.WriteLine($"» Analyzing: {projectFilePath}");
 
-            if (excludeDev && IsTestProject(projectFilePath))
+            if (excludeTestProjects && IsTestProject(projectFilePath))
             {
                 Console.WriteLine($"Skipping: {projectFilePath}");
                 return new HashSet<NugetPackage>();
@@ -149,13 +149,13 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeDev)
+        public async Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects)
         {
-            var nugetPackages = await GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeDev).ConfigureAwait(false);
+            var nugetPackages = await GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects).ConfigureAwait(false);
             var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
             foreach (var project in projectReferences)
             {
-                var projectNugetPackages = await GetProjectNugetPackagesAsync(project, baseIntermediateOutputPath, excludeDev).ConfigureAwait(false);
+                var projectNugetPackages = await GetProjectNugetPackagesAsync(project, baseIntermediateOutputPath, excludeTestProjects).ConfigureAwait(false);
                 nugetPackages.UnionWith(projectNugetPackages);
             }
             return nugetPackages;

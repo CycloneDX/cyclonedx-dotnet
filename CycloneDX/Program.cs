@@ -74,6 +74,9 @@ namespace CycloneDX {
         [Option(Description = "Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated.", ShortName = "biop", LongName = "base-intermediate-output-path")]
         public string baseIntermediateOutputPath { get; }
 
+        [Option(Description = "Exclude test projects from the BOM", ShortName = "t", LongName = "exclude-test-projects")]
+        bool excludetestprojects { get; }
+
     static internal IFileSystem fileSystem = new FileSystem();
         static internal HttpClient httpClient = new HttpClient();
         static internal IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem);
@@ -170,15 +173,15 @@ namespace CycloneDX {
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
-                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludeDev).ConfigureAwait(false);
+                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects).ConfigureAwait(false);
                 }
                 else if (Core.Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
-                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludeDev).ConfigureAwait(false);
+                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects).ConfigureAwait(false);
                 }
                 else if (Core.Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
-                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludeDev).ConfigureAwait(false);
+                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects).ConfigureAwait(false);
                 }
                 else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {
