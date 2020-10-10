@@ -17,8 +17,7 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
-using Bom = CycloneDX.Models.Bom;
+using CycloneDX.Models;
 
 namespace CycloneDX.Xml
 {
@@ -50,23 +49,21 @@ namespace CycloneDX.Xml
                     var authors = new XElement(ns + "authors");
                     foreach (var author in bom.Metadata.Authors)
                     {
-                        var a = new XElement(ns + "author");
-                        if (!string.IsNullOrEmpty(author.Name))
-                        {
-                            a.Add(new XElement(ns + "name", author.Name));
-                        }
-                        if (!string.IsNullOrEmpty(author.Email))
-                        {
-                            a.Add(new XElement(ns + "email", author.Email));
-                        }
-                        if (!string.IsNullOrEmpty(author.Phone))
-                        {
-                            a.Add(new XElement(ns + "phone", author.Phone));
-                        }
-                        authors.Add(a);
+                        authors.Add(SerializeOrgnizationalContact(ns, "author", author));
                     }
                     meta.Add(authors);
                 }
+
+                if (bom.Metadata.Manufacture != null)
+                {
+                    meta.Add(SerializeOrganizationalEntity(ns, "manufacture", bom.Metadata.Manufacture));
+                }
+
+                if (bom.Metadata.Supplier != null)
+                {
+                    meta.Add(SerializeOrganizationalEntity(ns, "supplier", bom.Metadata.Supplier));
+                }
+
                 bomElement.Add(meta);
             }
 
@@ -147,6 +144,47 @@ namespace CycloneDX.Xml
                 doc.Save(sw);
                 return sw.ToString();
             }
+        }
+
+        internal static XElement SerializeOrganizationalEntity(XNamespace ns, string elementName, OrganizationalEntity entity)
+        {
+            var entityElement = new XElement(ns + elementName);
+            if (!string.IsNullOrEmpty(entity.Name))
+            {
+                entityElement.Add(new XElement(ns + "name", entity.Name));
+            }
+            
+            if (entity.Url?.Count() > 0)
+            foreach (var url in entity.Url)
+            {
+                entityElement.Add(new XElement(ns + "url", url));
+            }
+
+            if (entity.Contact?.Count() > 0)
+            foreach (var contact in entity.Contact)
+            {
+                entityElement.Add(SerializeOrgnizationalContact(ns, "contact", contact));
+            }
+
+            return entityElement;
+        }
+
+        internal static XElement SerializeOrgnizationalContact(XNamespace ns, string elementName, OrganizationalContact contact)
+        {
+            var contactElement = new XElement(ns + elementName);
+            if (!string.IsNullOrEmpty(contact.Name))
+            {
+                contactElement.Add(new XElement(ns + "name", contact.Name));
+            }
+            if (!string.IsNullOrEmpty(contact.Email))
+            {
+                contactElement.Add(new XElement(ns + "email", contact.Email));
+            }
+            if (!string.IsNullOrEmpty(contact.Phone))
+            {
+                contactElement.Add(new XElement(ns + "phone", contact.Phone));
+            }
+            return contactElement;
         }
     }
 }

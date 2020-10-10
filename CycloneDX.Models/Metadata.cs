@@ -23,5 +23,8 @@ namespace CycloneDX.Models
     {
         public DateTime? Timestamp { get; set; } = null;
         public List<OrganizationalContact> Authors { get; set; }
+        public Component Component { get; set; }
+        public OrganizationalEntity Manufacture { get; set; }
+        public OrganizationalEntity Supplier { get; set; }
     }
 }

@@ -71,7 +71,10 @@ namespace CycloneDX {
         [Option(Description = "dotnet command timeout in milliseconds (primarily used for long dotnet restore operations)", ShortName = "dct", LongName = "dotnet-command-timeout")]
         int dotnetCommandTimeout { get; set; } = 300000;
 
-        static internal IFileSystem fileSystem = new FileSystem();
+        [Option(Description = "Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated.", ShortName = "biop", LongName = "base-intermediate-output-path")]
+        public string baseIntermediateOutputPath { get; }
+
+    static internal IFileSystem fileSystem = new FileSystem();
         static internal HttpClient httpClient = new HttpClient();
         static internal IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem);
         static internal IDotnetCommandService dotnetCommandService = new DotnetCommandService();
@@ -167,15 +170,15 @@ namespace CycloneDX {
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
-                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath).ConfigureAwait(false);
+                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath, baseIntermediateOutputPath).ConfigureAwait(false);
                 }
                 else if (Core.Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
-                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
+                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath).ConfigureAwait(false);
                 }
                 else if (Core.Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
-                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
+                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath).ConfigureAwait(false);
                 }
                 else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {

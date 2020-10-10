@@ -15,14 +15,13 @@
 // Copyright (c) Steve Springett. All Rights Reserved.
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using CycloneDX.Core.Models;
 
-namespace CycloneDX.Services
+namespace CycloneDX.Models
 {
-    public interface ISolutionFileService
+    public class OrganizationalEntity
     {
-        Task<HashSet<string>> GetSolutionProjectReferencesAsync(string solutionFilePath);
-        Task<HashSet<NugetPackage>> GetSolutionNugetPackages(string solutionFilePath, string baseIntermediateOutputPath);
+        public string Name { get; set; }
+        public List<string> Url { get; set; }
+        public List<OrganizationalContact> Contact { get; set; }
     }
 }
