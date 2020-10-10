@@ -59,24 +59,25 @@ namespace CycloneDX.Services
         }
 
 
-    static internal String GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
-    {
-      if (string.IsNullOrEmpty(baseIntermediateOutputPath))
-      {
-        return Path.Combine(Path.GetDirectoryName(projectFilePath), "obj");
-      }
-      else
-      {
-        string folderName = Path.GetFileNameWithoutExtension(projectFilePath);
-        return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
-      }
-    }
-    /// <summary>
-    /// Analyzes a single Project file for NuGet package references.
-    /// </summary>
-    /// <param name="projectFilePath"></param>
-    /// <returns></returns>
-    public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath)
+        static internal String GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
+        {
+            if (string.IsNullOrEmpty(baseIntermediateOutputPath))
+            {
+                return Path.Combine(Path.GetDirectoryName(projectFilePath), "obj");
+            }
+            else
+            {
+                string folderName = Path.GetFileNameWithoutExtension(projectFilePath);
+                return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
+            }
+        }
+
+        /// <summary>
+        /// Analyzes a single Project file for NuGet package references.
+        /// </summary>
+        /// <param name="projectFilePath"></param>
+        /// <returns></returns>
+        public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
