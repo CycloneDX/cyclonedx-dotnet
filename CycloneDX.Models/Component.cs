@@ -32,6 +32,7 @@ namespace CycloneDX.Models
         public string Version { get; set; }
         public string Description { get; set; }
         public string Scope { get; set; }
+        public List<Hash> Hashes { get; set; }
         public List<ComponentLicense> Licenses { get; set; }
         public string Copyright { get; set; }
         public string Purl { get; set; }

@@ -16,6 +16,7 @@ namespace CycloneDX.Json.Tests
         [InlineData("valid-metadata-supplier-1.2")]
         [InlineData("valid-metadata-timestamp-1.2")]
         [InlineData("valid-metadata-tool-1.2")]
+        [InlineData("valid-component-hashes-1.2")]
         public void JsonRoundTripTest(string filename)
         {
             var resourceFilename = Path.Join("Resources", filename + ".json");
