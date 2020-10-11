@@ -26,11 +26,12 @@ namespace CycloneDX.Models
     [SuppressMessage("Microsoft.Design", "CA1036:OverrideMethodsOnComparableTypes")]
     public class Component : IComparable<Component>
     {
-        public string Publisher { get; set; }
-        public string Group { get; set; }
         public string Type { get; set; }
         [JsonPropertyName("bom-ref")]
         public string BomRef { get; set; }
+        public string Author { get; set; }
+        public string Publisher { get; set; }
+        public string Group { get; set; }
         public string Name { get; set; }
         public string Version { get; set; }
         public string Description { get; set; }
@@ -39,6 +40,7 @@ namespace CycloneDX.Models
         public List<ComponentLicense> Licenses { get; set; }
         public string Copyright { get; set; }
         public string Purl { get; set; }
+        public Swid Swid { get; set; }
         public List<ExternalReference> ExternalReferences { get; set; }
         public List<Component> Components { get; set; }
 
