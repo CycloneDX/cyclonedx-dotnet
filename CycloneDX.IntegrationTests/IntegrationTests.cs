@@ -27,7 +27,7 @@ namespace CycloneDX.IntegrationTests
 {
     public class Tests
     {
-        static private string[] ArgsHelper(string path, string output, bool json, bool excludeDev)
+        private string[] ArgsHelper(string path, string output, bool json, bool excludeDev)
         {
                 var args = new List<string> {
                     path,
@@ -39,14 +39,14 @@ namespace CycloneDX.IntegrationTests
                 return args.ToArray();
         }
 
-        static private async Task<int> CallCycloneDX(string path, string output, bool json, bool excludeDev)
+        private async Task<int> CallCycloneDX(string path, string output, bool json, bool excludeDev)
         {
             var args = ArgsHelper(path, output, json, excludeDev);
             var exitCode = await Program.Main(args).ConfigureAwait(false);
             return exitCode;
         }
 
-        static private void AssertEqualIgnoringSpaces(string expected, string actual)
+        private void AssertEqualIgnoringSpaces(string expected, string actual)
         {
             var exp = Regex.Replace(expected, @"\n\s*", "");
             var act = Regex.Replace(actual, @"\n\s*", "");
