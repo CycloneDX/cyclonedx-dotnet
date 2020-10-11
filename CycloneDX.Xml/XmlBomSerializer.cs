@@ -77,75 +77,78 @@ namespace CycloneDX.Xml
                 bomElement.Add(meta);
             }
 
-            var sortedComponents = bom.Components.ToList();
-            sortedComponents.Sort();
-
-            var com = new XElement(ns + "components");
-            foreach (var component in sortedComponents)
+            if (bom.Components != null)
             {
-                var c = new XElement(ns + "component", new XAttribute("type", component.Type));
-                if (!string.IsNullOrEmpty(component.Group))
-                {
-                    c.Add(new XElement(ns + "group", component.Group));
-                }
-                if (!string.IsNullOrEmpty(component.Name))
-                {
-                    c.Add(new XElement(ns + "name", component.Name));
-                }
-                if (!string.IsNullOrEmpty(component.Version))
-                {
-                    c.Add(new XElement(ns + "version", component.Version));
-                }
-                if (!string.IsNullOrEmpty(component.Description))
-                {
-                    c.Add(new XElement(ns + "description", new XCData(component.Description)));
-                }
-                if (!string.IsNullOrEmpty(component.Scope))
-                {
-                    c.Add(new XElement(ns + "scope", component.Scope));
-                }
-                if (component.Licenses != null && component.Licenses.Count > 0)
-                {
-                    var l = new XElement(ns + "licenses");
-                    foreach (var componentLicense in component.Licenses)
-                    {
-                        var license = componentLicense.License;
-                        if (license.Id != null)
-                        {
-                            l.Add(new XElement(ns + "license", new XElement(ns + "id", license.Id)));
-                        }
-                        else if (license.Name != null)
-                        {
-                            l.Add(new XElement(ns + "license", new XElement(ns + "name", license.Name)));
-                        }
-                        else if (license.Url != null)
-                        {
-                            l.Add(new XElement(ns + "license", new XElement(ns + "url", license.Url)));
-                        }
-                    }
-                    c.Add(l);
-                }
-                if (!string.IsNullOrEmpty(component.Copyright))
-                {
-                    c.Add(new XElement(ns + "copyright", component.Copyright));
-                }
-                if (!string.IsNullOrEmpty(component.Purl))
-                {
-                    c.Add(new XElement(ns + "purl", component.Purl));
-                }
-                if (component.ExternalReferences != null && component.ExternalReferences.Count > 0)
-                {
-                    var externalReferences = new XElement(ns + "externalReferences");
-                    foreach (var externalReference in component.ExternalReferences)
-                    {
-                        externalReferences.Add(new XElement(ns + "reference", new XAttribute("type", externalReference.Type), new XElement(ns + "url", externalReference.Url)));
-                    }
-                    c.Add(externalReferences);
-                }
+                var sortedComponents = bom.Components.ToList();
+                sortedComponents.Sort();
 
-                com.Add(c);
+                var com = new XElement(ns + "components");
+                foreach (var component in sortedComponents)
+                {
+                    var c = new XElement(ns + "component", new XAttribute("type", component.Type));
+                    if (!string.IsNullOrEmpty(component.Group))
+                    {
+                        c.Add(new XElement(ns + "group", component.Group));
+                    }
+                    if (!string.IsNullOrEmpty(component.Name))
+                    {
+                        c.Add(new XElement(ns + "name", component.Name));
+                    }
+                    if (!string.IsNullOrEmpty(component.Version))
+                    {
+                        c.Add(new XElement(ns + "version", component.Version));
+                    }
+                    if (!string.IsNullOrEmpty(component.Description))
+                    {
+                        c.Add(new XElement(ns + "description", new XCData(component.Description)));
+                    }
+                    if (!string.IsNullOrEmpty(component.Scope))
+                    {
+                        c.Add(new XElement(ns + "scope", component.Scope));
+                    }
+                    if (component.Licenses != null && component.Licenses.Count > 0)
+                    {
+                        var l = new XElement(ns + "licenses");
+                        foreach (var componentLicense in component.Licenses)
+                        {
+                            var license = componentLicense.License;
+                            if (license.Id != null)
+                            {
+                                l.Add(new XElement(ns + "license", new XElement(ns + "id", license.Id)));
+                            }
+                            else if (license.Name != null)
+                            {
+                                l.Add(new XElement(ns + "license", new XElement(ns + "name", license.Name)));
+                            }
+                            else if (license.Url != null)
+                            {
+                                l.Add(new XElement(ns + "license", new XElement(ns + "url", license.Url)));
+                            }
+                        }
+                        c.Add(l);
+                    }
+                    if (!string.IsNullOrEmpty(component.Copyright))
+                    {
+                        c.Add(new XElement(ns + "copyright", component.Copyright));
+                    }
+                    if (!string.IsNullOrEmpty(component.Purl))
+                    {
+                        c.Add(new XElement(ns + "purl", component.Purl));
+                    }
+                    if (component.ExternalReferences != null && component.ExternalReferences.Count > 0)
+                    {
+                        var externalReferences = new XElement(ns + "externalReferences");
+                        foreach (var externalReference in component.ExternalReferences)
+                        {
+                            externalReferences.Add(new XElement(ns + "reference", new XAttribute("type", externalReference.Type), new XElement(ns + "url", externalReference.Url)));
+                        }
+                        c.Add(externalReferences);
+                    }
+
+                    com.Add(c);
+                }
+                bomElement.Add(com);
             }
-            bomElement.Add(com);
 
             doc.Add(bomElement);
 

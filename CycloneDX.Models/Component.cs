@@ -27,15 +27,15 @@ namespace CycloneDX.Models
     {
         public string Publisher { get; set; }
         public string Group { get; set; }
-        public string Type { get; set; } = "library";
+        public string Type { get; set; }
         public string Name { get; set; }
         public string Version { get; set; }
         public string Description { get; set; }
         public string Scope { get; set; }
-        public List<ComponentLicense> Licenses { get; set; } = new List<ComponentLicense>();
+        public List<ComponentLicense> Licenses { get; set; }
         public string Copyright { get; set; }
         public string Purl { get; set; }
-        public List<ExternalReference> ExternalReferences { get; set; } = new List<ExternalReference>();
+        public List<ExternalReference> ExternalReferences { get; set; }
 
         public override bool Equals(object obj)
         {

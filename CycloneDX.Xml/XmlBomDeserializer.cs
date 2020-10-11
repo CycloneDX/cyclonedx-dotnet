@@ -84,6 +84,7 @@ namespace CycloneDX.Xml
             }
 
             var xmlComponentNodes = doc.SelectNodes("/cdx:bom/cdx:components/cdx:component", nsmgr);
+            if (xmlComponentNodes.Count > 0) bom.Components = new HashSet<Component>();
             for (var i=0; i<xmlComponentNodes.Count; i++)
             {
                 bom.Components.Add(GetComponent(xmlComponentNodes[i], nsmgr));
@@ -163,6 +164,7 @@ namespace CycloneDX.Xml
             component.Scope = componentXmlNode["scope"]?.InnerText;
             
             var licenseXmlNodes = componentXmlNode.SelectNodes("cdx:licenses/cdx:license", nsmgr);
+            if (licenseXmlNodes.Count > 0) component.Licenses = new List<ComponentLicense>();
             for (var i=0; i<licenseXmlNodes.Count; i++)
             {
                 var licenseXmlNode = licenseXmlNodes[i];
@@ -173,6 +175,7 @@ namespace CycloneDX.Xml
             component.Purl = componentXmlNode["purl"]?.InnerText;
             
             var externalReferenceXmlNodes = componentXmlNode.SelectNodes("cdx:externalReferences/cdx:reference", nsmgr);
+            if (externalReferenceXmlNodes.Count > 0) component.ExternalReferences = new List<ExternalReference>();
             for (var i=0; i<externalReferenceXmlNodes.Count; i++)
             {
                 var externalReferenceXmlNode = externalReferenceXmlNodes[i];

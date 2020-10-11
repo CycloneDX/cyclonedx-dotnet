@@ -29,7 +29,7 @@ namespace CycloneDX.Models
         public string SerialNumber { get; set; }
         public int Version { get; set; } = 1;
         public Metadata Metadata { get; set; }
-        public HashSet<Component> Components { get; set; } = new HashSet<Component>();
+        public HashSet<Component> Components { get; set; }
         //TODO externalReferences
         //TODO dependencies
     }

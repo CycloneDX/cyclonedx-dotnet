@@ -93,6 +93,7 @@ namespace CycloneDX.Services
             {
                 Name = name,
                 Version = version,
+                Type = "library",
                 Scope = scope,
                 Purl = Utils.GeneratePackageUrl(name, version)
             };
@@ -143,6 +144,7 @@ namespace CycloneDX.Services
             }
 
             var licenseMetadata = nuspecReader.GetLicenseMetadata();
+            component.Licenses = new List<ComponentLicense>();
             if (licenseMetadata != null && licenseMetadata.Type == NuGet.Packaging.LicenseType.Expression)
             {
                 Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
@@ -192,7 +194,10 @@ namespace CycloneDX.Services
                 var externalReference = new Models.ExternalReference();
                 externalReference.Type = Models.ExternalReference.WEBSITE;
                 externalReference.Url = projectUrl;
-                component.ExternalReferences.Add(externalReference);
+                component.ExternalReferences = new List<ExternalReference>
+                {
+                    externalReference
+                };
             }
 
             return component;
