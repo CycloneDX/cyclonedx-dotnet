@@ -1,4 +1,4 @@
-// This file is part of the CycloneDX Tool for .NET
+﻿// This file is part of the CycloneDX Tool for .NET
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ namespace CycloneDX.Tests
         [Fact]
         public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsSolutionOrProjectFileParameterMissingExitCode()
         {
-            var exitCode = await Program.Main(new string[] {}).ConfigureAwait(false);
+            var exitCode = await Program.Main(System.Array.Empty<string>()).ConfigureAwait(false);
 
             Assert.Equal((int)ExitCode.SolutionOrProjectFileParameterMissing, exitCode);
         }

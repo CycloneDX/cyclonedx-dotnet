@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using Xunit;
 using Snapshooter;
@@ -7,7 +7,7 @@ using CycloneDX.Json;
 
 namespace CycloneDX.Json.Tests
 {
-    public class Tests
+    public class JsonTests
     {
         [Theory]
         [InlineData("bom")]

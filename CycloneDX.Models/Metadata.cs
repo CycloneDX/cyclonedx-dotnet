@@ -1,4 +1,4 @@
-// This file is part of the CycloneDX Tool for .NET
+﻿// This file is part of the CycloneDX Tool for .NET
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,9 +15,11 @@
 // Copyright (c) Steve Springett. All Rights Reserved.
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CycloneDX.Models
 {
+    [SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
     public class Metadata
     {
         public List<OrganizationalContact> Authors { get; set; } = new List<OrganizationalContact>();

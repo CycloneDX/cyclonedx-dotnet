@@ -1,4 +1,4 @@
-// This file is part of the CycloneDX Tool for .NET
+﻿// This file is part of the CycloneDX Tool for .NET
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.

@@ -1,4 +1,4 @@
-// This file is part of the CycloneDX Tool for .NET
+﻿// This file is part of the CycloneDX Tool for .NET
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ namespace CycloneDX.IntegrationTests
 {
     public class Tests
     {
-        private string[] ArgsHelper(string path, string output, bool json, bool excludeDev)
+        static private string[] ArgsHelper(string path, string output, bool json, bool excludeDev)
         {
                 var args = new List<string> {
                     path,
@@ -39,14 +39,14 @@ namespace CycloneDX.IntegrationTests
                 return args.ToArray();
         }
 
-        private async Task<int> CallCycloneDX(string path, string output, bool json, bool excludeDev)
+        static private async Task<int> CallCycloneDX(string path, string output, bool json, bool excludeDev)
         {
             var args = ArgsHelper(path, output, json, excludeDev);
             var exitCode = await Program.Main(args).ConfigureAwait(false);
             return exitCode;
         }
 
-        private void AssertEqualIgnoringSpaces(string expected, string actual)
+        static private void AssertEqualIgnoringSpaces(string expected, string actual)
         {
             var exp = Regex.Replace(expected, @"\n\s*", "");
             var act = Regex.Replace(actual, @"\n\s*", "");
