@@ -84,7 +84,7 @@ namespace CycloneDX.Xml
             }
 
             var xmlComponentNodes = doc.SelectNodes("/cdx:bom/cdx:components/cdx:component", nsmgr);
-            if (xmlComponentNodes.Count > 0) bom.Components = new HashSet<Component>();
+            if (xmlComponentNodes.Count > 0) bom.Components = new List<Component>();
             for (var i=0; i<xmlComponentNodes.Count; i++)
             {
                 bom.Components.Add(GetComponent(xmlComponentNodes[i], nsmgr));
