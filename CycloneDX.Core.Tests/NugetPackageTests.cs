@@ -17,7 +17,7 @@
 using Xunit;
 using CycloneDX.Core.Models;
 
-namespace CycloneDX.Tests
+namespace CycloneDX.Core.Tests
 {
     public class NugetPackageTests
     {

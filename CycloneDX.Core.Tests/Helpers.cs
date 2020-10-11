@@ -20,7 +20,7 @@ using System.IO.Abstractions.TestingHelpers;
 using RichardSzalay.MockHttp;
 using CycloneDX.Core.Models;
 
-namespace CycloneDX.Tests
+namespace CycloneDX.Core.Tests
 {
     static class Helpers
     {

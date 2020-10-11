@@ -22,7 +22,7 @@ using RichardSzalay.MockHttp;
 using CycloneDX.Models;
 using CycloneDX.Services;
 
-namespace CycloneDX.Tests
+namespace CycloneDX.Core.Tests
 {
     public class GithubServiceTests
     {

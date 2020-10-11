@@ -27,7 +27,7 @@ using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using CycloneDX.Models;
 using CycloneDX.Services;
 
-namespace CycloneDX.Tests
+namespace CycloneDX.Core.Tests
 {
     public class NugetServiceTests
     {
@@ -138,7 +138,7 @@ namespace CycloneDX.Tests
             var mockGithubService = new Mock<IGithubService>();
             mockGithubService
                 .Setup(service => service.GetLicenseAsync(It.IsAny<string>()))
-                .ReturnsAsync(new Models.License
+                .ReturnsAsync(new License
                 {
                     Id = "TestLicenseId",
                     Name = "Test License",

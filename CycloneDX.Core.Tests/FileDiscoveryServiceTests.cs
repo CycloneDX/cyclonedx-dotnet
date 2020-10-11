@@ -20,7 +20,7 @@ using System.IO.Abstractions.TestingHelpers;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using CycloneDX.Services;
 
-namespace CycloneDX.Tests
+namespace CycloneDX.Core.Tests
 {
     public class FileDiscoveryServiceTests
     {

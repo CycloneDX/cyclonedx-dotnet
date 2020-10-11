@@ -24,7 +24,7 @@ using CycloneDX.Core.Models;
 using CycloneDX.Services;
 using Moq;
 
-namespace CycloneDX.Tests
+namespace CycloneDX.Core.Tests
 {
     public class ComponentServiceTests
     {

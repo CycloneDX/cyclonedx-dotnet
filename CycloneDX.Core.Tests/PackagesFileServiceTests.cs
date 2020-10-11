@@ -23,7 +23,7 @@ using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using CycloneDX.Core.Models;
 using CycloneDX.Services;
 
-namespace CycloneDX.Tests
+namespace CycloneDX.Core.Tests
 {
     public class PackagesFileServiceTests
     {

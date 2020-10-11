@@ -25,7 +25,7 @@ using Moq;
 using CycloneDX.Core.Models;
 using CycloneDX.Services;
 
-namespace CycloneDX.Tests
+namespace CycloneDX.Core.Tests
 {
     public class DotnetUtilsServiceTests
     {
