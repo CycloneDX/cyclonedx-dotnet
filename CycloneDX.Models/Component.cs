@@ -40,6 +40,7 @@ namespace CycloneDX.Models
         public string Copyright { get; set; }
         public string Purl { get; set; }
         public List<ExternalReference> ExternalReferences { get; set; }
+        public List<Component> Components { get; set; }
 
         public override bool Equals(object obj)
         {

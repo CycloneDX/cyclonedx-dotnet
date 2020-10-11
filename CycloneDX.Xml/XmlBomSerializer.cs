@@ -102,6 +102,9 @@ namespace CycloneDX.Xml
         internal static XElement SerializeComponent(XNamespace ns, Component component)
         {
             var c = new XElement(ns + "component", new XAttribute("type", component.Type));
+
+            if (component.BomRef != null) c.SetAttributeValue("bom-ref", component.BomRef);
+
             if (!string.IsNullOrEmpty(component.Group))
             {
                 c.Add(new XElement(ns + "group", component.Group));
@@ -168,6 +171,16 @@ namespace CycloneDX.Xml
                     externalReferences.Add(new XElement(ns + "reference", new XAttribute("type", externalReference.Type), new XElement(ns + "url", externalReference.Url)));
                 }
                 c.Add(externalReferences);
+            }
+
+            if (component.Components?.Count() > 0)
+            {
+                var subcomponents = new XElement(ns + "components");
+                foreach (var subcomponent in component.Components)
+                {
+                    subcomponents.Add(SerializeComponent(ns, subcomponent));
+                }
+                c.Add(subcomponents);
             }
 
             return c;

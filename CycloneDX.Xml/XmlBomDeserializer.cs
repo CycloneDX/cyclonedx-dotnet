@@ -163,6 +163,7 @@ namespace CycloneDX.Xml
             component.Publisher = componentXmlNode.Attributes["publisher"]?.InnerText;
             component.Group = componentXmlNode.Attributes["group"]?.InnerText;
             component.Type = componentXmlNode.Attributes["type"]?.InnerText;
+            component.BomRef = componentXmlNode.Attributes["bom-ref"]?.InnerText;
             component.Name = componentXmlNode["name"]?.InnerText;
             component.Version = componentXmlNode["version"]?.InnerText;
             component.Description = componentXmlNode["description"]?.InnerText;
@@ -193,6 +194,14 @@ namespace CycloneDX.Xml
             {
                 var externalReferenceXmlNode = externalReferenceXmlNodes[i];
                 component.ExternalReferences.Add(GetExternalReference(externalReferenceXmlNode));
+            }
+
+            var subcomponentXmlNodes = componentXmlNode.SelectNodes("cdx:components/cdx:component", nsmgr);
+            if (subcomponentXmlNodes.Count > 0) component.Components = new List<Component>();
+            for (var i=0; i<subcomponentXmlNodes.Count; i++)
+            {
+                var subcomponentXmlNode = subcomponentXmlNodes[i];
+                component.Components.Add(GetComponent(subcomponentXmlNode, nsmgr));
             }
 
             return component;

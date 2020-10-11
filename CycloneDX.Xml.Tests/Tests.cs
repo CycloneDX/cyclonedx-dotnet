@@ -17,6 +17,7 @@ namespace CycloneDX.Xml.Tests
         [InlineData("valid-metadata-timestamp-1.2")]
         [InlineData("valid-metadata-tool-1.2")]
         [InlineData("valid-component-hashes-1.2")]
+        [InlineData("valid-component-ref-1.1")]
         public void XmlRoundTripTest(string filename)
         {
             var resourceFilename = Path.Join("Resources", filename + ".xml");
