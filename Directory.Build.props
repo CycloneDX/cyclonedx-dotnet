@@ -36,10 +36,10 @@
 
   <!-- lightweight GitVersioning tool - not depended on tags or branches -->
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37">
+    <!--<PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    </PackageReference>-->
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
