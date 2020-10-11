@@ -44,6 +44,16 @@ namespace CycloneDX.Xml
                     meta.Add(new XElement(ns + "timestamp", bom.Metadata.Timestamp?.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")));
                 }
 
+                if (bom.Metadata.Tools != null && bom.Metadata.Tools.Count > 0)
+                {
+                    var tools = new XElement(ns + "tools");
+                    foreach (var tool in bom.Metadata.Tools)
+                    {
+                        tools.Add(SerializeTool(ns, tool));
+                    }
+                    meta.Add(tools);
+                }
+
                 if (bom.Metadata.Authors != null && bom.Metadata.Authors.Count > 0)
                 {
                     var authors = new XElement(ns + "authors");
@@ -144,6 +154,39 @@ namespace CycloneDX.Xml
                 doc.Save(sw);
                 return sw.ToString();
             }
+        }
+
+        internal static XElement SerializeTool(XNamespace ns, Tool tool)
+        {
+            var toolElement = new XElement(ns + "tool");
+            if (!string.IsNullOrEmpty(tool.Vendor))
+            {
+                toolElement.Add(new XElement(ns + "vendor", tool.Vendor));
+            }
+            
+            if (!string.IsNullOrEmpty(tool.Name))
+            {
+                toolElement.Add(new XElement(ns + "name", tool.Name));
+            }
+
+            if (!string.IsNullOrEmpty(tool.Version))
+            {
+                toolElement.Add(new XElement(ns + "version", tool.Version));
+            }
+
+            if (tool.Hashes?.Count() > 0)
+            {
+                var hashesElement = new XElement(ns + "hashes");
+                foreach (var hash in tool.Hashes)
+                {
+                    var hashElement = new XElement(ns + "hash", hash.Content);
+                    hashElement.SetAttributeValue("alg", hash.Alg);
+                    hashesElement.Add(hashElement);
+                }
+                toolElement.Add(hashesElement);
+            }
+
+            return toolElement;
         }
 
         internal static XElement SerializeOrganizationalEntity(XNamespace ns, string elementName, OrganizationalEntity entity)

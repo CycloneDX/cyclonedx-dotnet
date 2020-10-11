@@ -74,6 +74,13 @@ namespace CycloneDX.Xml
                     bom.Metadata.Supplier = GetOrgnizationalEntity(xmlSupplierNode, nsmgr);
                 }
 
+                var xmlToolNodes = xmlMetadataNode.SelectNodes("cdx:tools/cdx:tool", nsmgr);
+                if (xmlToolNodes.Count > 0) bom.Metadata.Tools = new List<Tool>();
+                for (var i=0; i<xmlToolNodes.Count; i++)
+                {
+                    bom.Metadata.Tools.Add(GetTool(xmlToolNodes[i], nsmgr));
+                }
+
             }
 
             var xmlComponentNodes = doc.SelectNodes("/cdx:bom/cdx:components/cdx:component", nsmgr);
@@ -85,6 +92,31 @@ namespace CycloneDX.Xml
             return bom;
         }
 
+        private static Tool GetTool(XmlNode toolXmlNode, XmlNamespaceManager nsmgr)
+        {
+            var tool = new Tool();
+            if (toolXmlNode == null) return tool;
+
+            tool.Vendor = toolXmlNode.SelectSingleNode("cdx:vendor", nsmgr)?.InnerText;
+            tool.Name = toolXmlNode.SelectSingleNode("cdx:name", nsmgr)?.InnerText;
+            tool.Version = toolXmlNode.SelectSingleNode("cdx:version", nsmgr)?.InnerText;
+            
+            var hashXmlNodes = toolXmlNode.SelectNodes("cdx:hashes/cdx:hash", nsmgr);
+            if (hashXmlNodes.Count > 0)
+            {
+                tool.Hashes = new List<Hash>();
+                for (var i=0; i<hashXmlNodes.Count; i++)
+                {
+                    var hash = new Hash();
+                    hash.Alg = hashXmlNodes[i].Attributes["alg"]?.InnerText;
+                    hash.Content = hashXmlNodes[i].InnerText;
+                    tool.Hashes.Add(hash);
+                }
+            }
+
+            return tool;
+        }
+        
         private static OrganizationalEntity GetOrgnizationalEntity(XmlNode organizationalEntityXmlNode, XmlNamespaceManager nsmgr)
         {
             var entity = new OrganizationalEntity();
