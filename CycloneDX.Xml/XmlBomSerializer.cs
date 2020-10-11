@@ -106,6 +106,15 @@ namespace CycloneDX.Xml
                     {
                         c.Add(new XElement(ns + "scope", component.Scope));
                     }
+                    if (component.Hashes?.Count > 0)
+                    {
+                        var h = new XElement(ns + "hashes");
+                        foreach (var hash in component.Hashes)
+                        {
+                            h.Add(SerializeHash(ns, hash));
+                        }
+                        c.Add(h);
+                    }
                     if (component.Licenses != null && component.Licenses.Count > 0)
                     {
                         var l = new XElement(ns + "licenses");
@@ -182,14 +191,19 @@ namespace CycloneDX.Xml
                 var hashesElement = new XElement(ns + "hashes");
                 foreach (var hash in tool.Hashes)
                 {
-                    var hashElement = new XElement(ns + "hash", hash.Content);
-                    hashElement.SetAttributeValue("alg", hash.Alg);
-                    hashesElement.Add(hashElement);
+                    hashesElement.Add(SerializeHash(ns, hash));
                 }
                 toolElement.Add(hashesElement);
             }
 
             return toolElement;
+        }
+
+        internal static XElement SerializeHash(XNamespace ns, Hash hash)
+        {
+            var hashElement = new XElement(ns + "hash", hash.Content);
+            hashElement.SetAttributeValue("alg", hash.Alg);
+            return hashElement;
         }
 
         internal static XElement SerializeOrganizationalEntity(XNamespace ns, string elementName, OrganizationalEntity entity)

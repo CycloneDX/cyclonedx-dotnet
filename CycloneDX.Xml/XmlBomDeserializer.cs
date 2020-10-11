@@ -108,14 +108,19 @@ namespace CycloneDX.Xml
                 tool.Hashes = new List<Hash>();
                 for (var i=0; i<hashXmlNodes.Count; i++)
                 {
-                    var hash = new Hash();
-                    hash.Alg = hashXmlNodes[i].Attributes["alg"]?.InnerText;
-                    hash.Content = hashXmlNodes[i].InnerText;
-                    tool.Hashes.Add(hash);
+                    tool.Hashes.Add(GetHash(hashXmlNodes[i]));
                 }
             }
 
             return tool;
+        }
+
+        private static Hash GetHash(XmlNode hashXmlNode)
+        {
+            var hash = new Hash();
+            hash.Alg = hashXmlNode.Attributes["alg"]?.InnerText;
+            hash.Content = hashXmlNode.InnerText;
+            return hash;
         }
         
         private static OrganizationalEntity GetOrgnizationalEntity(XmlNode organizationalEntityXmlNode, XmlNamespaceManager nsmgr)
@@ -163,6 +168,14 @@ namespace CycloneDX.Xml
             component.Description = componentXmlNode["description"]?.InnerText;
             component.Scope = componentXmlNode["scope"]?.InnerText;
             
+            var hashXmlNodes = componentXmlNode.SelectNodes("cdx:hashes/cdx:hash", nsmgr);
+            if (hashXmlNodes.Count > 0) component.Hashes = new List<Hash>();
+            for (var i=0; i<hashXmlNodes.Count; i++)
+            {
+                var hashXmlNode = hashXmlNodes[i];
+                component.Hashes.Add(GetHash(hashXmlNode));
+            }
+
             var licenseXmlNodes = componentXmlNode.SelectNodes("cdx:licenses/cdx:license", nsmgr);
             if (licenseXmlNodes.Count > 0) component.Licenses = new List<ComponentLicense>();
             for (var i=0; i<licenseXmlNodes.Count; i++)
