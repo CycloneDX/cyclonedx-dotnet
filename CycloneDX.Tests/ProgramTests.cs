@@ -31,7 +31,9 @@ namespace CycloneDX.Tests
         [Fact]
         public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsSolutionOrProjectFileParameterMissingExitCode()
         {
-            var exitCode = await Program.Main(System.Array.Empty<string>()).ConfigureAwait(false);
+#pragma warning disable CA1825 // Avoid zero-length array allocations
+            var exitCode = await Program.Main(new string[] { }).ConfigureAwait(false);
+#pragma warning restore CA1825 // Avoid zero-length array allocations
 
             Assert.Equal((int)ExitCode.SolutionOrProjectFileParameterMissing, exitCode);
         }
