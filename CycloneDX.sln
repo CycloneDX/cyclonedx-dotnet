@@ -1,37 +1,38 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30524.135
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX", "CycloneDX\CycloneDX.csproj", "{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CycloneDX", "CycloneDX\CycloneDX.csproj", "{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4FCB6A5C-513F-4C55-8006-9F379857087D}"
 	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
-		LICENSE = LICENSE
+		.editorconfig = .editorconfig
 		build.sh = build.sh
-		push.sh = push.sh
-		semver.txt = semver.txt
 		Dockerfile = Dockerfile
+		LICENSE = LICENSE
+		push.sh = push.sh
+		README.md = README.md
+		semver.txt = semver.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Tests", "CycloneDX.Tests\CycloneDX.Tests.csproj", "{36E0F78F-9C64-4967-976B-9ACD072E3E92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CycloneDX.Tests", "CycloneDX.Tests\CycloneDX.Tests.csproj", "{36E0F78F-9C64-4967-976B-9ACD072E3E92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.IntegrationTests", "CycloneDX.IntegrationTests\CycloneDX.IntegrationTests.csproj", "{25DD6BFA-E38D-4415-871E-A29045D13C28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CycloneDX.IntegrationTests", "CycloneDX.IntegrationTests\CycloneDX.IntegrationTests.csproj", "{25DD6BFA-E38D-4415-871E-A29045D13C28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Core", "CycloneDX.Core\CycloneDX.Core.csproj", "{7CB70965-427C-49AF-87DC-D9E50E8DB7E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CycloneDX.Core", "CycloneDX.Core\CycloneDX.Core.csproj", "{7CB70965-427C-49AF-87DC-D9E50E8DB7E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Core.Tests", "CycloneDX.Core.Tests\CycloneDX.Core.Tests.csproj", "{C861EC52-4ACD-425B-A859-3D086B3587A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CycloneDX.Core.Tests", "CycloneDX.Core.Tests\CycloneDX.Core.Tests.csproj", "{C861EC52-4ACD-425B-A859-3D086B3587A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Json", "CycloneDX.Json\CycloneDX.Json.csproj", "{60250E21-18CA-4C71-AA6F-E22DBA185AC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CycloneDX.Json", "CycloneDX.Json\CycloneDX.Json.csproj", "{60250E21-18CA-4C71-AA6F-E22DBA185AC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Models", "CycloneDX.Models\CycloneDX.Models.csproj", "{4F0F6F2F-3EC1-4ADF-BB53-8AAAAFC30302}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CycloneDX.Models", "CycloneDX.Models\CycloneDX.Models.csproj", "{4F0F6F2F-3EC1-4ADF-BB53-8AAAAFC30302}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Xml", "CycloneDX.Xml\CycloneDX.Xml.csproj", "{079527D3-4BDC-43C8-9890-9491CBC37C34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CycloneDX.Xml", "CycloneDX.Xml\CycloneDX.Xml.csproj", "{079527D3-4BDC-43C8-9890-9491CBC37C34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Json.Tests", "CycloneDX.Json.Tests\CycloneDX.Json.Tests.csproj", "{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CycloneDX.Json.Tests", "CycloneDX.Json.Tests\CycloneDX.Json.Tests.csproj", "{C4234C8F-4AD4-41CB-B10C-3AAB98A0A250}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycloneDX.Xml.Tests", "CycloneDX.Xml.Tests\CycloneDX.Xml.Tests.csproj", "{998FA095-DFE0-4171-9B08-58D9CDC58919}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CycloneDX.Xml.Tests", "CycloneDX.Xml.Tests\CycloneDX.Xml.Tests.csproj", "{998FA095-DFE0-4171-9B08-58D9CDC58919}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,9 +42,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -166,6 +164,12 @@ Global
 		{998FA095-DFE0-4171-9B08-58D9CDC58919}.Release|x64.Build.0 = Release|Any CPU
 		{998FA095-DFE0-4171-9B08-58D9CDC58919}.Release|x86.ActiveCfg = Release|Any CPU
 		{998FA095-DFE0-4171-9B08-58D9CDC58919}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {382B7E41-7FCF-43AE-A35A-2CACB3ADD91B}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
