@@ -117,6 +117,10 @@ Pull requests are welcome. But please read the
 To build and test the solution locally you should have .NET core 2.1 and 3.1
 installed. Standard commands like `dotnet build` and `dotnet test` work.
 
+Alternatively, you can use VS Code and the included devcontainer configuration
+to work in a pre-configured docker image. (You will also need the "Remote - Containers"
+extension and Docker)
+
 It is generally expected that pull requests will include relevant tests.
 Tests are automatically run on Windows, MacOS and Linux for every pull request.
 And build warnings will break the build.
