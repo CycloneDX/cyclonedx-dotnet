@@ -187,6 +187,11 @@ namespace CycloneDX.Xml
 
             component.Copyright = componentXmlNode["copyright"]?.InnerText;
             component.Purl = componentXmlNode["purl"]?.InnerText;
+
+            if (componentXmlNode["swid"] != null)
+            {
+                component.Swid = GetSwid(componentXmlNode["swid"]);
+            }
             
             var externalReferenceXmlNodes = componentXmlNode.SelectNodes("cdx:externalReferences/cdx:reference", nsmgr);
             if (externalReferenceXmlNodes.Count > 0) component.ExternalReferences = new List<ExternalReference>();
@@ -205,6 +210,36 @@ namespace CycloneDX.Xml
             }
 
             return component;
+        }
+
+        private static Swid GetSwid(XmlNode swidXmlNode)
+        {
+            var swid = new Swid();
+
+            swid.TagId = swidXmlNode.Attributes["tagId"]?.InnerText;
+            swid.Name = swidXmlNode.Attributes["name"]?.InnerText;
+            swid.Version = swidXmlNode.Attributes["version"]?.InnerText;
+            swid.TagVersion = swidXmlNode.Attributes["tagVersion"]?.InnerText;
+            swid.Patch = swidXmlNode.Attributes["patch"]?.InnerText;
+
+            if (swidXmlNode["text"] != null)
+            {
+                swid.Text = GetAttachedText(swidXmlNode["text"]);
+            }
+            swid.Url = swidXmlNode["url"]?.InnerText;
+
+            return swid;
+        }
+
+        private static AttachedText GetAttachedText(XmlNode attachedTextXmlNode)
+        {
+            var at = new AttachedText();
+
+            at.ContentType = attachedTextXmlNode.Attributes["content-type"]?.InnerText;
+            at.Encoding = attachedTextXmlNode.Attributes["encoding"]?.InnerText;
+            at.Content = attachedTextXmlNode.InnerText;
+
+            return at;
         }
 
         private static ComponentLicense GetLicense(XmlNode licenseXmlNode)

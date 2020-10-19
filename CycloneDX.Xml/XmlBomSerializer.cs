@@ -163,6 +163,10 @@ namespace CycloneDX.Xml
             {
                 c.Add(new XElement(ns + "purl", component.Purl));
             }
+            if (component.Swid != null)
+            {
+                c.Add(SerializeSwid(ns, component.Swid));
+            }
             if (component.ExternalReferences != null && component.ExternalReferences.Count > 0)
             {
                 var externalReferences = new XElement(ns + "externalReferences");
@@ -184,6 +188,65 @@ namespace CycloneDX.Xml
             }
 
             return c;
+        }
+
+        internal static XElement SerializeSwid(XNamespace ns, Swid swid)
+        {
+            var swidElement = new XElement(ns + "swid");
+
+            if (!string.IsNullOrEmpty(swid.TagId))
+            {
+                swidElement.SetAttributeValue("tagId", swid.TagId);
+            }
+
+            if (!string.IsNullOrEmpty(swid.Name))
+            {
+                swidElement.SetAttributeValue("name", swid.Name);
+            }
+
+            if (!string.IsNullOrEmpty(swid.Version))
+            {
+                swidElement.SetAttributeValue("version", swid.Version);
+            }
+
+            if (!string.IsNullOrEmpty(swid.TagVersion))
+            {
+                swidElement.SetAttributeValue("tagVersion", swid.TagVersion);
+            }
+
+            if (!string.IsNullOrEmpty(swid.Patch))
+            {
+                swidElement.SetAttributeValue("patch", swid.Patch);
+            }
+
+            if (!string.IsNullOrEmpty(swid.Url))
+            {
+                swidElement.Add(new XElement(ns + "url", swid.Url));
+            }
+
+            if (swid.Text != null)
+            {
+                swidElement.Add(SerializeAttachedText(ns, "text", swid.Text));
+            }
+
+            return swidElement;
+        }
+
+        internal static XElement SerializeAttachedText(XNamespace ns, string elementName, AttachedText attachedText)
+        {
+            var attachedTextElement = new XElement(ns + elementName, attachedText.Content);
+
+            if (!string.IsNullOrEmpty(attachedText.ContentType))
+            {
+                attachedTextElement.SetAttributeValue("content-type", attachedText.ContentType);
+            }
+
+            if (!string.IsNullOrEmpty(attachedText.Encoding))
+            {
+                attachedTextElement.SetAttributeValue("encoding", attachedText.Encoding);
+            }
+
+            return attachedTextElement;
         }
 
         internal static XElement SerializeTool(XNamespace ns, Tool tool)

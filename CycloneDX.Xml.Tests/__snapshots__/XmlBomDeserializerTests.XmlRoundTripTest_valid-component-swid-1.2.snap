@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bom version="1" serialNumber="urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79" xmlns="http://cyclonedx.org/schema/bom/1.2">
+  <components>
+    <component type="application">
+      <name>Acme Application</name>
+      <version>9.1.1</version>
+      <swid tagId="swidgen-242eb18a-503e-ca37-393b-cf156ef09691_9.1.1" name="Acme Application" version="9.1.1" />
+    </component>
+  </components>
+</bom>
