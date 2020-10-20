@@ -15,8 +15,6 @@
     <OsEnvironment Condition="$([MSBuild]::IsOSPlatform('linux'))">linux</OsEnvironment>
     <OsEnvironment Condition="$([MSBuild]::IsOSPlatform('osx'))">osx</OsEnvironment>
 
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-
   </PropertyGroup>
 
 
