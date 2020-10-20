@@ -65,12 +65,8 @@ namespace CycloneDX.Services
             xmldoc.Load(projectFilePath);
 
             XmlElement elt = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
-            if (elt != null)
-            {
-                return true;
-            }
 
-            return false;
+            return elt != null;
         }
 
         static internal String GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
