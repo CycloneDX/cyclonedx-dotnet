@@ -61,40 +61,39 @@ namespace CycloneDX.Services
 
         public static bool IsTestProject(string projectFilePath)
         {
-        XmlDocument xmldoc = new XmlDocument();
-        xmldoc.Load(projectFilePath);
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(projectFilePath);
 
-        XmlElement elt = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
-        if (elt != null)
+            XmlElement elt = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
+            if (elt != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        static internal String GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
         {
-          return true;
+            if (string.IsNullOrEmpty(baseIntermediateOutputPath))
+            {
+            return Path.Combine(Path.GetDirectoryName(projectFilePath), "obj");
+            }
+            else
+            {
+            string folderName = Path.GetFileNameWithoutExtension(projectFilePath);
+            return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
+            }
         }
 
-        return false;
 
-        }
-
-      static internal String GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
-      {
-        if (string.IsNullOrEmpty(baseIntermediateOutputPath))
+        /// <summary>
+        /// Analyzes a single Project file for NuGet package references.
+        /// </summary>
+        /// <param name="projectFilePath"></param>
+        /// <returns></returns>
+        public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects)
         {
-          return Path.Combine(Path.GetDirectoryName(projectFilePath), "obj");
-        }
-        else
-        {
-          string folderName = Path.GetFileNameWithoutExtension(projectFilePath);
-          return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
-        }
-      }
-
-
-      /// <summary>
-      /// Analyzes a single Project file for NuGet package references.
-      /// </summary>
-      /// <param name="projectFilePath"></param>
-      /// <returns></returns>
-      public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects)
-      {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
                 Console.Error.WriteLine($"Project file \"{projectFilePath}\" does not exist");
