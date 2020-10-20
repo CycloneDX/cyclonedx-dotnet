@@ -38,20 +38,20 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task IsTestProjectTrue()
+        public void IsTestProjectTrue()
         {
             string szProjectPath = System.Environment.CurrentDirectory + XFS.Path(@"\..\..\..\..\CycloneDX.Core.Tests\CycloneDX.Core.Tests.csproj");
             Assert.True(ProjectFileService.IsTestProject(szProjectPath));
         }
 
         [Fact]
-        public async Task IsTestProjectFalse()
+        public void IsTestProjectFalse()
         {
             string szProjectPath = System.Environment.CurrentDirectory + XFS.Path(@"\..\..\..\..\CycloneDX.Core\CycloneDX.Core.csproj");
             Assert.False(ProjectFileService.IsTestProject(szProjectPath));
         }
 
-    [Fact]
+        [Fact]
         public async Task GetProjectNugetPackages_WithProjectAssetsFile_ReturnsNugetPackage()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
