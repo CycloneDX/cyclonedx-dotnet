@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CycloneDX.Json" Version="0.1.0" />
+    <PackageReference Include="CycloneDX.Models" Version="0.1.0" />
+    <PackageReference Include="CycloneDX.Xml" Version="0.1.0" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -12,12 +15,6 @@
     </PackageReference>
     <PackageReference Include="nuget.projectmodel" Version="5.6.0" />
     <PackageReference Include="System.IO.Abstractions" Version="12.2.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CycloneDX.Models\CycloneDX.Models.csproj" />
-    <ProjectReference Include="..\CycloneDX.Json\CycloneDX.Json.csproj" />
-    <ProjectReference Include="..\CycloneDX.Xml\CycloneDX.Xml.csproj" />
   </ItemGroup>
 
 </Project>

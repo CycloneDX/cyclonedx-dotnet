@@ -232,7 +232,7 @@ namespace CycloneDX {
             Console.WriteLine("Creating CycloneDX BOM");
             var bom = new Bom();
             if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
-            bom.Components = components;
+            bom.Components = new List<Component>(components);
 
             var bomContents = BomService.CreateDocument(bom, json);
 

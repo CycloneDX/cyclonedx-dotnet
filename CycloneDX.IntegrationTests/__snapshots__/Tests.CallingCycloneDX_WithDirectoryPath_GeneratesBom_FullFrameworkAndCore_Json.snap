@@ -4,8 +4,8 @@
   "version": 1,
   "components": [
     {
-      "publisher": "James Newton-King",
       "type": "library",
+      "publisher": "James Newton-King",
       "name": "Newtonsoft.Json",
       "version": "9.0.1",
       "description": "Json.NET is a popular high-performance JSON framework for .NET",
@@ -25,8 +25,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Common",
       "version": "5.2.0",
       "description": "NuGet client library.",
@@ -47,8 +47,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Configuration",
       "version": "5.2.0",
       "description": "NuGet\u0027s client configuration settings implementation.",
@@ -69,8 +69,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.DependencyResolver.Core",
       "version": "5.2.0",
       "description": "NuGet client library.",
@@ -91,8 +91,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Frameworks",
       "version": "5.2.0",
       "description": "The understanding of target frameworks for NuGet.Packaging.",
@@ -113,8 +113,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.LibraryModel",
       "version": "5.2.0",
       "description": "NuGet client library.",
@@ -135,8 +135,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Packaging",
       "version": "5.2.0",
       "description": "NuGet\u0027s implementation for reading nupkg package and nuspec package specification files.",
@@ -157,8 +157,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.ProjectModel",
       "version": "5.2.0",
       "description": "NuGet client library.",
@@ -179,8 +179,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Protocol",
       "version": "5.2.0",
       "description": "NuGet client library.",
@@ -201,8 +201,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Versioning",
       "version": "5.2.0",
       "description": "NuGet\u0027s implementation of Semantic Versioning.",
