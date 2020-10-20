@@ -4,8 +4,8 @@
   "version": 1,
   "components": [
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "Microsoft.NETCore.App",
       "version": "2.1.0",
       "description": "A set of .NET API\u0027s that are included in the default .NET Core application model. \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -27,8 +27,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "Microsoft.NETCore.DotNetAppHost",
       "version": "2.1.0",
       "description": "Provides the .NET Core app bootstrapper intended for use in the application directory \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -50,8 +50,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "Microsoft.NETCore.DotNetHostPolicy",
       "version": "2.1.0",
       "description": "Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -73,8 +73,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "Microsoft.NETCore.DotNetHostResolver",
       "version": "2.1.0",
       "description": "Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -96,8 +96,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "Microsoft.NETCore.Platforms",
       "version": "2.1.0",
       "description": "Provides runtime information required to resolve target framework, platform, and runtime specific implementations of .NETCore packages. \n30ab651fcb4354552bd4891619a0bdd81e0ebdbf \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -119,8 +119,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "Microsoft.NETCore.Targets",
       "version": "2.1.0",
       "description": "Provides supporting infrastructure for portable projects: support identifiers that define framework and runtime for support targets and packages that reference the minimum supported package versions when targeting these. \n30ab651fcb4354552bd4891619a0bdd81e0ebdbf \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -142,8 +142,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "Microsoft.Win32.Primitives",
       "version": "4.3.0",
       "description": "Provides common types for Win32-based libraries.\n\nCommonly Used Types:\nSystem.ComponentModel.Win32Exception\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -165,8 +165,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "Microsoft.Win32.Registry",
       "version": "4.3.0",
       "description": "Provides support for accessing and modifying the Windows Registry.\n\nCommonly Used Types:\nMicrosoft.Win32.RegistryKey\nMicrosoft.Win32.Registry\nMicrosoft.Win32.RegistryValueKind\nMicrosoft.Win32.RegistryHive\nMicrosoft.Win32.RegistryView\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -188,8 +188,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NETStandard.Library",
       "version": "2.0.3",
       "description": "A set of standard .NET APIs that are prescribed to be used and supported together. \n18a36291e48808fa7ef2d00a764ceb1ec95645a5 \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -211,8 +211,8 @@
       ]
     },
     {
-      "publisher": "James Newton-King",
       "type": "library",
+      "publisher": "James Newton-King",
       "name": "Newtonsoft.Json",
       "version": "12.0.3",
       "description": "Json.NET is a popular high-performance JSON framework for .NET",
@@ -234,8 +234,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Common",
       "version": "5.4.0",
       "description": "NuGet client library.",
@@ -257,8 +257,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Configuration",
       "version": "5.4.0",
       "description": "NuGet\u0027s client configuration settings implementation.",
@@ -280,8 +280,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.DependencyResolver.Core",
       "version": "5.4.0",
       "description": "NuGet client library.",
@@ -303,8 +303,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Frameworks",
       "version": "5.4.0",
       "description": "The understanding of target frameworks for NuGet.Packaging.",
@@ -326,8 +326,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.LibraryModel",
       "version": "5.4.0",
       "description": "NuGet client library.",
@@ -349,8 +349,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Packaging",
       "version": "5.4.0",
       "description": "NuGet\u0027s implementation for reading nupkg package and nuspec package specification files.",
@@ -372,8 +372,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.ProjectModel",
       "version": "5.4.0",
       "description": "NuGet client library.",
@@ -395,8 +395,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Protocol",
       "version": "5.4.0",
       "description": "NuGet client library.",
@@ -418,8 +418,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "NuGet.Versioning",
       "version": "5.4.0",
       "description": "NuGet\u0027s implementation of Semantic Versioning.",
@@ -441,8 +441,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "runtime.native.System",
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -464,8 +464,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Collections",
       "version": "4.3.0",
       "description": "Provides classes that define generic collections, which allow developers to create strongly typed collections that provide better type safety and performance than non-generic strongly typed collections.\n\nCommonly Used Types:\nSystem.Collections.Generic.List\u003CT\u003E\nSystem.Collections.Generic.Dictionary\u003CTKey, TValue\u003E\nSystem.Collections.Generic.Queue\u003CT\u003E\nSystem.Collections.Generic.Stack\u003CT\u003E\nSystem.Collections.Generic.HashSet\u003CT\u003E\nSystem.Collections.Generic.LinkedList\u003CT\u003E\nSystem.Collections.Generic.EqualityComparer\u003CT\u003E\nSystem.Collections.Generic.Comparer\u003CT\u003E\nSystem.Collections.Generic.SortedDictionary\u003CTKey, TValue\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -487,8 +487,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Diagnostics.Debug",
       "version": "4.3.0",
       "description": "Provides classes and attributes that allows basic interaction with a debugger.\n\nCommonly Used Types:\nSystem.Diagnostics.Debug\nSystem.Diagnostics.DebuggerStepThroughAttribute\nSystem.Diagnostics.Debugger\nSystem.Diagnostics.DebuggerDisplayAttribute\nSystem.Diagnostics.DebuggerBrowsableAttribute\nSystem.Diagnostics.DebuggerBrowsableState\nSystem.Diagnostics.DebuggerHiddenAttribute\nSystem.Diagnostics.DebuggerNonUserCodeAttribute\nSystem.Diagnostics.DebuggerTypeProxyAttribute\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -510,8 +510,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Diagnostics.Process",
       "version": "4.3.0",
       "description": "Provides the System.Diagnostics.Process class, which allows interaction with local and remote processes.\n\nCommonly Used Types:\nSystem.Diagnostics.Process\nSystem.Diagnostics.ProcessModule\nSystem.Diagnostics.ProcessStartInfo\nSystem.Diagnostics.ProcessThread\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -533,8 +533,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Dynamic.Runtime",
       "version": "4.3.0",
       "description": "Provides classes and interfaces that support the Dynamic Language Runtime (DLR).\n\nCommonly Used Types:\nSystem.Runtime.CompilerServices.CallSite\nSystem.Runtime.CompilerServices.CallSite\u003CT\u003E\nSystem.Dynamic.IDynamicMetaObjectProvider\nSystem.Dynamic.DynamicMetaObject\nSystem.Dynamic.SetMemberBinder\nSystem.Dynamic.GetMemberBinder\nSystem.Dynamic.ExpandoObject\nSystem.Dynamic.DynamicObject\nSystem.Runtime.CompilerServices.CallSiteBinder\nSystem.Runtime.CompilerServices.ConditionalWeakTable\u003CTKey, TValue\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -556,8 +556,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Globalization",
       "version": "4.3.0",
       "description": "Provides classes that define culture-related information, including language, country/region, calendars in use, format patterns for dates, currency, and numbers, and sort order for strings.\n\nCommonly Used Types:\nSystem.Globalization.DateTimeFormatInfo\nSystem.Globalization.CultureInfo\nSystem.Globalization.NumberFormatInfo\nSystem.Globalization.CalendarWeekRule\nSystem.Globalization.TextInfo\nSystem.Globalization.Calendar\nSystem.Globalization.CompareInfo\nSystem.Globalization.CompareOptions\nSystem.Globalization.UnicodeCategory\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -579,8 +579,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.IO",
       "version": "4.3.0",
       "description": "Provides base input and output (I/O) types, including System.IO.Stream, System.IO.StreamReader and System.IO.StreamWriter, that allow reading and writing to data streams\n\nCommonly Used Types:\nSystem.IO.Stream\nSystem.IO.EndOfStreamException\nSystem.IO.MemoryStream\nSystem.IO.StreamReader\nSystem.IO.StreamWriter\nSystem.IO.StringWriter\nSystem.IO.TextWriter\nSystem.IO.TextReader\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -602,8 +602,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.IO.FileSystem",
       "version": "4.3.0",
       "description": "Provides types that allow reading and writing to files and types that provide basic file and directory support.\n\nCommonly Used Types:\nSystem.IO.FileStream\nSystem.IO.FileInfo\nSystem.IO.DirectoryInfo\nSystem.IO.FileSystemInfo\nSystem.IO.File\nSystem.IO.Directory\nSystem.IO.SearchOption\nSystem.IO.FileOptions\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -625,8 +625,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.IO.FileSystem.Primitives",
       "version": "4.3.0",
       "description": "Provides common enumerations and exceptions for path-based I/O libraries.\n\nCommonly Used Types:\nSystem.IO.DirectoryNotFoundException\nSystem.IO.FileAccess\nSystem.IO.FileLoadException\nSystem.IO.PathTooLongException\nSystem.IO.FileMode\nSystem.IO.FileShare\nSystem.IO.FileAttributes\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -648,8 +648,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Linq",
       "version": "4.3.0",
       "description": "Provides classes and interfaces that supports queries that use Language-Integrated Query (LINQ).\n\nCommonly Used Types:\nSystem.Linq.Enumerable\nSystem.Linq.IGrouping\u003CTKey, TElement\u003E\nSystem.Linq.IOrderedEnumerable\u003CTElement\u003E\nSystem.Linq.ILookup\u003CTKey, TElement\u003E\nSystem.Linq.Lookup\u003CTKey, TElement\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -671,8 +671,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Linq.Expressions",
       "version": "4.3.0",
       "description": "Provides classes, interfaces and enumerations that enable language-level code expressions to be represented as objects in the form of expression trees.\n\nCommonly Used Types:\nSystem.Linq.IQueryable\u003CT\u003E\nSystem.Linq.IQueryable\nSystem.Linq.Expressions.Expression\u003CTDelegate\u003E\nSystem.Linq.Expressions.Expression\nSystem.Linq.Expressions.ExpressionVisitor\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -694,8 +694,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.ObjectModel",
       "version": "4.3.0",
       "description": "Provides types and interfaces that allow the creation of observable types that provide notifications to clients when changes are made to it.\n\nCommonly Used Types:\nSystem.ComponentModel.INotifyPropertyChanged\nSystem.Collections.ObjectModel.ObservableCollection\u003CT\u003E\nSystem.ComponentModel.PropertyChangedEventHandler\nSystem.Windows.Input.ICommand\nSystem.Collections.Specialized.INotifyCollectionChanged\nSystem.Collections.Specialized.NotifyCollectionChangedEventArgs\nSystem.Collections.Specialized.NotifyCollectionChangedEventHandler\nSystem.Collections.ObjectModel.KeyedCollection\u003CTKey, TItem\u003E\nSystem.ComponentModel.PropertyChangedEventArgs\nSystem.Collections.ObjectModel.ReadOnlyDictionary\u003CTKey, TValue\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -717,8 +717,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Reflection",
       "version": "4.3.0",
       "description": "Provides types that retrieve information about assemblies, modules, members, parameters, and other entities in managed code by examining their metadata. These types also can be used to manipulate instances of loaded types, for example to hook up events or to invoke methods.\n\nCommonly Used Types:\nSystem.Reflection.MethodInfo\nSystem.Reflection.PropertyInfo\nSystem.Reflection.ParameterInfo\nSystem.Reflection.FieldInfo\nSystem.Reflection.ConstructorInfo\nSystem.Reflection.Assembly\nSystem.Reflection.MemberInfo\nSystem.Reflection.EventInfo\nSystem.Reflection.Module\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -740,8 +740,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Reflection.Emit",
       "version": "4.3.0",
       "description": "Provides classes that allow a compiler or tool to emit metadata and optionally generate a PE file on disk. The primary clients of these classes are script engines and compilers.\n\nCommonly Used Types:\nSystem.Reflection.Emit.AssemblyBuilder\nSystem.Reflection.Emit.FieldBuilder\nSystem.Reflection.Emit.TypeBuilder\nSystem.Reflection.Emit.MethodBuilder\nSystem.Reflection.Emit.ConstructorBuilder\nSystem.Reflection.Emit.GenericTypeParameterBuilder\nSystem.Reflection.Emit.ModuleBuilder\nSystem.Reflection.Emit.PropertyBuilder\nSystem.Reflection.Emit.AssemblyBuilderAccess\nSystem.Reflection.Emit.EventBuilder\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -763,8 +763,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Reflection.Emit.ILGeneration",
       "version": "4.3.0",
       "description": "Provides classes that allow a compiler or tool to emit Microsoft intermediate language (MSIL). The primary clients of these classes are script engines and compilers.\n\nCommonly Used Types:\nSystem.Reflection.Emit.ILGenerator\nSystem.Reflection.Emit.Label\nSystem.Reflection.Emit.CustomAttributeBuilder\nSystem.Reflection.Emit.LocalBuilder\nSystem.Reflection.Emit.ParameterBuilder\nSystem.Reflection.Emit.SignatureHelper\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -786,8 +786,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Reflection.Emit.Lightweight",
       "version": "4.3.0",
       "description": "Provides the System.Reflection.Emit.DynamicMethod class, which represents a dynamic method that can be compiled, executed, and discarded. Discarded methods are available for garbage collection.\n\nCommonly Used Types:\nSystem.Reflection.Emit.DynamicMethod\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -809,8 +809,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Reflection.Extensions",
       "version": "4.3.0",
       "description": "Provides custom attribute extension methods for System.Reflection types.\n\nCommonly Used Types:\nSystem.Reflection.InterfaceMapping\nSystem.Reflection.CustomAttributeExtensions\nSystem.Reflection.RuntimeReflectionExtensions\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -832,8 +832,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Reflection.Primitives",
       "version": "4.3.0",
       "description": "Provides common enumerations for reflection-based libraries.\n\nCommonly Used Types:\nSystem.Reflection.FieldAttributes\nSystem.Reflection.Emit.OpCode\nSystem.Reflection.TypeAttributes\nSystem.Reflection.MethodAttributes\nSystem.Reflection.CallingConventions\nSystem.Reflection.PropertyAttributes\nSystem.Reflection.EventAttributes\nSystem.Reflection.ParameterAttributes\nSystem.Reflection.GenericParameterAttributes\nSystem.Reflection.MethodImplAttributes\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -855,8 +855,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Reflection.TypeExtensions",
       "version": "4.3.0",
       "description": "Provides extensions methods for System.Type that are designed to be source-compatible with older framework reflection-based APIs.\n\nCommonly Used Types:\nSystem.Reflection.TypeExtensions\nSystem.Reflection.BindingFlags\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -878,8 +878,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Resources.ResourceManager",
       "version": "4.3.0",
       "description": "Provides classes and attributes that allow developers to create, store, and manage various culture-specific resources used in an application.\n\nCommonly Used Types:\nSystem.Resources.ResourceManager\nSystem.Resources.NeutralResourcesLanguageAttribute\nSystem.Resources.SatelliteContractVersionAttribute\nSystem.Resources.MissingManifestResourceException\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -901,8 +901,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Runtime",
       "version": "4.3.0",
       "description": "Provides the fundamental primitives, classes and base classes that define commonly-used value and reference data types, events and event handlers, interfaces, attributes, and exceptions. This packages represents the core package, and provides the minimal set of types required to build a managed application.\n\nCommonly Used Types:\nSystem.Object\nSystem.Exception\nSystem.Int16\nSystem.Int32\nSystem.Int64\nSystem.Enum\nSystem.String\nSystem.Char\nSystem.Boolean\nSystem.SByte\nSystem.Byte\nSystem.DateTime\nSystem.DateTimeOffset\nSystem.Single\nSystem.Double\nSystem.UInt16\nSystem.UInt32\nSystem.UInt64\nSystem.IDisposable\nSystem.Uri\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -924,8 +924,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Runtime.Extensions",
       "version": "4.3.0",
       "description": "Provides commonly-used classes for performing mathematical functions, conversions, string comparisons and querying environment information.\n\nCommonly Used Types:\nSystem.Math\nSystem.Environment\nSystem.Random\nSystem.Progress\u003CT\u003E\nSystem.Convert\nSystem.Diagnostics.Stopwatch\nSystem.Runtime.Versioning.FrameworkName\nSystem.StringComparer\nSystem.IO.Path\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -947,8 +947,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Runtime.Handles",
       "version": "4.3.0",
       "description": "Provides base classes, including System.Runtime.InteropServices.CriticalHandle and System.Runtime.InteropServices.SafeHandle, for types that represent operating system handles.\n\nCommonly Used Types:\nSystem.Runtime.InteropServices.SafeHandle\nMicrosoft.Win32.SafeHandles.SafeWaitHandle\nSystem.Runtime.InteropServices.CriticalHandle\nSystem.Threading.WaitHandleExtensions\nSystem.IO.HandleInheritability\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -970,8 +970,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Runtime.InteropServices",
       "version": "4.3.0",
       "description": "Provides types that support COM interop and platform invoke services.\n\nCommonly Used Types:\nSystem.Runtime.InteropServices.GCHandle\nSystem.Runtime.InteropServices.GuidAttribute\nSystem.Runtime.InteropServices.COMException\nSystem.DllNotFoundException\nSystem.Runtime.InteropServices.DllImportAttribute\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -993,8 +993,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Security.Cryptography.Primitives",
       "version": "4.3.0",
       "description": "Provides common types for the cryptographic libraries.\n\nCommonly Used Types:\nSystem.Security.Cryptography.ICryptoTransform\nSystem.Security.Cryptography.AsymmetricAlgorithm\nSystem.Security.Cryptography.SymmetricAlgorithm\nSystem.Security.Cryptography.HashAlgorithm\nSystem.Security.Cryptography.KeyedHashAlgorithm\nSystem.Security.Cryptography.HMAC\nSystem.Security.Cryptography.KeySizes\nSystem.Security.Cryptography.CryptographicException\nSystem.Security.Cryptography.CipherMode\nSystem.Security.Cryptography.PaddingMode\nSystem.Security.Cryptography.CryptoStream\nSystem.Security.Cryptography.CryptoStreamMode\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -1016,8 +1016,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Security.Cryptography.ProtectedData",
       "version": "4.3.0",
       "description": "Provides access to Windows Data Protection Api.\n\nCommonly Used Types:\nSystem.Security.Cryptography.DataProtectionScope\nSystem.Security.Cryptography.ProtectedData\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -1039,8 +1039,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Text.Encoding",
       "version": "4.3.0",
       "description": "Provides base abstract encoding classes for converting blocks of characters to and from blocks of bytes.\n\nCommonly Used Types:\nSystem.Text.Encoding\nSystem.Text.DecoderFallbackException\nSystem.Text.Decoder\nSystem.Text.EncoderFallbackException\nSystem.Text.Encoder\nSystem.Text.EncoderFallback\nSystem.Text.EncoderFallbackBuffer\nSystem.Text.DecoderFallback\nSystem.Text.DecoderFallbackBuffer\nSystem.Text.DecoderExceptionFallback\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -1062,8 +1062,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Text.Encoding.Extensions",
       "version": "4.3.0",
       "description": "Provides support for specific encodings, including ASCII, UTF-7, UTF-8, UTF-16, and UTF-32.\n\nCommonly Used Types:\nSystem.Text.UTF8Encoding\nSystem.Text.UnicodeEncoding\nSystem.Text.ASCIIEncoding\nSystem.Text.UTF7Encoding\nSystem.Text.UTF32Encoding\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -1085,8 +1085,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Threading",
       "version": "4.3.0",
       "description": "Provides the fundamental synchronization primitives, including System.Threading.Monitor and System.Threading.Mutex, that are required when writing asynchronous code.\n\nCommonly Used Types:\nSystem.Threading.Monitor\nSystem.Threading.SynchronizationContext\nSystem.Threading.ManualResetEvent\nSystem.Threading.AutoResetEvent\nSystem.Threading.ThreadLocal\u003CT\u003E\nSystem.Threading.EventWaitHandle\nSystem.Threading.SemaphoreSlim\nSystem.Threading.Mutex\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -1108,8 +1108,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Threading.Tasks",
       "version": "4.3.0",
       "description": "Provides types that simplify the work of writing concurrent and asynchronous code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.Task\u003CTResult\u003E\nSystem.Runtime.CompilerServices.TaskAwaiter\u003CTResult\u003E\nSystem.Threading.Tasks.TaskCompletionSource\u003CTResult\u003E\nSystem.Threading.Tasks.Task\nSystem.OperationCanceledException\nSystem.AggregateException\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -1131,8 +1131,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Threading.Thread",
       "version": "4.3.0",
       "description": "Provides the System.Threading.Thread class, which allows developers to create and control a thread, set its priority, and get its state.\n\nCommonly Used Types:\nSystem.Threading.Thread\nSystem.Threading.ThreadStart\nSystem.Threading.ParameterizedThreadStart\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
@@ -1154,8 +1154,8 @@
       ]
     },
     {
-      "publisher": "Microsoft",
       "type": "library",
+      "publisher": "Microsoft",
       "name": "System.Threading.ThreadPool",
       "version": "4.3.0",
       "description": "Provides the System.Threading.ThreadPool class, which contains a pool of threads that can be used to execute tasks, post work items, wait on behalf of other threads, and process timers.\n\nCommonly Used Types:\nSystem.Threading.ThreadPool\nSystem.Threading.WaitOrTimerCallback\n \nWhen using NuGet 3.x this package requires at least version 3.4.",

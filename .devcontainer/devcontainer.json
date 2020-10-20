@@ -1,0 +1,11 @@
+{
+    "name": "devcontainer",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "extensions": [
+        "ms-dotnettools.csharp",
+        "redhat.vscode-yaml"
+    ]
+}

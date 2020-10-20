@@ -94,7 +94,8 @@ namespace CycloneDX.Services
                 Name = name,
                 Version = version,
                 Scope = scope,
-                Purl = Utils.GeneratePackageUrl(name, version)
+                Purl = Utils.GeneratePackageUrl(name, version),
+                Type = "library"
             };
 
             var nuspecFilename = GetCachedNuspecFilename(name, version);
@@ -152,10 +153,13 @@ namespace CycloneDX.Services
                         Id = nugetLicense.Identifier,
                         Name = nugetLicense.Identifier
                     };
-                    component.Licenses.Add(new ComponentLicense
+                    component.Licenses = new List<ComponentLicense>
                     {
-                        License = license
-                    });
+                        new ComponentLicense
+                        {
+                            License = license
+                        }
+                    };
                 };
                 licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
             }
@@ -179,20 +183,26 @@ namespace CycloneDX.Services
                         };
                     }
                     
-                    component.Licenses.Add(new ComponentLicense
+                    component.Licenses = new List<ComponentLicense>
                     {
-                        License = license
-                    });
+                        new ComponentLicense
+                        {
+                            License = license
+                        }
+                    };
                 }
             }
 
             var projectUrl = nuspecReader.GetProjectUrl();
-            if (projectUrl != null)
+            if (!string.IsNullOrEmpty(projectUrl))
             {
                 var externalReference = new Models.ExternalReference();
                 externalReference.Type = Models.ExternalReference.WEBSITE;
                 externalReference.Url = projectUrl;
-                component.ExternalReferences.Add(externalReference);
+                component.ExternalReferences = new List<ExternalReference>
+                {
+                    externalReference
+                };
             }
 
             return component;
