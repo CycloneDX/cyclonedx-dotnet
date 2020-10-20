@@ -59,25 +59,36 @@ namespace CycloneDX.Services
         }
 
 
+        public static bool IsTestProject(string projectFilePath)
+        {
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(projectFilePath);
+
+            XmlElement elt = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
+
+            return elt != null;
+        }
+
         static internal String GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
         {
             if (string.IsNullOrEmpty(baseIntermediateOutputPath))
             {
-                return Path.Combine(Path.GetDirectoryName(projectFilePath), "obj");
+            return Path.Combine(Path.GetDirectoryName(projectFilePath), "obj");
             }
             else
             {
-                string folderName = Path.GetFileNameWithoutExtension(projectFilePath);
-                return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
+            string folderName = Path.GetFileNameWithoutExtension(projectFilePath);
+            return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
             }
         }
+
 
         /// <summary>
         /// Analyzes a single Project file for NuGet package references.
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath)
+        public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
@@ -89,6 +100,12 @@ namespace CycloneDX.Services
 
             Console.WriteLine();
             Console.WriteLine($"» Analyzing: {projectFilePath}");
+
+            if (excludeTestProjects && IsTestProject(projectFilePath))
+            {
+                Console.WriteLine($"Skipping: {projectFilePath}");
+                return new HashSet<NugetPackage>();
+            }
 
             Console.WriteLine("  Attempting to restore packages");
             var restoreResult = _dotnetUtilsService.Restore(projectFilePath);
@@ -129,13 +146,13 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath)
+        public async Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects)
         {
-            var nugetPackages = await GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath).ConfigureAwait(false);
+            var nugetPackages = await GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects).ConfigureAwait(false);
             var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
             foreach (var project in projectReferences)
             {
-                var projectNugetPackages = await GetProjectNugetPackagesAsync(project, baseIntermediateOutputPath).ConfigureAwait(false);
+                var projectNugetPackages = await GetProjectNugetPackagesAsync(project, baseIntermediateOutputPath, excludeTestProjects).ConfigureAwait(false);
                 nugetPackages.UnionWith(projectNugetPackages);
             }
             return nugetPackages;
