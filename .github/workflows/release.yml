@@ -121,20 +121,3 @@ jobs:
           asset_path: bom.json
           asset_name: bom.json
           asset_content_type: application/json
-
-      - name: Upload latest SBOM to Dependency-Track
-        uses: coderpatros/upload-bom-to-dependency-track@master
-        with:
-          serverhostname: cyclonedx-dependency-track.azurewebsites.net
-          apikey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
-          projectname: cyclonedx-dotnet
-          projectversion: latest
-
-      - name: Upload version SBOM to Dependency-Track
-        uses: coderpatros/upload-bom-to-dependency-track@master
-        with:
-          serverhostname: cyclonedx-dependency-track.azurewebsites.net
-          apikey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
-          projectname: cyclonedx-dotnet
-          projectversion: ${{ steps.package_release.outputs.version }}
-          autocreate: true
