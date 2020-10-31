@@ -21,6 +21,15 @@ namespace CycloneDX.Core
 {
     public static class Utils
     {
+        /*
+         * Creates a PackageURL from the specified package name and version. 
+         */
+        public static string GeneratePackageUrl(string packageName, string packageVersion) {
+            if (packageName == null || packageVersion == null) {
+                return null;
+            }
+            return $"pkg:nuget/{packageName}@{packageVersion}";
+        }
         public static bool IsSupportedProjectType(string filename) {
             Contract.Requires(filename != null);
             return filename.ToLowerInvariant().EndsWith(".csproj", StringComparison.OrdinalIgnoreCase) ||

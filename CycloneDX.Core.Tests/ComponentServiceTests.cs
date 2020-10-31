@@ -19,8 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using CycloneDX.Models;
 using CycloneDX.Core.Models;
+using CycloneDX.Models;
 using CycloneDX.Services;
 using Moq;
 

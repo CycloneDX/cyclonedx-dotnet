@@ -16,8 +16,8 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CycloneDX.Models;
 using CycloneDX.Core.Models;
+using CycloneDX.Models;
 
 namespace CycloneDX.Services
 {

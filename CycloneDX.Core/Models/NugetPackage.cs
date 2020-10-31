@@ -47,7 +47,7 @@ namespace CycloneDX.Core.Models
 
         public override int GetHashCode()
         {
-            return CycloneDX.Models.Utils.GeneratePackageUrl(Name, Version).GetHashCode();
+            return Utils.GeneratePackageUrl(Name, Version).GetHashCode();
         }
 
         public int CompareTo(NugetPackage other)
