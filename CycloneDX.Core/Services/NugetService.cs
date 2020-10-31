@@ -23,8 +23,8 @@ using System.Threading.Tasks;
 using NuGet.Packaging.Licenses;
 using NuspecReader = NuGet.Packaging.NuspecReader;
 using CycloneDX.Extensions;
-using CycloneDX.Models;
 using CycloneDX.Core.Models;
+using CycloneDX.Models;
 
 namespace CycloneDX.Services
 {
@@ -94,8 +94,8 @@ namespace CycloneDX.Services
                 Name = name,
                 Version = version,
                 Scope = scope,
-                Purl = Utils.GeneratePackageUrl(name, version),
-                Type = "library"
+                Purl = Core.Utils.GeneratePackageUrl(name, version),
+                Type = Component.ComponentType.Library
             };
 
             var nuspecFilename = GetCachedNuspecFilename(name, version);
@@ -197,7 +197,7 @@ namespace CycloneDX.Services
             if (!string.IsNullOrEmpty(projectUrl))
             {
                 var externalReference = new Models.ExternalReference();
-                externalReference.Type = Models.ExternalReference.WEBSITE;
+                externalReference.Type = Models.ExternalReference.ExternalReferenceType.Website;
                 externalReference.Url = projectUrl;
                 component.ExternalReferences = new List<ExternalReference>
                 {

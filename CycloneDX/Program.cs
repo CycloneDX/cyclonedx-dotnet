@@ -236,6 +236,12 @@ namespace CycloneDX {
             var bom = new Bom();
             if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
             bom.Components = new List<Component>(components);
+            bom.Components.Sort((x, y) => {
+                if (x.Name == y.Name)
+                    return string.Compare(x.Version, y.Version, StringComparison.InvariantCultureIgnoreCase);
+                else
+                    return string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase);
+            });
 
             var bomContents = BomService.CreateDocument(bom, json);
 

@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<bom version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
   <components>
     <component type="library">
+      <publisher>James Newton-King</publisher>
       <name>Newtonsoft.Json</name>
       <version>9.0.1</version>
-      <description><![CDATA[Json.NET is a popular high-performance JSON framework for .NET]]></description>
+      <description>Json.NET is a popular high-performance JSON framework for .NET</description>
       <licenses>
         <license>
           <url>https://raw.github.com/JamesNK/Newtonsoft.Json/master/LICENSE.md</url>
@@ -18,9 +19,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>NuGet.Common</name>
       <version>5.2.0</version>
-      <description><![CDATA[NuGet client library.]]></description>
+      <description>NuGet client library.</description>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -35,9 +37,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>NuGet.Configuration</name>
       <version>5.2.0</version>
-      <description><![CDATA[NuGet's client configuration settings implementation.]]></description>
+      <description>NuGet's client configuration settings implementation.</description>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -52,9 +55,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>NuGet.DependencyResolver.Core</name>
       <version>5.2.0</version>
-      <description><![CDATA[NuGet client library.]]></description>
+      <description>NuGet client library.</description>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -69,9 +73,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>NuGet.Frameworks</name>
       <version>5.2.0</version>
-      <description><![CDATA[The understanding of target frameworks for NuGet.Packaging.]]></description>
+      <description>The understanding of target frameworks for NuGet.Packaging.</description>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -86,9 +91,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>NuGet.LibraryModel</name>
       <version>5.2.0</version>
-      <description><![CDATA[NuGet client library.]]></description>
+      <description>NuGet client library.</description>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -103,9 +109,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>NuGet.Packaging</name>
       <version>5.2.0</version>
-      <description><![CDATA[NuGet's implementation for reading nupkg package and nuspec package specification files.]]></description>
+      <description>NuGet's implementation for reading nupkg package and nuspec package specification files.</description>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -120,9 +127,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>NuGet.ProjectModel</name>
       <version>5.2.0</version>
-      <description><![CDATA[NuGet client library.]]></description>
+      <description>NuGet client library.</description>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -137,9 +145,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>NuGet.Protocol</name>
       <version>5.2.0</version>
-      <description><![CDATA[NuGet client library.]]></description>
+      <description>NuGet client library.</description>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -154,9 +163,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>NuGet.Versioning</name>
       <version>5.2.0</version>
-      <description><![CDATA[NuGet's implementation of Semantic Versioning.]]></description>
+      <description>NuGet's implementation of Semantic Versioning.</description>
       <licenses>
         <license>
           <id>Apache-2.0</id>

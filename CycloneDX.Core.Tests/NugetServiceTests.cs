@@ -24,7 +24,6 @@ using Xunit;
 using Moq;
 using RichardSzalay.MockHttp;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
-using CycloneDX.Models;
 using CycloneDX.Services;
 
 namespace CycloneDX.Tests

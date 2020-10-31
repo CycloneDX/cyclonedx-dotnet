@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<bom version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
   <components>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Antiforgery</name>
       <version>2.0.0</version>
-      <description><![CDATA[An antiforgery system for ASP.NET Core designed to generate and validate tokens to prevent Cross-Site Request Forgery attacks.]]></description>
+      <description>An antiforgery system for ASP.NET Core designed to generate and validate tokens to prevent Cross-Site Request Forgery attacks.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -20,9 +21,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Authentication.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core common types used by the various authentication components.]]></description>
+      <description>ASP.NET Core common types used by the various authentication components.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -38,9 +40,10 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Authentication.Core</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core common types used by the various authentication middleware components.]]></description>
+      <description>ASP.NET Core common types used by the various authentication middleware components.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -56,12 +59,13 @@
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Authorization</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core authorization classes.
+      <description>ASP.NET Core authorization classes.
 Commonly used types:
 Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute
-Microsoft.AspNetCore.Authorization.AuthorizeAttribute]]></description>
+Microsoft.AspNetCore.Authorization.AuthorizeAttribute</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -77,9 +81,10 @@ Microsoft.AspNetCore.Authorization.AuthorizeAttribute]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Authorization.Policy</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core authorization policy helper classes.]]></description>
+      <description>ASP.NET Core authorization policy helper classes.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -95,12 +100,13 @@ Microsoft.AspNetCore.Authorization.AuthorizeAttribute]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Cors</name>
       <version>2.0.0</version>
-      <description><![CDATA[CORS middleware and policy for ASP.NET Core to enable cross-origin resource sharing.
+      <description>CORS middleware and policy for ASP.NET Core to enable cross-origin resource sharing.
 Commonly used types:
 Microsoft.AspNetCore.Cors.DisableCorsAttribute
-Microsoft.AspNetCore.Cors.EnableCorsAttribute]]></description>
+Microsoft.AspNetCore.Cors.EnableCorsAttribute</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -116,9 +122,10 @@ Microsoft.AspNetCore.Cors.EnableCorsAttribute]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Cryptography.Internal</name>
       <version>2.0.0</version>
-      <description><![CDATA[Infrastructure for ASP.NET Core cryptographic packages. Applications and libraries should not reference this package directly.]]></description>
+      <description>Infrastructure for ASP.NET Core cryptographic packages. Applications and libraries should not reference this package directly.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -134,9 +141,10 @@ Microsoft.AspNetCore.Cors.EnableCorsAttribute]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.DataProtection</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core logic to protect and unprotect data, similar to DPAPI.]]></description>
+      <description>ASP.NET Core logic to protect and unprotect data, similar to DPAPI.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -152,12 +160,13 @@ Microsoft.AspNetCore.Cors.EnableCorsAttribute]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.DataProtection.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core data protection abstractions.
+      <description>ASP.NET Core data protection abstractions.
 Commonly used types:
 Microsoft.AspNetCore.DataProtection.IDataProtectionProvider
-Microsoft.AspNetCore.DataProtection.IDataProtector]]></description>
+Microsoft.AspNetCore.DataProtection.IDataProtector</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -173,9 +182,10 @@ Microsoft.AspNetCore.DataProtection.IDataProtector]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Diagnostics.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core diagnostics middleware abstractions and feature interface definitions.]]></description>
+      <description>ASP.NET Core diagnostics middleware abstractions and feature interface definitions.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -191,9 +201,10 @@ Microsoft.AspNetCore.DataProtection.IDataProtector]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Hosting.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core hosting and startup abstractions for web applications.]]></description>
+      <description>ASP.NET Core hosting and startup abstractions for web applications.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -209,9 +220,10 @@ Microsoft.AspNetCore.DataProtection.IDataProtector]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Hosting.Server.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core hosting server abstractions for web applications.]]></description>
+      <description>ASP.NET Core hosting server abstractions for web applications.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -227,12 +239,13 @@ Microsoft.AspNetCore.DataProtection.IDataProtector]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Html.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core HTML abstractions used for building HTML content.
+      <description>ASP.NET Core HTML abstractions used for building HTML content.
 Commonly used types:
 Microsoft.AspNetCore.Html.HtmlString
-Microsoft.AspNetCore.Html.IHtmlContent]]></description>
+Microsoft.AspNetCore.Html.IHtmlContent</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -248,9 +261,10 @@ Microsoft.AspNetCore.Html.IHtmlContent]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Http</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core default HTTP feature implementations.]]></description>
+      <description>ASP.NET Core default HTTP feature implementations.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -266,14 +280,15 @@ Microsoft.AspNetCore.Html.IHtmlContent]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Http.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core HTTP object model for HTTP requests and responses and also common extension methods for registering middleware in an IApplicationBuilder.
+      <description>ASP.NET Core HTTP object model for HTTP requests and responses and also common extension methods for registering middleware in an IApplicationBuilder.
 Commonly used types:
 Microsoft.AspNetCore.Builder.IApplicationBuilder
 Microsoft.AspNetCore.Http.HttpContext
 Microsoft.AspNetCore.Http.HttpRequest
-Microsoft.AspNetCore.Http.HttpResponse]]></description>
+Microsoft.AspNetCore.Http.HttpResponse</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -289,9 +304,10 @@ Microsoft.AspNetCore.Http.HttpResponse]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Http.Extensions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core common extension methods for HTTP abstractions, HTTP headers, HTTP request/response, and session state.]]></description>
+      <description>ASP.NET Core common extension methods for HTTP abstractions, HTTP headers, HTTP request/response, and session state.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -307,9 +323,10 @@ Microsoft.AspNetCore.Http.HttpResponse]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Http.Features</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core HTTP feature interface definitions.]]></description>
+      <description>ASP.NET Core HTTP feature interface definitions.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -325,11 +342,12 @@ Microsoft.AspNetCore.Http.HttpResponse]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.HttpOverrides</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core basic middleware for supporting HTTP method overrides. Includes:
+      <description>ASP.NET Core basic middleware for supporting HTTP method overrides. Includes:
 * X-Forwarded-* headers to forward headers from a proxy.
-* HTTP method override header.]]></description>
+* HTTP method override header.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -345,9 +363,10 @@ Microsoft.AspNetCore.Http.HttpResponse]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.JsonPatch</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core support for JSON PATCH.]]></description>
+      <description>ASP.NET Core support for JSON PATCH.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -363,9 +382,10 @@ Microsoft.AspNetCore.Http.HttpResponse]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Localization</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core middleware for automatically applying culture information to HTTP requests. Culture information can be specified in the HTTP header, query string, cookie, or custom source.]]></description>
+      <description>ASP.NET Core middleware for automatically applying culture information to HTTP requests. Culture information can be specified in the HTTP header, query string, cookie, or custom source.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -381,9 +401,10 @@ Microsoft.AspNetCore.Http.HttpResponse]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC is a web framework that gives you a powerful, patterns-based way to build dynamic websites and web APIs. ASP.NET Core MVC enables a clean separation of concerns and gives you full control over markup.]]></description>
+      <description>ASP.NET Core MVC is a web framework that gives you a powerful, patterns-based way to build dynamic websites and web APIs. ASP.NET Core MVC enables a clean separation of concerns and gives you full control over markup.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -399,11 +420,12 @@ Microsoft.AspNetCore.Http.HttpResponse]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC abstractions and interfaces for action invocation and dispatching, authorization, action filters, formatters, model binding, routing, validation, and more.
+      <description>ASP.NET Core MVC abstractions and interfaces for action invocation and dispatching, authorization, action filters, formatters, model binding, routing, validation, and more.
 Commonly used types:
-Microsoft.AspNetCore.Mvc.IActionResult]]></description>
+Microsoft.AspNetCore.Mvc.IActionResult</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -419,9 +441,10 @@ Microsoft.AspNetCore.Mvc.IActionResult]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.ApiExplorer</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC API explorer functionality for discovering metadata such as the list of controllers and actions, and their URLs and allowed HTTP methods.]]></description>
+      <description>ASP.NET Core MVC API explorer functionality for discovering metadata such as the list of controllers and actions, and their URLs and allowed HTTP methods.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -437,9 +460,10 @@ Microsoft.AspNetCore.Mvc.IActionResult]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.Core</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC core components. Contains common action result types, attribute routing, application model conventions, API explorer, application parts, filters, formatters, model binding, and more.
+      <description>ASP.NET Core MVC core components. Contains common action result types, attribute routing, application model conventions, API explorer, application parts, filters, formatters, model binding, and more.
 Commonly used types:
 Microsoft.AspNetCore.Mvc.AreaAttribute
 Microsoft.AspNetCore.Mvc.BindAttribute
@@ -447,7 +471,7 @@ Microsoft.AspNetCore.Mvc.ControllerBase
 Microsoft.AspNetCore.Mvc.FromBodyAttribute
 Microsoft.AspNetCore.Mvc.FromFormAttribute
 Microsoft.AspNetCore.Mvc.RequireHttpsAttribute
-Microsoft.AspNetCore.Mvc.RouteAttribute]]></description>
+Microsoft.AspNetCore.Mvc.RouteAttribute</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -463,9 +487,10 @@ Microsoft.AspNetCore.Mvc.RouteAttribute]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.Cors</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC cross-origin resource sharing (CORS) features.]]></description>
+      <description>ASP.NET Core MVC cross-origin resource sharing (CORS) features.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -481,9 +506,10 @@ Microsoft.AspNetCore.Mvc.RouteAttribute]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.DataAnnotations</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC metadata and validation system using System.ComponentModel.DataAnnotations.]]></description>
+      <description>ASP.NET Core MVC metadata and validation system using System.ComponentModel.DataAnnotations.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -499,9 +525,10 @@ Microsoft.AspNetCore.Mvc.RouteAttribute]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.Formatters.Json</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC formatters for JSON input and output and for JSON PATCH input using Json.NET.]]></description>
+      <description>ASP.NET Core MVC formatters for JSON input and output and for JSON PATCH input using Json.NET.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -517,12 +544,13 @@ Microsoft.AspNetCore.Mvc.RouteAttribute]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.Localization</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC features that enable globalization and localization of applications.
+      <description>ASP.NET Core MVC features that enable globalization and localization of applications.
 Commonly used types:
-Microsoft.AspNetCore.Mvc.Localization.IHtmlLocalizer<TResource>
-Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer]]></description>
+Microsoft.AspNetCore.Mvc.Localization.IHtmlLocalizer&lt;TResource&gt;
+Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -538,9 +566,10 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.Razor</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC Razor view engine for CSHTML files.]]></description>
+      <description>ASP.NET Core MVC Razor view engine for CSHTML files.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -556,9 +585,10 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.Razor.Extensions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core design time hosting infrastructure for the Razor view engine.]]></description>
+      <description>ASP.NET Core design time hosting infrastructure for the Razor view engine.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -574,9 +604,10 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.RazorPages</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC Razor Pages.]]></description>
+      <description>ASP.NET Core MVC Razor Pages.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -592,9 +623,10 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.TagHelpers</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC default tag helpers. Contains tag helpers for anchor tags, HTML input elements, caching, scripts, links (for CSS), and more.]]></description>
+      <description>ASP.NET Core MVC default tag helpers. Contains tag helpers for anchor tags, HTML input elements, caching, scripts, links (for CSS), and more.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -610,13 +642,14 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Mvc.ViewFeatures</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core MVC view rendering features. Contains common types used in most MVC applications as well as view rendering features such as view engines, views, view components, and HTML helpers.
+      <description>ASP.NET Core MVC view rendering features. Contains common types used in most MVC applications as well as view rendering features such as view engines, views, view components, and HTML helpers.
 Commonly used types:
 Microsoft.AspNetCore.Mvc.Controller
 Microsoft.AspNetCore.Mvc.ValidateAntiForgeryTokenAttribute
-Microsoft.AspNetCore.Mvc.ViewComponent]]></description>
+Microsoft.AspNetCore.Mvc.ViewComponent</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -632,9 +665,10 @@ Microsoft.AspNetCore.Mvc.ViewComponent]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Razor</name>
       <version>2.0.0</version>
-      <description><![CDATA[Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor parser and code generation infrastructure.]]></description>
+      <description>Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor parser and code generation infrastructure.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -650,9 +684,10 @@ Microsoft.AspNetCore.Mvc.ViewComponent]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Razor.Language</name>
       <version>2.0.0</version>
-      <description><![CDATA[Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor parser and code generation infrastructure.]]></description>
+      <description>Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor parser and code generation infrastructure.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -668,14 +703,15 @@ Microsoft.AspNetCore.Mvc.ViewComponent]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Razor.Runtime</name>
       <version>2.0.0</version>
-      <description><![CDATA[Runtime components for rendering Razor pages and implementing tag helpers.
+      <description>Runtime components for rendering Razor pages and implementing tag helpers.
 
 Commonly used types:
 Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeNameAttribute
 Microsoft.AspNetCore.Razor.TagHelpers.HtmlTargetElementAttribute
-Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper]]></description>
+Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -691,9 +727,10 @@ Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.ResponseCaching.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core response caching middleware abstractions and feature interface definitions.]]></description>
+      <description>ASP.NET Core response caching middleware abstractions and feature interface definitions.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -709,12 +746,13 @@ Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Routing</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core middleware for routing requests to application logic and for generating links.
+      <description>ASP.NET Core middleware for routing requests to application logic and for generating links.
 Commonly used types:
 Microsoft.AspNetCore.Routing.Route
-Microsoft.AspNetCore.Routing.RouteCollection]]></description>
+Microsoft.AspNetCore.Routing.RouteCollection</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -730,12 +768,13 @@ Microsoft.AspNetCore.Routing.RouteCollection]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Routing.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core abstractions for routing requests to application logic and for generating links.
+      <description>ASP.NET Core abstractions for routing requests to application logic and for generating links.
 Commonly used types:
 Microsoft.AspNetCore.Routing.IRouter
-Microsoft.AspNetCore.Routing.RouteData]]></description>
+Microsoft.AspNetCore.Routing.RouteData</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -751,9 +790,10 @@ Microsoft.AspNetCore.Routing.RouteData]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.Server.IISIntegration</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core components for working with the IIS AspNetCoreModule.]]></description>
+      <description>ASP.NET Core components for working with the IIS AspNetCoreModule.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -769,9 +809,10 @@ Microsoft.AspNetCore.Routing.RouteData]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.AspNetCore.WebUtilities</name>
       <version>2.0.0</version>
-      <description><![CDATA[ASP.NET Core utilities, such as for working with forms, multipart messages, and query strings.]]></description>
+      <description>ASP.NET Core utilities, such as for working with forms, multipart messages, and query strings.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -787,9 +828,10 @@ Microsoft.AspNetCore.Routing.RouteData]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.CodeAnalysis.Analyzers</name>
       <version>1.1.0</version>
-      <description><![CDATA[Analyzers for .NET Compiler Platform ("Roslyn")]]></description>
+      <description>Analyzers for .NET Compiler Platform ("Roslyn")</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -804,9 +846,10 @@ Microsoft.AspNetCore.Routing.RouteData]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.CodeAnalysis.Common</name>
       <version>2.3.1</version>
-      <description><![CDATA[A shared package used by the Microsoft .NET Compiler Platform ("Roslyn").]]></description>
+      <description>A shared package used by the Microsoft .NET Compiler Platform ("Roslyn").</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -821,11 +864,12 @@ Microsoft.AspNetCore.Routing.RouteData]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.CodeAnalysis.CSharp</name>
       <version>2.3.1</version>
-      <description><![CDATA[.NET Compiler Platform ("Roslyn") support for C#, Microsoft.CodeAnalysis.CSharp.dll.
+      <description>.NET Compiler Platform ("Roslyn") support for C#, Microsoft.CodeAnalysis.CSharp.dll.
 
-      More details at https://aka.ms/roslyn-packages]]></description>
+      More details at https://aka.ms/roslyn-packages</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -840,9 +884,10 @@ Microsoft.AspNetCore.Routing.RouteData]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.CodeAnalysis.Razor</name>
       <version>2.0.0</version>
-      <description><![CDATA[Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor design-time infrastructure.]]></description>
+      <description>Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor design-time infrastructure.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -858,9 +903,10 @@ Microsoft.AspNetCore.Routing.RouteData]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.CSharp</name>
       <version>4.4.0</version>
-      <description><![CDATA[Provides support for compilation and code generation, including dynamic, using the C# language.
+      <description>Provides support for compilation and code generation, including dynamic, using the C# language.
 
 Commonly Used Types:
 Microsoft.CSharp.RuntimeBinder.Binder
@@ -870,7 +916,7 @@ Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfoFlags
 Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags
  
 8321c729934c0f8be754953439b88e6e1c120c24 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -886,9 +932,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft.DotNet.PlatformAbstractions</publisher>
       <name>Microsoft.DotNet.PlatformAbstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[Abstractions for making code that uses file system and environment testable.]]></description>
+      <description>Abstractions for making code that uses file system and environment testable.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -904,12 +951,13 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.Caching.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[Caching abstractions for in-memory cache and distributed cache.
+      <description>Caching abstractions for in-memory cache and distributed cache.
 Commonly used types:
 Microsoft.Extensions.Caching.Distributed.IDistributedCache
-Microsoft.Extensions.Caching.Memory.IMemoryCache]]></description>
+Microsoft.Extensions.Caching.Memory.IMemoryCache</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -925,9 +973,10 @@ Microsoft.Extensions.Caching.Memory.IMemoryCache]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.Caching.Memory</name>
       <version>2.0.0</version>
-      <description><![CDATA[In-memory cache implementation of Microsoft.Extensions.Caching.Memory.IMemoryCache.]]></description>
+      <description>In-memory cache implementation of Microsoft.Extensions.Caching.Memory.IMemoryCache.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -943,15 +992,16 @@ Microsoft.Extensions.Caching.Memory.IMemoryCache]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.Configuration.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[Abstractions of key-value pair based configuration.
+      <description>Abstractions of key-value pair based configuration.
 Commonly used types:
 Microsoft.Extensions.Configuration.IConfiguration
 Microsoft.Extensions.Configuration.IConfigurationBuilder
 Microsoft.Extensions.Configuration.IConfigurationProvider
 Microsoft.Extensions.Configuration.IConfigurationRoot
-Microsoft.Extensions.Configuration.IConfigurationSection]]></description>
+Microsoft.Extensions.Configuration.IConfigurationSection</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -967,9 +1017,10 @@ Microsoft.Extensions.Configuration.IConfigurationSection]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.DependencyInjection</name>
       <version>2.0.0</version>
-      <description><![CDATA[Default implementation of dependency injection for Microsoft.Extensions.DependencyInjection.]]></description>
+      <description>Default implementation of dependency injection for Microsoft.Extensions.DependencyInjection.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -985,11 +1036,12 @@ Microsoft.Extensions.Configuration.IConfigurationSection]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.DependencyInjection.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[Abstractions for dependency injection.
+      <description>Abstractions for dependency injection.
 Commonly used types:
-Microsoft.Extensions.DependencyInjection.IServiceCollection]]></description>
+Microsoft.Extensions.DependencyInjection.IServiceCollection</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1005,9 +1057,10 @@ Microsoft.Extensions.DependencyInjection.IServiceCollection]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft.Extensions.DependencyModel</publisher>
       <name>Microsoft.Extensions.DependencyModel</name>
       <version>2.0.0</version>
-      <description><![CDATA[Abstractions for reading `.deps` files.]]></description>
+      <description>Abstractions for reading `.deps` files.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1023,13 +1076,14 @@ Microsoft.Extensions.DependencyInjection.IServiceCollection]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.FileProviders.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[Abstractions of files and directories.
+      <description>Abstractions of files and directories.
 Commonly used types:
 Microsoft.Extensions.FileProviders.IDirectoryContents
 Microsoft.Extensions.FileProviders.IFileInfo
-Microsoft.Extensions.FileProviders.IFileProvider]]></description>
+Microsoft.Extensions.FileProviders.IFileProvider</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1045,9 +1099,10 @@ Microsoft.Extensions.FileProviders.IFileProvider]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.FileProviders.Composite</name>
       <version>2.0.0</version>
-      <description><![CDATA[Composite file and directory providers for Microsoft.Extensions.FileProviders.]]></description>
+      <description>Composite file and directory providers for Microsoft.Extensions.FileProviders.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1063,9 +1118,10 @@ Microsoft.Extensions.FileProviders.IFileProvider]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.FileSystemGlobbing</name>
       <version>2.0.0</version>
-      <description><![CDATA[File system globbing to find files matching a specified pattern.]]></description>
+      <description>File system globbing to find files matching a specified pattern.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1081,9 +1137,10 @@ Microsoft.Extensions.FileProviders.IFileProvider]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.Hosting.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[.NET Core hosting and startup abstractions for applications.]]></description>
+      <description>.NET Core hosting and startup abstractions for applications.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1099,9 +1156,10 @@ Microsoft.Extensions.FileProviders.IFileProvider]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.Localization</name>
       <version>2.0.0</version>
-      <description><![CDATA[Application localization services and default implementation based on ResourceManager to load localized assembly resources.]]></description>
+      <description>Application localization services and default implementation based on ResourceManager to load localized assembly resources.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1117,12 +1175,13 @@ Microsoft.Extensions.FileProviders.IFileProvider]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.Localization.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[Abstractions of application localization services.
+      <description>Abstractions of application localization services.
 Commonly used types:
 Microsoft.Extensions.Localization.IStringLocalizer
-Microsoft.Extensions.Localization.IStringLocalizer<T>]]></description>
+Microsoft.Extensions.Localization.IStringLocalizer&lt;T&gt;</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1138,17 +1197,18 @@ Microsoft.Extensions.Localization.IStringLocalizer<T>]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.Logging.Abstractions</name>
       <version>2.0.0</version>
-      <description><![CDATA[Logging abstractions for Microsoft.Extensions.Logging.
+      <description>Logging abstractions for Microsoft.Extensions.Logging.
 Commonly used types:
 Microsoft.Extensions.Logging.ILogger
 Microsoft.Extensions.Logging.ILoggerFactory
-Microsoft.Extensions.Logging.ILogger<TCategoryName>
+Microsoft.Extensions.Logging.ILogger&lt;TCategoryName&gt;
 Microsoft.Extensions.Logging.LogLevel
-Microsoft.Extensions.Logging.Logger<T>
+Microsoft.Extensions.Logging.Logger&lt;T&gt;
 Microsoft.Extensions.Logging.LoggerMessage
-Microsoft.Extensions.Logging.Abstractions.NullLogger]]></description>
+Microsoft.Extensions.Logging.Abstractions.NullLogger</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1164,9 +1224,10 @@ Microsoft.Extensions.Logging.Abstractions.NullLogger]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.ObjectPool</name>
       <version>2.0.0</version>
-      <description><![CDATA[A simple object pool implementation.]]></description>
+      <description>A simple object pool implementation.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1182,9 +1243,10 @@ Microsoft.Extensions.Logging.Abstractions.NullLogger]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.Options</name>
       <version>2.0.0</version>
-      <description><![CDATA[Provides a strongly typed way of specifying and accessing settings using dependency injection.]]></description>
+      <description>Provides a strongly typed way of specifying and accessing settings using dependency injection.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1200,12 +1262,13 @@ Microsoft.Extensions.Logging.Abstractions.NullLogger]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.Primitives</name>
       <version>2.0.0</version>
-      <description><![CDATA[Primitives shared by framework extensions. Commonly used types include:
+      <description>Primitives shared by framework extensions. Commonly used types include:
 Microsoft.Extensions.Primitives.IChangeToken
 Microsoft.Extensions.Primitives.StringValues
-Microsoft.Extensions.Primitives.StringSegment]]></description>
+Microsoft.Extensions.Primitives.StringSegment</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1221,9 +1284,10 @@ Microsoft.Extensions.Primitives.StringSegment]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Extensions.WebEncoders</name>
       <version>2.0.0</version>
-      <description><![CDATA[Contains registration and configuration APIs to add the core framework encoders to a dependency injection container.]]></description>
+      <description>Contains registration and configuration APIs to add the core framework encoders to a dependency injection container.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1239,9 +1303,10 @@ Microsoft.Extensions.Primitives.StringSegment]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Net.Http.Headers</name>
       <version>2.0.0</version>
-      <description><![CDATA[HTTP header parser implementations.]]></description>
+      <description>HTTP header parser implementations.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1257,11 +1322,12 @@ Microsoft.Extensions.Primitives.StringSegment]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.NETCore.App</name>
       <version>2.1.0</version>
-      <description><![CDATA[A set of .NET API's that are included in the default .NET Core application model. 
+      <description>A set of .NET API's that are included in the default .NET Core application model. 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1277,11 +1343,12 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.NETCore.DotNetAppHost</name>
       <version>2.1.0</version>
-      <description><![CDATA[Provides the .NET Core app bootstrapper intended for use in the application directory 
+      <description>Provides the .NET Core app bootstrapper intended for use in the application directory 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1297,11 +1364,12 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.NETCore.DotNetHostPolicy</name>
       <version>2.1.0</version>
-      <description><![CDATA[Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing 
+      <description>Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1317,11 +1385,12 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.NETCore.DotNetHostResolver</name>
       <version>2.1.0</version>
-      <description><![CDATA[Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost 
+      <description>Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost 
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1337,11 +1406,12 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.NETCore.Platforms</name>
       <version>2.1.0</version>
-      <description><![CDATA[Provides runtime information required to resolve target framework, platform, and runtime specific implementations of .NETCore packages. 
+      <description>Provides runtime information required to resolve target framework, platform, and runtime specific implementations of .NETCore packages. 
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1357,11 +1427,12 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.NETCore.Targets</name>
       <version>2.1.0</version>
-      <description><![CDATA[Provides supporting infrastructure for portable projects: support identifiers that define framework and runtime for support targets and packages that reference the minimum supported package versions when targeting these. 
+      <description>Provides supporting infrastructure for portable projects: support identifiers that define framework and runtime for support targets and packages that reference the minimum supported package versions when targeting these. 
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1377,14 +1448,15 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Win32.Primitives</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides common types for Win32-based libraries.
+      <description>Provides common types for Win32-based libraries.
 
 Commonly Used Types:
 System.ComponentModel.Win32Exception
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1400,9 +1472,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>Microsoft.Win32.Registry</name>
       <version>4.4.0</version>
-      <description><![CDATA[Provides support for accessing and modifying the Windows Registry.
+      <description>Provides support for accessing and modifying the Windows Registry.
 
 Commonly Used Types:
 Microsoft.Win32.RegistryKey
@@ -1412,7 +1485,7 @@ Microsoft.Win32.RegistryHive
 Microsoft.Win32.RegistryView
  
 8321c729934c0f8be754953439b88e6e1c120c24 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1428,11 +1501,12 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>NETStandard.Library</name>
       <version>2.0.3</version>
-      <description><![CDATA[A set of standard .NET APIs that are prescribed to be used and supported together. 
+      <description>A set of standard .NET APIs that are prescribed to be used and supported together. 
 18a36291e48808fa7ef2d00a764ceb1ec95645a5 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1448,9 +1522,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>James Newton-King</publisher>
       <name>Newtonsoft.Json</name>
       <version>10.0.1</version>
-      <description><![CDATA[Json.NET is a popular high-performance JSON framework for .NET]]></description>
+      <description>Json.NET is a popular high-performance JSON framework for .NET</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1465,9 +1540,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>James Newton-King</publisher>
       <name>Newtonsoft.Json.Bson</name>
       <version>1.0.1</version>
-      <description><![CDATA[Json.NET BSON adds support for reading and writing BSON]]></description>
+      <description>Json.NET BSON adds support for reading and writing BSON</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1483,10 +1559,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1502,10 +1579,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1521,10 +1599,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1540,10 +1619,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.native.System</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1559,10 +1639,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.native.System.IO.Compression</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1578,10 +1659,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.native.System.Net.Http</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1597,10 +1679,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.native.System.Net.Security</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1616,10 +1699,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.native.System.Security.Cryptography.Apple</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1635,10 +1719,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1654,10 +1739,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1673,10 +1759,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1692,10 +1779,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1711,10 +1799,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1730,10 +1819,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1749,10 +1839,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1768,10 +1859,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1787,10 +1879,11 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Internal implementation package not meant for direct consumption.  Please do not reference directly. 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+      <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <licenses>
         <license>
@@ -1806,14 +1899,15 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.AppContext</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.AppContext class, which allows access to the BaseDirectory property and other application specific data.
+      <description>Provides the System.AppContext class, which allows access to the BaseDirectory property and other application specific data.
 
 Commonly Used Types:
 System.AppContext
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1829,15 +1923,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Buffers</name>
       <version>4.4.0</version>
-      <description><![CDATA[Provides resource pooling of any type for performance-critical applications that allocate and deallocate objects frequently.
+      <description>Provides resource pooling of any type for performance-critical applications that allocate and deallocate objects frequently.
 
 Commonly Used Types:
-System.Buffers.ArrayPool<T>
+System.Buffers.ArrayPool&lt;T&gt;
  
 8321c729934c0f8be754953439b88e6e1c120c24 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1853,22 +1948,23 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Collections</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes that define generic collections, which allow developers to create strongly typed collections that provide better type safety and performance than non-generic strongly typed collections.
+      <description>Provides classes that define generic collections, which allow developers to create strongly typed collections that provide better type safety and performance than non-generic strongly typed collections.
 
 Commonly Used Types:
-System.Collections.Generic.List<T>
-System.Collections.Generic.Dictionary<TKey, TValue>
-System.Collections.Generic.Queue<T>
-System.Collections.Generic.Stack<T>
-System.Collections.Generic.HashSet<T>
-System.Collections.Generic.LinkedList<T>
-System.Collections.Generic.EqualityComparer<T>
-System.Collections.Generic.Comparer<T>
-System.Collections.Generic.SortedDictionary<TKey, TValue>
+System.Collections.Generic.List&lt;T&gt;
+System.Collections.Generic.Dictionary&lt;TKey, TValue&gt;
+System.Collections.Generic.Queue&lt;T&gt;
+System.Collections.Generic.Stack&lt;T&gt;
+System.Collections.Generic.HashSet&lt;T&gt;
+System.Collections.Generic.LinkedList&lt;T&gt;
+System.Collections.Generic.EqualityComparer&lt;T&gt;
+System.Collections.Generic.Comparer&lt;T&gt;
+System.Collections.Generic.SortedDictionary&lt;TKey, TValue&gt;
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1884,18 +1980,19 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Collections.Concurrent</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides several thread-safe collection classes that should be used in place of the corresponding types in the System.Collections.NonGeneric and System.Collections packages whenever multiple threads are accessing the collection concurrently.
+      <description>Provides several thread-safe collection classes that should be used in place of the corresponding types in the System.Collections.NonGeneric and System.Collections packages whenever multiple threads are accessing the collection concurrently.
 
 Commonly Used Types:
-System.Collections.Concurrent.ConcurrentDictionary<TKey, TValue>
-System.Collections.Concurrent.ConcurrentQueue<T>
-System.Collections.Concurrent.ConcurrentBag<T>
-System.Collections.Concurrent.BlockingCollection<T>
-System.Collections.Concurrent.ConcurrentStack<T>
+System.Collections.Concurrent.ConcurrentDictionary&lt;TKey, TValue&gt;
+System.Collections.Concurrent.ConcurrentQueue&lt;T&gt;
+System.Collections.Concurrent.ConcurrentBag&lt;T&gt;
+System.Collections.Concurrent.BlockingCollection&lt;T&gt;
+System.Collections.Concurrent.ConcurrentStack&lt;T&gt;
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1911,27 +2008,28 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Collections.Immutable</name>
       <version>1.3.1</version>
-      <description><![CDATA[This package provides collections that are thread safe and guaranteed to never change their contents, also known as immutable collections. Like strings, any methods that perform modifications will not change the existing instance but instead return a new instance. For efficiency reasons, the implementation uses a sharing mechanism to ensure that newly created instances share as much data as possible with the previous instance while ensuring that operations have a predictable time complexity.
+      <description>This package provides collections that are thread safe and guaranteed to never change their contents, also known as immutable collections. Like strings, any methods that perform modifications will not change the existing instance but instead return a new instance. For efficiency reasons, the implementation uses a sharing mechanism to ensure that newly created instances share as much data as possible with the previous instance while ensuring that operations have a predictable time complexity.
 
 Commonly Used Types:
 System.Collections.Immutable.ImmutableArray
-System.Collections.Immutable.ImmutableArray<T>
+System.Collections.Immutable.ImmutableArray&lt;T&gt;
 System.Collections.Immutable.ImmutableDictionary
-System.Collections.Immutable.ImmutableDictionary<TKey,TValue>
+System.Collections.Immutable.ImmutableDictionary&lt;TKey,TValue&gt;
 System.Collections.Immutable.ImmutableHashSet
-System.Collections.Immutable.ImmutableHashSet<T>
+System.Collections.Immutable.ImmutableHashSet&lt;T&gt;
 System.Collections.Immutable.ImmutableList
-System.Collections.Immutable.ImmutableList<T>
+System.Collections.Immutable.ImmutableList&lt;T&gt;
 System.Collections.Immutable.ImmutableQueue
-System.Collections.Immutable.ImmutableQueue<T>
+System.Collections.Immutable.ImmutableQueue&lt;T&gt;
 System.Collections.Immutable.ImmutableSortedDictionary
-System.Collections.Immutable.ImmutableSortedDictionary<TKey,TValue>
+System.Collections.Immutable.ImmutableSortedDictionary&lt;TKey,TValue&gt;
 System.Collections.Immutable.ImmutableSortedSet
-System.Collections.Immutable.ImmutableSortedSet<T>
+System.Collections.Immutable.ImmutableSortedSet&lt;T&gt;
 System.Collections.Immutable.ImmutableStack
-System.Collections.Immutable.ImmutableStack<T>]]></description>
+System.Collections.Immutable.ImmutableStack&lt;T&gt;</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1947,9 +2045,10 @@ System.Collections.Immutable.ImmutableStack<T>]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Collections.NonGeneric</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes that define older non-generic collections of objects, such as lists, queues, hash tables and dictionaries. Developers should prefer the generic collections in the System.Collections package.
+      <description>Provides classes that define older non-generic collections of objects, such as lists, queues, hash tables and dictionaries. Developers should prefer the generic collections in the System.Collections package.
 
 Commonly Used Types:
 System.Collections.ArrayList
@@ -1963,7 +2062,7 @@ System.Collections.Queue
 System.Collections.Comparer
 System.Collections.CaseInsensitiveComparer
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -1979,9 +2078,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Collections.Specialized</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides older specialized non-generic collections; for example, a linked list dictionary, a bit vector, and collections that contain only strings.
+      <description>Provides older specialized non-generic collections; for example, a linked list dictionary, a bit vector, and collections that contain only strings.
 
 Commonly Used Types:
 System.Collections.Specialized.NameValueCollection
@@ -1994,7 +2094,7 @@ System.Collections.Specialized.ListDictionary
 System.Collections.Specialized.StringDictionary
 System.Collections.Specialized.BitVector32
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2010,9 +2110,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.ComponentModel</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides interfaces for the editing and change tracking of objects used as data sources.
+      <description>Provides interfaces for the editing and change tracking of objects used as data sources.
 
 Commonly Used Types:
 System.ComponentModel.CancelEventArgs
@@ -2021,7 +2122,7 @@ System.ComponentModel.IEditableObject
 System.ComponentModel.IChangeTracking
 System.ComponentModel.IRevertibleChangeTracking
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2037,9 +2138,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.ComponentModel.Annotations</name>
       <version>4.4.0</version>
-      <description><![CDATA[Provides attributes that are used to define metadata for objects used as data sources.
+      <description>Provides attributes that are used to define metadata for objects used as data sources.
 
 Commonly Used Types:
 System.ComponentModel.DataAnnotations.ValidationResult
@@ -2054,7 +2156,7 @@ System.ComponentModel.DataAnnotations.RangeAttribute
 System.ComponentModel.DataAnnotations.KeyAttribute
  
 8321c729934c0f8be754953439b88e6e1c120c24 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2070,9 +2172,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.ComponentModel.Primitives</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides interfaces that are used to implement the run-time and design-time behavior of components.
+      <description>Provides interfaces that are used to implement the run-time and design-time behavior of components.
 
 Commonly Used Types:
 System.ComponentModel.IComponent
@@ -2080,7 +2183,7 @@ System.ComponentModel.IContainer
 System.ComponentModel.ISite
 System.ComponentModel.ComponentCollection
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2096,9 +2199,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.ComponentModel.TypeConverter</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.ComponentModel.TypeConverter class, which represents a unified way of converting types of values to other types.
+      <description>Provides the System.ComponentModel.TypeConverter class, which represents a unified way of converting types of values to other types.
 
 Commonly Used Types:
 System.ComponentModel.TypeConverter
@@ -2112,7 +2216,7 @@ System.ComponentModel.Int32Converter
 System.ComponentModel.BooleanConverter
 System.ComponentModel.DoubleConverter
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2128,15 +2232,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Console</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.Console class, which represents the standard input, output and error streams for console applications.
+      <description>Provides the System.Console class, which represents the standard input, output and error streams for console applications.
 
 Commonly Used Types:
 System.Console
 System.ConsoleColor
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2152,9 +2257,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Diagnostics.Debug</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes and attributes that allows basic interaction with a debugger.
+      <description>Provides classes and attributes that allows basic interaction with a debugger.
 
 Commonly Used Types:
 System.Diagnostics.Debug
@@ -2167,7 +2273,7 @@ System.Diagnostics.DebuggerHiddenAttribute
 System.Diagnostics.DebuggerNonUserCodeAttribute
 System.Diagnostics.DebuggerTypeProxyAttribute
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2183,15 +2289,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Diagnostics.DiagnosticSource</name>
       <version>4.4.1</version>
-      <description><![CDATA[Provides Classes that allow you to decouple code logging rich (unserializable) diagnostics/telemetry (e.g. framework) from code that consumes it (e.g. tools)
+      <description>Provides Classes that allow you to decouple code logging rich (unserializable) diagnostics/telemetry (e.g. framework) from code that consumes it (e.g. tools)
 
 Commonly Used Types:
 System.Diagnostics.DiagnosticListener
 System.Diagnostics.DiagnosticSource
  
-8321c729934c0f8be754953439b88e6e1c120c24]]></description>
+8321c729934c0f8be754953439b88e6e1c120c24</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2207,14 +2314,15 @@ System.Diagnostics.DiagnosticSource
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Diagnostics.FileVersionInfo</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.Diagnostics.FileVersionInfo class, which allows access to Win32 version resource information for a physical file on disk.
+      <description>Provides the System.Diagnostics.FileVersionInfo class, which allows access to Win32 version resource information for a physical file on disk.
 
 Commonly Used Types:
 System.Diagnostics.FileVersionInfo
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2230,15 +2338,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Diagnostics.StackTrace</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.Diagnostics.StackTrace class, which allows interaction with local and remote processes.
+      <description>Provides the System.Diagnostics.StackTrace class, which allows interaction with local and remote processes.
 
 Commonly Used Types:
 System.Diagnostics.StackFrame
 System.Diagnostics.StackTrace
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2254,15 +2363,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Diagnostics.Tools</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides attributes, such as GeneratedCodeAttribute and SuppresMessageAttribute, that are emitted or consumed by analysis tools.
+      <description>Provides attributes, such as GeneratedCodeAttribute and SuppresMessageAttribute, that are emitted or consumed by analysis tools.
 
 Commonly Used Types:
 System.CodeDom.Compiler.GeneratedCodeAttribute
 System.Diagnostics.CodeAnalysis.SuppressMessageAttribute
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2278,9 +2388,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Diagnostics.Tracing</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides class that enable you to create high performance tracing events to be captured by event tracing for Windows (ETW).
+      <description>Provides class that enable you to create high performance tracing events to be captured by event tracing for Windows (ETW).
 
 Commonly Used Types:
 System.Diagnostics.Tracing.EventSource
@@ -2292,7 +2403,7 @@ System.Diagnostics.Tracing.EventAttribute
 System.Diagnostics.Tracing.EventSourceAttribute
 System.Diagnostics.Tracing.NonEventAttribute
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2308,13 +2419,14 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Dynamic.Runtime</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes and interfaces that support the Dynamic Language Runtime (DLR).
+      <description>Provides classes and interfaces that support the Dynamic Language Runtime (DLR).
 
 Commonly Used Types:
 System.Runtime.CompilerServices.CallSite
-System.Runtime.CompilerServices.CallSite<T>
+System.Runtime.CompilerServices.CallSite&lt;T&gt;
 System.Dynamic.IDynamicMetaObjectProvider
 System.Dynamic.DynamicMetaObject
 System.Dynamic.SetMemberBinder
@@ -2322,9 +2434,9 @@ System.Dynamic.GetMemberBinder
 System.Dynamic.ExpandoObject
 System.Dynamic.DynamicObject
 System.Runtime.CompilerServices.CallSiteBinder
-System.Runtime.CompilerServices.ConditionalWeakTable<TKey, TValue>
+System.Runtime.CompilerServices.ConditionalWeakTable&lt;TKey, TValue&gt;
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2340,9 +2452,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Globalization</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes that define culture-related information, including language, country/region, calendars in use, format patterns for dates, currency, and numbers, and sort order for strings.
+      <description>Provides classes that define culture-related information, including language, country/region, calendars in use, format patterns for dates, currency, and numbers, and sort order for strings.
 
 Commonly Used Types:
 System.Globalization.DateTimeFormatInfo
@@ -2355,7 +2468,7 @@ System.Globalization.CompareInfo
 System.Globalization.CompareOptions
 System.Globalization.UnicodeCategory
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2371,9 +2484,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Globalization.Calendars</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes for performing date calculations using specific calendars, including the Gregorian, Julian, Hijri and Korean calendars.
+      <description>Provides classes for performing date calculations using specific calendars, including the Gregorian, Julian, Hijri and Korean calendars.
 
 Commonly Used Types:
 System.Globalization.HijriCalendar
@@ -2387,7 +2501,7 @@ System.Globalization.GregorianCalendarTypes
 System.Globalization.PersianCalendar
 System.Globalization.UmAlQuraCalendar
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2403,16 +2517,17 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Globalization.Extensions</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes for performing Unicode string normalization, culture-specific string comparisons and support the use of non-ASCII characters for Internet domain names.
+      <description>Provides classes for performing Unicode string normalization, culture-specific string comparisons and support the use of non-ASCII characters for Internet domain names.
 
 Commonly Used Types:
 System.StringNormalizationExtensions
 System.Text.NormalizationForm
 System.Globalization.IdnMapping
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2428,9 +2543,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.IO</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides base input and output (I/O) types, including System.IO.Stream, System.IO.StreamReader and System.IO.StreamWriter, that allow reading and writing to data streams
+      <description>Provides base input and output (I/O) types, including System.IO.Stream, System.IO.StreamReader and System.IO.StreamWriter, that allow reading and writing to data streams
 
 Commonly Used Types:
 System.IO.Stream
@@ -2442,7 +2558,7 @@ System.IO.StringWriter
 System.IO.TextWriter
 System.IO.TextReader
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2458,9 +2574,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.IO.Compression</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes that support the compression and decompression of streams.
+      <description>Provides classes that support the compression and decompression of streams.
 
 Commonly Used Types:
 System.IO.Compression.DeflateStream
@@ -2471,7 +2588,7 @@ System.IO.Compression.ZipArchiveEntry
 System.IO.Compression.ZipArchive
 System.IO.Compression.ZipArchiveMode
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2487,9 +2604,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.IO.FileSystem</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides types that allow reading and writing to files and types that provide basic file and directory support.
+      <description>Provides types that allow reading and writing to files and types that provide basic file and directory support.
 
 Commonly Used Types:
 System.IO.FileStream
@@ -2501,7 +2619,7 @@ System.IO.Directory
 System.IO.SearchOption
 System.IO.FileOptions
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2517,9 +2635,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.IO.FileSystem.Primitives</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides common enumerations and exceptions for path-based I/O libraries.
+      <description>Provides common enumerations and exceptions for path-based I/O libraries.
 
 Commonly Used Types:
 System.IO.DirectoryNotFoundException
@@ -2530,7 +2649,7 @@ System.IO.FileMode
 System.IO.FileShare
 System.IO.FileAttributes
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2546,18 +2665,19 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Linq</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes and interfaces that supports queries that use Language-Integrated Query (LINQ).
+      <description>Provides classes and interfaces that supports queries that use Language-Integrated Query (LINQ).
 
 Commonly Used Types:
 System.Linq.Enumerable
-System.Linq.IGrouping<TKey, TElement>
-System.Linq.IOrderedEnumerable<TElement>
-System.Linq.ILookup<TKey, TElement>
-System.Linq.Lookup<TKey, TElement>
+System.Linq.IGrouping&lt;TKey, TElement&gt;
+System.Linq.IOrderedEnumerable&lt;TElement&gt;
+System.Linq.ILookup&lt;TKey, TElement&gt;
+System.Linq.Lookup&lt;TKey, TElement&gt;
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2573,18 +2693,19 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Linq.Expressions</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes, interfaces and enumerations that enable language-level code expressions to be represented as objects in the form of expression trees.
+      <description>Provides classes, interfaces and enumerations that enable language-level code expressions to be represented as objects in the form of expression trees.
 
 Commonly Used Types:
-System.Linq.IQueryable<T>
+System.Linq.IQueryable&lt;T&gt;
 System.Linq.IQueryable
-System.Linq.Expressions.Expression<TDelegate>
+System.Linq.Expressions.Expression&lt;TDelegate&gt;
 System.Linq.Expressions.Expression
 System.Linq.Expressions.ExpressionVisitor
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2600,9 +2721,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Net.Http</name>
       <version>4.3.1</version>
-      <description><![CDATA[Provides a programming interface for modern HTTP applications, including HTTP client components that allow applications to consume web services over HTTP and HTTP components that can be used by both clients and servers for parsing HTTP headers.
+      <description>Provides a programming interface for modern HTTP applications, including HTTP client components that allow applications to consume web services over HTTP and HTTP components that can be used by both clients and servers for parsing HTTP headers.
 
 Commonly Used Types:
 System.Net.Http.HttpResponseMessage
@@ -2616,7 +2738,7 @@ System.Net.Http.StreamContent
 System.Net.Http.FormUrlEncodedContent
 System.Net.Http.HttpMessageHandler
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2632,9 +2754,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Net.Primitives</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides common types for network-based libraries, including System.Net.IPAddress, System.Net.IPEndPoint, and System.Net.CookieContainer.
+      <description>Provides common types for network-based libraries, including System.Net.IPAddress, System.Net.IPEndPoint, and System.Net.CookieContainer.
 
 Commonly Used Types:
 System.Net.HttpStatusCode
@@ -2648,7 +2771,7 @@ System.Net.IPAddress
 System.Net.CookieCollection
 System.Net.CookieContainer
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2664,15 +2787,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Net.Security</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides types, such as System.Net.Security.SslStream, that uses SSL/TLS protocols to provide secure network communication between client and server endpoints.
+      <description>Provides types, such as System.Net.Security.SslStream, that uses SSL/TLS protocols to provide secure network communication between client and server endpoints.
 
 Commonly Used Types:
 System.Net.Security.SslStream
 System.Net.Security.ExtendedProtectionPolicy
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2688,23 +2812,24 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.ObjectModel</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides types and interfaces that allow the creation of observable types that provide notifications to clients when changes are made to it.
+      <description>Provides types and interfaces that allow the creation of observable types that provide notifications to clients when changes are made to it.
 
 Commonly Used Types:
 System.ComponentModel.INotifyPropertyChanged
-System.Collections.ObjectModel.ObservableCollection<T>
+System.Collections.ObjectModel.ObservableCollection&lt;T&gt;
 System.ComponentModel.PropertyChangedEventHandler
 System.Windows.Input.ICommand
 System.Collections.Specialized.INotifyCollectionChanged
 System.Collections.Specialized.NotifyCollectionChangedEventArgs
 System.Collections.Specialized.NotifyCollectionChangedEventHandler
-System.Collections.ObjectModel.KeyedCollection<TKey, TItem>
+System.Collections.ObjectModel.KeyedCollection&lt;TKey, TItem&gt;
 System.ComponentModel.PropertyChangedEventArgs
-System.Collections.ObjectModel.ReadOnlyDictionary<TKey, TValue>
+System.Collections.ObjectModel.ReadOnlyDictionary&lt;TKey, TValue&gt;
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2720,9 +2845,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Reflection</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides types that retrieve information about assemblies, modules, members, parameters, and other entities in managed code by examining their metadata. These types also can be used to manipulate instances of loaded types, for example to hook up events or to invoke methods.
+      <description>Provides types that retrieve information about assemblies, modules, members, parameters, and other entities in managed code by examining their metadata. These types also can be used to manipulate instances of loaded types, for example to hook up events or to invoke methods.
 
 Commonly Used Types:
 System.Reflection.MethodInfo
@@ -2735,7 +2861,7 @@ System.Reflection.MemberInfo
 System.Reflection.EventInfo
 System.Reflection.Module
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2751,9 +2877,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Reflection.Emit</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes that allow a compiler or tool to emit metadata and optionally generate a PE file on disk. The primary clients of these classes are script engines and compilers.
+      <description>Provides classes that allow a compiler or tool to emit metadata and optionally generate a PE file on disk. The primary clients of these classes are script engines and compilers.
 
 Commonly Used Types:
 System.Reflection.Emit.AssemblyBuilder
@@ -2767,7 +2894,7 @@ System.Reflection.Emit.PropertyBuilder
 System.Reflection.Emit.AssemblyBuilderAccess
 System.Reflection.Emit.EventBuilder
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2783,9 +2910,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Reflection.Emit.ILGeneration</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes that allow a compiler or tool to emit Microsoft intermediate language (MSIL). The primary clients of these classes are script engines and compilers.
+      <description>Provides classes that allow a compiler or tool to emit Microsoft intermediate language (MSIL). The primary clients of these classes are script engines and compilers.
 
 Commonly Used Types:
 System.Reflection.Emit.ILGenerator
@@ -2795,7 +2923,7 @@ System.Reflection.Emit.LocalBuilder
 System.Reflection.Emit.ParameterBuilder
 System.Reflection.Emit.SignatureHelper
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2811,14 +2939,15 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Reflection.Emit.Lightweight</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.Reflection.Emit.DynamicMethod class, which represents a dynamic method that can be compiled, executed, and discarded. Discarded methods are available for garbage collection.
+      <description>Provides the System.Reflection.Emit.DynamicMethod class, which represents a dynamic method that can be compiled, executed, and discarded. Discarded methods are available for garbage collection.
 
 Commonly Used Types:
 System.Reflection.Emit.DynamicMethod
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2834,16 +2963,17 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Reflection.Extensions</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides custom attribute extension methods for System.Reflection types.
+      <description>Provides custom attribute extension methods for System.Reflection types.
 
 Commonly Used Types:
 System.Reflection.InterfaceMapping
 System.Reflection.CustomAttributeExtensions
 System.Reflection.RuntimeReflectionExtensions
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2859,13 +2989,14 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Reflection.Metadata</name>
       <version>1.4.2</version>
-      <description><![CDATA[This packages provides a low-level .NET (ECMA-335) metadata reader. It's geared for performance and is the ideal choice for building higher-level libraries that intend to provide their own object model, such as compilers.
+      <description>This packages provides a low-level .NET (ECMA-335) metadata reader. It's geared for performance and is the ideal choice for building higher-level libraries that intend to provide their own object model, such as compilers.
 
 Commonly Used Types:
 System.Reflection.Metadata.MetadataReader
-System.Reflection.PortableExecutable.PEReader]]></description>
+System.Reflection.PortableExecutable.PEReader</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2881,9 +3012,10 @@ System.Reflection.PortableExecutable.PEReader]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Reflection.Primitives</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides common enumerations for reflection-based libraries.
+      <description>Provides common enumerations for reflection-based libraries.
 
 Commonly Used Types:
 System.Reflection.FieldAttributes
@@ -2897,7 +3029,7 @@ System.Reflection.ParameterAttributes
 System.Reflection.GenericParameterAttributes
 System.Reflection.MethodImplAttributes
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2913,15 +3045,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Reflection.TypeExtensions</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides extensions methods for System.Type that are designed to be source-compatible with older framework reflection-based APIs.
+      <description>Provides extensions methods for System.Type that are designed to be source-compatible with older framework reflection-based APIs.
 
 Commonly Used Types:
 System.Reflection.TypeExtensions
 System.Reflection.BindingFlags
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2937,9 +3070,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Resources.ResourceManager</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes and attributes that allow developers to create, store, and manage various culture-specific resources used in an application.
+      <description>Provides classes and attributes that allow developers to create, store, and manage various culture-specific resources used in an application.
 
 Commonly Used Types:
 System.Resources.ResourceManager
@@ -2947,7 +3081,7 @@ System.Resources.NeutralResourcesLanguageAttribute
 System.Resources.SatelliteContractVersionAttribute
 System.Resources.MissingManifestResourceException
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -2963,9 +3097,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Runtime</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the fundamental primitives, classes and base classes that define commonly-used value and reference data types, events and event handlers, interfaces, attributes, and exceptions. This packages represents the core package, and provides the minimal set of types required to build a managed application.
+      <description>Provides the fundamental primitives, classes and base classes that define commonly-used value and reference data types, events and event handlers, interfaces, attributes, and exceptions. This packages represents the core package, and provides the minimal set of types required to build a managed application.
 
 Commonly Used Types:
 System.Object
@@ -2989,7 +3124,7 @@ System.UInt64
 System.IDisposable
 System.Uri
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3005,15 +3140,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Runtime.CompilerServices.Unsafe</name>
       <version>4.4.0</version>
-      <description><![CDATA[Provides the System.Runtime.CompilerServices.Unsafe class, which provides generic, low-level functionality for manipulating pointers.
+      <description>Provides the System.Runtime.CompilerServices.Unsafe class, which provides generic, low-level functionality for manipulating pointers.
 
 Commonly Used Types:
 System.Runtime.CompilerServices.Unsafe
  
 8321c729934c0f8be754953439b88e6e1c120c24 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3029,22 +3165,23 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Runtime.Extensions</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides commonly-used classes for performing mathematical functions, conversions, string comparisons and querying environment information.
+      <description>Provides commonly-used classes for performing mathematical functions, conversions, string comparisons and querying environment information.
 
 Commonly Used Types:
 System.Math
 System.Environment
 System.Random
-System.Progress<T>
+System.Progress&lt;T&gt;
 System.Convert
 System.Diagnostics.Stopwatch
 System.Runtime.Versioning.FrameworkName
 System.StringComparer
 System.IO.Path
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3060,9 +3197,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Runtime.Handles</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides base classes, including System.Runtime.InteropServices.CriticalHandle and System.Runtime.InteropServices.SafeHandle, for types that represent operating system handles.
+      <description>Provides base classes, including System.Runtime.InteropServices.CriticalHandle and System.Runtime.InteropServices.SafeHandle, for types that represent operating system handles.
 
 Commonly Used Types:
 System.Runtime.InteropServices.SafeHandle
@@ -3071,7 +3209,7 @@ System.Runtime.InteropServices.CriticalHandle
 System.Threading.WaitHandleExtensions
 System.IO.HandleInheritability
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3087,9 +3225,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Runtime.InteropServices</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides types that support COM interop and platform invoke services.
+      <description>Provides types that support COM interop and platform invoke services.
 
 Commonly Used Types:
 System.Runtime.InteropServices.GCHandle
@@ -3098,7 +3237,7 @@ System.Runtime.InteropServices.COMException
 System.DllNotFoundException
 System.Runtime.InteropServices.DllImportAttribute
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3114,15 +3253,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Runtime.InteropServices.RuntimeInformation</name>
       <version>4.0.0</version>
-      <description><![CDATA[Provides APIs to query about runtime and OS information.
+      <description>Provides APIs to query about runtime and OS information.
 
 Commonly Used Types:
 System.Runtime.InteropServices.RuntimeInformation
 System.Runtime.InteropServices.OSPlatform
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3138,15 +3278,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Runtime.Numerics</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the numeric types System.Numerics.BigInteger and System.Numerics.Complex, which complement the numeric primitives, such as System.Byte, System.Double and System.Int32.
+      <description>Provides the numeric types System.Numerics.BigInteger and System.Numerics.Complex, which complement the numeric primitives, such as System.Byte, System.Double and System.Int32.
 
 Commonly Used Types:
 System.Numerics.BigInteger
 System.Numerics.Complex
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3162,15 +3303,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Runtime.Serialization.Formatters</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides common types for libraries that support runtime serialization.
+      <description>Provides common types for libraries that support runtime serialization.
 
 Commonly Used Types:
 System.SerializableAttribute
 System.Runtime.Serialization.ISerializable
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3186,9 +3328,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Runtime.Serialization.Primitives</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides common types, including System.Runtime.Serialization.DataContractAttribute, for libraries that support data contract serialization.
+      <description>Provides common types, including System.Runtime.Serialization.DataContractAttribute, for libraries that support data contract serialization.
 
 Commonly Used Types:
 System.Runtime.Serialization.StreamingContext
@@ -3202,7 +3345,7 @@ System.Runtime.Serialization.DataContractAttribute
 System.Runtime.Serialization.IgnoreDataMemberAttribute
 System.Runtime.Serialization.SerializationException
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3218,9 +3361,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.AccessControl</name>
       <version>4.4.0</version>
-      <description><![CDATA[Provides base classes that enable managing access and audit control lists on securable objects.
+      <description>Provides base classes that enable managing access and audit control lists on securable objects.
 
 Commonly Used Types:
 System.Security.AccessControl.AccessRule
@@ -3230,7 +3374,7 @@ System.Security.AccessControl.ObjectAuditRule
 System.Security.AccessControl.ObjectSecurity
  
 8321c729934c0f8be754953439b88e6e1c120c24 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3246,9 +3390,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Claims</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides classes that implement claims-based identity in the .NET Framework, including classes that represent claims, claims-based identities, and claims-based principals.
+      <description>Provides classes that implement claims-based identity in the .NET Framework, including classes that represent claims, claims-based identities, and claims-based principals.
 
 Commonly Used Types:
 System.Security.Principal.GenericIdentity
@@ -3257,7 +3402,7 @@ System.Security.Claims.ClaimsIdentity
 System.Security.Claims.ClaimsPrincipal
 System.Security.Principal.GenericPrincipal
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3273,9 +3418,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Cryptography.Algorithms</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides base types for cryptographic algorithms, including hashing, encryption, and signing operations.
+      <description>Provides base types for cryptographic algorithms, including hashing, encryption, and signing operations.
 
 Commonly Used Types:
 System.Security.Cryptography.Aes
@@ -3291,7 +3437,7 @@ System.Security.Cryptography.MD5
 System.Security.Cryptography.HMACSHA384
 System.Security.Cryptography.HMACSHA512
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3307,16 +3453,17 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Cryptography.Cng</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides cryptographic algorithm implementations and key management with Windows Cryptographic Next Generation API (CNG).
+      <description>Provides cryptographic algorithm implementations and key management with Windows Cryptographic Next Generation API (CNG).
 
 Commonly Used Types:
 System.Security.Cryptography.RSACng
 System.Security.Cryptography.ECDsaCng
 System.Security.Cryptography.CngKey
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3332,15 +3479,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Cryptography.Csp</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides cryptographic algorithm implementations and key management with Windows Cryptographic API (CryptoAPI).
+      <description>Provides cryptographic algorithm implementations and key management with Windows Cryptographic API (CryptoAPI).
 
 Commonly Used Types:
 System.Security.Cryptography.RSACryptoServiceProvider
 System.Security.Cryptography.CspParameters
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3356,16 +3504,17 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Cryptography.Encoding</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides types for representing Abstract Syntax Notation One (ASN.1)-encoded data.
+      <description>Provides types for representing Abstract Syntax Notation One (ASN.1)-encoded data.
 
 Commonly Used Types:
 System.Security.Cryptography.AsnEncodedData
 System.Security.Cryptography.Oid
 System.Security.Cryptography.OidCollection
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3381,14 +3530,15 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Cryptography.OpenSsl</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides cryptographic algorithm implementations and key management for non-Windows systems with OpenSSL.
+      <description>Provides cryptographic algorithm implementations and key management for non-Windows systems with OpenSSL.
 
 Commonly Used Types:
 System.Security.Cryptography.RSAOpenSsl
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3404,9 +3554,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Cryptography.Primitives</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides common types for the cryptographic libraries.
+      <description>Provides common types for the cryptographic libraries.
 
 Commonly Used Types:
 System.Security.Cryptography.ICryptoTransform
@@ -3422,7 +3573,7 @@ System.Security.Cryptography.PaddingMode
 System.Security.Cryptography.CryptoStream
 System.Security.Cryptography.CryptoStreamMode
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3438,9 +3589,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Cryptography.X509Certificates</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides types for reading, exporting and verifying Authenticode X.509 v3 certificates. These certificates are signed with a private key that uniquely and positively identifies the holder of the certificate.
+      <description>Provides types for reading, exporting and verifying Authenticode X.509 v3 certificates. These certificates are signed with a private key that uniquely and positively identifies the holder of the certificate.
 
 Commonly Used Types:
 System.Security.Cryptography.X509Certificates.X509Certificate2
@@ -3454,7 +3606,7 @@ System.Security.Cryptography.X509Certificates.X509Certificate2Collection
 System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension
 System.Security.Cryptography.X509Certificates.X509Chain
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3470,9 +3622,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Cryptography.Xml</name>
       <version>4.4.0</version>
-      <description><![CDATA[Provides classes to support the creation and validation of XML digital signatures. The classes in this namespace implement the World Wide Web Consortium Recommendation, "XML-Signature Syntax and Processing", described at http://www.w3.org/TR/xmldsig-core/.
+      <description>Provides classes to support the creation and validation of XML digital signatures. The classes in this namespace implement the World Wide Web Consortium Recommendation, "XML-Signature Syntax and Processing", described at http://www.w3.org/TR/xmldsig-core/.
 
 Commonly Used Types:
 System.Security.Cryptography.Xml.CipherData
@@ -3516,7 +3669,7 @@ System.Security.Cryptography.Xml.XmlDsigXsltTransform
 System.Security.Cryptography.Xml.XmlLicenseTransform
  
 8321c729934c0f8be754953439b88e6e1c120c24 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3532,16 +3685,17 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Principal</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the base interfaces for principal and identity objects that represents the security context under which code is running.
+      <description>Provides the base interfaces for principal and identity objects that represents the security context under which code is running.
 
 Commonly Used Types:
 System.Security.Principal.IPrincipal
 System.Security.Principal.IIdentity
 System.Security.Principal.TokenImpersonationLevel
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3557,9 +3711,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Security.Principal.Windows</name>
       <version>4.4.0</version>
-      <description><![CDATA[Provides classes for retrieving the current Windows user and for interacting with Windows users and groups.
+      <description>Provides classes for retrieving the current Windows user and for interacting with Windows users and groups.
 
 Commonly Used Types:
 System.Security.Principal.WindowsIdentity
@@ -3572,7 +3727,7 @@ System.Security.Principal.WindowsBuiltInRole
 System.Security.Principal.WellKnownSidType
  
 8321c729934c0f8be754953439b88e6e1c120c24 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3588,9 +3743,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Text.Encoding</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides base abstract encoding classes for converting blocks of characters to and from blocks of bytes.
+      <description>Provides base abstract encoding classes for converting blocks of characters to and from blocks of bytes.
 
 Commonly Used Types:
 System.Text.Encoding
@@ -3604,7 +3760,7 @@ System.Text.DecoderFallback
 System.Text.DecoderFallbackBuffer
 System.Text.DecoderExceptionFallback
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3620,14 +3776,15 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Text.Encoding.CodePages</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides support for code-page based encodings, including Windows-1252, Shift-JIS, and GB2312.
+      <description>Provides support for code-page based encodings, including Windows-1252, Shift-JIS, and GB2312.
 
 Commonly Used Types:
 System.Text.CodePagesEncodingProvider
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3643,9 +3800,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Text.Encoding.Extensions</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides support for specific encodings, including ASCII, UTF-7, UTF-8, UTF-16, and UTF-32.
+      <description>Provides support for specific encodings, including ASCII, UTF-7, UTF-8, UTF-16, and UTF-32.
 
 Commonly Used Types:
 System.Text.UTF8Encoding
@@ -3654,7 +3812,7 @@ System.Text.ASCIIEncoding
 System.Text.UTF7Encoding
 System.Text.UTF32Encoding
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3670,9 +3828,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Text.Encodings.Web</name>
       <version>4.4.0</version>
-      <description><![CDATA[Provides types for encoding and escaping strings for use in JavaScript, HyperText Markup Language (HTML), and uniform resource locators (URL).
+      <description>Provides types for encoding and escaping strings for use in JavaScript, HyperText Markup Language (HTML), and uniform resource locators (URL).
 
 Commonly Used Types:
 System.Text.Encodings.Web.HtmlEncoder
@@ -3680,7 +3839,7 @@ System.Text.Encodings.Web.UrlEncoder
 System.Text.Encodings.Web.JavaScriptEncoder
  
 8321c729934c0f8be754953439b88e6e1c120c24 
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3696,9 +3855,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Text.RegularExpressions</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.Text.RegularExpressions.Regex class, an implementation of a regular expression engine.
+      <description>Provides the System.Text.RegularExpressions.Regex class, an implementation of a regular expression engine.
 
 Commonly Used Types:
 System.Text.RegularExpressions.Regex
@@ -3708,7 +3868,7 @@ System.Text.RegularExpressions.Group
 System.Text.RegularExpressions.Capture
 System.Text.RegularExpressions.MatchEvaluator
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3724,21 +3884,22 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Threading</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the fundamental synchronization primitives, including System.Threading.Monitor and System.Threading.Mutex, that are required when writing asynchronous code.
+      <description>Provides the fundamental synchronization primitives, including System.Threading.Monitor and System.Threading.Mutex, that are required when writing asynchronous code.
 
 Commonly Used Types:
 System.Threading.Monitor
 System.Threading.SynchronizationContext
 System.Threading.ManualResetEvent
 System.Threading.AutoResetEvent
-System.Threading.ThreadLocal<T>
+System.Threading.ThreadLocal&lt;T&gt;
 System.Threading.EventWaitHandle
 System.Threading.SemaphoreSlim
 System.Threading.Mutex
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3754,19 +3915,20 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Threading.Tasks</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides types that simplify the work of writing concurrent and asynchronous code.
+      <description>Provides types that simplify the work of writing concurrent and asynchronous code.
 
 Commonly Used Types:
-System.Threading.Tasks.Task<TResult>
-System.Runtime.CompilerServices.TaskAwaiter<TResult>
-System.Threading.Tasks.TaskCompletionSource<TResult>
+System.Threading.Tasks.Task&lt;TResult&gt;
+System.Runtime.CompilerServices.TaskAwaiter&lt;TResult&gt;
+System.Threading.Tasks.TaskCompletionSource&lt;TResult&gt;
 System.Threading.Tasks.Task
 System.OperationCanceledException
 System.AggregateException
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3782,12 +3944,13 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Threading.Tasks.Extensions</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides additional types that simplify the work of writing concurrent and asynchronous code.
+      <description>Provides additional types that simplify the work of writing concurrent and asynchronous code.
 
 Commonly Used Types:
-System.Threading.Tasks.ValueTask<TResult>]]></description>
+System.Threading.Tasks.ValueTask&lt;TResult&gt;</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3803,9 +3966,10 @@ System.Threading.Tasks.ValueTask<TResult>]]></description>
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Threading.Tasks.Parallel</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.Threading.Tasks.Parallel class, which adds support for running loops and iterators in parallel.
+      <description>Provides the System.Threading.Tasks.Parallel class, which adds support for running loops and iterators in parallel.
 
 Commonly Used Types:
 System.Threading.Tasks.Parallel
@@ -3813,7 +3977,7 @@ System.Threading.Tasks.ParallelLoopState
 System.Threading.Tasks.ParallelLoopResult
 System.Threading.Tasks.ParallelOptions
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3829,16 +3993,17 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Threading.Thread</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.Threading.Thread class, which allows developers to create and control a thread, set its priority, and get its state.
+      <description>Provides the System.Threading.Thread class, which allows developers to create and control a thread, set its priority, and get its state.
 
 Commonly Used Types:
 System.Threading.Thread
 System.Threading.ThreadStart
 System.Threading.ParameterizedThreadStart
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3854,15 +4019,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Threading.ThreadPool</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.Threading.ThreadPool class, which contains a pool of threads that can be used to execute tasks, post work items, wait on behalf of other threads, and process timers.
+      <description>Provides the System.Threading.ThreadPool class, which contains a pool of threads that can be used to execute tasks, post work items, wait on behalf of other threads, and process timers.
 
 Commonly Used Types:
 System.Threading.ThreadPool
 System.Threading.WaitOrTimerCallback
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3878,22 +4044,23 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.ValueTuple</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the System.ValueTuple structs, which implement the underlying types for C# 7 tuples.
+      <description>Provides the System.ValueTuple structs, which implement the underlying types for C# 7 tuples.
 
 Commonly Used Types:
 System.ValueTuple
-System.ValueTuple<T1>
-System.ValueTuple<T1, T2>
-System.ValueTuple<T1, T2, T3>
-System.ValueTuple<T1, T2, T3, T4>
-System.ValueTuple<T1, T2, T3, T4, T5>
-System.ValueTuple<T1, T2, T3, T4, T5, T6>
-System.ValueTuple<T1, T2, T3, T4, T5, T6, T7>
-System.ValueTuple<T1, T2, T3, T4, T5, T6, T7, TRest>
+System.ValueTuple&lt;T1&gt;
+System.ValueTuple&lt;T1, T2&gt;
+System.ValueTuple&lt;T1, T2, T3&gt;
+System.ValueTuple&lt;T1, T2, T3, T4&gt;
+System.ValueTuple&lt;T1, T2, T3, T4, T5&gt;
+System.ValueTuple&lt;T1, T2, T3, T4, T5, T6&gt;
+System.ValueTuple&lt;T1, T2, T3, T4, T5, T6, T7&gt;
+System.ValueTuple&lt;T1, T2, T3, T4, T5, T6, T7, TRest&gt;
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3909,9 +4076,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Xml.ReaderWriter</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides provides a fast, non-cached, forward-only way to read and write Extensible Markup Language (XML) data.
+      <description>Provides provides a fast, non-cached, forward-only way to read and write Extensible Markup Language (XML) data.
 
 Commonly Used Types:
 System.Xml.XmlNodeType
@@ -3924,7 +4092,7 @@ System.Xml.IXmlNamespaceResolver
 System.Xml.XmlNamespaceManager
 System.Xml.XmlQualifiedName
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3940,9 +4108,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Xml.XDocument</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the classes for Language-Integrated Query (LINQ) to Extensible Markup Language (XML). LINQ to XML is an in-memory XML programming interface that enables you to modify XML documents efficiently and easily.
+      <description>Provides the classes for Language-Integrated Query (LINQ) to Extensible Markup Language (XML). LINQ to XML is an in-memory XML programming interface that enables you to modify XML documents efficiently and easily.
 
 Commonly Used Types:
 System.Xml.Linq.XElement
@@ -3956,7 +4125,7 @@ System.Xml.Linq.XObject
 System.Xml.Linq.XProcessingInstruction
 System.Xml.Linq.XDocumentType
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -3972,9 +4141,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Xml.XmlDocument</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides an older in-memory Extensible Markup Language (XML) programming interface that enables you to modify XML documents. Developers should prefer the classes in the System.Xml.XDocument package.
+      <description>Provides an older in-memory Extensible Markup Language (XML) programming interface that enables you to modify XML documents. Developers should prefer the classes in the System.Xml.XDocument package.
 
 Commonly Used Types:
 System.Xml.XmlNode
@@ -3988,7 +4158,7 @@ System.Xml.XmlNodeList
 System.Xml.XmlWhitespace
 System.Xml.XmlCDataSection
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -4004,9 +4174,10 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Xml.XPath</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides the classes that define a cursor model for navigating and editing Extensible Markup Language (XML) information items as instances of the XQuery 1.0 and XPath 2.0 Data Model.
+      <description>Provides the classes that define a cursor model for navigating and editing Extensible Markup Language (XML) information items as instances of the XQuery 1.0 and XPath 2.0 Data Model.
 
 Commonly Used Types:
 System.Xml.XPath.XPathNavigator
@@ -4020,7 +4191,7 @@ System.Xml.XPath.XPathDocument
 System.Xml.XPath.XPathItem
 System.Xml.XPath.XPathNamespaceScope
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
@@ -4036,15 +4207,16 @@ When using NuGet 3.x this package requires at least version 3.4.]]></description
       </externalReferences>
     </component>
     <component type="library">
+      <publisher>Microsoft</publisher>
       <name>System.Xml.XPath.XDocument</name>
       <version>4.3.0</version>
-      <description><![CDATA[Provides extension methods that add System.Xml.XPath support to the System.Xml.XDocument package.
+      <description>Provides extension methods that add System.Xml.XPath support to the System.Xml.XDocument package.
 
 Commonly Used Types:
 System.Xml.XPath.Extensions
 System.Xml.XPath.XDocumentExtensions
  
-When using NuGet 3.x this package requires at least version 3.4.]]></description>
+When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <licenses>
         <license>
