@@ -13,7 +13,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
-    <PackageReference Include="Moq" Version="4.14.7" />
+    <PackageReference Include="Moq" Version="4.15.1" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
     <PackageReference Include="Snapshooter.Xunit" Version="0.5.8" />
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="12.2.19" />
