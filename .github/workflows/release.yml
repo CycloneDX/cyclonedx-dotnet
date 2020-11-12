@@ -30,9 +30,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
       
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: '2.1.x'
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: '3.1.x'
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: '5.0.x'
+
       # The tests should have already been run during the PR workflow, so this is really just a sanity check
       - name: Tests
-        run: dotnet test
+        run: dotnet test --framework net5
 
       # Build and package everything, including the Docker image
       - name: Package release
