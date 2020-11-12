@@ -13,7 +13,7 @@
 
 The CycloneDX module for .NET creates a valid CycloneDX bill-of-material document containing an aggregate of all project dependencies. CycloneDX is a lightweight BOM specification that is easily created, human readable, and simple to parse.
 
-This module runs on [.NET Core 2.1](https://dotnet.microsoft.com/download/dotnet-core/2.1) and [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1).
+This module runs on [.NET Core 2.1](https://dotnet.microsoft.com/download/dotnet-core/2.1), [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) and [.NET Core 5.0](https://dotnet.microsoft.com/download/dotnet/5.0).
 
 ## Usage
 
