@@ -14,7 +14,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="nuget.projectmodel" Version="5.6.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="12.2.24" />
+    <PackageReference Include="System.IO.Abstractions" Version="12.2.25" />
   </ItemGroup>
 
 </Project>
