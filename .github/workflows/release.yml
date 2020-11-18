@@ -47,7 +47,7 @@ jobs:
 
       # The tests should have already been run during the PR workflow, so this is really just a sanity check
       - name: Tests
-        run: dotnet test --framework net5
+        run: dotnet test --framework net5.0
 
       # Build and package everything, including the Docker image
       - name: Package release
