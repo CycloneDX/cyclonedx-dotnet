@@ -21,7 +21,7 @@ using System.IO.Abstractions;
 using System.Net.Http;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
-using CycloneDX.Models;
+using CycloneDX.Models.v1_2;
 using CycloneDX.Core.Models;
 using CycloneDX.Services;
 

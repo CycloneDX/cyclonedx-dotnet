@@ -20,7 +20,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using CycloneDX.Core.Models;
-using CycloneDX.Models;
+using CycloneDX.Models.v1_2;
 using CycloneDX.Services;
 using Moq;
 

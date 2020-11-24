@@ -24,7 +24,7 @@ using NuGet.Packaging.Licenses;
 using NuspecReader = NuGet.Packaging.NuspecReader;
 using CycloneDX.Extensions;
 using CycloneDX.Core.Models;
-using CycloneDX.Models;
+using CycloneDX.Models.v1_2;
 
 namespace CycloneDX.Services
 {
@@ -148,7 +148,7 @@ namespace CycloneDX.Services
             {
                 Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
                 {
-                    var license = new Models.License
+                    var license = new Models.v1_2.License
                     {
                         Id = nugetLicense.Identifier,
                         Name = nugetLicense.Identifier
@@ -168,7 +168,7 @@ namespace CycloneDX.Services
                 var licenseUrl = nuspecReader.GetLicenseUrl();
                 if (!string.IsNullOrEmpty(licenseUrl))
                 {
-                    Models.License license = null;
+                    Models.v1_2.License license = null;
                     
                     if (_githubService != null)
                     {
@@ -177,7 +177,7 @@ namespace CycloneDX.Services
 
                     if (license == null)
                     {
-                        license = new Models.License
+                        license = new Models.v1_2.License
                         {
                             Url = licenseUrl
                         };
@@ -196,8 +196,8 @@ namespace CycloneDX.Services
             var projectUrl = nuspecReader.GetProjectUrl();
             if (!string.IsNullOrEmpty(projectUrl))
             {
-                var externalReference = new Models.ExternalReference();
-                externalReference.Type = Models.ExternalReference.ExternalReferenceType.Website;
+                var externalReference = new Models.v1_2.ExternalReference();
+                externalReference.Type = Models.v1_2.ExternalReference.ExternalReferenceType.Website;
                 externalReference.Url = projectUrl;
                 component.ExternalReferences = new List<ExternalReference>
                 {
