@@ -24,7 +24,7 @@ using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CycloneDX.Core.Models;
-using License = CycloneDX.Models.License;
+using License = CycloneDX.Models.v1_2.License;
 
 namespace CycloneDX.Services
 {

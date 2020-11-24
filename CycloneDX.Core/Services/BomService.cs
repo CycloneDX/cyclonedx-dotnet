@@ -14,7 +14,7 @@
 //
 // Copyright (c) Steve Springett. All Rights Reserved.
 
-using CycloneDX.Models;
+using CycloneDX.Models.v1_2;
 using CycloneDX.Json;
 using CycloneDX.Xml;
 

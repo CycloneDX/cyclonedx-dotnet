@@ -137,7 +137,7 @@ namespace CycloneDX.Tests
             var mockGithubService = new Mock<IGithubService>();
             mockGithubService
                 .Setup(service => service.GetLicenseAsync(It.IsAny<string>()))
-                .ReturnsAsync(new Models.License
+                .ReturnsAsync(new Models.v1_2.License
                 {
                     Id = "TestLicenseId",
                     Name = "Test License",
