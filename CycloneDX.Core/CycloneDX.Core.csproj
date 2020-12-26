@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CycloneDX.Json" Version="0.5.0" />
+    <PackageReference Include="CycloneDX.Json" Version="1.0.0" />
     <PackageReference Include="CycloneDX.Models" Version="1.0.0" />
     <PackageReference Include="CycloneDX.Xml" Version="0.5.0" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
