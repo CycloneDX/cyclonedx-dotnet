@@ -15,6 +15,10 @@
     <OsEnvironment Condition="$([MSBuild]::IsOSPlatform('linux'))">linux</OsEnvironment>
     <OsEnvironment Condition="$([MSBuild]::IsOSPlatform('osx'))">osx</OsEnvironment>
 
+    <!-- use command "dotnet new globaljson" for local develpment environment -->
+    
+    <!-- .NET 5.0 SDK includes Microsoft.CodeAnalysis.NetAnalyzers which replaces Microsoft.CodeAnalysis.FxCopAnalyzers -->
+    <AnalysisMode>AllEnableByDefault</AnalysisMode>
   </PropertyGroup>
 
 
