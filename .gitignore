@@ -7,3 +7,4 @@ coverage-report/
 coverage.cobertura.xml
 */__snapshots__/__mismatch__/
 global.json
+SBOM/
