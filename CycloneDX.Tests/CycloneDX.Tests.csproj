@@ -12,6 +12,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="Moq" Version="4.16.0" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
@@ -29,6 +30,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CycloneDX\CycloneDX.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\metadata\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\metadata\cycloneDX-metadata-template.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

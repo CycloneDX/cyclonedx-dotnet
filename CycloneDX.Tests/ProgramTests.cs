@@ -20,9 +20,11 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Threading.Tasks;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using Moq;
-using CycloneDX;
 using CycloneDX.Core.Models;
 using CycloneDX.Services;
+using CycloneDX.Models.v1_2;
+using System.IO;
+using Microsoft.DotNet.PlatformAbstractions;
 
 namespace CycloneDX.Tests
 {
@@ -67,6 +69,19 @@ namespace CycloneDX.Tests
 
             Assert.Equal((int)ExitCode.OK, exitCode);
             Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\bom.xml")));
+        }
+
+        [Fact]
+        public void CheckMetaDataTemplate()
+        {
+            var bom = new Bom();
+            string resourcePath = Path.Join(ApplicationEnvironment.ApplicationBasePath, "Resources", "metadata");
+            bom = Program.ReadMetaDataFromFile(bom, Path.Join(resourcePath, "cycloneDX-metadata-template.xml"));
+            Assert.NotNull(bom.Metadata);
+            Assert.Matches("CycloneDX", bom.Metadata.Component.Name);
+            Assert.NotEmpty(bom.Metadata.Tools);
+            Assert.Matches("CycloneDX", bom.Metadata.Tools[0].Vendor);
+            Assert.Matches("1.2.0", bom.Metadata.Tools[0].Version);
         }
     }
 }

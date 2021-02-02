@@ -1,10 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net5.0;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <PackageId>CycloneDX</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>A .NET Core global tool to generate CycloneDX bill-of-material documents for use with Software Composition Analysis (SCA).</Description>
+    <PackageReleaseNotes>See $(PackageProjectUrl)/blob/master/CHANGELOG.md#$(VersionSuffix.Replace('.','')) for release notes.</PackageReleaseNotes>
+    <PackageVersion>$(VersionSuffix)</PackageVersion>
+    <PackAsTool>true</PackAsTool>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <ToolCommandName>dotnet-CycloneDX</ToolCommandName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(OsEnvironment )'=='windows'">
@@ -17,21 +23,6 @@
     <DefineConstants>Linux</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup>
-    <Authors>Steve Springett</Authors>
-    <Copyright>Copyright (c) Steve Springett</Copyright>
-    <Description>A .NET Core global tool to generate CycloneDX bill-of-material documents for use with Software Composition Analysis (SCA).</Description>
-    <PackageId>CycloneDX</PackageId>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/CycloneDX/cyclonedx-dotnet</PackageProjectUrl>
-    <PackageReleaseNotes>See $(PackageProjectUrl)/blob/master/CHANGELOG.md#$(VersionSuffix.Replace('.','')) for release notes.</PackageReleaseNotes>
-    <PackageVersion>$(VersionSuffix)</PackageVersion>
-    <PackAsTool>true</PackAsTool>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/CycloneDX/cyclonedx-dotnet.git</RepositoryUrl>
-    <ToolCommandName>dotnet-CycloneDX</ToolCommandName>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.1.0" />
     <PackageReference Include="System.IO.Abstractions" Version="13.2.9" />

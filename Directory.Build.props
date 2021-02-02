@@ -21,6 +21,12 @@
     <AnalysisMode>AllEnableByDefault</AnalysisMode>
   </PropertyGroup>
 
+  <!--<ItemGroup>
+    <PackageReference Include="AsyncFixer" Version="1.5.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>-->
 
   <PropertyGroup>
     <Authors>Steve Springett</Authors>
