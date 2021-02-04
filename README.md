@@ -64,6 +64,7 @@ Options:
   -gbt|--github-bearer-token <GITHUB_BEARER_TOKEN>                       Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions
   -dgl|--disable-github-licenses                                         Optionally disable GitHub license resolution
   -biop|--base-intermediate-output-path <BASE_INTERMEDIATE_OUTPUT_PATH>  Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated.
+  -imp|--import-metadata-path <METADATA_TEMPLATE>                        Optionally provide a metadata template which has project specific details
   -?|-h|--help                                                           Show help information
 ```
 
@@ -84,6 +85,29 @@ The following will recursively scan the project references of the supplied .cspr
 ```bash
 dotnet CycloneDX /path/to/project/MyProject.csproj -o /output/path -r
 ```
+
+Project metadata template example
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serialNumber="urn:uuid:087d0712-f591-4995-ba76-03f1c5c48884" version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
+  <metadata>
+    <component type="application" bom-ref="pkg:nuget/CycloneDX@1.3.0">
+      <name>CycloneDX</name>
+      <version>1.3.0</version>
+      <description>
+        <![CDATA[The [CycloneDX module](https://github.com/CycloneDX/cyclonedx-dotnet) for .NET creates a valid CycloneDX bill-of-material document containing an aggregate of all project dependencies. CycloneDX is a lightweight BOM specification that is easily created, human readable, and simple to parse.]]>
+      </description>
+      <licenses>
+        <license>
+          <name>Apache License 2.0</name>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <purl>pkg:nuget/CycloneDX@1.3.0</purl>
+    </component>
+  </metadata>
+</bom>
+``` 
 
 #### GitHub License Resolution
 
