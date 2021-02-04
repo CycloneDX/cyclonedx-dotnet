@@ -17,6 +17,7 @@ indent_size = 2
 # XML Configuration Files
 [*.{xml,config,props,targets,nuspec,resx,ruleset,vsixmanifest,vsct}]
 indent_size = 2
+
 # JSON Files
 [*.{json,json5,webmanifest}]
 indent_size = 2
@@ -36,6 +37,11 @@ end_of_line = crlf
 # Bash Files
 [*.sh]
 end_of_line = lf
+
+# snap Files
+[*.snap]
+indent_size = 2
+trim_trailing_whitespace = false
 
 ###############################
 # .NET Coding Conventions     #
