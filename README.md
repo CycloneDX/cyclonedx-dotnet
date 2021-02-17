@@ -86,7 +86,8 @@ The following will recursively scan the project references of the supplied .cspr
 dotnet CycloneDX /path/to/project/MyProject.csproj -o /output/path -r
 ```
 
-Project metadata template example
+Project [metadata](https://cyclonedx.org/docs/1.2/#type_metadata) **template example**
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serialNumber="urn:uuid:087d0712-f591-4995-ba76-03f1c5c48884" version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
@@ -108,6 +109,8 @@ Project metadata template example
   </metadata>
 </bom>
 ``` 
+
+_Update the data and import it within a build pipeline e.g. create the file using a script and add also dynamic data (version, timestamp, ...)_ 
 
 #### GitHub License Resolution
 
