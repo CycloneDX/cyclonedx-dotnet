@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,13 +9,12 @@
     <PackageReference Include="CycloneDX.Models" Version="1.0.0" />
     <PackageReference Include="CycloneDX.Xml" Version="1.0.0" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.1.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="nuget.projectmodel" Version="5.8.1" />
-    <PackageReference Include="System.IO.Abstractions" Version="13.2.15" />
+    <PackageReference Include="nuget.projectmodel" Version="5.6.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="13.2.23" />
   </ItemGroup>
 
 </Project>
-
