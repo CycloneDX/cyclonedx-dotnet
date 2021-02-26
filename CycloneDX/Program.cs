@@ -24,7 +24,11 @@ using McMaster.Extensions.CommandLineUtils;
 using CycloneDX.Models.v1_2;
 using CycloneDX.Core.Models;
 using CycloneDX.Services;
+using CycloneDX.Xml;
+using System.Reflection;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.IntegrationTests")]
 namespace CycloneDX {
     [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")]
     class Program {
@@ -77,7 +81,10 @@ namespace CycloneDX {
         [Option(Description = "Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated.", ShortName = "biop", LongName = "base-intermediate-output-path")]
         public string baseIntermediateOutputPath { get; }
 
-    static internal IFileSystem fileSystem = new FileSystem();
+        [Option(Description = "Optionally provide a metadata template which has project specific details.", ShortName = "imp", LongName = "import-metadata-path")]
+        public string importMetadataPath { get; }
+
+        static internal IFileSystem fileSystem = new FileSystem();
         static internal HttpClient httpClient = new HttpClient();
         static internal IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem);
         static internal IDotnetCommandService dotnetCommandService = new DotnetCommandService();
@@ -234,6 +241,26 @@ namespace CycloneDX {
             Console.WriteLine();
             Console.WriteLine("Creating CycloneDX BOM");
             var bom = new Bom();
+
+            if (!string.IsNullOrEmpty(importMetadataPath))
+            {
+                if (!File.Exists(importMetadataPath))
+                {
+                    Console.Error.WriteLine($"Metadata template '{importMetadataPath}' does not exist.");
+                    //throw new FileNotFoundException($"{importMetadataPath} not found");
+                    return (int)ExitCode.InvalidOptions;
+                }
+                else
+                {
+                    bom =  ReadMetaDataFromFile(bom, importMetadataPath);
+                }
+            }
+            else
+            {
+                bom.Metadata = new Metadata();
+            }
+            AddMetadataTool(bom);
+
             if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
             bom.Components = new List<Component>(components);
             bom.Components.Sort((x, y) => {
@@ -257,5 +284,48 @@ namespace CycloneDX {
 
             return 0;
         }
+
+        static public Bom ReadMetaDataFromFile(Bom bom, string templatePath)
+        {
+            try
+            {
+                return XmlBomDeserializer.Deserialize(File.ReadAllText(templatePath));
+            }
+            catch (IOException ex)
+            {
+                Console.Error.WriteLine($"Could not read Metadata file.");
+                Console.WriteLine(ex.Message);
+            }
+            return bom;
+        }
+        static public void AddMetadataTool(Bom bom)
+        {
+            string toolname = "CycloneDX module for .NET";
+
+            if (bom.Metadata == null) {
+                bom.Metadata = new Metadata();
+            }
+            if (bom.Metadata.Tools == null)
+            {
+                bom.Metadata.Tools = new List<Tool>();
+            }
+            var index = bom.Metadata.Tools.FindIndex(p => p.Name == toolname);
+            if (index == -1)
+            {
+                bom.Metadata.Tools.Add(new Tool
+                {
+                    Name = toolname,
+                    Vendor = "CycloneDX",
+                    Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
+                }
+                );
+            }
+            else
+            {
+                bom.Metadata.Tools[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+
+        }
+
     }
 }

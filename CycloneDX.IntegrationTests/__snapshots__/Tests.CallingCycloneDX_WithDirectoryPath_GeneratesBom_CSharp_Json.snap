@@ -2,5 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.2",
   "version": 1,
+  "metadata": {
+    "tools": [
+      {
+        "vendor": "CycloneDX",
+        "name": "CycloneDX module for .NET",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
   "components": []
 }
