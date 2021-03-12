@@ -163,6 +163,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
         <reference type="website">
           <url>https://www.newtonsoft.com/json</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/JamesNK/Newtonsoft.Json</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -181,6 +184,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <externalReferences>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
         </reference>
       </externalReferences>
     </component>
@@ -201,6 +207,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -219,6 +228,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <externalReferences>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
         </reference>
       </externalReferences>
     </component>
@@ -239,6 +251,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -257,6 +272,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <externalReferences>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
         </reference>
       </externalReferences>
     </component>
@@ -277,6 +295,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -295,6 +316,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <externalReferences>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
         </reference>
       </externalReferences>
     </component>
@@ -315,6 +339,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -333,6 +360,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <externalReferences>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
         </reference>
       </externalReferences>
     </component>

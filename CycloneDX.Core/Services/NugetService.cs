@@ -205,6 +205,27 @@ namespace CycloneDX.Services
                 };
             }
 
+            // Source: https://docs.microsoft.com/de-de/nuget/reference/nuspec#repository
+            var repoMeta = nuspecReader.GetRepositoryMetadata();
+            var vcsUrl = repoMeta?.Url;
+            if (!string.IsNullOrEmpty(vcsUrl))
+            {
+                var externalReference = new Models.v1_2.ExternalReference();
+                externalReference.Type = Models.v1_2.ExternalReference.ExternalReferenceType.Vcs;
+                externalReference.Url = vcsUrl;
+                if (null == component.ExternalReferences)
+                {
+                    component.ExternalReferences = new List<ExternalReference>
+                    {
+                        externalReference
+                    };
+                }
+                else
+                {
+                    component.ExternalReferences.Add(externalReference);
+                }
+            }
+
             return component;
         }
 
