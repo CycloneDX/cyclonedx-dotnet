@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
   <metadata>
     <tools>
@@ -43,6 +43,9 @@
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -60,6 +63,9 @@
       <externalReferences>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
         </reference>
       </externalReferences>
     </component>
@@ -79,6 +85,9 @@
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -96,6 +105,9 @@
       <externalReferences>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
         </reference>
       </externalReferences>
     </component>
@@ -115,6 +127,9 @@
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -132,6 +147,9 @@
       <externalReferences>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
         </reference>
       </externalReferences>
     </component>
@@ -151,6 +169,9 @@
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -169,6 +190,9 @@
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -186,6 +210,9 @@
       <externalReferences>
         <reference type="website">
           <url>https://aka.ms/nugetprj</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/NuGet/NuGet.Client</url>
         </reference>
       </externalReferences>
     </component>

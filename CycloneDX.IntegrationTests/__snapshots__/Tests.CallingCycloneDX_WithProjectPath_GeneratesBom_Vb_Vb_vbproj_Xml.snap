@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
   <metadata>
     <tools>
@@ -27,6 +27,9 @@
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Antiforgery</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -46,6 +49,9 @@
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/HttpAbstractions</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -64,6 +70,9 @@
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/HttpAbstractions</url>
         </reference>
       </externalReferences>
     </component>
@@ -87,6 +96,9 @@ Microsoft.AspNetCore.Authorization.AuthorizeAttribute</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Security</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -105,6 +117,9 @@ Microsoft.AspNetCore.Authorization.AuthorizeAttribute</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Security</url>
         </reference>
       </externalReferences>
     </component>
@@ -128,6 +143,9 @@ Microsoft.AspNetCore.Cors.EnableCorsAttribute</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/CORS</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -147,6 +165,9 @@ Microsoft.AspNetCore.Cors.EnableCorsAttribute</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/DataProtection</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -165,6 +186,9 @@ Microsoft.AspNetCore.Cors.EnableCorsAttribute</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/DataProtection</url>
         </reference>
       </externalReferences>
     </component>
@@ -188,6 +212,9 @@ Microsoft.AspNetCore.DataProtection.IDataProtector</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/DataProtection</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -206,6 +233,9 @@ Microsoft.AspNetCore.DataProtection.IDataProtector</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Diagnostics</url>
         </reference>
       </externalReferences>
     </component>
@@ -226,6 +256,9 @@ Microsoft.AspNetCore.DataProtection.IDataProtector</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Hosting</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -244,6 +277,9 @@ Microsoft.AspNetCore.DataProtection.IDataProtector</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Hosting</url>
         </reference>
       </externalReferences>
     </component>
@@ -267,6 +303,9 @@ Microsoft.AspNetCore.Html.IHtmlContent</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/HtmlAbstractions</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -285,6 +324,9 @@ Microsoft.AspNetCore.Html.IHtmlContent</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/HttpAbstractions</url>
         </reference>
       </externalReferences>
     </component>
@@ -310,6 +352,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/HttpAbstractions</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -329,6 +374,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/HttpAbstractions</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -347,6 +395,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/HttpAbstractions</url>
         </reference>
       </externalReferences>
     </component>
@@ -369,6 +420,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/BasicMiddleware</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -387,6 +441,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/JsonPatch</url>
         </reference>
       </externalReferences>
     </component>
@@ -407,6 +464,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Localization</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -425,6 +485,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
         </reference>
       </externalReferences>
     </component>
@@ -447,6 +510,9 @@ Microsoft.AspNetCore.Mvc.IActionResult</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -465,6 +531,9 @@ Microsoft.AspNetCore.Mvc.IActionResult</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
         </reference>
       </externalReferences>
     </component>
@@ -493,6 +562,9 @@ Microsoft.AspNetCore.Mvc.RouteAttribute</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -511,6 +583,9 @@ Microsoft.AspNetCore.Mvc.RouteAttribute</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
         </reference>
       </externalReferences>
     </component>
@@ -531,6 +606,9 @@ Microsoft.AspNetCore.Mvc.RouteAttribute</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -549,6 +627,9 @@ Microsoft.AspNetCore.Mvc.RouteAttribute</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
         </reference>
       </externalReferences>
     </component>
@@ -572,6 +653,9 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -590,6 +674,9 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
         </reference>
       </externalReferences>
     </component>
@@ -610,6 +697,9 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Razor</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -629,6 +719,9 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -647,6 +740,9 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
         </reference>
       </externalReferences>
     </component>
@@ -671,6 +767,9 @@ Microsoft.AspNetCore.Mvc.ViewComponent</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Mvc</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -690,6 +789,9 @@ Microsoft.AspNetCore.Mvc.ViewComponent</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Razor</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -708,6 +810,9 @@ Microsoft.AspNetCore.Mvc.ViewComponent</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Razor</url>
         </reference>
       </externalReferences>
     </component>
@@ -733,6 +838,9 @@ Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Razor</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -751,6 +859,9 @@ Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/ResponseCaching</url>
         </reference>
       </externalReferences>
     </component>
@@ -774,6 +885,9 @@ Microsoft.AspNetCore.Routing.RouteCollection</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Routing</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -796,6 +910,9 @@ Microsoft.AspNetCore.Routing.RouteData</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Routing</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -815,6 +932,9 @@ Microsoft.AspNetCore.Routing.RouteData</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/IISIntegration</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -833,6 +953,9 @@ Microsoft.AspNetCore.Routing.RouteData</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/HttpAbstractions</url>
         </reference>
       </externalReferences>
     </component>
@@ -909,6 +1032,9 @@ Microsoft.AspNetCore.Routing.RouteData</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Razor</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -957,6 +1083,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
         <reference type="website">
           <url>https://dot.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>git://github.com/dotnet/core-setup</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -979,6 +1108,9 @@ Microsoft.Extensions.Caching.Memory.IMemoryCache</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Caching</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -997,6 +1129,9 @@ Microsoft.Extensions.Caching.Memory.IMemoryCache</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Caching</url>
         </reference>
       </externalReferences>
     </component>
@@ -1023,6 +1158,9 @@ Microsoft.Extensions.Configuration.IConfigurationSection</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Configuration</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -1041,6 +1179,9 @@ Microsoft.Extensions.Configuration.IConfigurationSection</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/DependencyInjection</url>
         </reference>
       </externalReferences>
     </component>
@@ -1063,6 +1204,9 @@ Microsoft.Extensions.DependencyInjection.IServiceCollection</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/DependencyInjection</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -1081,6 +1225,9 @@ Microsoft.Extensions.DependencyInjection.IServiceCollection</description>
       <externalReferences>
         <reference type="website">
           <url>https://dot.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>git://github.com/dotnet/core-setup</url>
         </reference>
       </externalReferences>
     </component>
@@ -1105,6 +1252,9 @@ Microsoft.Extensions.FileProviders.IFileProvider</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/FileSystem</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -1123,6 +1273,9 @@ Microsoft.Extensions.FileProviders.IFileProvider</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/FileSystem</url>
         </reference>
       </externalReferences>
     </component>
@@ -1143,6 +1296,9 @@ Microsoft.Extensions.FileProviders.IFileProvider</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/FileSystem</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -1162,6 +1318,9 @@ Microsoft.Extensions.FileProviders.IFileProvider</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Hosting</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -1180,6 +1339,9 @@ Microsoft.Extensions.FileProviders.IFileProvider</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Localization</url>
         </reference>
       </externalReferences>
     </component>
@@ -1202,6 +1364,9 @@ Microsoft.Extensions.Localization.IStringLocalizer&lt;T&gt;</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Localization</url>
         </reference>
       </externalReferences>
     </component>
@@ -1230,6 +1395,9 @@ Microsoft.Extensions.Logging.Abstractions.NullLogger</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Logging</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -1249,6 +1417,9 @@ Microsoft.Extensions.Logging.Abstractions.NullLogger</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Common</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -1267,6 +1438,9 @@ Microsoft.Extensions.Logging.Abstractions.NullLogger</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Options</url>
         </reference>
       </externalReferences>
     </component>
@@ -1290,6 +1464,9 @@ Microsoft.Extensions.Primitives.StringSegment</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/Common</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -1309,6 +1486,9 @@ Microsoft.Extensions.Primitives.StringSegment</description>
         <reference type="website">
           <url>https://asp.net/</url>
         </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/HtmlAbstractions</url>
+        </reference>
       </externalReferences>
     </component>
     <component type="library">
@@ -1327,6 +1507,9 @@ Microsoft.Extensions.Primitives.StringSegment</description>
       <externalReferences>
         <reference type="website">
           <url>https://asp.net/</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/aspnet/HttpAbstractions</url>
         </reference>
       </externalReferences>
     </component>
@@ -1564,6 +1747,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <externalReferences>
         <reference type="website">
           <url>http://www.newtonsoft.com/json</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://github.com/JamesNK/Newtonsoft.Json.Bson</url>
         </reference>
       </externalReferences>
     </component>

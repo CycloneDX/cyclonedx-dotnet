@@ -239,6 +239,10 @@
         {
           "url": "https://www.newtonsoft.com/json",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/JamesNK/Newtonsoft.Json",
+          "type": "vcs"
         }
       ]
     },
@@ -282,6 +286,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -305,6 +313,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -327,6 +339,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -350,6 +366,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -372,6 +392,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -395,6 +419,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -417,6 +445,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -440,6 +472,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -462,6 +498,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -485,6 +525,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -507,6 +551,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -530,6 +578,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -552,6 +604,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -575,6 +631,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -597,6 +657,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -620,6 +684,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -642,6 +710,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },
@@ -665,6 +737,10 @@
         {
           "url": "https://aka.ms/nugetprj",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/NuGet/NuGet.Client",
+          "type": "vcs"
         }
       ]
     },

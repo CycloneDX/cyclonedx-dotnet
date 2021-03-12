@@ -32,6 +32,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Antiforgery",
+          "type": "vcs"
         }
       ]
     },
@@ -55,6 +59,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/HttpAbstractions",
+          "type": "vcs"
         }
       ]
     },
@@ -78,6 +86,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/HttpAbstractions",
+          "type": "vcs"
         }
       ]
     },
@@ -101,6 +113,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Security",
+          "type": "vcs"
         }
       ]
     },
@@ -124,6 +140,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Security",
+          "type": "vcs"
         }
       ]
     },
@@ -147,6 +167,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/CORS",
+          "type": "vcs"
         }
       ]
     },
@@ -170,6 +194,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/DataProtection",
+          "type": "vcs"
         }
       ]
     },
@@ -193,6 +221,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/DataProtection",
+          "type": "vcs"
         }
       ]
     },
@@ -216,6 +248,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/DataProtection",
+          "type": "vcs"
         }
       ]
     },
@@ -239,6 +275,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Diagnostics",
+          "type": "vcs"
         }
       ]
     },
@@ -262,6 +302,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Hosting",
+          "type": "vcs"
         }
       ]
     },
@@ -285,6 +329,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Hosting",
+          "type": "vcs"
         }
       ]
     },
@@ -308,6 +356,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/HtmlAbstractions",
+          "type": "vcs"
         }
       ]
     },
@@ -331,6 +383,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/HttpAbstractions",
+          "type": "vcs"
         }
       ]
     },
@@ -354,6 +410,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/HttpAbstractions",
+          "type": "vcs"
         }
       ]
     },
@@ -377,6 +437,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/HttpAbstractions",
+          "type": "vcs"
         }
       ]
     },
@@ -400,6 +464,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/HttpAbstractions",
+          "type": "vcs"
         }
       ]
     },
@@ -423,6 +491,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/BasicMiddleware",
+          "type": "vcs"
         }
       ]
     },
@@ -446,6 +518,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/JsonPatch",
+          "type": "vcs"
         }
       ]
     },
@@ -469,6 +545,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Localization",
+          "type": "vcs"
         }
       ]
     },
@@ -492,6 +572,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -515,6 +599,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -538,6 +626,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -561,6 +653,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -584,6 +680,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -607,6 +707,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -630,6 +734,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -653,6 +761,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -676,6 +788,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -699,6 +815,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Razor",
+          "type": "vcs"
         }
       ]
     },
@@ -722,6 +842,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -745,6 +869,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -768,6 +896,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Mvc",
+          "type": "vcs"
         }
       ]
     },
@@ -791,6 +923,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Razor",
+          "type": "vcs"
         }
       ]
     },
@@ -814,6 +950,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Razor",
+          "type": "vcs"
         }
       ]
     },
@@ -837,6 +977,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Razor",
+          "type": "vcs"
         }
       ]
     },
@@ -860,6 +1004,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/ResponseCaching",
+          "type": "vcs"
         }
       ]
     },
@@ -883,6 +1031,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Routing",
+          "type": "vcs"
         }
       ]
     },
@@ -906,6 +1058,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Routing",
+          "type": "vcs"
         }
       ]
     },
@@ -929,6 +1085,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/IISIntegration",
+          "type": "vcs"
         }
       ]
     },
@@ -952,6 +1112,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/HttpAbstractions",
+          "type": "vcs"
         }
       ]
     },
@@ -1041,6 +1205,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Razor",
+          "type": "vcs"
         }
       ]
     },
@@ -1087,6 +1255,10 @@
         {
           "url": "https://dot.net/",
           "type": "website"
+        },
+        {
+          "url": "git://github.com/dotnet/core-setup",
+          "type": "vcs"
         }
       ]
     },
@@ -1110,6 +1282,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Caching",
+          "type": "vcs"
         }
       ]
     },
@@ -1133,6 +1309,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Caching",
+          "type": "vcs"
         }
       ]
     },
@@ -1156,6 +1336,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Configuration",
+          "type": "vcs"
         }
       ]
     },
@@ -1179,6 +1363,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/DependencyInjection",
+          "type": "vcs"
         }
       ]
     },
@@ -1202,6 +1390,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/DependencyInjection",
+          "type": "vcs"
         }
       ]
     },
@@ -1225,6 +1417,10 @@
         {
           "url": "https://dot.net/",
           "type": "website"
+        },
+        {
+          "url": "git://github.com/dotnet/core-setup",
+          "type": "vcs"
         }
       ]
     },
@@ -1248,6 +1444,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/FileSystem",
+          "type": "vcs"
         }
       ]
     },
@@ -1271,6 +1471,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/FileSystem",
+          "type": "vcs"
         }
       ]
     },
@@ -1294,6 +1498,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/FileSystem",
+          "type": "vcs"
         }
       ]
     },
@@ -1317,6 +1525,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Hosting",
+          "type": "vcs"
         }
       ]
     },
@@ -1340,6 +1552,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Localization",
+          "type": "vcs"
         }
       ]
     },
@@ -1363,6 +1579,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Localization",
+          "type": "vcs"
         }
       ]
     },
@@ -1386,6 +1606,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Logging",
+          "type": "vcs"
         }
       ]
     },
@@ -1409,6 +1633,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Common",
+          "type": "vcs"
         }
       ]
     },
@@ -1432,6 +1660,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Options",
+          "type": "vcs"
         }
       ]
     },
@@ -1455,6 +1687,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/Common",
+          "type": "vcs"
         }
       ]
     },
@@ -1478,6 +1714,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/HtmlAbstractions",
+          "type": "vcs"
         }
       ]
     },
@@ -1501,6 +1741,10 @@
         {
           "url": "https://asp.net/",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/aspnet/HttpAbstractions",
+          "type": "vcs"
         }
       ]
     },
@@ -1753,6 +1997,10 @@
         {
           "url": "http://www.newtonsoft.com/json",
           "type": "website"
+        },
+        {
+          "url": "https://github.com/JamesNK/Newtonsoft.Json.Bson",
+          "type": "vcs"
         }
       ]
     },
