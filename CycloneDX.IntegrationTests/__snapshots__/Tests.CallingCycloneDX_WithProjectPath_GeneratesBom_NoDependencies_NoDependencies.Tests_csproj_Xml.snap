@@ -18,6 +18,9 @@
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">02F4FBEF89D316053C7187063BD8F510CC2E6B22AC971A984EEAE0DF61C6A566B684460DB96DBE5E061554D7197BA35D6EBF38417E9FC1A3997DDE67FB59B638</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -39,6 +42,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">7FFE3B23AD168374ABBDE4EF9DE702421099080318954BA3585D79110FC0653A85FF9E2A7842636C2200C4A71923C4E8518CD283A25D7EB1E082C8230B2084F5</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -60,6 +66,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">A79D326582B3847EB896602B260A0A8EDBEC35E84409AFBFB00B8E433661E6E0CD0536D12B18CDF085CFD5EE75EF1755B20AC571237148454329920E5958C671</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -81,6 +90,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">7D2F43F1AFB2E799FA98731B36A8075DA3C69239A9547F61F7B3B2AC1C6C0AEA3767C690685309E7121F9B38E2DA7B5477FDEDAEE84C6D28127C87A51CE910A6</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -102,6 +114,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">1A690A7E8C9EAEA9AC1CC9FB3998F400AA5C05A6C3F8669A7EAA61BD7D8CC38D3A230889472D6929C2AA7427CA25F626911C89EBE7BE45A532960749A036B58D</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -123,6 +138,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">7AD698C2B2D94144BE6F75164E90A752081DE9243F648919E691E7A11EFE7485ADFF0A7646FDC2BCC28E6484ACAEDEC56021CAC02C5F71EA6EBB2116910C400E</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -144,6 +162,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 18a36291e48808fa7ef2d00a764ceb1ec95645a5 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">B2DE3B3E8B19487AE3102763788CD941BCE2BD804916FE8FDA7BF8723DB2A5D236D380CEFAF67B979ADA18C897E1E5CC279DD17CE220FBFB380C7559E7836ED8</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/standard/blob/master/LICENSE.TXT</url>
