@@ -19,6 +19,12 @@
       "version": "2.1.0",
       "description": "A set of .NET API\u0027s that are included in the default .NET Core application model. \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "02F4FBEF89D316053C7187063BD8F510CC2E6B22AC971A984EEAE0DF61C6A566B684460DB96DBE5E061554D7197BA35D6EBF38417E9FC1A3997DDE67FB59B638"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -42,6 +48,12 @@
       "version": "2.1.0",
       "description": "Provides the .NET Core app bootstrapper intended for use in the application directory \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7FFE3B23AD168374ABBDE4EF9DE702421099080318954BA3585D79110FC0653A85FF9E2A7842636C2200C4A71923C4E8518CD283A25D7EB1E082C8230B2084F5"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -65,6 +77,12 @@
       "version": "2.1.0",
       "description": "Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "A79D326582B3847EB896602B260A0A8EDBEC35E84409AFBFB00B8E433661E6E0CD0536D12B18CDF085CFD5EE75EF1755B20AC571237148454329920E5958C671"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -88,6 +106,12 @@
       "version": "2.1.0",
       "description": "Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7D2F43F1AFB2E799FA98731B36A8075DA3C69239A9547F61F7B3B2AC1C6C0AEA3767C690685309E7121F9B38E2DA7B5477FDEDAEE84C6D28127C87A51CE910A6"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -111,6 +135,12 @@
       "version": "2.1.0",
       "description": "Provides runtime information required to resolve target framework, platform, and runtime specific implementations of .NETCore packages. \n30ab651fcb4354552bd4891619a0bdd81e0ebdbf \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "1A690A7E8C9EAEA9AC1CC9FB3998F400AA5C05A6C3F8669A7EAA61BD7D8CC38D3A230889472D6929C2AA7427CA25F626911C89EBE7BE45A532960749A036B58D"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -134,6 +164,12 @@
       "version": "2.1.0",
       "description": "Provides supporting infrastructure for portable projects: support identifiers that define framework and runtime for support targets and packages that reference the minimum supported package versions when targeting these. \n30ab651fcb4354552bd4891619a0bdd81e0ebdbf \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7AD698C2B2D94144BE6F75164E90A752081DE9243F648919E691E7A11EFE7485ADFF0A7646FDC2BCC28E6484ACAEDEC56021CAC02C5F71EA6EBB2116910C400E"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -157,6 +193,12 @@
       "version": "4.3.0",
       "description": "Provides common types for Win32-based libraries.\n\nCommonly Used Types:\nSystem.ComponentModel.Win32Exception\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "366F07A79D72F6D61C2B7C43EAA938DD68DFB6B83599D1F6E02089B136FA82BEC74B6D54D6E03E08A3C612D51C5596E3535CBC2B29F39B97A827B3E7C79826F0"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -180,6 +222,12 @@
       "version": "4.3.0",
       "description": "Provides support for accessing and modifying the Windows Registry.\n\nCommonly Used Types:\nMicrosoft.Win32.RegistryKey\nMicrosoft.Win32.Registry\nMicrosoft.Win32.RegistryValueKind\nMicrosoft.Win32.RegistryHive\nMicrosoft.Win32.RegistryView\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2F0D7F5702C7D72C73E927C512355108DD299DF94B12C5A09D5E2AB1D279D76FC7853C27297506FB30D0E324CEDCAFC42507A61A835A0475F922721234A4F351"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -203,6 +251,12 @@
       "version": "2.0.3",
       "description": "A set of standard .NET APIs that are prescribed to be used and supported together. \n18a36291e48808fa7ef2d00a764ceb1ec95645a5 \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "B2DE3B3E8B19487AE3102763788CD941BCE2BD804916FE8FDA7BF8723DB2A5D236D380CEFAF67B979ADA18C897E1E5CC279DD17CE220FBFB380C7559E7836ED8"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -226,6 +280,12 @@
       "version": "12.0.3",
       "description": "Json.NET is a popular high-performance JSON framework for .NET",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6934665F0479C58BBE996C44F2BF16D435A72F4D92795F0BC1D40CB0BC1358FF0E660AC20B24EABCE01EE6145BD553506178E59FBAABD0F2A94B23BFA5C735F5"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -252,6 +312,12 @@
       "name": "Newtonsoft.Json",
       "version": "9.0.1",
       "description": "Json.NET is a popular high-performance JSON framework for .NET",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "DA8917A5347051C8106F4EA9BADE4BC300A3B60A05A3BE3390F92C8DCBCEA67223C7B4DA8065B9228042000E25B99C75FAD7E2221A0DAA8888ED8EF3C161B228"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -273,6 +339,12 @@
       "name": "NuGet.Common",
       "version": "5.2.0",
       "description": "NuGet client library.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "35132826145CA3F922D3BEDB6E739F83A5D5BF420225C3118A3EF1DF2E788174125D54B8C567BDDB1EA301EA9693F89D047DB1BDAFB643AC7715FD49F5E21ACF"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -300,6 +372,12 @@
       "version": "5.4.0",
       "description": "NuGet client library.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2953CB3587E45421136EAEF654F3B9CC62F684426A8499177FC5F7AF7ADEA0D0C1A292BCFA6B59DDB63B17C8E5A2D02A75DFB5A981C93DD114688467EA477979"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -326,6 +404,12 @@
       "name": "NuGet.Configuration",
       "version": "5.2.0",
       "description": "NuGet\u0027s client configuration settings implementation.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3FCB6A18B86556D81E8419A158F4BC0C8E8623EAC4BBCDC3CE17E4D88687D060938827D997E8D4BDF32766EC33D21F69D41F95258B8CDCA17A4F1B339A15A89B"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -353,6 +437,12 @@
       "version": "5.4.0",
       "description": "NuGet\u0027s client configuration settings implementation.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6D0019E5EBFB5FEC4859C4BAD6BA230745BADE9C73C7A3712CFB25D44A008A1B923A049A6057F68C83EF1B6CDDEC865C845DB5B40F1D4F4D7246B1F92CCA1577"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -379,6 +469,12 @@
       "name": "NuGet.DependencyResolver.Core",
       "version": "5.2.0",
       "description": "NuGet client library.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "9C39C53305E1FAF7C9B9A95DB247F05655DCD4E4CDF5C5C564BD28407B114D67C4603E571B981D1EAC989750B3C32FAF199F05AEAAD06C7AFAFB1C18B071D600"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -406,6 +502,12 @@
       "version": "5.4.0",
       "description": "NuGet client library.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "646D83DDFA94E13A29076267EE5111D826E96B3A9C3D7EF0F264572CB3DB4247DBC8C55AD2738E3291EF73EEE9C407BAA0E506FA69DE8AF6892A9A8CEF5DF8D7"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -432,6 +534,12 @@
       "name": "NuGet.Frameworks",
       "version": "5.2.0",
       "description": "The understanding of target frameworks for NuGet.Packaging.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2ACBA3C3E6D1257968FCCB6E218776455ADE3C626E2829512310DDC1BEE8C142A3C9EF681BF793A1F6A158014FE4A5A7AE9278A55E560C4C8545343D7A2B7028"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -459,6 +567,12 @@
       "version": "5.4.0",
       "description": "The understanding of target frameworks for NuGet.Packaging.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "21DCA7B6A6D56419B2098EE2B1307422AD1E19104B360B9C71258CC51B59880BBAC571C06F8858A5EAB95DF448892EEB28F203D8A9259385144685D73535B45E"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -485,6 +599,12 @@
       "name": "NuGet.LibraryModel",
       "version": "5.2.0",
       "description": "NuGet client library.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2411D6BB82FFF5AA619C50B2978771934F6F1F1D39EDC9B87841050A76C0EAB61D84ADE46AC5B9C65F32F7654E283A92BDC685F8E8EF708B98A50F8591D19AD4"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -512,6 +632,12 @@
       "version": "5.4.0",
       "description": "NuGet client library.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "40972DE899FB65860B502E7DBFD98FAAA3A8C44C150CF8A7DCE8364A3172221F68CA7780A2D7D9A73585C850FB6DCE120BE2DC6DD6AED0AD52F07409B706F9EA"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -538,6 +664,12 @@
       "name": "NuGet.Packaging",
       "version": "5.2.0",
       "description": "NuGet\u0027s implementation for reading nupkg package and nuspec package specification files.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "A1C67FF4A8C02B8A548643A1EC3451CB77BBF9150407901190F39BB5E7A9D9D6C4F3BD44C0C161A115777AB09A9689D9708BC6E3BFFF3E2071BA55916EE6CF3D"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -565,6 +697,12 @@
       "version": "5.4.0",
       "description": "NuGet\u0027s implementation for reading nupkg package and nuspec package specification files.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "1077FCA64CA20D35526E3DB527B42FAF3A31BB45A92564AD14FE74025CF2AFA559F129AC74072B47CA44DC84A7A1780A9C8233355B3B1AA74B4738F985E9EB10"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -591,6 +729,12 @@
       "name": "NuGet.ProjectModel",
       "version": "5.2.0",
       "description": "NuGet client library.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "E46FC853BAE913D57D00FA8B47DAC0485F9A4BE82AB312054542964777B68A4EC5B38317F357C329B2BD48458C47C6741032415EBAFF27B40CD87772444A4B57"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -618,6 +762,12 @@
       "version": "5.4.0",
       "description": "NuGet client library.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6A5F3B741D32094675521BD2841BA566EDCECBB82B624EEB7721A2032B6270C947EA27443B50F70C147322C94B37FEA6E4CDDB1021C5A1EA487017422613F412"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -644,6 +794,12 @@
       "name": "NuGet.Protocol",
       "version": "5.2.0",
       "description": "NuGet client library.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "B00781F9220093400F47FA077CBC5E3706CA917826CC47CE671B2990DC98FC2173DDB45E8D890B73BCFC4B07E9A628B1DBD35072E3FC7F36525C0CE28FC75679"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -671,6 +827,12 @@
       "version": "5.4.0",
       "description": "NuGet client library.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "630A63C22A9E7C1EB0D39998A71B42DB3AB467620FEA157774413010EA4E5B579F14E7366593B762EF58959DA83D76C710720E1FE20A2FF2D21593946C0BCC59"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -697,6 +859,12 @@
       "name": "NuGet.Versioning",
       "version": "5.2.0",
       "description": "NuGet\u0027s implementation of Semantic Versioning.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "FAE603B3C59407F57E53C711E261B0F677083303745241F8B453D7FFE90A5C6D5E8F05D86AAFD5D6DEBE5E67BC43FF1DE0A431C38CDDF6F78F980F4C986258BE"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -724,6 +892,12 @@
       "version": "5.4.0",
       "description": "NuGet\u0027s implementation of Semantic Versioning.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7D36047CF218EAB2E0899C74292BBADB7F607553AD5C4A264B99780B4E4D47AA07A5B971B8D34944BB6E24A9075AA66F9A7FA080CB78AFAE35DEB622285E9CB1"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -751,6 +925,12 @@
       "version": "4.3.0",
       "description": "Internal implementation package not meant for direct consumption.  Please do not reference directly. \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "299C5A96FFFDCAF1972E3E3D1C727837D18AC9E88CB79C09914F12FF1DE7280DFF10C9232A49A1C1D3BA7785A5CF76F28C9DCE414F0A2A567688DE7FD5331DC8"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -774,6 +954,12 @@
       "version": "4.3.0",
       "description": "Provides classes that define generic collections, which allow developers to create strongly typed collections that provide better type safety and performance than non-generic strongly typed collections.\n\nCommonly Used Types:\nSystem.Collections.Generic.List\u003CT\u003E\nSystem.Collections.Generic.Dictionary\u003CTKey, TValue\u003E\nSystem.Collections.Generic.Queue\u003CT\u003E\nSystem.Collections.Generic.Stack\u003CT\u003E\nSystem.Collections.Generic.HashSet\u003CT\u003E\nSystem.Collections.Generic.LinkedList\u003CT\u003E\nSystem.Collections.Generic.EqualityComparer\u003CT\u003E\nSystem.Collections.Generic.Comparer\u003CT\u003E\nSystem.Collections.Generic.SortedDictionary\u003CTKey, TValue\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "CA7B952D30DA1487CA4E43AA522817B5EE26E7E10537062810112FC67A7512766C39D402F394BB0426D1108BBCF9BBB64E9CE1F5AF736EF215A51A35E55F051B"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -797,6 +983,12 @@
       "version": "4.3.0",
       "description": "Provides classes and attributes that allows basic interaction with a debugger.\n\nCommonly Used Types:\nSystem.Diagnostics.Debug\nSystem.Diagnostics.DebuggerStepThroughAttribute\nSystem.Diagnostics.Debugger\nSystem.Diagnostics.DebuggerDisplayAttribute\nSystem.Diagnostics.DebuggerBrowsableAttribute\nSystem.Diagnostics.DebuggerBrowsableState\nSystem.Diagnostics.DebuggerHiddenAttribute\nSystem.Diagnostics.DebuggerNonUserCodeAttribute\nSystem.Diagnostics.DebuggerTypeProxyAttribute\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6C58FE1E3618E7F87684C1CEA7EFC7D3B19BD7DF8D2535F9E27B62C52F441F11B67B21225D6BCD62F409E02C2A16231C4DB19BE33B8FAB5B9B0A5C8660DDAB24"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -820,6 +1012,12 @@
       "version": "4.3.0",
       "description": "Provides the System.Diagnostics.Process class, which allows interaction with local and remote processes.\n\nCommonly Used Types:\nSystem.Diagnostics.Process\nSystem.Diagnostics.ProcessModule\nSystem.Diagnostics.ProcessStartInfo\nSystem.Diagnostics.ProcessThread\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "274C0E5F4EFE4004906E5B1FC6620C15CF48ABB2935D82F7CECD86FD773BD38625BF7369B95768EA08A3E95DCF1A2A6D4F1AAC2B42BB09D5DE9D1BCA527900DA"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -843,6 +1041,12 @@
       "version": "4.3.0",
       "description": "Provides classes and interfaces that support the Dynamic Language Runtime (DLR).\n\nCommonly Used Types:\nSystem.Runtime.CompilerServices.CallSite\nSystem.Runtime.CompilerServices.CallSite\u003CT\u003E\nSystem.Dynamic.IDynamicMetaObjectProvider\nSystem.Dynamic.DynamicMetaObject\nSystem.Dynamic.SetMemberBinder\nSystem.Dynamic.GetMemberBinder\nSystem.Dynamic.ExpandoObject\nSystem.Dynamic.DynamicObject\nSystem.Runtime.CompilerServices.CallSiteBinder\nSystem.Runtime.CompilerServices.ConditionalWeakTable\u003CTKey, TValue\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "54446FEE94F432CB8FD38EC10C929A87B307A76F152A2E9DA11BA99C41CEB0F65913CF218944990F0E122D4F858945091E9806C84C0285ADA1FCC939337D30EA"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -866,6 +1070,12 @@
       "version": "4.3.0",
       "description": "Provides classes that define culture-related information, including language, country/region, calendars in use, format patterns for dates, currency, and numbers, and sort order for strings.\n\nCommonly Used Types:\nSystem.Globalization.DateTimeFormatInfo\nSystem.Globalization.CultureInfo\nSystem.Globalization.NumberFormatInfo\nSystem.Globalization.CalendarWeekRule\nSystem.Globalization.TextInfo\nSystem.Globalization.Calendar\nSystem.Globalization.CompareInfo\nSystem.Globalization.CompareOptions\nSystem.Globalization.UnicodeCategory\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "823D2BA308CB073B40A3146ECCCD0D9FD7B1615AC3FBEFB16F73D873E411FD81C3BDC87DF206D3DC7E2F14C9CD53AAFCA684A3570C25471280AADA8DE805ECE2"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -889,6 +1099,12 @@
       "version": "4.3.0",
       "description": "Provides base input and output (I/O) types, including System.IO.Stream, System.IO.StreamReader and System.IO.StreamWriter, that allow reading and writing to data streams\n\nCommonly Used Types:\nSystem.IO.Stream\nSystem.IO.EndOfStreamException\nSystem.IO.MemoryStream\nSystem.IO.StreamReader\nSystem.IO.StreamWriter\nSystem.IO.StringWriter\nSystem.IO.TextWriter\nSystem.IO.TextReader\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "BFCA5A21E3E1986B9765B13DC6FBCD6F8B89E4C1383855D1D7EF256BF1BF2F51889769DB5365859DD7606FBF6454ADD4DAEB3BAB56994FFB98FD1D03FE8BC1E6"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -912,6 +1128,12 @@
       "version": "4.3.0",
       "description": "Provides types that allow reading and writing to files and types that provide basic file and directory support.\n\nCommonly Used Types:\nSystem.IO.FileStream\nSystem.IO.FileInfo\nSystem.IO.DirectoryInfo\nSystem.IO.FileSystemInfo\nSystem.IO.File\nSystem.IO.Directory\nSystem.IO.SearchOption\nSystem.IO.FileOptions\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "4FB581D6F85B9529A091A0E974633752AA39E50B2BE6C8A9E5ECA8C2BC225CEA07064CCEC7778F77DF9987DEEBF4DCCEC050B1A97EDAC0EE9107142E6A8EE7EE"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -935,6 +1157,12 @@
       "version": "4.3.0",
       "description": "Provides common enumerations and exceptions for path-based I/O libraries.\n\nCommonly Used Types:\nSystem.IO.DirectoryNotFoundException\nSystem.IO.FileAccess\nSystem.IO.FileLoadException\nSystem.IO.PathTooLongException\nSystem.IO.FileMode\nSystem.IO.FileShare\nSystem.IO.FileAttributes\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5885953D09582CFFD973D23A21A929064D72F2BC9518AF3732D671FFFCC628A8B686F1D058A001EE6A114023B3E48B3FC0D0E4B22629A1C7F715E03795EE9EE5"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -958,6 +1186,12 @@
       "version": "4.3.0",
       "description": "Provides classes and interfaces that supports queries that use Language-Integrated Query (LINQ).\n\nCommonly Used Types:\nSystem.Linq.Enumerable\nSystem.Linq.IGrouping\u003CTKey, TElement\u003E\nSystem.Linq.IOrderedEnumerable\u003CTElement\u003E\nSystem.Linq.ILookup\u003CTKey, TElement\u003E\nSystem.Linq.Lookup\u003CTKey, TElement\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "EACC7FE1EC526F405F5BA0E671F616D0E5BE9C1828D543A9E2F8C65DF4099D6B2EA4A9FA2CDAE4F34B170DC37142F60E267E137CA39F350281ED70D2DC620458"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -981,6 +1215,12 @@
       "version": "4.3.0",
       "description": "Provides classes, interfaces and enumerations that enable language-level code expressions to be represented as objects in the form of expression trees.\n\nCommonly Used Types:\nSystem.Linq.IQueryable\u003CT\u003E\nSystem.Linq.IQueryable\nSystem.Linq.Expressions.Expression\u003CTDelegate\u003E\nSystem.Linq.Expressions.Expression\nSystem.Linq.Expressions.ExpressionVisitor\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "61B90EF9AE6F779FBC8A7B6483EE8F5449CDD05C81B05235F70447E656A73B2AAB7C341784B999F7532374744A72E2C3A5CD13800EA23417FAC32CCFAE5CDE6D"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1004,6 +1244,12 @@
       "version": "4.3.0",
       "description": "Provides types and interfaces that allow the creation of observable types that provide notifications to clients when changes are made to it.\n\nCommonly Used Types:\nSystem.ComponentModel.INotifyPropertyChanged\nSystem.Collections.ObjectModel.ObservableCollection\u003CT\u003E\nSystem.ComponentModel.PropertyChangedEventHandler\nSystem.Windows.Input.ICommand\nSystem.Collections.Specialized.INotifyCollectionChanged\nSystem.Collections.Specialized.NotifyCollectionChangedEventArgs\nSystem.Collections.Specialized.NotifyCollectionChangedEventHandler\nSystem.Collections.ObjectModel.KeyedCollection\u003CTKey, TItem\u003E\nSystem.ComponentModel.PropertyChangedEventArgs\nSystem.Collections.ObjectModel.ReadOnlyDictionary\u003CTKey, TValue\u003E\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "409BCA3D2139BD1D003C711400BA2DB5E576BB54D593AA541EC3576E7B2029B60159AB1C5B2C4E7389267B1B95EBCD8C2F064DC6E1F53E693AACB1737F066123"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1027,6 +1273,12 @@
       "version": "4.3.0",
       "description": "Provides types that retrieve information about assemblies, modules, members, parameters, and other entities in managed code by examining their metadata. These types also can be used to manipulate instances of loaded types, for example to hook up events or to invoke methods.\n\nCommonly Used Types:\nSystem.Reflection.MethodInfo\nSystem.Reflection.PropertyInfo\nSystem.Reflection.ParameterInfo\nSystem.Reflection.FieldInfo\nSystem.Reflection.ConstructorInfo\nSystem.Reflection.Assembly\nSystem.Reflection.MemberInfo\nSystem.Reflection.EventInfo\nSystem.Reflection.Module\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2325B67ED60DCE0302807064F25422CBE1B7FB275B539B44FBA3C4A8CE4926F21D78529A5C34B31C03D80D110F7BACE9AF9589D457266BEAC014220057AF8333"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1050,6 +1302,12 @@
       "version": "4.3.0",
       "description": "Provides classes that allow a compiler or tool to emit metadata and optionally generate a PE file on disk. The primary clients of these classes are script engines and compilers.\n\nCommonly Used Types:\nSystem.Reflection.Emit.AssemblyBuilder\nSystem.Reflection.Emit.FieldBuilder\nSystem.Reflection.Emit.TypeBuilder\nSystem.Reflection.Emit.MethodBuilder\nSystem.Reflection.Emit.ConstructorBuilder\nSystem.Reflection.Emit.GenericTypeParameterBuilder\nSystem.Reflection.Emit.ModuleBuilder\nSystem.Reflection.Emit.PropertyBuilder\nSystem.Reflection.Emit.AssemblyBuilderAccess\nSystem.Reflection.Emit.EventBuilder\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "BE45051467A36AB965410F112A475FB81510A5595347D1CC0C46B028E0436A339218DD3C073F048C2D338B67DC13B45742290B6C46F55982503F74A8F2698818"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1073,6 +1331,12 @@
       "version": "4.3.0",
       "description": "Provides classes that allow a compiler or tool to emit Microsoft intermediate language (MSIL). The primary clients of these classes are script engines and compilers.\n\nCommonly Used Types:\nSystem.Reflection.Emit.ILGenerator\nSystem.Reflection.Emit.Label\nSystem.Reflection.Emit.CustomAttributeBuilder\nSystem.Reflection.Emit.LocalBuilder\nSystem.Reflection.Emit.ParameterBuilder\nSystem.Reflection.Emit.SignatureHelper\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "E9BE5F62BF64B1947A49857337306A5D0980686B58D665989E94006AB04AA7E0BBF4D8543D1B57D5BB38079052F275F339B73054A7357E4FA357208A0AC85D69"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1096,6 +1360,12 @@
       "version": "4.3.0",
       "description": "Provides the System.Reflection.Emit.DynamicMethod class, which represents a dynamic method that can be compiled, executed, and discarded. Discarded methods are available for garbage collection.\n\nCommonly Used Types:\nSystem.Reflection.Emit.DynamicMethod\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "AD58AF07296BD084907A089F92026FA3898B764EB9D6A07C9414B550A83AC60456F32A34127C29BB93A9633FB07BA9FD828F7B41A31DCE5FF019A7CF1AB29435"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1119,6 +1389,12 @@
       "version": "4.3.0",
       "description": "Provides custom attribute extension methods for System.Reflection types.\n\nCommonly Used Types:\nSystem.Reflection.InterfaceMapping\nSystem.Reflection.CustomAttributeExtensions\nSystem.Reflection.RuntimeReflectionExtensions\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "06CFD992C8D7FD9AB6432AB02BE981A01B6558285A6E26A7825A064D4EFCCE08D9E7344F03FA19B033A2459D42B0B80E8C1400CE39B47A1752869AB8825B0475"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1142,6 +1418,12 @@
       "version": "4.3.0",
       "description": "Provides common enumerations for reflection-based libraries.\n\nCommonly Used Types:\nSystem.Reflection.FieldAttributes\nSystem.Reflection.Emit.OpCode\nSystem.Reflection.TypeAttributes\nSystem.Reflection.MethodAttributes\nSystem.Reflection.CallingConventions\nSystem.Reflection.PropertyAttributes\nSystem.Reflection.EventAttributes\nSystem.Reflection.ParameterAttributes\nSystem.Reflection.GenericParameterAttributes\nSystem.Reflection.MethodImplAttributes\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "D4B9CC905F5A5CAB900206338E889068BF66C18EE863A29D68EFF3CDE2CCCA734112A2A851F2E2E5388A21EC28005FA19317C64D9B23923B05D6344BE2E49EAA"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1165,6 +1447,12 @@
       "version": "4.3.0",
       "description": "Provides extensions methods for System.Type that are designed to be source-compatible with older framework reflection-based APIs.\n\nCommonly Used Types:\nSystem.Reflection.TypeExtensions\nSystem.Reflection.BindingFlags\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "68AE81A635B9AF2AEE9FC8FC8FE7DA0356EF4DA4EB32F81A89FB75613B96714E8F1A1F4C12BD0D335EFBB03408CC7A744314837F13564D5FB262CA272055677F"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1188,6 +1476,12 @@
       "version": "4.3.0",
       "description": "Provides classes and attributes that allow developers to create, store, and manage various culture-specific resources used in an application.\n\nCommonly Used Types:\nSystem.Resources.ResourceManager\nSystem.Resources.NeutralResourcesLanguageAttribute\nSystem.Resources.SatelliteContractVersionAttribute\nSystem.Resources.MissingManifestResourceException\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "9067DB28F1C48D08FC52AD40A608F88C14AD9112646741DDAF426FDFE68BED61AB01954B179461E61D187371600C1E6E5C36C788993F5A105A64F5702A6B81D4"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1211,6 +1505,12 @@
       "version": "4.3.0",
       "description": "Provides the fundamental primitives, classes and base classes that define commonly-used value and reference data types, events and event handlers, interfaces, attributes, and exceptions. This packages represents the core package, and provides the minimal set of types required to build a managed application.\n\nCommonly Used Types:\nSystem.Object\nSystem.Exception\nSystem.Int16\nSystem.Int32\nSystem.Int64\nSystem.Enum\nSystem.String\nSystem.Char\nSystem.Boolean\nSystem.SByte\nSystem.Byte\nSystem.DateTime\nSystem.DateTimeOffset\nSystem.Single\nSystem.Double\nSystem.UInt16\nSystem.UInt32\nSystem.UInt64\nSystem.IDisposable\nSystem.Uri\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "92AB2249F08073CFAFDC4CFBD7DB36D651AD871B8D8BA961006982187DE374BF4A30AF93F15F73B05AF343F7A70CBD484B04D646570587636AE72171EB0714FB"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1234,6 +1534,12 @@
       "version": "4.3.0",
       "description": "Provides commonly-used classes for performing mathematical functions, conversions, string comparisons and querying environment information.\n\nCommonly Used Types:\nSystem.Math\nSystem.Environment\nSystem.Random\nSystem.Progress\u003CT\u003E\nSystem.Convert\nSystem.Diagnostics.Stopwatch\nSystem.Runtime.Versioning.FrameworkName\nSystem.StringComparer\nSystem.IO.Path\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "680A32B19C2BD5026F8687AA5382AEA4F432B4F032F8BDE299FACB618C56D57369ADEF7F7CC8E60AD82AE3C12E5DD50772491363BF8044C778778628A6605BBC"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1257,6 +1563,12 @@
       "version": "4.3.0",
       "description": "Provides base classes, including System.Runtime.InteropServices.CriticalHandle and System.Runtime.InteropServices.SafeHandle, for types that represent operating system handles.\n\nCommonly Used Types:\nSystem.Runtime.InteropServices.SafeHandle\nMicrosoft.Win32.SafeHandles.SafeWaitHandle\nSystem.Runtime.InteropServices.CriticalHandle\nSystem.Threading.WaitHandleExtensions\nSystem.IO.HandleInheritability\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0A5BAF1DD554BF9E01BCB4CE082CB26EE82B783364FEB47CBA730FAEECD70EDC528EFAD0394DCCE11F37D7F9507F8608F15629EBAF051906BFD3513E46AF0F11"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1280,6 +1592,12 @@
       "version": "4.3.0",
       "description": "Provides types that support COM interop and platform invoke services.\n\nCommonly Used Types:\nSystem.Runtime.InteropServices.GCHandle\nSystem.Runtime.InteropServices.GuidAttribute\nSystem.Runtime.InteropServices.COMException\nSystem.DllNotFoundException\nSystem.Runtime.InteropServices.DllImportAttribute\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "650799C3E654EFBB9AD67157C9C60CE46F288A81597BE37CE2A0BF5D4835044065EF3F65B997328CBBBBFB81F4C89B8D7E7D61380880019DEEE6EB3F963F70D9"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1303,6 +1621,12 @@
       "version": "4.3.0",
       "description": "Provides common types for the cryptographic libraries.\n\nCommonly Used Types:\nSystem.Security.Cryptography.ICryptoTransform\nSystem.Security.Cryptography.AsymmetricAlgorithm\nSystem.Security.Cryptography.SymmetricAlgorithm\nSystem.Security.Cryptography.HashAlgorithm\nSystem.Security.Cryptography.KeyedHashAlgorithm\nSystem.Security.Cryptography.HMAC\nSystem.Security.Cryptography.KeySizes\nSystem.Security.Cryptography.CryptographicException\nSystem.Security.Cryptography.CipherMode\nSystem.Security.Cryptography.PaddingMode\nSystem.Security.Cryptography.CryptoStream\nSystem.Security.Cryptography.CryptoStreamMode\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5AD8273F998EBB9CCA2F7BD03143D3F6D57B5D560657B26D6F4E78D038010FB30C379A23A27C08730F15C9B66F4BA565A06984EC246DFC79ACF1A741B0DD4347"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1326,6 +1650,12 @@
       "version": "4.3.0",
       "description": "Provides access to Windows Data Protection Api.\n\nCommonly Used Types:\nSystem.Security.Cryptography.DataProtectionScope\nSystem.Security.Cryptography.ProtectedData\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "48A062992F88839AFAC96BE5DB69FA8B9AC363449FF7B84D9DCE508E63470DE8229E69B683B470731E12D091B6BB75E41E2F8E0F2821A19913092F7769F4DECB"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1349,6 +1679,12 @@
       "version": "4.3.0",
       "description": "Provides base abstract encoding classes for converting blocks of characters to and from blocks of bytes.\n\nCommonly Used Types:\nSystem.Text.Encoding\nSystem.Text.DecoderFallbackException\nSystem.Text.Decoder\nSystem.Text.EncoderFallbackException\nSystem.Text.Encoder\nSystem.Text.EncoderFallback\nSystem.Text.EncoderFallbackBuffer\nSystem.Text.DecoderFallback\nSystem.Text.DecoderFallbackBuffer\nSystem.Text.DecoderExceptionFallback\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6FF7FEEC7313A7121F795EC7D376E4B8728C17294219FAFDFD4EA078F9DF1455B4685F0B3962C3810098E95D68594A8392C0B799D36EC8284CD6FCBD4CFE2C67"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1372,6 +1708,12 @@
       "version": "4.3.0",
       "description": "Provides support for specific encodings, including ASCII, UTF-7, UTF-8, UTF-16, and UTF-32.\n\nCommonly Used Types:\nSystem.Text.UTF8Encoding\nSystem.Text.UnicodeEncoding\nSystem.Text.ASCIIEncoding\nSystem.Text.UTF7Encoding\nSystem.Text.UTF32Encoding\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "E648C5DC781E35CF00C5CC8E7E42E815B963CF8FB788E8A817F9B53E318B2B42E2F7A556E9C3C64BF2F6A2FD4615F26AB4F0D4EB713A0151E71E0AF3FE9C3EED"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1395,6 +1737,12 @@
       "version": "4.3.0",
       "description": "Provides the fundamental synchronization primitives, including System.Threading.Monitor and System.Threading.Mutex, that are required when writing asynchronous code.\n\nCommonly Used Types:\nSystem.Threading.Monitor\nSystem.Threading.SynchronizationContext\nSystem.Threading.ManualResetEvent\nSystem.Threading.AutoResetEvent\nSystem.Threading.ThreadLocal\u003CT\u003E\nSystem.Threading.EventWaitHandle\nSystem.Threading.SemaphoreSlim\nSystem.Threading.Mutex\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "97A2751BDCE69FAAF9C54F834A9FD5C60C7A786FAA52F420769828DBC9B5804C1F3721BA1EA945EA1D844835D909810F9E782C9A44D0FAAECCCB230C4CD95A88"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1418,6 +1766,12 @@
       "version": "4.3.0",
       "description": "Provides types that simplify the work of writing concurrent and asynchronous code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.Task\u003CTResult\u003E\nSystem.Runtime.CompilerServices.TaskAwaiter\u003CTResult\u003E\nSystem.Threading.Tasks.TaskCompletionSource\u003CTResult\u003E\nSystem.Threading.Tasks.Task\nSystem.OperationCanceledException\nSystem.AggregateException\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7D488FF82CB20A3B3CEF6380F2DAE5EA9F7BAA66BF75AD711AADE1E3301B25993CCF2694E33C847EA5B9BDB90FF34C46FCD8A6BA7D6F95605BA0C124ED7C5D13"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1441,6 +1795,12 @@
       "version": "4.3.0",
       "description": "Provides the System.Threading.Thread class, which allows developers to create and control a thread, set its priority, and get its state.\n\nCommonly Used Types:\nSystem.Threading.Thread\nSystem.Threading.ThreadStart\nSystem.Threading.ParameterizedThreadStart\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "38799B4FE673D3AE4D28823F647707F573B5744B8B188D4BDA4EEE62CB3EF42D632F14C2F644D966ECD43B25C76B2464F9D7EDF428837F723F419D2DF092B205"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -1464,6 +1824,12 @@
       "version": "4.3.0",
       "description": "Provides the System.Threading.ThreadPool class, which contains a pool of threads that can be used to execute tasks, post work items, wait on behalf of other threads, and process timers.\n\nCommonly Used Types:\nSystem.Threading.ThreadPool\nSystem.Threading.WaitOrTimerCallback\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "93FFA0E1BEEF8DD7786A2C7CDEC4E00BD546EA85D828092D49F348254346C4F123EEBC8439FCC71E17E79AC66F8F16B0C1C0FD1F25972825E63E35FC538CDE4B"
+        }
+      ],
       "licenses": [
         {
           "license": {

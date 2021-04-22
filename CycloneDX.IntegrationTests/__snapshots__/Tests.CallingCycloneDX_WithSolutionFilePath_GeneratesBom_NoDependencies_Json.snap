@@ -19,6 +19,12 @@
       "version": "2.1.0",
       "description": "A set of .NET API\u0027s that are included in the default .NET Core application model. \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "02F4FBEF89D316053C7187063BD8F510CC2E6B22AC971A984EEAE0DF61C6A566B684460DB96DBE5E061554D7197BA35D6EBF38417E9FC1A3997DDE67FB59B638"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -42,6 +48,12 @@
       "version": "2.1.0",
       "description": "Provides the .NET Core app bootstrapper intended for use in the application directory \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7FFE3B23AD168374ABBDE4EF9DE702421099080318954BA3585D79110FC0653A85FF9E2A7842636C2200C4A71923C4E8518CD283A25D7EB1E082C8230B2084F5"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -65,6 +77,12 @@
       "version": "2.1.0",
       "description": "Provides a CoreCLR hosting policy implementation -- configuration settings, assembly paths and assembly servicing \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "A79D326582B3847EB896602B260A0A8EDBEC35E84409AFBFB00B8E433661E6E0CD0536D12B18CDF085CFD5EE75EF1755B20AC571237148454329920E5958C671"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -88,6 +106,12 @@
       "version": "2.1.0",
       "description": "Provides an implementation of framework resolution strategy used by Microsoft.NETCore.DotNetHost \ncaa7b7e2bad98e56a687fb5cbaf60825500800f7 \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7D2F43F1AFB2E799FA98731B36A8075DA3C69239A9547F61F7B3B2AC1C6C0AEA3767C690685309E7121F9B38E2DA7B5477FDEDAEE84C6D28127C87A51CE910A6"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -111,6 +135,12 @@
       "version": "2.1.0",
       "description": "Provides runtime information required to resolve target framework, platform, and runtime specific implementations of .NETCore packages. \n30ab651fcb4354552bd4891619a0bdd81e0ebdbf \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "1A690A7E8C9EAEA9AC1CC9FB3998F400AA5C05A6C3F8669A7EAA61BD7D8CC38D3A230889472D6929C2AA7427CA25F626911C89EBE7BE45A532960749A036B58D"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -134,6 +164,12 @@
       "version": "2.1.0",
       "description": "Provides supporting infrastructure for portable projects: support identifiers that define framework and runtime for support targets and packages that reference the minimum supported package versions when targeting these. \n30ab651fcb4354552bd4891619a0bdd81e0ebdbf \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7AD698C2B2D94144BE6F75164E90A752081DE9243F648919E691E7A11EFE7485ADFF0A7646FDC2BCC28E6484ACAEDEC56021CAC02C5F71EA6EBB2116910C400E"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -157,6 +193,12 @@
       "version": "2.0.3",
       "description": "A set of standard .NET APIs that are prescribed to be used and supported together. \n18a36291e48808fa7ef2d00a764ceb1ec95645a5 \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "B2DE3B3E8B19487AE3102763788CD941BCE2BD804916FE8FDA7BF8723DB2A5D236D380CEFAF67B979ADA18C897E1E5CC279DD17CE220FBFB380C7559E7836ED8"
+        }
+      ],
       "licenses": [
         {
           "license": {
