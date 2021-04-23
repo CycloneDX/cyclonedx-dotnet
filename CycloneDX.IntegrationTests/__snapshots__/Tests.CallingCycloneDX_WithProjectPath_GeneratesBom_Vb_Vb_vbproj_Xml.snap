@@ -1089,7 +1089,7 @@ Microsoft.AspNetCore.Routing.RouteData</description>
       <description>Analyzers for .NET Compiler Platform ("Roslyn")</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">1D2DE245664A714C3FF1E67FD3C197298D819FBC4DCD03F37FC8113C7192A305FBBBB5D7BBD8BD60468178134A51759F23BAA3BD3DB35ED2D4BDB37485DB3CBE</hash>
+        <hash alg="SHA-512">12D7A033EC66D072C9249677FB0712446290991A587B180E6D18FFEF0EB97B738443FE69098370984EE56EBA9F6CA0BBE57D11AC59D41A32D137C7F9A6734AAC</hash>
       </hashes>
       <licenses>
         <license>
@@ -1717,7 +1717,7 @@ caa7b7e2bad98e56a687fb5cbaf60825500800f7
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">02F4FBEF89D316053C7187063BD8F510CC2E6B22AC971A984EEAE0DF61C6A566B684460DB96DBE5E061554D7197BA35D6EBF38417E9FC1A3997DDE67FB59B638</hash>
+        <hash alg="SHA-512">D83B514E902151D68F0E704CD51E136E5D61C4B5BEDCBE3F6F23289C8FBB68040F15199578A7357A998CE30A7103887513BB8AEAD48F381394EDFF8C0DC63906</hash>
       </hashes>
       <licenses>
         <license>
@@ -1741,7 +1741,7 @@ caa7b7e2bad98e56a687fb5cbaf60825500800f7
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">7FFE3B23AD168374ABBDE4EF9DE702421099080318954BA3585D79110FC0653A85FF9E2A7842636C2200C4A71923C4E8518CD283A25D7EB1E082C8230B2084F5</hash>
+        <hash alg="SHA-512">719880484F35AE4B0F26C189D3885DFEE127EA0B8D180A2A36CAF313F0CFE8068D44F087C137BA9D9BC7778B803E3DCC695450DD4D1CE9C47270C6870982CF51</hash>
       </hashes>
       <licenses>
         <license>
@@ -1765,7 +1765,7 @@ caa7b7e2bad98e56a687fb5cbaf60825500800f7
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">A79D326582B3847EB896602B260A0A8EDBEC35E84409AFBFB00B8E433661E6E0CD0536D12B18CDF085CFD5EE75EF1755B20AC571237148454329920E5958C671</hash>
+        <hash alg="SHA-512">2DD8525941199856A5873E9F2C113958398274EF63AAF5B9AB709439393D9FF85D9A6C274EEECAA303CF230E69DADD6F9FBA334AD2C6DD164C25B7F8F1FED6B4</hash>
       </hashes>
       <licenses>
         <license>
@@ -1789,7 +1789,7 @@ caa7b7e2bad98e56a687fb5cbaf60825500800f7
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">7D2F43F1AFB2E799FA98731B36A8075DA3C69239A9547F61F7B3B2AC1C6C0AEA3767C690685309E7121F9B38E2DA7B5477FDEDAEE84C6D28127C87A51CE910A6</hash>
+        <hash alg="SHA-512">FBD0FB1B9F45CF51F664EF3B1E5825ED9BF8E01AC09969F245FAABA1FAC75B88104EEE7BDF140FE9CB9888D51EAABD7CF5E1FA859BA1E4C29484EA141898EA89</hash>
       </hashes>
       <licenses>
         <license>
@@ -1837,7 +1837,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">7AD698C2B2D94144BE6F75164E90A752081DE9243F648919E691E7A11EFE7485ADFF0A7646FDC2BCC28E6484ACAEDEC56021CAC02C5F71EA6EBB2116910C400E</hash>
+        <hash alg="SHA-512">23634001E3F27C0CD22E5FC05A680DB38F77C494030EA9762DDA71DCF465EDF13E16BB207469951F2C9695F777768324C473ECB4E92A6151AF48B6C8061CB3B2</hash>
       </hashes>
       <licenses>
         <license>
@@ -1920,7 +1920,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">B2DE3B3E8B19487AE3102763788CD941BCE2BD804916FE8FDA7BF8723DB2A5D236D380CEFAF67B979ADA18C897E1E5CC279DD17CE220FBFB380C7559E7836ED8</hash>
+        <hash alg="SHA-512">E78F0CEA69C14895B1B089644077DBCE8631A626055D96522F4D29E061D8BFC3E48AA1419E74FAF265B998612C03F721F5F0CEF4690F824150A5689764DEE601</hash>
       </hashes>
       <licenses>
         <license>
@@ -1963,7 +1963,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Json.NET BSON adds support for reading and writing BSON</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">E4F613FC8A90F942B7D409998924B5D3647A12C4E8F8B193488F1BA7B58052A0CA685E301D70FC53DBB85B14C8D6F73AE2D622FBEF29DDD93759636A3C582577</hash>
+        <hash alg="SHA-512">5B929EE717A2F724B4963419B93EF95604A9E4CE377823E6E611C07A5BCAC86194E1D57B8580A6B7076CC680036FF7B13BAA581DEBBF2248B8DD37583F37C449</hash>
       </hashes>
       <licenses>
         <license>
@@ -1989,7 +1989,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">1DD492A79327252B20D3C28C7D94E1A6E2CF2693F01398415EF1F0A0A5A8B321C77DEF0C87958A4F4CA510E7FAC8DCD7E8D823C5EE1686469F879ABB62669CE1</hash>
+        <hash alg="SHA-512">B2CF809FE50C4B46BD6F2372265CD3059622550123AFCEB5DBB2410906C07A7F47BAE4273584D29253D5E7A63A17C68C7BA0434608BBC8FD4D00E479B2F128FF</hash>
       </hashes>
       <licenses>
         <license>
@@ -2012,7 +2012,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">FB21F56B8F7024CCBC66DE32C7946126BC4EFC30430720220B33708844C8FB54B898F742BB4398E1D8DD7220BB56CB24D25DB6C106832EB5F15E4A7EDFEEDB54</hash>
+        <hash alg="SHA-512">FD8E32D7D3E9A465202E391B0AB8B95E212900879BC4D8AC22954FD2D0F98FA579E9D25F88885AC2A4BF1EBA755DB940F8D131250A3FFEC34DBE77431A379CAB</hash>
       </hashes>
       <licenses>
         <license>
@@ -2035,7 +2035,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">73760D1F519025B7C83C97829EBE1ABEC7AE812A8FAF1C08AB3B6163264337A12E3B234ECEAFB2D8A4947D17176AEC9AD6C1787E81124E0C0CE5ED40F1AAC02B</hash>
+        <hash alg="SHA-512">4AFAC5CC1734330A6103880E790D639E825BFB1B34DBD42083762C47DB5E5DAB6C03EFD16049AC03861D7D87746CAED09C7534241D51B7341D47BA6AF7E8DD31</hash>
       </hashes>
       <licenses>
         <license>
@@ -2104,7 +2104,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">655B9926A9E77A026177693F3ED01B6C8719DDA65E213AB7B23D3AA0A7CC0527E9856DC70E693FB7839BBDB3A4FC903FB30191D0B36A324B0087F7FB8294D13A</hash>
+        <hash alg="SHA-512">DDD1E5B67545477F7C72B5883666DE40E89EFB0836D91E7A349E2F3D4AC05CE1125E6ADD3CB09C39CBDFE7AB7C5DC8FDAEAF6AC25ACD92F6DE3D8CE2D6DB7918</hash>
       </hashes>
       <licenses>
         <license>
@@ -2127,7 +2127,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">3369CDF7678F4BC060436A22E898F73E54D4CDA75848858B759AC76359F565C5BDA38C00410E96F9A43695FAB5CAC6507D50A00F0639F1A954768C2BCDECF3B6</hash>
+        <hash alg="SHA-512">C5DB086A026EB52FF432DFCE1ED295BC390E0701FD61E78EC443014D2C6E9C7C2D528236F7838D9AA55A93ADB7203654DAFBF4B8CF5A25578347A727D0B1262D</hash>
       </hashes>
       <licenses>
         <license>
@@ -2196,7 +2196,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">6F7A6D84D831C45703F8F7345921280B4FA67773328514BA68211E7A7BCD13715DC351F2275F19851155249CC8791FCEFE3A713DBA01F34E47A344F7525EF0F0</hash>
+        <hash alg="SHA-512">81BDB93C1C86C560343DF6CC367499FB2A01A9B3016617BE416874A23C4355A8D95C7BE34F175510F3FDEA4872302A87C8EFAB98A328DFA39422DB520C3F291C</hash>
       </hashes>
       <licenses>
         <license>
@@ -2219,7 +2219,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">29E2F3E070A529FFA7152EE9FFA162FC2AB22D787CD45A621B3726B92F031A2F6552A4A767A12CDB7FE0BF63BED575467EB6CD9AF885EC27240696AF901A0815</hash>
+        <hash alg="SHA-512">6DE9544B4DA49F127680CF5B3B4AFEA96BFCAC3293038A1B0A12EEA0AD60BE368AF31EE1DFD66D48D458B40200738C04AA0C71ADCC54AE2DDDBEA2CD50D6F28D</hash>
       </hashes>
       <licenses>
         <license>
@@ -2242,7 +2242,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">9155C2B8C4EB4E5C6AE1738E300CACB8DC2C5D6A5879BA0675D346A4880D4999AFD5BEABFECFC33E4D1F60C07B439428E1B63AF28E3C8EDE13E32E4155E71B09</hash>
+        <hash alg="SHA-512">9929942914071E0EA0944A952FF9AD3C296BE39E719A2F4BB3EAC298D41829B4468B332FBA880EBE242871A02145E1C26DC7660021375D12C7EFCAE4D200278A</hash>
       </hashes>
       <licenses>
         <license>
@@ -2265,7 +2265,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">5FB21D8482F3AF844E5DDF262350540903121D24307A55250631752724CA0A35DA3869F67C1E04281C506C22B65633B759A5887655D92F75BA4E22159EB857E2</hash>
+        <hash alg="SHA-512">61DA1667A5DD1E53A5D19FBE90ABBFE332D84FE755FB811A080668A47D41A97DB44539E3174FD1D2A0770FF1BD83AFA68C82CE06DF5775DA65A6054CCC12C4BE</hash>
       </hashes>
       <licenses>
         <license>
@@ -2288,7 +2288,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">9F214D88293FAFE54E888AAB78B8B1F3237EAB75A06BDF9213C0428247FED81C042A2371E83CAF1630A091F57BE37FE0AF1BFC8C727C8142B85C4430EF2CD162</hash>
+        <hash alg="SHA-512">E65A6A1F1928CFB760C395A399542DC7F9087399C53874376604504AE60ABD2DA24ED735EBD148D335000A5E35C8108EA55404685E902DF392EAC2E8D38FB665</hash>
       </hashes>
       <licenses>
         <license>
@@ -2311,7 +2311,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">CADA1EC02EB01A8ACBECAA0202F45FB20A093C96CDABEEB89364AA5BA25C38079B5AC154BC209881FCD032B9E9BCF8849783AB6E5525845DA38BE435F9254BAD</hash>
+        <hash alg="SHA-512">C9F219515E268CF40E16B135BD64CBA95C35E866DD9BC34954159562314D01D2F9EA7EB8B0DB94ACF6BDAC83D651D90BAD7890CB657FFE40FA3440EC662C9944</hash>
       </hashes>
       <licenses>
         <license>
@@ -2334,7 +2334,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">23C6CAC3623C939F16C7B7CC290267D91F256A66E80808877C7795FE94BAE5270A58C308D3EC0990B62510ABE05B50FF5EF4A5FF6DB5725068476ABD40D34CEC</hash>
+        <hash alg="SHA-512">4981B2D7A106703B185E176AD35BFDA149156F3B752778FA71C56B3686407765FD2B6625DE352BD563AAC1E1E8769D7886CC59A0D5D0BFB41ED60277360BEB81</hash>
       </hashes>
       <licenses>
         <license>
@@ -2357,7 +2357,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">541E5C9FFECECD47F37670BCB6A00831072254B8AAD9EA66D8DAC09B513D3A3351C86E255617D1EB548C70B8B37A3CD03FC47C51FFF4979A8E21B5048BE45D12</hash>
+        <hash alg="SHA-512">5DBE6BC007A9B46491E5299602291F5DBF8CC8D51E6C1B08DB2FA0EFD365990B41B6E181ED6BF82E873A659396427BC0E33E85B47D645D273FEF8BF8EC643631</hash>
       </hashes>
       <licenses>
         <license>
@@ -2518,7 +2518,7 @@ System.Collections.Immutable.ImmutableStack
 System.Collections.Immutable.ImmutableStack&lt;T&gt;</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">9FE0065FBCE6899BA65BD6A080E917687CD47804B711F79312B9E4282BACC8E354A336D3BFE90C6FC544DFA9BE95D57A905F60E7B1B673AE352827601FD134A6</hash>
+        <hash alg="SHA-512">978FABCD8B9B95BDE6DF55E7DE282BFC1043AE8FE069FF64519392F8DA424E64867BA2FE16FBBAA75D7505AAFBBF92304B48A4275A3BDBE53E0C1EBDA1C56672</hash>
       </hashes>
       <licenses>
         <license>
@@ -2841,7 +2841,7 @@ System.Diagnostics.FileVersionInfo
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">A26085EB8C3343743609E22A903EA59A6C5E319B461D49B380530F8DF55A3ACCAAA51EBAA7F25A67331A9CCC35B37DE8B2801BE60AA99DCB2389EEBBFB250F1D</hash>
+        <hash alg="SHA-512">0AAC60B56B118C1BFA5AA6492A0D32DCE19A5350E61D8759367CEE704E05D35913A113772B98277A76ED806D5F575803376F5C0C6810A801E2566213C44DBA01</hash>
       </hashes>
       <licenses>
         <license>
@@ -2869,7 +2869,7 @@ System.Diagnostics.StackTrace
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">0621E0D2F82D777E7F0CCF63BED682D5E291A56671AF481C41DEB8DC0046EC69EF4A57F9A4E918DAEC9DE3698C389A0E98ABE7A4D8F4178B6EA12D6969C4F063</hash>
+        <hash alg="SHA-512">3A7D95FD5D64D8B490C12D7E90C22B2D476C25ACB7A211B9205626D6A9002C5107AAC1A8EFD08217181473E092E6ABDE15CFB2B35CCEE86E18BD1BB7FED2CBE8</hash>
       </hashes>
       <licenses>
         <license>
@@ -3299,7 +3299,7 @@ System.Net.Http.HttpMessageHandler
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">52B4F245CCCCDD9BCD93AA1EB41BB096EEBB30528A46F6BEAFB6F0E090D567A63622E932676E2D779A69B227AEFF8C99968815008B99BA5F46210DE1A22CF4C8</hash>
+        <hash alg="SHA-512">A6DCF72ECFF62FE362221A8E4A04DAAEF687AB3B8704A64873AE6BBEFE9F9568B4098120740F850917B5BDDAC26B6C99CA41DB3B120506987592D07441349ED8</hash>
       </hashes>
       <licenses>
         <license>
@@ -3363,7 +3363,7 @@ System.Net.Security.ExtendedProtectionPolicy
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">22024A35F00BAB0EC9456A792CC4394961CD2AF5D5CF4F7853AC0D1377358BC6CE90C42F8012FE30C42E36DDF197D420F625A98F7945C4F64463A5C79913A331</hash>
+        <hash alg="SHA-512">976F3D58275166FD7DCC5A1F7D91803633C4179293B54BB53C119A58C582D0B51C3BC9252A7D72447FB8A3D76C63C371F61C40145F50D255DDA7B4B54B0881FA</hash>
       </hashes>
       <licenses>
         <license>
@@ -3584,7 +3584,7 @@ System.Reflection.Metadata.MetadataReader
 System.Reflection.PortableExecutable.PEReader</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">2983CD303ACB07647E1B9249889D9F8C1A6286D92D295223B22AE6CB2BFE543A39AD090847D05678260CD700D2CDB41AB56359FCD41F3EC4324C1D548B7A817D</hash>
+        <hash alg="SHA-512">635D5A0789773D7E4482ED384DD9D092654505D081BD8B94537BB72EEFDD4BDF00433E57C2A8C0BCD935754D9924721B63D43C88704337D452599665BDCFD8FA</hash>
       </hashes>
       <licenses>
         <license>
@@ -3877,7 +3877,7 @@ System.Runtime.InteropServices.OSPlatform
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">8563E1271738E774426BC676F4EF751267C67992075F5647D80F0BEA561055268ACE4BB60DF02B49F3046F5FCC618CCF4112597AED1CF5D9987892B15B91609E</hash>
+        <hash alg="SHA-512">462D35E66CBDD21DC007F06C6EF129AB57E810FA0F0416BD2FC6FB7EED55138780D4D31E31EE6267A82E2E3A1607E5C642BD6EFEB130B57A1BAA87E3141B0080</hash>
       </hashes>
       <licenses>
         <license>
@@ -4127,7 +4127,7 @@ System.Security.Cryptography.CspParameters
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">5F8B3F1429045274469F04776927D522495D066B5444C8667B100B353C298E4973C5653BCA3324EC61CB28E6533648275A7134ABBF8109FF4DD8B5515B17B068</hash>
+        <hash alg="SHA-512">43317591747A18F52F683187E09ADFE0E03573E6DAC430BF3BA13F440CDB1C7BB1F9205369D5F3B2A0F3FDF9604D5BA1E6D94A899A25D2C533E453338578F351</hash>
       </hashes>
       <licenses>
         <license>
@@ -4183,7 +4183,7 @@ System.Security.Cryptography.RSAOpenSsl
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">87808480E82FE4F29517F1F0687CC946255BA0BD931D80A8BBDEF3A66863821C797EB73B7C8BE5918D632FE967210C8286B24330D1174BAAFB6F21A27FC0B2E3</hash>
+        <hash alg="SHA-512">64530A19489730F873F8C68E6B245135EA260C02D68591880261768358D0145795132BA5EE877741822FF05DCD0C61EDCA27696EF99E8F9302A21CADF3B1329F</hash>
       </hashes>
       <licenses>
         <license>
@@ -4450,7 +4450,7 @@ System.Text.CodePagesEncodingProvider
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">2118841546B96FF1ACE44820F28A81568CB086D39E68ED8A3B1DE3D117DC618FEB6B1A81B842BB35744380EC2D60CF2A6E2FBB4B844F5D46CDB7E671C98D3F35</hash>
+        <hash alg="SHA-512">D6179BE2BEAC0A19AA4BFD3C317FFAA5DB0C3EA224A0BA1F0269C0267AD679F76D387D8455EC26C06F3A166EA84AF2348597425412D95CCFE352A3EF11123A44</hash>
       </hashes>
       <licenses>
         <license>
@@ -4664,7 +4664,7 @@ System.Threading.Tasks.ParallelOptions
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">71B8C13591DFFEF4027DC761CF1EE49EC8B282808A8312FC99939EA1C5D99F98168427731C8ABA6D834A597D0B00909660FEDB76CE3204AF29D3A6243F4A1AD2</hash>
+        <hash alg="SHA-512">460EEC2492B2CC8FC8FEFA64FF148D77AAE2DA157CAAB25D03023CD6E2064CD8EC2AB3F68FD722FBE8A8DC1E05E775D2AECD789A0FC5D48FE2AE59921ED5A12A</hash>
       </hashes>
       <licenses>
         <license>
@@ -4693,7 +4693,7 @@ System.Threading.ParameterizedThreadStart
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">38799B4FE673D3AE4D28823F647707F573B5744B8B188D4BDA4EEE62CB3EF42D632F14C2F644D966ECD43B25C76B2464F9D7EDF428837F723F419D2DF092B205</hash>
+        <hash alg="SHA-512">CFE12B6A60E79E2F7FCA779A511153D5B0DCAE59EA1B11606F6327DBF8B3C565E2551E8ECADA558E62DD3B684B5C9D676575025048EDFBD3988FAF7F7235A5FE</hash>
       </hashes>
       <licenses>
         <license>
@@ -4721,7 +4721,7 @@ System.Threading.WaitOrTimerCallback
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">93FFA0E1BEEF8DD7786A2C7CDEC4E00BD546EA85D828092D49F348254346C4F123EEBC8439FCC71E17E79AC66F8F16B0C1C0FD1F25972825E63E35FC538CDE4B</hash>
+        <hash alg="SHA-512">450A40F94A48E9396979E764E494AD624D8333F3378B91EA69B23FC836DF8F5C43BBD6C8CFD91DA2AB95A476E1FF042338968E09B720447F2241C014BFC75159</hash>
       </hashes>
       <licenses>
         <license>
@@ -4899,7 +4899,7 @@ System.Xml.XPath.XPathNamespaceScope
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">BF5250E521139D0BACAA64B74704AD17BBF04372F4DA2988CE5FBEB1EC26B76DD51B2822C74E29107F850A3D7259BFB3E060F32A2963AF55BB59FBEBC7463080</hash>
+        <hash alg="SHA-512">2BD0979A2020579FB32AD374B89929A272E763EE1233ED9A215408C0A1F9F82A5FDB74330C1C55A6102E0DFDB8B7B59ED25FDF6454BF3DE146152EA779F366E0</hash>
       </hashes>
       <licenses>
         <license>
@@ -4927,7 +4927,7 @@ System.Xml.XPath.XDocumentExtensions
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">8F0F681C7108556E7798763D3E0AD06BDF17A36219D198EBA5D3939ADBE4F91BE0E2DABB772766C5D36A52F2796308C3AA19FBE660575ADB568E22A158FE772D</hash>
+        <hash alg="SHA-512">06AC9786B2F20B1336F3F56A3C97536907D033F1A9B9EC07267192F60ED51732924AA366F481E862F1F63D75FABDC5DE51B445C5CB6C36F1FB89690A29B6E1E8</hash>
       </hashes>
       <licenses>
         <license>

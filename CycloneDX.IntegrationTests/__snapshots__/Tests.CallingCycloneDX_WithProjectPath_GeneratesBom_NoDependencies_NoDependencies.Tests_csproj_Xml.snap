@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
   <metadata>
     <tools>
@@ -19,7 +19,7 @@ caa7b7e2bad98e56a687fb5cbaf60825500800f7
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">02F4FBEF89D316053C7187063BD8F510CC2E6B22AC971A984EEAE0DF61C6A566B684460DB96DBE5E061554D7197BA35D6EBF38417E9FC1A3997DDE67FB59B638</hash>
+        <hash alg="SHA-512">D83B514E902151D68F0E704CD51E136E5D61C4B5BEDCBE3F6F23289C8FBB68040F15199578A7357A998CE30A7103887513BB8AEAD48F381394EDFF8C0DC63906</hash>
       </hashes>
       <licenses>
         <license>
@@ -43,7 +43,7 @@ caa7b7e2bad98e56a687fb5cbaf60825500800f7
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">7FFE3B23AD168374ABBDE4EF9DE702421099080318954BA3585D79110FC0653A85FF9E2A7842636C2200C4A71923C4E8518CD283A25D7EB1E082C8230B2084F5</hash>
+        <hash alg="SHA-512">719880484F35AE4B0F26C189D3885DFEE127EA0B8D180A2A36CAF313F0CFE8068D44F087C137BA9D9BC7778B803E3DCC695450DD4D1CE9C47270C6870982CF51</hash>
       </hashes>
       <licenses>
         <license>
@@ -67,7 +67,7 @@ caa7b7e2bad98e56a687fb5cbaf60825500800f7
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">A79D326582B3847EB896602B260A0A8EDBEC35E84409AFBFB00B8E433661E6E0CD0536D12B18CDF085CFD5EE75EF1755B20AC571237148454329920E5958C671</hash>
+        <hash alg="SHA-512">2DD8525941199856A5873E9F2C113958398274EF63AAF5B9AB709439393D9FF85D9A6C274EEECAA303CF230E69DADD6F9FBA334AD2C6DD164C25B7F8F1FED6B4</hash>
       </hashes>
       <licenses>
         <license>
@@ -91,7 +91,7 @@ caa7b7e2bad98e56a687fb5cbaf60825500800f7
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
       <hashes>
-        <hash alg="SHA-512">7D2F43F1AFB2E799FA98731B36A8075DA3C69239A9547F61F7B3B2AC1C6C0AEA3767C690685309E7121F9B38E2DA7B5477FDEDAEE84C6D28127C87A51CE910A6</hash>
+        <hash alg="SHA-512">FBD0FB1B9F45CF51F664EF3B1E5825ED9BF8E01AC09969F245FAABA1FAC75B88104EEE7BDF140FE9CB9888D51EAABD7CF5E1FA859BA1E4C29484EA141898EA89</hash>
       </hashes>
       <licenses>
         <license>
@@ -139,7 +139,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">7AD698C2B2D94144BE6F75164E90A752081DE9243F648919E691E7A11EFE7485ADFF0A7646FDC2BCC28E6484ACAEDEC56021CAC02C5F71EA6EBB2116910C400E</hash>
+        <hash alg="SHA-512">23634001E3F27C0CD22E5FC05A680DB38F77C494030EA9762DDA71DCF465EDF13E16BB207469951F2C9695F777768324C473ECB4E92A6151AF48B6C8061CB3B2</hash>
       </hashes>
       <licenses>
         <license>
@@ -163,7 +163,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">B2DE3B3E8B19487AE3102763788CD941BCE2BD804916FE8FDA7BF8723DB2A5D236D380CEFAF67B979ADA18C897E1E5CC279DD17CE220FBFB380C7559E7836ED8</hash>
+        <hash alg="SHA-512">E78F0CEA69C14895B1B089644077DBCE8631A626055D96522F4D29E061D8BFC3E48AA1419E74FAF265B998612C03F721F5F0CEF4690F824150A5689764DEE601</hash>
       </hashes>
       <licenses>
         <license>
