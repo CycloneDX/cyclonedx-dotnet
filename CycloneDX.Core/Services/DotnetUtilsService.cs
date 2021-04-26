@@ -131,7 +131,8 @@ namespace CycloneDX.Services
         public DotnetUtilsResult Restore(string path)
         {
             var arguments = "restore";
-            if (!string.IsNullOrEmpty(path)) arguments = $"{arguments} \"{path}\"";
+            //https://github.com/NuGet/Home/issues/6309#issuecomment-351830787
+            if (!string.IsNullOrEmpty(path)) arguments = $"{arguments} \"{path}\" /p:DisableImplicitNuGetFallbackFolder=true";
 
             var commandResult = _dotnetCommandService.Run(arguments);
 
