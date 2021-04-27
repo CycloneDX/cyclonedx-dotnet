@@ -4291,13 +4291,13 @@
       "type": "library",
       "publisher": "Microsoft",
       "name": "System.Runtime.InteropServices.RuntimeInformation",
-      "version": "4.0.0",
+      "version": "4.3.0",
       "description": "Provides APIs to query about runtime and OS information.\n\nCommonly Used Types:\nSystem.Runtime.InteropServices.RuntimeInformation\nSystem.Runtime.InteropServices.OSPlatform\n \nWhen using NuGet 3.x this package requires at least version 3.4.",
       "scope": "required",
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "462D35E66CBDD21DC007F06C6EF129AB57E810FA0F0416BD2FC6FB7EED55138780D4D31E31EE6267A82E2E3A1607E5C642BD6EFEB130B57A1BAA87E3141B0080"
+          "content": "6F4905329A3CC9E62D274C885F275EE31C5AF57A6C9FD1A5080D039CB748E0277BEF3DC8CE42863CAC78365084E00A032279BF3D2B7254A49F3FB1566A29AD1B"
         }
       ],
       "licenses": [
@@ -4308,7 +4308,7 @@
         }
       ],
       "copyright": "\u00A9 Microsoft Corporation.  All rights reserved.",
-      "purl": "pkg:nuget/System.Runtime.InteropServices.RuntimeInformation@4.0.0",
+      "purl": "pkg:nuget/System.Runtime.InteropServices.RuntimeInformation@4.3.0",
       "externalReferences": [
         {
           "url": "https://dot.net/",
