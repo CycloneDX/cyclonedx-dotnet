@@ -3867,7 +3867,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
     <component type="library">
       <publisher>Microsoft</publisher>
       <name>System.Runtime.InteropServices.RuntimeInformation</name>
-      <version>4.0.0</version>
+      <version>4.3.0</version>
       <description>Provides APIs to query about runtime and OS information.
 
 Commonly Used Types:
@@ -3877,7 +3877,7 @@ System.Runtime.InteropServices.OSPlatform
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">462D35E66CBDD21DC007F06C6EF129AB57E810FA0F0416BD2FC6FB7EED55138780D4D31E31EE6267A82E2E3A1607E5C642BD6EFEB130B57A1BAA87E3141B0080</hash>
+        <hash alg="SHA-512">6F4905329A3CC9E62D274C885F275EE31C5AF57A6C9FD1A5080D039CB748E0277BEF3DC8CE42863CAC78365084E00A032279BF3D2B7254A49F3FB1566A29AD1B</hash>
       </hashes>
       <licenses>
         <license>
@@ -3885,7 +3885,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
         </license>
       </licenses>
       <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
-      <purl>pkg:nuget/System.Runtime.InteropServices.RuntimeInformation@4.0.0</purl>
+      <purl>pkg:nuget/System.Runtime.InteropServices.RuntimeInformation@4.3.0</purl>
       <externalReferences>
         <reference type="website">
           <url>https://dot.net/</url>
