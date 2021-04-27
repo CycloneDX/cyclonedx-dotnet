@@ -105,7 +105,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public void GetPackageCachePaths_ReturnsGlobalCachePath()
+        public void GetPackageCachePaths_ReturnsGlobalCacheAndFallbackCachePaths()
         {
             var fileSystem = new MockFileSystem();
             fileSystem.Directory
@@ -135,7 +135,8 @@ namespace CycloneDX.Tests
 
             Assert.Collection(
                 cachePaths.Result,
-                path => Assert.Equal(XFS.Path(@"c:\user\.nuget\packages"), path));
+                path => Assert.Equal(XFS.Path(@"c:\user\.nuget\packages"), path),
+                path => Assert.Equal(XFS.Path(@"c:\dotnet\sdk\NuGetFallbackFolder"), path));
         }
 
         [Fact]
