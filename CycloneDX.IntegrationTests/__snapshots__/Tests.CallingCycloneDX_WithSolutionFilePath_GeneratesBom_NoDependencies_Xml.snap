@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
   <metadata>
     <tools>
@@ -18,6 +18,9 @@
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D83B514E902151D68F0E704CD51E136E5D61C4B5BEDCBE3F6F23289C8FBB68040F15199578A7357A998CE30A7103887513BB8AEAD48F381394EDFF8C0DC63906</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -39,6 +42,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">719880484F35AE4B0F26C189D3885DFEE127EA0B8D180A2A36CAF313F0CFE8068D44F087C137BA9D9BC7778B803E3DCC695450DD4D1CE9C47270C6870982CF51</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -60,6 +66,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">2DD8525941199856A5873E9F2C113958398274EF63AAF5B9AB709439393D9FF85D9A6C274EEECAA303CF230E69DADD6F9FBA334AD2C6DD164C25B7F8F1FED6B4</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -81,6 +90,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">FBD0FB1B9F45CF51F664EF3B1E5825ED9BF8E01AC09969F245FAABA1FAC75B88104EEE7BDF140FE9CB9888D51EAABD7CF5E1FA859BA1E4C29484EA141898EA89</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -102,6 +114,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">1A690A7E8C9EAEA9AC1CC9FB3998F400AA5C05A6C3F8669A7EAA61BD7D8CC38D3A230889472D6929C2AA7427CA25F626911C89EBE7BE45A532960749A036B58D</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -123,6 +138,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">23634001E3F27C0CD22E5FC05A680DB38F77C494030EA9762DDA71DCF465EDF13E16BB207469951F2C9695F777768324C473ECB4E92A6151AF48B6C8061CB3B2</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -144,6 +162,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 18a36291e48808fa7ef2d00a764ceb1ec95645a5 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">E78F0CEA69C14895B1B089644077DBCE8631A626055D96522F4D29E061D8BFC3E48AA1419E74FAF265B998612C03F721F5F0CEF4690F824150A5689764DEE601</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/standard/blob/master/LICENSE.TXT</url>

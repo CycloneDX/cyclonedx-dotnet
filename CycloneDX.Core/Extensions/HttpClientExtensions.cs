@@ -28,7 +28,7 @@ namespace CycloneDX.Extensions
         /*
          * Simple extension method to retrieve an xml stream from a URL.
          */
-        public static async Task<Stream> GetXmlStreamAsync(this HttpClient httpClient, string url)
+        public static async Task<Stream> GetStreamWithStatusCheckAsync(this HttpClient httpClient, string url)
         {
             Contract.Requires(httpClient != null);
             httpClient.DefaultRequestHeaders.Accept.Clear();

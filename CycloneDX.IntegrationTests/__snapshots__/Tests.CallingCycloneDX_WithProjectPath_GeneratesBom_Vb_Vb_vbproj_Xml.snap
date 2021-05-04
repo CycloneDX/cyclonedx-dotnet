@@ -16,6 +16,9 @@
       <version>2.0.0</version>
       <description>An antiforgery system for ASP.NET Core designed to generate and validate tokens to prevent Cross-Site Request Forgery attacks.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">9AAFFC6B8D29A9CBBFEF868D1DF8DA899BB638B7A6F23F3817BC0AEBF16F94B44C8559E2AF151FD75C8AEF60328173B7BC883734A2E2F55084969C09FB6E155E</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -38,6 +41,9 @@
       <version>2.0.0</version>
       <description>ASP.NET Core common types used by the various authentication components.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">C0ECB2D807BE07753D6CB00B5707AC760F216FB53C4C07533BB5314A65B2B85B43C6C61801F126D89B4B96748E81DBD15C8C811F72C9569ACDA8014B639056B0</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -60,6 +66,9 @@
       <version>2.0.0</version>
       <description>ASP.NET Core common types used by the various authentication middleware components.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">C020E62610C8442F42F6132FC29C1C49A43E45E5198025D4E0974B55B12F39835719FB44FE78B3B2635BB0E798C75DC4BDF11AF2D3CA29EA7F4660B4ADC6409E</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -85,6 +94,9 @@ Commonly used types:
 Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute
 Microsoft.AspNetCore.Authorization.AuthorizeAttribute</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">90EBB89A3AB1CBAE98059805F5FE305ED68B42B5921CA882D6BE90DDF07C4CB128AA70123B56485CA5F5EC9B3A3EDD165CBD644F4CE5E0CDB436EFC3FDFEFA33</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -107,6 +119,9 @@ Microsoft.AspNetCore.Authorization.AuthorizeAttribute</description>
       <version>2.0.0</version>
       <description>ASP.NET Core authorization policy helper classes.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">83E0F690E847A1043E644747D2C82FF6ACE0FF398BD4554BA7FD27A620F9AF1853BB5FD51F5782553C5FA94D33FF9A4CC49C5B571166335C02EB4A4F1E17ECC4</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -132,6 +147,9 @@ Commonly used types:
 Microsoft.AspNetCore.Cors.DisableCorsAttribute
 Microsoft.AspNetCore.Cors.EnableCorsAttribute</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">17616FE47A8AB46B1D8019670438651D05F51F9E5131530C53B52DC103190984B3F438B1D8216ED26FEB76F1FC9828A63B7C76F3B5152EE433A2958543C41D13</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -154,6 +172,9 @@ Microsoft.AspNetCore.Cors.EnableCorsAttribute</description>
       <version>2.0.0</version>
       <description>Infrastructure for ASP.NET Core cryptographic packages. Applications and libraries should not reference this package directly.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">8DD804429EBEB229A1E4DE8196B4A1C6C63EA6B1373C825389C2AF14210B9E6D1523D280212456F5D1FD419BEFF9D07B3381B6A0790C49AEE41CA354785179B9</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -176,6 +197,9 @@ Microsoft.AspNetCore.Cors.EnableCorsAttribute</description>
       <version>2.0.0</version>
       <description>ASP.NET Core logic to protect and unprotect data, similar to DPAPI.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">C3B663E0BB86596F29F9A6B358C0A73B31545957D555CEA7044BEF4DF61398106AC0AB801240112A50C1631F820375743D358C802270819340D045E707F05D36</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -201,6 +225,9 @@ Commonly used types:
 Microsoft.AspNetCore.DataProtection.IDataProtectionProvider
 Microsoft.AspNetCore.DataProtection.IDataProtector</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">0358DE6D7C886D5BD7253B9568198466B8FA07468931BAC8F4F0466FA1F4BF2C03EA963BAF6F9F832AA62AC006DCE7C2FFB2129A6CA612DC5DB52B9FC8A0F058</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -223,6 +250,9 @@ Microsoft.AspNetCore.DataProtection.IDataProtector</description>
       <version>2.0.0</version>
       <description>ASP.NET Core diagnostics middleware abstractions and feature interface definitions.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">57D9432D4A1F40E2F3EF0D4B26BEEB03DF57ABA967CC370FB8F79788E21B1A2B7DFAEB5554F641B88FFDEAD7CA4935D9574E8F076D3D97985E55FC2E509C817C</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -245,6 +275,9 @@ Microsoft.AspNetCore.DataProtection.IDataProtector</description>
       <version>2.0.0</version>
       <description>ASP.NET Core hosting and startup abstractions for web applications.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">ED83B26EA0343DB5B4FDB4FF853CD9E3871408C63FA67D490C2B2A22183BA7E4A323FC3380CE162092BFF296217D9534D8BBCE95BEABFD0DA4DE063F7BBBFD38</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -267,6 +300,9 @@ Microsoft.AspNetCore.DataProtection.IDataProtector</description>
       <version>2.0.0</version>
       <description>ASP.NET Core hosting server abstractions for web applications.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">0E91EC41DE8771CCC9987E72D860F82265B631081DAC4376AF8172B549491D894F3E7700FCEAAB02BAE7D4471112B9DC71A299AC1F304611596E29D2DEEE2072</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -292,6 +328,9 @@ Commonly used types:
 Microsoft.AspNetCore.Html.HtmlString
 Microsoft.AspNetCore.Html.IHtmlContent</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">57FE0AEF8B6430A95C6C45ED7EB84119A3AFBD3103DD5C4F8EFFE8FE68056A57FDDDE9FE93798DEC0DB986997691A681D2D545A02355D866234D0DB8E992AC50</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -314,6 +353,9 @@ Microsoft.AspNetCore.Html.IHtmlContent</description>
       <version>2.0.0</version>
       <description>ASP.NET Core default HTTP feature implementations.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D75E01FBB62475AD4E965984183CE3DD5580E6A2ECC4874D66198C96A2B7F328E8B12FBAE614901E6EE6FB773A5A73E0278BA63B129829F5E2E9AE8B2E03B350</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -341,6 +383,9 @@ Microsoft.AspNetCore.Http.HttpContext
 Microsoft.AspNetCore.Http.HttpRequest
 Microsoft.AspNetCore.Http.HttpResponse</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">0CE578D7329ABC0A464E24148132A8752EB2D34467486955ABFD14541065FD272DA02B31E5CC8BB4B940BE77D0281D4367DAD03FA5A6ABB980A1CCFBDE767D0F</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -363,6 +408,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
       <version>2.0.0</version>
       <description>ASP.NET Core common extension methods for HTTP abstractions, HTTP headers, HTTP request/response, and session state.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">9F25F8FA989A5E29283C3BE45710AC5390024C8778EFCA46097BAFE0668312EAC51D9D143EBFA9E6A8B5990486F6DDA93D49D80023EE417976AA38D997922BD0</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -385,6 +433,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
       <version>2.0.0</version>
       <description>ASP.NET Core HTTP feature interface definitions.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">93983A0CD5C789A5358889C5BFF52CC4BAEED918522E4BD3646734D57B2E954EC67F92320C136AFEC94F8D18DBBF870F145F746158F07D5394AC71D7CD7F5EBD</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -409,6 +460,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
 * X-Forwarded-* headers to forward headers from a proxy.
 * HTTP method override header.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6AA99D2FC3FC2E4532C4ACAC016285B0498E35041D50B1D2D5A1614F79AABE2E0BEA8B3333C98A3501C91C635664382862EA526DA732C92D1D299C078F03A931</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -431,6 +485,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
       <version>2.0.0</version>
       <description>ASP.NET Core support for JSON PATCH.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">4D37A098B9667C5BC227FED0442316B307E6075EC39814B967F6A19065BD4628503EF8E65BFDC5A5C9155094A7D03F1C85B19F33B3D40825DF11896C2850C5D0</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -453,6 +510,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
       <version>2.0.0</version>
       <description>ASP.NET Core middleware for automatically applying culture information to HTTP requests. Culture information can be specified in the HTTP header, query string, cookie, or custom source.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">079311D94BB21AB4B35044F98813D82DB4494C50ABC275120E762B1F679A853655C972EA31DE79460B26095C00AC98F5766E8E737EC9FE2F676E3CA8CED8141E</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -475,6 +535,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
       <version>2.0.0</version>
       <description>ASP.NET Core MVC is a web framework that gives you a powerful, patterns-based way to build dynamic websites and web APIs. ASP.NET Core MVC enables a clean separation of concerns and gives you full control over markup.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">08529E3A9227AE164663592F89D67945A618CCDEBE88ACD3A0528DCF583FCFC4161080D58B647D175BE8E9198369242E2DD089BF5EDF75ADA2B4F50EB335C349</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -499,6 +562,9 @@ Microsoft.AspNetCore.Http.HttpResponse</description>
 Commonly used types:
 Microsoft.AspNetCore.Mvc.IActionResult</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">C2D8C125238A07153ADDCA215A7704F27EE53E1D65361AF3EF44E0788B1E33AAC90996A8A5428C1328A00CD2C8B59BCCB811EFCCF278399B2C0B6DD1C3619417</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -521,6 +587,9 @@ Microsoft.AspNetCore.Mvc.IActionResult</description>
       <version>2.0.0</version>
       <description>ASP.NET Core MVC API explorer functionality for discovering metadata such as the list of controllers and actions, and their URLs and allowed HTTP methods.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">9CF588A93F7B882EF2308D01CA00B36EF2E52F60319EED8DB66030B8B9E907BFC4BC5C94D32027B2AB3D55230B92258ABEE7876AACAF8A81858C0EEE7CD403B7</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -551,6 +620,9 @@ Microsoft.AspNetCore.Mvc.FromFormAttribute
 Microsoft.AspNetCore.Mvc.RequireHttpsAttribute
 Microsoft.AspNetCore.Mvc.RouteAttribute</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">2D78B5596848AC0BE575D72D58275241D375D5BDFE880D23CE01F634E7917682454BF9D32BC163D6D960A2E99EF45FE4AD780A511CE582A8447095AA95D5E7E3</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -573,6 +645,9 @@ Microsoft.AspNetCore.Mvc.RouteAttribute</description>
       <version>2.0.0</version>
       <description>ASP.NET Core MVC cross-origin resource sharing (CORS) features.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">12434FF44EC07C7A93CFD8A4BC1E2AA846BAA5010C5CB1B24C0A8E2EE5B14836634D1FB47439970D8C9D48995BAD3D328C61AC8D5D3232BF488FA49AC97FC23C</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -595,6 +670,9 @@ Microsoft.AspNetCore.Mvc.RouteAttribute</description>
       <version>2.0.0</version>
       <description>ASP.NET Core MVC metadata and validation system using System.ComponentModel.DataAnnotations.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">F3429C250E03535AFEEBAE2304C5095B51EA4232224B59701EABF3B70407AAF9121B547D8ECE17CD1E38092470E742BB1514AF6609DFEA7A5591483D72C5C324</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -617,6 +695,9 @@ Microsoft.AspNetCore.Mvc.RouteAttribute</description>
       <version>2.0.0</version>
       <description>ASP.NET Core MVC formatters for JSON input and output and for JSON PATCH input using Json.NET.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">94CECBD65D434463F677B97E177B6B3F50D23A8D31E21C98256500DF73573756F5027B5556A053BB334155945356E30B03445F124B80DE0E9AFA0D3BE46E065B</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -642,6 +723,9 @@ Commonly used types:
 Microsoft.AspNetCore.Mvc.Localization.IHtmlLocalizer&lt;TResource&gt;
 Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D1456A8558548B140CD3B11EC693B49112C162339F3470E31A84DEE465A0C48CF6A870967A274FC42952C013160273646B665B5917173B7FD403FA21C56CBDE3</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -664,6 +748,9 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
       <version>2.0.0</version>
       <description>ASP.NET Core MVC Razor view engine for CSHTML files.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">BDBEE3A7A1BCDFBD35EF0A5F360157F555BDFD2802951963F7721B7DE4A51107135E9E74D1AF5FFF2A85489DBFF49A6FD0FC8C183E4DE4BE941E2EB5D8008D05</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -686,6 +773,9 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
       <version>2.0.0</version>
       <description>ASP.NET Core design time hosting infrastructure for the Razor view engine.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">C7559BE2F3B9793D8B46553FBD38C78216C66A8ADC14605B20A8316B46252A999199F12578CDE0D7E6E196D715C47452A0CE507A94D3100CA1252150C576EE68</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -708,6 +798,9 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
       <version>2.0.0</version>
       <description>ASP.NET Core MVC Razor Pages.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">23D34D3A023B7F285B735EE433679BA7DE7E61600D4E102B4F97E386BCEE05C64EBC50C5B7EFB89428C0064A67A9A83608A5BBF058E9C44E0B9ADE2884ED4F7C</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -730,6 +823,9 @@ Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer</description>
       <version>2.0.0</version>
       <description>ASP.NET Core MVC default tag helpers. Contains tag helpers for anchor tags, HTML input elements, caching, scripts, links (for CSS), and more.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">1A9D7CCE11D837FF59197C4980C7B23D842556F27D6E2CEEB970CFE45A892187C02D4E08AF2EEF84EAECA327ABAB747C5CB2F86651889BCE56F3E2BAFFF0488C</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -756,6 +852,9 @@ Microsoft.AspNetCore.Mvc.Controller
 Microsoft.AspNetCore.Mvc.ValidateAntiForgeryTokenAttribute
 Microsoft.AspNetCore.Mvc.ViewComponent</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">19E3F757E16EA508612A33C6A82B285F46CA45859097221190F123D5EDCC3737BC8C1E915DB12E92B03BCE714F7D34BF5C239D1D3DE00A7BC0D0BDB59F62BAC6</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -778,6 +877,9 @@ Microsoft.AspNetCore.Mvc.ViewComponent</description>
       <version>2.0.0</version>
       <description>Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor parser and code generation infrastructure.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">E41C4834BDF7670D48CE7B42B506BA9E68528F6CB58E759BD9F7B0B214A45AD0E754C0AEFD6A43B79238D3C11909E8C9D449985BEA9C332FB8CEDB46B7D00F39</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -800,6 +902,9 @@ Microsoft.AspNetCore.Mvc.ViewComponent</description>
       <version>2.0.0</version>
       <description>Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor parser and code generation infrastructure.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6B6EA3F36729D138DE915AEE1D9922214D081E9F04F3637F0D997642713621C972566DA3ECA963E26CA90D8C937D093175A7527857506C04798DF1DEF1EA5311</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -827,6 +932,9 @@ Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeNameAttribute
 Microsoft.AspNetCore.Razor.TagHelpers.HtmlTargetElementAttribute
 Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">1AFAF3F4046DA645733AA34B0A5237CB3DD4B7744887FA7D4F982B7E8E62CEC3533183A274B9B6C15636288A01C237B2CD8E5A6AD04C55355663E87BA3FDA481</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -849,6 +957,9 @@ Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper</description>
       <version>2.0.0</version>
       <description>ASP.NET Core response caching middleware abstractions and feature interface definitions.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">9493542459747BCB0361567A42C3030B1B3184F3930B278C75A6DE0948B97C6E5834E8359C3E8FF42AA8F99A704EB400505D2C01184C9F307A1CCC271CA1B0A5</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -874,6 +985,9 @@ Commonly used types:
 Microsoft.AspNetCore.Routing.Route
 Microsoft.AspNetCore.Routing.RouteCollection</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6A1C1354FCEA6CAE8635C2241D5F94D39BBA0FE64D1CE4BDD27F029CDD3771B52FAD2AF88A26B77995B2496CE7C4A8A40C6D7C32BC8643F41243B8DB36A833C0</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -899,6 +1013,9 @@ Commonly used types:
 Microsoft.AspNetCore.Routing.IRouter
 Microsoft.AspNetCore.Routing.RouteData</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">A7D9744F5DAC00B144842F1BB79C08EF1B6191D252DEAD2B82237185B2A1907F38937E5FFB3AA7CE2D19435D1AAE884A362B8EF4FAF57EAC9FBB8A2B94736B89</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -921,6 +1038,9 @@ Microsoft.AspNetCore.Routing.RouteData</description>
       <version>2.0.0</version>
       <description>ASP.NET Core components for working with the IIS AspNetCoreModule.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">2B6997347EC51361835E285AB5D989F9F654E226BB7CB4E437BB88F5A6FD8A1B7841A9EF7790A06B9F398D702E57E04A28B29AB73EBD07D0A7A898E79B4221A4</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -943,6 +1063,9 @@ Microsoft.AspNetCore.Routing.RouteData</description>
       <version>2.0.0</version>
       <description>ASP.NET Core utilities, such as for working with forms, multipart messages, and query strings.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">074456E592565070A786ADBD9A0A6FE957FDA894B46A1A28D4B50721A750932EAB6A6C3E5F0C45DAB8BBE3CC439C0FAC3B6F0704DC523387D736B0AE377D7D4E</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -965,6 +1088,9 @@ Microsoft.AspNetCore.Routing.RouteData</description>
       <version>1.1.0</version>
       <description>Analyzers for .NET Compiler Platform ("Roslyn")</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">12D7A033EC66D072C9249677FB0712446290991A587B180E6D18FFEF0EB97B738443FE69098370984EE56EBA9F6CA0BBE57D11AC59D41A32D137C7F9A6734AAC</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=529443</url>
@@ -983,6 +1109,9 @@ Microsoft.AspNetCore.Routing.RouteData</description>
       <version>2.3.1</version>
       <description>A shared package used by the Microsoft .NET Compiler Platform ("Roslyn").</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">5B7ADD0A54E724BE3A78C4FF7E36462C37159323F35666E7BFDB9166E654AFAD853EAF58EEC6EC5211D67BEAEBF4AB8E796C53D7FBB741A717437766023AFBE3</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=529443</url>
@@ -1003,6 +1132,9 @@ Microsoft.AspNetCore.Routing.RouteData</description>
 
       More details at https://aka.ms/roslyn-packages</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">E2B828B55C98297955406A90E51ABD20A1AD2323BE873BE9A4F0D9A84F4E5F7A94643D3EA1A28BD5C310E2F5F9A3DF251178A1382960192C1A5B513DC5172DC1</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=529443</url>
@@ -1021,6 +1153,9 @@ Microsoft.AspNetCore.Routing.RouteData</description>
       <version>2.0.0</version>
       <description>Razor is a markup syntax for adding server-side logic to web pages. This package contains the Razor design-time infrastructure.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">DBE60B82F5581230C92D17F6D5BD11CF20DCEF4778A0170E2EE2AC36C30B957FFB1C627D501756A66200781AC489FE09E3A40FC049E7D817B4DA4C92173442FE</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1053,6 +1188,9 @@ Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags
 8321c729934c0f8be754953439b88e6e1c120c24 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">320EC8A877601ACC9E5D2029CFCE658A66011C2524E1D405E043E74AA7087C58850360BA6C7E2376D613B0B7989D1374DC190F94D1D7B5BC25CC69FC012ABC2C</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -1072,6 +1210,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>2.0.0</version>
       <description>Abstractions for making code that uses file system and environment testable.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">F31ECF14D9FAE5BC9B01A200DE7449AB018B6139C54179079109ED5BD84F43E9E95A80AFCCFBA60930B0E52169D6478C7E0D1E6DCE4F2009C2C6823752F9A708</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -1097,6 +1238,9 @@ Commonly used types:
 Microsoft.Extensions.Caching.Distributed.IDistributedCache
 Microsoft.Extensions.Caching.Memory.IMemoryCache</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">FC1F7D3F267D86CE18BA04AEEBCE36B4047F5A7C3CB2342A4209D3C0F1B0FA2F07CE70EA82A85442E9C9A54EC3102D63E5B88098A3F7C08468A835FB51FB423E</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1119,6 +1263,9 @@ Microsoft.Extensions.Caching.Memory.IMemoryCache</description>
       <version>2.0.0</version>
       <description>In-memory cache implementation of Microsoft.Extensions.Caching.Memory.IMemoryCache.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">2B46B6DCA1B37F2B45C4001F7C52C5195FE2D488F32E2658BF025A1772C875A04555E84991385BF50D51536F6C2D53E16C8E23253DA07A52F95D23E15F1A6BD3</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1147,6 +1294,9 @@ Microsoft.Extensions.Configuration.IConfigurationProvider
 Microsoft.Extensions.Configuration.IConfigurationRoot
 Microsoft.Extensions.Configuration.IConfigurationSection</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">35818457877053D38F899715EE90B7A672D5B6B95FDAA6B0FA28E5DA10E0B349A3239B3DFE9782A58FE60FAA5BA4E8695765E96EFFD23B9DF02ADC5EC6C516C7</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1169,6 +1319,9 @@ Microsoft.Extensions.Configuration.IConfigurationSection</description>
       <version>2.0.0</version>
       <description>Default implementation of dependency injection for Microsoft.Extensions.DependencyInjection.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6A29AD4770E1EFCCF736E68B5EFB2F385CFBEDB22017F34043FD370EF824F46AE5E95A85ABBAE8AD54B25E80668E954AF86EB88887F9E095D514E401F7717394</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1193,6 +1346,9 @@ Microsoft.Extensions.Configuration.IConfigurationSection</description>
 Commonly used types:
 Microsoft.Extensions.DependencyInjection.IServiceCollection</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">54DEB3578C6430A23120FE3C910CD789E64F59751E18BDCCD6742F8170A6E38100BE2D9E0B48188FF95DADF3DD7B8245DD33B2A4010D66FB895F5AA44C50207B</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1215,6 +1371,9 @@ Microsoft.Extensions.DependencyInjection.IServiceCollection</description>
       <version>2.0.0</version>
       <description>Abstractions for reading `.deps` files.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">660B37703784F04F30BB65124F928378404EC52F800C74470748F92961BFB34446CDB2DD45B7AF1E51D27FF52562152385150D5BA5AD468DC25080CFADAE6A82</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -1241,6 +1400,9 @@ Microsoft.Extensions.FileProviders.IDirectoryContents
 Microsoft.Extensions.FileProviders.IFileInfo
 Microsoft.Extensions.FileProviders.IFileProvider</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">4B4D6D4AFDDC5723AB203B50162DA116886B5C0152612E338C870483044D2820507C4B1C8D6C8570331A00A48521ABC2B7A00BC6CB0367C3DB4292B79255361C</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1263,6 +1425,9 @@ Microsoft.Extensions.FileProviders.IFileProvider</description>
       <version>2.0.0</version>
       <description>Composite file and directory providers for Microsoft.Extensions.FileProviders.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">EF08D36DBD75C2DC6E3FCB7DBABD041995C04EB0E0FF8CB1D683B9CCB5CEF51158112B8B4F341E0197D6B98D84D762B2801F1329FA2397693560AAC349051A3C</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1285,6 +1450,9 @@ Microsoft.Extensions.FileProviders.IFileProvider</description>
       <version>2.0.0</version>
       <description>File system globbing to find files matching a specified pattern.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">C1051AF7252853D2BC137927E09E57C3E7201CBCEED5157A53B247EC17B7813404FAE056FC9F05F02662F4AA6A43B48AC1372345A54B8DBA7CEB6F3C55792B88</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1307,6 +1475,9 @@ Microsoft.Extensions.FileProviders.IFileProvider</description>
       <version>2.0.0</version>
       <description>.NET Core hosting and startup abstractions for applications.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D2F192DBE86D2AE88764CFB064046236D6962CF9159E0646612195F940F0EFFD0AEFC1A10897A42E0427E460B3906DBD1C157FBCF7421A1EC340E8343032CF50</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1329,6 +1500,9 @@ Microsoft.Extensions.FileProviders.IFileProvider</description>
       <version>2.0.0</version>
       <description>Application localization services and default implementation based on ResourceManager to load localized assembly resources.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">72D501C21C010F0C15CC2E40D5D4CA510EB2D511B5433AC34C8799C8E14A2EB8F7DC078BEFCF39D1BA7942F17A02F1B7B00F57FED9D57CDE55C059D735DC659A</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1354,6 +1528,9 @@ Commonly used types:
 Microsoft.Extensions.Localization.IStringLocalizer
 Microsoft.Extensions.Localization.IStringLocalizer&lt;T&gt;</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">FFBA9A547651AF4FB23D58621028DEBFEFE501B1CBC97A78B1E9528A342B6445077E086582EE6AC4E5F33E1058A81A8BB96238E6137665C564F340A985AF67D7</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1384,6 +1561,9 @@ Microsoft.Extensions.Logging.Logger&lt;T&gt;
 Microsoft.Extensions.Logging.LoggerMessage
 Microsoft.Extensions.Logging.Abstractions.NullLogger</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">BA16672246F04445E17D7999CF957753ED4F06E28C9278B299461628B18E7CC4036192B375EBF4377A4D1A5DDEA8BDE3E2ECB7B3604A520DCEFD804F6A945981</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1406,6 +1586,9 @@ Microsoft.Extensions.Logging.Abstractions.NullLogger</description>
       <version>2.0.0</version>
       <description>A simple object pool implementation.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">F3FC2558BD36D8EC142170023955123AEFD7ACFD438FD17CB99F420B1EC2F5BEF5830936E69E1131401A3864A2301B9A23D9A6A8EA47D915068B64FF9A561DC0</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1428,6 +1611,9 @@ Microsoft.Extensions.Logging.Abstractions.NullLogger</description>
       <version>2.0.0</version>
       <description>Provides a strongly typed way of specifying and accessing settings using dependency injection.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">AFC8EF803AFE1D832EB86F023BBBD5DC14B76583CE191338DFB2F7FF030ADCEC71D35AAC194D4EFCF0D08E5AF572E2205E848FC137F8812F8CA85BDE72E11E33</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1453,6 +1639,9 @@ Microsoft.Extensions.Primitives.IChangeToken
 Microsoft.Extensions.Primitives.StringValues
 Microsoft.Extensions.Primitives.StringSegment</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">47284B149A0CB337DBBB5AF3FE0CE8AAF3AB760B275F193407F3387CA8EC25D6FAFC8DEDD8C755AB8B35756B3C84E5CA8DCAB6EA8BEC2CBD543CBA304EC69371</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1475,6 +1664,9 @@ Microsoft.Extensions.Primitives.StringSegment</description>
       <version>2.0.0</version>
       <description>Contains registration and configuration APIs to add the core framework encoders to a dependency injection container.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">5F438B8E614CCF68C260F5BA1FB3775F4C2F6782828559F8F3365BE8A9386B6CB4C05F0FC040E7CDE845A95DE590AAC4B837BDA5DD8C88C0E3429456A86FB09E</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1497,6 +1689,9 @@ Microsoft.Extensions.Primitives.StringSegment</description>
       <version>2.0.0</version>
       <description>HTTP header parser implementations.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">F4D869A106644D9E28557C3BAC6C428CE842E81EA08A5659BCB4ABA5468FCBCA8D18158D18EE8ED261D79C6DFE124CE21C63FAD7D4CD78654984B4EA20B4285A</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</url>
@@ -1521,6 +1716,9 @@ Microsoft.Extensions.Primitives.StringSegment</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D83B514E902151D68F0E704CD51E136E5D61C4B5BEDCBE3F6F23289C8FBB68040F15199578A7357A998CE30A7103887513BB8AEAD48F381394EDFF8C0DC63906</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -1542,6 +1740,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">719880484F35AE4B0F26C189D3885DFEE127EA0B8D180A2A36CAF313F0CFE8068D44F087C137BA9D9BC7778B803E3DCC695450DD4D1CE9C47270C6870982CF51</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -1563,6 +1764,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">2DD8525941199856A5873E9F2C113958398274EF63AAF5B9AB709439393D9FF85D9A6C274EEECAA303CF230E69DADD6F9FBA334AD2C6DD164C25B7F8F1FED6B4</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -1584,6 +1788,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">FBD0FB1B9F45CF51F664EF3B1E5825ED9BF8E01AC09969F245FAABA1FAC75B88104EEE7BDF140FE9CB9888D51EAABD7CF5E1FA859BA1E4C29484EA141898EA89</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -1605,6 +1812,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">1A690A7E8C9EAEA9AC1CC9FB3998F400AA5C05A6C3F8669A7EAA61BD7D8CC38D3A230889472D6929C2AA7427CA25F626911C89EBE7BE45A532960749A036B58D</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -1626,6 +1836,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">23634001E3F27C0CD22E5FC05A680DB38F77C494030EA9762DDA71DCF465EDF13E16BB207469951F2C9695F777768324C473ECB4E92A6151AF48B6C8061CB3B2</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -1650,6 +1863,9 @@ System.ComponentModel.Win32Exception
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">366F07A79D72F6D61C2B7C43EAA938DD68DFB6B83599D1F6E02089B136FA82BEC74B6D54D6E03E08A3C612D51C5596E3535CBC2B29F39B97A827B3E7C79826F0</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1679,6 +1895,9 @@ Microsoft.Win32.RegistryView
 8321c729934c0f8be754953439b88e6e1c120c24 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">2C98753D2A2A76E82B0AFEEDFA4D81F75F4619DAB83F2AE7B4F56530232B733E7D9EC8CEB2D626B465920A2159DD4369C6FD9D96C65D70BCC9F38EEEC8E95A10</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -1700,6 +1919,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 18a36291e48808fa7ef2d00a764ceb1ec95645a5 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">E78F0CEA69C14895B1B089644077DBCE8631A626055D96522F4D29E061D8BFC3E48AA1419E74FAF265B998612C03F721F5F0CEF4690F824150A5689764DEE601</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/standard/blob/master/LICENSE.TXT</url>
@@ -1719,6 +1941,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>10.0.1</version>
       <description>Json.NET is a popular high-performance JSON framework for .NET</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">30E52141F788E37BA9ABD42212FFBB6184C340FB446448FDC41E74320A653B55C5FDABA63F47FE4C26081E964499FB226A1249697B7F81D44560B144A05D95C9</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.github.com/JamesNK/Newtonsoft.Json/master/LICENSE.md</url>
@@ -1737,6 +1962,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>1.0.1</version>
       <description>Json.NET BSON adds support for reading and writing BSON</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">5B929EE717A2F724B4963419B93EF95604A9E4CE377823E6E611C07A5BCAC86194E1D57B8580A6B7076CC680036FF7B13BAA581DEBBF2248B8DD37583F37C449</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://raw.github.com/JamesNK/Newtonsoft.Json.Bson/master/LICENSE.md</url>
@@ -1760,6 +1988,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">B2CF809FE50C4B46BD6F2372265CD3059622550123AFCEB5DBB2410906C07A7F47BAE4273584D29253D5E7A63A17C68C7BA0434608BBC8FD4D00E479B2F128FF</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1780,6 +2011,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">FD8E32D7D3E9A465202E391B0AB8B95E212900879BC4D8AC22954FD2D0F98FA579E9D25F88885AC2A4BF1EBA755DB940F8D131250A3FFEC34DBE77431A379CAB</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1800,6 +2034,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">4AFAC5CC1734330A6103880E790D639E825BFB1B34DBD42083762C47DB5E5DAB6C03EFD16049AC03861D7D87746CAED09C7534241D51B7341D47BA6AF7E8DD31</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1820,6 +2057,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">299C5A96FFFDCAF1972E3E3D1C727837D18AC9E88CB79C09914F12FF1DE7280DFF10C9232A49A1C1D3BA7785A5CF76F28C9DCE414F0A2A567688DE7FD5331DC8</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1840,6 +2080,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">BFF1F0CAC94327014BB07C1EBEE06C216E6E4951B1DDAA0C8A753A4A0338BE621FD15EC621503490DBCA54A75809ABC4F420669B33052B28D24D726AC79C9891</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1860,6 +2103,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">DDD1E5B67545477F7C72B5883666DE40E89EFB0836D91E7A349E2F3D4AC05CE1125E6ADD3CB09C39CBDFE7AB7C5DC8FDAEAF6AC25ACD92F6DE3D8CE2D6DB7918</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1880,6 +2126,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">C5DB086A026EB52FF432DFCE1ED295BC390E0701FD61E78EC443014D2C6E9C7C2D528236F7838D9AA55A93ADB7203654DAFBF4B8CF5A25578347A727D0B1262D</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1900,6 +2149,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">23C6A99B323CD71CDCB28C6FAA71F099F69FF0972D5125607AE8BBC99BA7C08513571D14526E8C2805AB3A8B70D3D3A6DD76DFA193320393ECB05906EE91F37D</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1920,6 +2172,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">EE5D047908B99B776FF9BB54856454B24B09A0F9271B127239543B1F5FAA3381A032D9EEB4D813D01B5A4B7D183B6A16250F159FDC450D5314A7EACE1550BEA3</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1940,6 +2195,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">81BDB93C1C86C560343DF6CC367499FB2A01A9B3016617BE416874A23C4355A8D95C7BE34F175510F3FDEA4872302A87C8EFAB98A328DFA39422DB520C3F291C</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1960,6 +2218,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">6DE9544B4DA49F127680CF5B3B4AFEA96BFCAC3293038A1B0A12EEA0AD60BE368AF31EE1DFD66D48D458B40200738C04AA0C71ADCC54AE2DDDBEA2CD50D6F28D</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1980,6 +2241,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">9929942914071E0EA0944A952FF9AD3C296BE39E719A2F4BB3EAC298D41829B4468B332FBA880EBE242871A02145E1C26DC7660021375D12C7EFCAE4D200278A</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2000,6 +2264,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">61DA1667A5DD1E53A5D19FBE90ABBFE332D84FE755FB811A080668A47D41A97DB44539E3174FD1D2A0770FF1BD83AFA68C82CE06DF5775DA65A6054CCC12C4BE</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2020,6 +2287,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">E65A6A1F1928CFB760C395A399542DC7F9087399C53874376604504AE60ABD2DA24ED735EBD148D335000A5E35C8108EA55404685E902DF392EAC2E8D38FB665</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2040,6 +2310,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">C9F219515E268CF40E16B135BD64CBA95C35E866DD9BC34954159562314D01D2F9EA7EB8B0DB94ACF6BDAC83D651D90BAD7890CB657FFE40FA3440EC662C9944</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2060,6 +2333,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">4981B2D7A106703B185E176AD35BFDA149156F3B752778FA71C56B3686407765FD2B6625DE352BD563AAC1E1E8769D7886CC59A0D5D0BFB41ED60277360BEB81</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2080,6 +2356,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">5DBE6BC007A9B46491E5299602291F5DBF8CC8D51E6C1B08DB2FA0EFD365990B41B6E181ED6BF82E873A659396427BC0E33E85B47D645D273FEF8BF8EC643631</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2104,6 +2383,9 @@ System.AppContext
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">0D6EA63006304708FEAE2CC0590D2CDD99327B682210822BB2803AC842FDF4D8D57170D7947C006EEC4B5687C942768478A7EC109745472F3946D230732483E8</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2129,6 +2411,9 @@ System.Buffers.ArrayPool&lt;T&gt;
 8321c729934c0f8be754953439b88e6e1c120c24 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">222D9B79D7781D5CDD76EA5D537E67DF28288543E5367ECC0E298139873058D71ED8D8B34357C249A4096354F3BFCD1A32A386A55714E3066BFD77B9D31713C2</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -2161,6 +2446,9 @@ System.Collections.Generic.SortedDictionary&lt;TKey, TValue&gt;
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">CA7B952D30DA1487CA4E43AA522817B5EE26E7E10537062810112FC67A7512766C39D402F394BB0426D1108BBCF9BBB64E9CE1F5AF736EF215A51A35E55F051B</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2189,6 +2477,9 @@ System.Collections.Concurrent.ConcurrentStack&lt;T&gt;
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">35C1AA3E636216FE5DC2EBEB504293E69AD6355D26E22453AF060AF94D8279FAA93BDCFE127AECB0B316C7E7D9185BCAC72E994984EFDB7F2D8515F1F55CF682</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2226,6 +2517,9 @@ System.Collections.Immutable.ImmutableSortedSet&lt;T&gt;
 System.Collections.Immutable.ImmutableStack
 System.Collections.Immutable.ImmutableStack&lt;T&gt;</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">978FABCD8B9B95BDE6DF55E7DE282BFC1043AE8FE069FF64519392F8DA424E64867BA2FE16FBBAA75D7505AAFBBF92304B48A4275A3BDBE53E0C1EBDA1C56672</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2259,6 +2553,9 @@ System.Collections.CaseInsensitiveComparer
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">DC6ABFE778B3EA08E99F50B79112A51728E689F353B082234351B9F5B1BE4B601A0B6D38A04C2138D05B5BDD83D6F3D91B53EE86ED119225C15E4683C38BF98C</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2291,6 +2588,9 @@ System.Collections.Specialized.BitVector32
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">C7A257CBDA812D6C0C44B29D8BB5CC4F5CF2D3CB81574EB1DC94A7EFDE980AC26C5FFADB7CC3521FE7B19437766A046C83CBF2E7EA59A36435C288ADD8142B57</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2319,6 +2619,9 @@ System.ComponentModel.IRevertibleChangeTracking
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">7C638AC92A132E1553A089C6A711FFB7431B22FECCA322CE748D6684AE2BAAF161BAB2F71704750BD15EC6FDA11E795F2AB8491AC769B89341BDE77AA9212D59</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2353,6 +2656,9 @@ System.ComponentModel.DataAnnotations.KeyAttribute
 8321c729934c0f8be754953439b88e6e1c120c24 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">BDDD37A301CBA60723C6E65026DFEB643B2985BEAEA1F85BC5E15D5C01C8EDBCADB8704A3A6011195D2313A7CA1F7DAF99094F9119EFC5045B3D2D9E94B0264A</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -2380,6 +2686,9 @@ System.ComponentModel.ComponentCollection
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">AB26D413ABCE9CFC31B860765D91B21D4048976016D853CE8969F7BA79C039D8846B3C4E2986530F20B62DCB23FF0A769AE5EE37FC078D69EAA962832F2035EF</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2413,6 +2722,9 @@ System.ComponentModel.DoubleConverter
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">0A2B2F3C25DE4A6429C6CB9FBB37409E86168921EA71EC58889912742E39E1B67F5CBE764AFFC3580AA0EF167C7F73A55332A0ABF7B043E89185293029D8B087</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2438,6 +2750,9 @@ System.ConsoleColor
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">A08A684A583C9B3278CE32BE1007DAE495F9D87254666392F794EF1203079F333CD7D388C28944FFA36FB49F0C8BB21F42C70F6E1D7C1C03920DF6D0D1130C82</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2470,6 +2785,9 @@ System.Diagnostics.DebuggerTypeProxyAttribute
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6C58FE1E3618E7F87684C1CEA7EFC7D3B19BD7DF8D2535F9E27B62C52F441F11B67B21225D6BCD62F409E02C2A16231C4DB19BE33B8FAB5B9B0A5C8660DDAB24</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2495,6 +2813,9 @@ System.Diagnostics.DiagnosticSource
  
 8321c729934c0f8be754953439b88e6e1c120c24</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">0DF99211F24B01FB3E895690871509121E7B376B9B57E9DDD345ECA1BDAD9C2F97C1AB2774A6B332384361D60C5BB519EAD9B2053C6E479B84C74A2FE00695B1</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -2519,6 +2840,9 @@ System.Diagnostics.FileVersionInfo
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">0AAC60B56B118C1BFA5AA6492A0D32DCE19A5350E61D8759367CEE704E05D35913A113772B98277A76ED806D5F575803376F5C0C6810A801E2566213C44DBA01</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2544,6 +2868,9 @@ System.Diagnostics.StackTrace
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">3A7D95FD5D64D8B490C12D7E90C22B2D476C25ACB7A211B9205626D6A9002C5107AAC1A8EFD08217181473E092E6ABDE15CFB2B35CCEE86E18BD1BB7FED2CBE8</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2569,6 +2896,9 @@ System.Diagnostics.CodeAnalysis.SuppressMessageAttribute
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">164D6977E721CBCEB44EDE7BFD75B03B8D9771E0426AEFA5D40C71867E964092FDC6A6808BCBC5559ED73EC2C532CA657D6476AF79A49CA3AD879B8366F13D90</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2600,6 +2930,9 @@ System.Diagnostics.Tracing.NonEventAttribute
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D0A5D30E261CD45B7DFAB02B7FFBD76B64E0C9B892ED826EA61481C983C0208B05B69981CD79E91CD4E5811E1CD4C3CEA06A1AFCE05811ECE58BE5E4C20169EA</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2633,6 +2966,9 @@ System.Runtime.CompilerServices.ConditionalWeakTable&lt;TKey, TValue&gt;
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">54446FEE94F432CB8FD38EC10C929A87B307A76F152A2E9DA11BA99C41CEB0F65913CF218944990F0E122D4F858945091E9806C84C0285ADA1FCC939337D30EA</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2665,6 +3001,9 @@ System.Globalization.UnicodeCategory
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">823D2BA308CB073B40A3146ECCCD0D9FD7B1615AC3FBEFB16F73D873E411FD81C3BDC87DF206D3DC7E2F14C9CD53AAFCA684A3570C25471280AADA8DE805ECE2</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2698,6 +3037,9 @@ System.Globalization.UmAlQuraCalendar
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">E97190231402B393774B925EFC02A2BFA41D1D117A17FB87DA6E399F5234546962767E9CD8F39970EFA408E4F453CD1E6751A2A61E366BC97406E1B0B8A4BE86</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2724,6 +3066,9 @@ System.Globalization.IdnMapping
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">A4D360003F95E0C31EDF39C0B91E1C73850A60AC5D0032B17DB888A3C7D7134CEF9ACD97219D14174AD213B7C044F49B364CC5720073EBFCB6E1BF6E4EC24CE5</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2755,6 +3100,9 @@ System.IO.TextReader
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">BFCA5A21E3E1986B9765B13DC6FBCD6F8B89E4C1383855D1D7EF256BF1BF2F51889769DB5365859DD7606FBF6454ADD4DAEB3BAB56994FFB98FD1D03FE8BC1E6</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2785,6 +3133,9 @@ System.IO.Compression.ZipArchiveMode
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">F540EE51A3BB6941CDFBAACE9A9738D7F7986A2F94770DB61F45A88ECB7EF36B571D4C07417DC89CDBE9655A262B7CC599B0A4B78EFFEA91819E186121B44807</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2816,6 +3167,9 @@ System.IO.FileOptions
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">4FB581D6F85B9529A091A0E974633752AA39E50B2BE6C8A9E5ECA8C2BC225CEA07064CCEC7778F77DF9987DEEBF4DCCEC050B1A97EDAC0EE9107142E6A8EE7EE</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2846,6 +3200,9 @@ System.IO.FileAttributes
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">5885953D09582CFFD973D23A21A929064D72F2BC9518AF3732D671FFFCC628A8B686F1D058A001EE6A114023B3E48B3FC0D0E4B22629A1C7F715E03795EE9EE5</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2874,6 +3231,9 @@ System.Linq.Lookup&lt;TKey, TElement&gt;
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">EACC7FE1EC526F405F5BA0E671F616D0E5BE9C1828D543A9E2F8C65DF4099D6B2EA4A9FA2CDAE4F34B170DC37142F60E267E137CA39F350281ED70D2DC620458</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2902,6 +3262,9 @@ System.Linq.Expressions.ExpressionVisitor
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">61B90EF9AE6F779FBC8A7B6483EE8F5449CDD05C81B05235F70447E656A73B2AAB7C341784B999F7532374744A72E2C3A5CD13800EA23417FAC32CCFAE5CDE6D</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2935,6 +3298,9 @@ System.Net.Http.HttpMessageHandler
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">A6DCF72ECFF62FE362221A8E4A04DAAEF687AB3B8704A64873AE6BBEFE9F9568B4098120740F850917B5BDDAC26B6C99CA41DB3B120506987592D07441349ED8</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2968,6 +3334,9 @@ System.Net.CookieContainer
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">9F7FDECE330A81F3312EA7C804927852413BEE2C929F3066B736993803DF47CC0692FBCA236C222BF19DC8F59B42F54F2A4C00DA9A4D624E458DA5874D127CE6</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -2993,6 +3362,9 @@ System.Net.Security.ExtendedProtectionPolicy
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">976F3D58275166FD7DCC5A1F7D91803633C4179293B54BB53C119A58C582D0B51C3BC9252A7D72447FB8A3D76C63C371F61C40145F50D255DDA7B4B54B0881FA</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3026,6 +3398,9 @@ System.Collections.ObjectModel.ReadOnlyDictionary&lt;TKey, TValue&gt;
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">409BCA3D2139BD1D003C711400BA2DB5E576BB54D593AA541EC3576E7B2029B60159AB1C5B2C4E7389267B1B95EBCD8C2F064DC6E1F53E693AACB1737F066123</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3058,6 +3433,9 @@ System.Reflection.Module
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">2325B67ED60DCE0302807064F25422CBE1B7FB275B539B44FBA3C4A8CE4926F21D78529A5C34B31C03D80D110F7BACE9AF9589D457266BEAC014220057AF8333</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3091,6 +3469,9 @@ System.Reflection.Emit.EventBuilder
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">BE45051467A36AB965410F112A475FB81510A5595347D1CC0C46B028E0436A339218DD3C073F048C2D338B67DC13B45742290B6C46F55982503F74A8F2698818</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3120,6 +3501,9 @@ System.Reflection.Emit.SignatureHelper
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">E9BE5F62BF64B1947A49857337306A5D0980686B58D665989E94006AB04AA7E0BBF4D8543D1B57D5BB38079052F275F339B73054A7357E4FA357208A0AC85D69</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3144,6 +3528,9 @@ System.Reflection.Emit.DynamicMethod
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">AD58AF07296BD084907A089F92026FA3898B764EB9D6A07C9414B550A83AC60456F32A34127C29BB93A9633FB07BA9FD828F7B41A31DCE5FF019A7CF1AB29435</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3170,6 +3557,9 @@ System.Reflection.RuntimeReflectionExtensions
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">06CFD992C8D7FD9AB6432AB02BE981A01B6558285A6E26A7825A064D4EFCCE08D9E7344F03FA19B033A2459D42B0B80E8C1400CE39B47A1752869AB8825B0475</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3193,6 +3583,9 @@ Commonly Used Types:
 System.Reflection.Metadata.MetadataReader
 System.Reflection.PortableExecutable.PEReader</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">635D5A0789773D7E4482ED384DD9D092654505D081BD8B94537BB72EEFDD4BDF00433E57C2A8C0BCD935754D9924721B63D43C88704337D452599665BDCFD8FA</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3226,6 +3619,9 @@ System.Reflection.MethodImplAttributes
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D4B9CC905F5A5CAB900206338E889068BF66C18EE863A29D68EFF3CDE2CCCA734112A2A851F2E2E5388A21EC28005FA19317C64D9B23923B05D6344BE2E49EAA</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3251,6 +3647,9 @@ System.Reflection.BindingFlags
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">68AE81A635B9AF2AEE9FC8FC8FE7DA0356EF4DA4EB32F81A89FB75613B96714E8F1A1F4C12BD0D335EFBB03408CC7A744314837F13564D5FB262CA272055677F</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3278,6 +3677,9 @@ System.Resources.MissingManifestResourceException
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">9067DB28F1C48D08FC52AD40A608F88C14AD9112646741DDAF426FDFE68BED61AB01954B179461E61D187371600C1E6E5C36C788993F5A105A64F5702A6B81D4</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3321,6 +3723,9 @@ System.Uri
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">92AB2249F08073CFAFDC4CFBD7DB36D651AD871B8D8BA961006982187DE374BF4A30AF93F15F73B05AF343F7A70CBD484B04D646570587636AE72171EB0714FB</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3346,6 +3751,9 @@ System.Runtime.CompilerServices.Unsafe
 8321c729934c0f8be754953439b88e6e1c120c24 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D03F39B62F48714C56AA5DB5DDDE1613E7F62633734731E611A1B7E2A880DE10FB1BC3B88B4320AFE46EB649F8A66ADBAD6F80058E2FCE910280799DC3EBD38D</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -3378,6 +3786,9 @@ System.IO.Path
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">680A32B19C2BD5026F8687AA5382AEA4F432B4F032F8BDE299FACB618C56D57369ADEF7F7CC8E60AD82AE3C12E5DD50772491363BF8044C778778628A6605BBC</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3406,6 +3817,9 @@ System.IO.HandleInheritability
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">0A5BAF1DD554BF9E01BCB4CE082CB26EE82B783364FEB47CBA730FAEECD70EDC528EFAD0394DCCE11F37D7F9507F8608F15629EBAF051906BFD3513E46AF0F11</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3434,6 +3848,9 @@ System.Runtime.InteropServices.DllImportAttribute
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">650799C3E654EFBB9AD67157C9C60CE46F288A81597BE37CE2A0BF5D4835044065EF3F65B997328CBBBBFB81F4C89B8D7E7D61380880019DEEE6EB3F963F70D9</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3450,7 +3867,7 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
     <component type="library">
       <publisher>Microsoft</publisher>
       <name>System.Runtime.InteropServices.RuntimeInformation</name>
-      <version>4.0.0</version>
+      <version>4.3.0</version>
       <description>Provides APIs to query about runtime and OS information.
 
 Commonly Used Types:
@@ -3459,13 +3876,16 @@ System.Runtime.InteropServices.OSPlatform
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6F4905329A3CC9E62D274C885F275EE31C5AF57A6C9FD1A5080D039CB748E0277BEF3DC8CE42863CAC78365084E00A032279BF3D2B7254A49F3FB1566A29AD1B</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
         </license>
       </licenses>
       <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
-      <purl>pkg:nuget/System.Runtime.InteropServices.RuntimeInformation@4.0.0</purl>
+      <purl>pkg:nuget/System.Runtime.InteropServices.RuntimeInformation@4.3.0</purl>
       <externalReferences>
         <reference type="website">
           <url>https://dot.net/</url>
@@ -3484,6 +3904,9 @@ System.Numerics.Complex
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">3E347FAA8E7EC484D481E53B1C219FE1CE346AE8278A214B4508CF0E233C1627BD9C6C6C7C654E8C1F4143271838DDD9593F63A1043577AD87C40E392AF7FD34</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3509,6 +3932,9 @@ System.Runtime.Serialization.ISerializable
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">5B852ACA669B8826F5C71B8AAECA490B30875BDE55650DC60A6CE90D81EF271554BCF636B22C14E00E6B3EEF0445A44F52F41168EDE3757F06AFEA1EE58E0908</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3542,6 +3968,9 @@ System.Runtime.Serialization.SerializationException
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">FCF73BAADF5675029E91F2E6E4A71C305EECE3671EF69F49440F9C6DA160D7B33F0A73923D652F2987F7668093F74ED83DE72B185DE2CE6EC6B37C6E821217AE</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3571,6 +4000,9 @@ System.Security.AccessControl.ObjectSecurity
 8321c729934c0f8be754953439b88e6e1c120c24 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">50F17EB3829CB4E0A993B76905EDD0B59D40CC510729D84EB623432F11A70FF9F12AC55BB28C39382953CBC73BC8E39BC3F12F6EFF79C51C197D8678C0B5787C</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -3599,6 +4031,9 @@ System.Security.Principal.GenericPrincipal
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">AB72B90801F6C051A2B31645448EEBFCA74642B3CFA1D51F80E21A0D0D7AD44D3366DEA139347E2852781B7F3BAE820DF16C3EB188A2C96244DF05394ED72C86</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3634,6 +4069,9 @@ System.Security.Cryptography.HMACSHA512
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">7641D70C2BA6F37BF429D5D949BDA427F078098C2DCB8924FD79B23BB22C4B956EF14235422D8B1CC5720CBBCC6CFEE8943D5FF87CE7ABF0D54C5E8BCE2AA5E2</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3660,6 +4098,9 @@ System.Security.Cryptography.CngKey
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6272273414EAA777E78DCA1B5ECBBDF65E9659908082AEA924DF0975E71F4C1B47F85617EDF90EAD57078C29513A160CA62F123BE9F9F339DFB9C9386844F5EA</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3685,6 +4126,9 @@ System.Security.Cryptography.CspParameters
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">43317591747A18F52F683187E09ADFE0E03573E6DAC430BF3BA13F440CDB1C7BB1F9205369D5F3B2A0F3FDF9604D5BA1E6D94A899A25D2C533E453338578F351</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3711,6 +4155,9 @@ System.Security.Cryptography.OidCollection
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">5C26ADD23E63542F37506F5FA1F72E8980F03743D529CD8E583D1054B8D8A579FB773FA035A00D9073DB84DB6BE4F47CAC340D1EBC6D23DD761DBDBD600075E0</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3735,6 +4182,9 @@ System.Security.Cryptography.RSAOpenSsl
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">64530A19489730F873F8C68E6B245135EA260C02D68591880261768358D0145795132BA5EE877741822FF05DCD0C61EDCA27696EF99E8F9302A21CADF3B1329F</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3770,6 +4220,9 @@ System.Security.Cryptography.CryptoStreamMode
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">5AD8273F998EBB9CCA2F7BD03143D3F6D57B5D560657B26D6F4E78D038010FB30C379A23A27C08730F15C9B66F4BA565A06984EC246DFC79ACF1A741B0DD4347</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3803,6 +4256,9 @@ System.Security.Cryptography.X509Certificates.X509Chain
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">318D86AB5528E2B444EC3E4B9824C1BE82BB93DB513EAB34B238E486F886C4D74310ED82C2110401FE5CD790E4D97F4A023A0B2D5C2E29952D3FD02E42734D00</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3866,6 +4322,9 @@ System.Security.Cryptography.Xml.XmlLicenseTransform
 8321c729934c0f8be754953439b88e6e1c120c24 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">BB75BA27D0DAFA4EDCF1328A29313A75DC99C720DB46B68EB6DDBE99F303C89BEE2EF5759E3C787F955A9F7BACFFAE40BBD4C73C3336D6397FE95BE3EECC5B25</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -3892,6 +4351,9 @@ System.Security.Principal.TokenImpersonationLevel
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">DB8A1ED0D189637D9EF83147550CE5DA890CF6EC189A7D006BA9DE86AB55679E7F025E18BDAED2DC137DDF82A7E6A0131FB4D54D4264831862B1D7C5EE62837E</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3924,6 +4386,9 @@ System.Security.Principal.WellKnownSidType
 8321c729934c0f8be754953439b88e6e1c120c24 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">CA70B904A63086038DE961FFC8F33964B29CD7DC2A0B5DC0E5F9788596B92DFF29430BF56266C23CA1AE6A5592461128395587D85CD984E5DAB8447A6A5E14A6</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -3957,6 +4422,9 @@ System.Text.DecoderExceptionFallback
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6FF7FEEC7313A7121F795EC7D376E4B8728C17294219FAFDFD4EA078F9DF1455B4685F0B3962C3810098E95D68594A8392C0B799D36EC8284CD6FCBD4CFE2C67</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -3981,6 +4449,9 @@ System.Text.CodePagesEncodingProvider
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D6179BE2BEAC0A19AA4BFD3C317FFAA5DB0C3EA224A0BA1F0269C0267AD679F76D387D8455EC26C06F3A166EA84AF2348597425412D95CCFE352A3EF11123A44</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4009,6 +4480,9 @@ System.Text.UTF32Encoding
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">E648C5DC781E35CF00C5CC8E7E42E815B963CF8FB788E8A817F9B53E318B2B42E2F7A556E9C3C64BF2F6A2FD4615F26AB4F0D4EB713A0151E71E0AF3FE9C3EED</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4036,6 +4510,9 @@ System.Text.Encodings.Web.JavaScriptEncoder
 8321c729934c0f8be754953439b88e6e1c120c24 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">B7DB32FA35F99E6F086A2AD3E1EB29CE37EFCF49F0111E065669C528BBC0D9391A86D057203A14B12FA58DF48CB884F7ADE8D7CA55E64248689B76114E9B9308</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -4065,6 +4542,9 @@ System.Text.RegularExpressions.MatchEvaluator
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">80353C148DF30D9A2C03EE10A624D91B64D7CCC3218CB966344CFA70657F0B59C867FED2AB94057F64AB281AD9318353F25C23375C00E1376B6589AE0A70AAD3</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4096,6 +4576,9 @@ System.Threading.Mutex
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">97A2751BDCE69FAAF9C54F834A9FD5C60C7A786FAA52F420769828DBC9B5804C1F3721BA1EA945EA1D844835D909810F9E782C9A44D0FAAECCCB230C4CD95A88</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4125,6 +4608,9 @@ System.AggregateException
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">7D488FF82CB20A3B3CEF6380F2DAE5EA9F7BAA66BF75AD711AADE1E3301B25993CCF2694E33C847EA5B9BDB90FF34C46FCD8A6BA7D6F95605BA0C124ED7C5D13</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4147,6 +4633,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 Commonly Used Types:
 System.Threading.Tasks.ValueTask&lt;TResult&gt;</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">2C33900FF7F544D6DB31AD11B6BAEE1C9ECB40D5A54F51E5DD5BBBB37F4C50EE35ED481615CBF7C1DA61A31AE3333C4454BFBEEE4AE32241789E72CE3F910DB6</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4174,6 +4663,9 @@ System.Threading.Tasks.ParallelOptions
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">460EEC2492B2CC8FC8FEFA64FF148D77AAE2DA157CAAB25D03023CD6E2064CD8EC2AB3F68FD722FBE8A8DC1E05E775D2AECD789A0FC5D48FE2AE59921ED5A12A</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4200,6 +4692,9 @@ System.Threading.ParameterizedThreadStart
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">CFE12B6A60E79E2F7FCA779A511153D5B0DCAE59EA1B11606F6327DBF8B3C565E2551E8ECADA558E62DD3B684B5C9D676575025048EDFBD3988FAF7F7235A5FE</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4225,6 +4720,9 @@ System.Threading.WaitOrTimerCallback
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">450A40F94A48E9396979E764E494AD624D8333F3378B91EA69B23FC836DF8F5C43BBD6C8CFD91DA2AB95A476E1FF042338968E09B720447F2241C014BFC75159</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4257,6 +4755,9 @@ System.ValueTuple&lt;T1, T2, T3, T4, T5, T6, T7, TRest&gt;
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">BF34DEF0430144EF07C027405A7CE0D9792C4C031EED9F445996CBC6905197FA3010CF2887C7A2E5CCDD8584F4A1DD8B51555DF21A1F6C1F7C95AD31008E63D5</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4289,6 +4790,9 @@ System.Xml.XmlQualifiedName
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">991101497FBD39E43FC306CA280A465318868AFA8DB1F34BB87C266FE61F0C81A0EC34A797B236EE823BD60D1149B7592DEF96FE044ABB511858EFFFE890C2E6</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4322,6 +4826,9 @@ System.Xml.Linq.XDocumentType
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">C2D9236A696DAF23A29B530B9AA510FB813041685A1BB9A95845A51E61D870A0615E988B150F5BE0D0896EF94B123E97F96C8A43EE815CF5B9897593986B1113</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4355,6 +4862,9 @@ System.Xml.XmlCDataSection
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">22251B3F16DE9AA06E091B24BAEA1B8C95752F0D22266FAF34E1FB76B347B23F7910CDAF567058E23D06B7079961090CA70805070A2491ADD5DA4D0271AFD133</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4388,6 +4898,9 @@ System.Xml.XPath.XPathNamespaceScope
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">2BD0979A2020579FB32AD374B89929A272E763EE1233ED9A215408C0A1F9F82A5FDB74330C1C55A6102E0DFDB8B7B59ED25FDF6454BF3DE146152EA779F366E0</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -4413,6 +4926,9 @@ System.Xml.XPath.XDocumentExtensions
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">06AC9786B2F20B1336F3F56A3C97536907D033F1A9B9EC07267192F60ED51732924AA366F481E862F1F63D75FABDC5DE51B445C5CB6C36F1FB89690A29B6E1E8</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>

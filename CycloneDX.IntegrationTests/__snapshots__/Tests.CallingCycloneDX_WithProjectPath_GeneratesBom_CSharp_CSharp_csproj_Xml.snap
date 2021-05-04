@@ -18,6 +18,9 @@
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D83B514E902151D68F0E704CD51E136E5D61C4B5BEDCBE3F6F23289C8FBB68040F15199578A7357A998CE30A7103887513BB8AEAD48F381394EDFF8C0DC63906</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -39,6 +42,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">719880484F35AE4B0F26C189D3885DFEE127EA0B8D180A2A36CAF313F0CFE8068D44F087C137BA9D9BC7778B803E3DCC695450DD4D1CE9C47270C6870982CF51</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -60,6 +66,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">2DD8525941199856A5873E9F2C113958398274EF63AAF5B9AB709439393D9FF85D9A6C274EEECAA303CF230E69DADD6F9FBA334AD2C6DD164C25B7F8F1FED6B4</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -81,6 +90,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 caa7b7e2bad98e56a687fb5cbaf60825500800f7 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>excluded</scope>
+      <hashes>
+        <hash alg="SHA-512">FBD0FB1B9F45CF51F664EF3B1E5825ED9BF8E01AC09969F245FAABA1FAC75B88104EEE7BDF140FE9CB9888D51EAABD7CF5E1FA859BA1E4C29484EA141898EA89</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT</url>
@@ -102,6 +114,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">1A690A7E8C9EAEA9AC1CC9FB3998F400AA5C05A6C3F8669A7EAA61BD7D8CC38D3A230889472D6929C2AA7427CA25F626911C89EBE7BE45A532960749A036B58D</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -123,6 +138,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 30ab651fcb4354552bd4891619a0bdd81e0ebdbf 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">23634001E3F27C0CD22E5FC05A680DB38F77C494030EA9762DDA71DCF465EDF13E16BB207469951F2C9695F777768324C473ECB4E92A6151AF48B6C8061CB3B2</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</url>
@@ -147,6 +165,9 @@ System.ComponentModel.Win32Exception
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">366F07A79D72F6D61C2B7C43EAA938DD68DFB6B83599D1F6E02089B136FA82BEC74B6D54D6E03E08A3C612D51C5596E3535CBC2B29F39B97A827B3E7C79826F0</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -175,6 +196,9 @@ Microsoft.Win32.RegistryView
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">38702F72EEAD561E343E77136059292C8B6CC3D3BCB14739F42E1EA92A8477E539AD8EEDD3EBBB5E88BA330D9039FBCF2761D4265C08115AB19250C87E7EF9ED</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -196,6 +220,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
 18a36291e48808fa7ef2d00a764ceb1ec95645a5 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">E78F0CEA69C14895B1B089644077DBCE8631A626055D96522F4D29E061D8BFC3E48AA1419E74FAF265B998612C03F721F5F0CEF4690F824150A5689764DEE601</hash>
+      </hashes>
       <licenses>
         <license>
           <url>https://github.com/dotnet/standard/blob/master/LICENSE.TXT</url>
@@ -215,6 +242,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>12.0.3</version>
       <description>Json.NET is a popular high-performance JSON framework for .NET</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6934665F0479C58BBE996C44F2BF16D435A72F4D92795F0BC1D40CB0BC1358FF0E660AC20B24EABCE01EE6145BD553506178E59FBAABD0F2A94B23BFA5C735F5</hash>
+      </hashes>
       <licenses>
         <license>
           <id>MIT</id>
@@ -237,6 +267,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>5.4.0</version>
       <description>NuGet client library.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">2953CB3587E45421136EAEF654F3B9CC62F684426A8499177FC5F7AF7ADEA0D0C1A292BCFA6B59DDB63B17C8E5A2D02A75DFB5A981C93DD114688467EA477979</hash>
+      </hashes>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -259,6 +292,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>5.4.0</version>
       <description>NuGet's client configuration settings implementation.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6D0019E5EBFB5FEC4859C4BAD6BA230745BADE9C73C7A3712CFB25D44A008A1B923A049A6057F68C83EF1B6CDDEC865C845DB5B40F1D4F4D7246B1F92CCA1577</hash>
+      </hashes>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -281,6 +317,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>5.4.0</version>
       <description>NuGet client library.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">646D83DDFA94E13A29076267EE5111D826E96B3A9C3D7EF0F264572CB3DB4247DBC8C55AD2738E3291EF73EEE9C407BAA0E506FA69DE8AF6892A9A8CEF5DF8D7</hash>
+      </hashes>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -303,6 +342,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>5.4.0</version>
       <description>The understanding of target frameworks for NuGet.Packaging.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">21DCA7B6A6D56419B2098EE2B1307422AD1E19104B360B9C71258CC51B59880BBAC571C06F8858A5EAB95DF448892EEB28F203D8A9259385144685D73535B45E</hash>
+      </hashes>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -325,6 +367,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>5.4.0</version>
       <description>NuGet client library.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">40972DE899FB65860B502E7DBFD98FAAA3A8C44C150CF8A7DCE8364A3172221F68CA7780A2D7D9A73585C850FB6DCE120BE2DC6DD6AED0AD52F07409B706F9EA</hash>
+      </hashes>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -347,6 +392,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>5.4.0</version>
       <description>NuGet's implementation for reading nupkg package and nuspec package specification files.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">1077FCA64CA20D35526E3DB527B42FAF3A31BB45A92564AD14FE74025CF2AFA559F129AC74072B47CA44DC84A7A1780A9C8233355B3B1AA74B4738F985E9EB10</hash>
+      </hashes>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -369,6 +417,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>5.4.0</version>
       <description>NuGet client library.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6A5F3B741D32094675521BD2841BA566EDCECBB82B624EEB7721A2032B6270C947EA27443B50F70C147322C94B37FEA6E4CDDB1021C5A1EA487017422613F412</hash>
+      </hashes>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -391,6 +442,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>5.4.0</version>
       <description>NuGet client library.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">630A63C22A9E7C1EB0D39998A71B42DB3AB467620FEA157774413010EA4E5B579F14E7366593B762EF58959DA83D76C710720E1FE20A2FF2D21593946C0BCC59</hash>
+      </hashes>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -413,6 +467,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <version>5.4.0</version>
       <description>NuGet's implementation of Semantic Versioning.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">7D36047CF218EAB2E0899C74292BBADB7F607553AD5C4A264B99780B4E4D47AA07A5B971B8D34944BB6E24A9075AA66F9A7FA080CB78AFAE35DEB622285E9CB1</hash>
+      </hashes>
       <licenses>
         <license>
           <id>Apache-2.0</id>
@@ -436,6 +493,9 @@ When using NuGet 3.x this package requires at least version 3.4.</description>
       <description>Internal implementation package not meant for direct consumption.  Please do not reference directly. 
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">299C5A96FFFDCAF1972E3E3D1C727837D18AC9E88CB79C09914F12FF1DE7280DFF10C9232A49A1C1D3BA7785A5CF76F28C9DCE414F0A2A567688DE7FD5331DC8</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -468,6 +528,9 @@ System.Collections.Generic.SortedDictionary&lt;TKey, TValue&gt;
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">CA7B952D30DA1487CA4E43AA522817B5EE26E7E10537062810112FC67A7512766C39D402F394BB0426D1108BBCF9BBB64E9CE1F5AF736EF215A51A35E55F051B</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -500,6 +563,9 @@ System.Diagnostics.DebuggerTypeProxyAttribute
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6C58FE1E3618E7F87684C1CEA7EFC7D3B19BD7DF8D2535F9E27B62C52F441F11B67B21225D6BCD62F409E02C2A16231C4DB19BE33B8FAB5B9B0A5C8660DDAB24</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -527,6 +593,9 @@ System.Diagnostics.ProcessThread
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">805BC86A25B1B77DC49F7A14564CD2614CCAA0E9BC69B57C21B339DC73CE7CB6412C3F7245D0F1BEA46284AFF5C92464169E4D6485DDE1C616B18D326E7BC036</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -560,6 +629,9 @@ System.Runtime.CompilerServices.ConditionalWeakTable&lt;TKey, TValue&gt;
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">54446FEE94F432CB8FD38EC10C929A87B307A76F152A2E9DA11BA99C41CEB0F65913CF218944990F0E122D4F858945091E9806C84C0285ADA1FCC939337D30EA</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -592,6 +664,9 @@ System.Globalization.UnicodeCategory
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">823D2BA308CB073B40A3146ECCCD0D9FD7B1615AC3FBEFB16F73D873E411FD81C3BDC87DF206D3DC7E2F14C9CD53AAFCA684A3570C25471280AADA8DE805ECE2</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -623,6 +698,9 @@ System.IO.TextReader
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">BFCA5A21E3E1986B9765B13DC6FBCD6F8B89E4C1383855D1D7EF256BF1BF2F51889769DB5365859DD7606FBF6454ADD4DAEB3BAB56994FFB98FD1D03FE8BC1E6</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -654,6 +732,9 @@ System.IO.FileOptions
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">4FB581D6F85B9529A091A0E974633752AA39E50B2BE6C8A9E5ECA8C2BC225CEA07064CCEC7778F77DF9987DEEBF4DCCEC050B1A97EDAC0EE9107142E6A8EE7EE</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -684,6 +765,9 @@ System.IO.FileAttributes
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">5885953D09582CFFD973D23A21A929064D72F2BC9518AF3732D671FFFCC628A8B686F1D058A001EE6A114023B3E48B3FC0D0E4B22629A1C7F715E03795EE9EE5</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -712,6 +796,9 @@ System.Linq.Lookup&lt;TKey, TElement&gt;
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">EACC7FE1EC526F405F5BA0E671F616D0E5BE9C1828D543A9E2F8C65DF4099D6B2EA4A9FA2CDAE4F34B170DC37142F60E267E137CA39F350281ED70D2DC620458</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -740,6 +827,9 @@ System.Linq.Expressions.ExpressionVisitor
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">61B90EF9AE6F779FBC8A7B6483EE8F5449CDD05C81B05235F70447E656A73B2AAB7C341784B999F7532374744A72E2C3A5CD13800EA23417FAC32CCFAE5CDE6D</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -773,6 +863,9 @@ System.Collections.ObjectModel.ReadOnlyDictionary&lt;TKey, TValue&gt;
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">409BCA3D2139BD1D003C711400BA2DB5E576BB54D593AA541EC3576E7B2029B60159AB1C5B2C4E7389267B1B95EBCD8C2F064DC6E1F53E693AACB1737F066123</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -805,6 +898,9 @@ System.Reflection.Module
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">2325B67ED60DCE0302807064F25422CBE1B7FB275B539B44FBA3C4A8CE4926F21D78529A5C34B31C03D80D110F7BACE9AF9589D457266BEAC014220057AF8333</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -838,6 +934,9 @@ System.Reflection.Emit.EventBuilder
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">BE45051467A36AB965410F112A475FB81510A5595347D1CC0C46B028E0436A339218DD3C073F048C2D338B67DC13B45742290B6C46F55982503F74A8F2698818</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -867,6 +966,9 @@ System.Reflection.Emit.SignatureHelper
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">E9BE5F62BF64B1947A49857337306A5D0980686B58D665989E94006AB04AA7E0BBF4D8543D1B57D5BB38079052F275F339B73054A7357E4FA357208A0AC85D69</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -891,6 +993,9 @@ System.Reflection.Emit.DynamicMethod
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">AD58AF07296BD084907A089F92026FA3898B764EB9D6A07C9414B550A83AC60456F32A34127C29BB93A9633FB07BA9FD828F7B41A31DCE5FF019A7CF1AB29435</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -917,6 +1022,9 @@ System.Reflection.RuntimeReflectionExtensions
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">06CFD992C8D7FD9AB6432AB02BE981A01B6558285A6E26A7825A064D4EFCCE08D9E7344F03FA19B033A2459D42B0B80E8C1400CE39B47A1752869AB8825B0475</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -950,6 +1058,9 @@ System.Reflection.MethodImplAttributes
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">D4B9CC905F5A5CAB900206338E889068BF66C18EE863A29D68EFF3CDE2CCCA734112A2A851F2E2E5388A21EC28005FA19317C64D9B23923B05D6344BE2E49EAA</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -975,6 +1086,9 @@ System.Reflection.BindingFlags
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">68AE81A635B9AF2AEE9FC8FC8FE7DA0356EF4DA4EB32F81A89FB75613B96714E8F1A1F4C12BD0D335EFBB03408CC7A744314837F13564D5FB262CA272055677F</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1002,6 +1116,9 @@ System.Resources.MissingManifestResourceException
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">9067DB28F1C48D08FC52AD40A608F88C14AD9112646741DDAF426FDFE68BED61AB01954B179461E61D187371600C1E6E5C36C788993F5A105A64F5702A6B81D4</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1045,6 +1162,9 @@ System.Uri
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">92AB2249F08073CFAFDC4CFBD7DB36D651AD871B8D8BA961006982187DE374BF4A30AF93F15F73B05AF343F7A70CBD484B04D646570587636AE72171EB0714FB</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1077,6 +1197,9 @@ System.IO.Path
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">680A32B19C2BD5026F8687AA5382AEA4F432B4F032F8BDE299FACB618C56D57369ADEF7F7CC8E60AD82AE3C12E5DD50772491363BF8044C778778628A6605BBC</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1105,6 +1228,9 @@ System.IO.HandleInheritability
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">0A5BAF1DD554BF9E01BCB4CE082CB26EE82B783364FEB47CBA730FAEECD70EDC528EFAD0394DCCE11F37D7F9507F8608F15629EBAF051906BFD3513E46AF0F11</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1133,6 +1259,9 @@ System.Runtime.InteropServices.DllImportAttribute
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">650799C3E654EFBB9AD67157C9C60CE46F288A81597BE37CE2A0BF5D4835044065EF3F65B997328CBBBBFB81F4C89B8D7E7D61380880019DEEE6EB3F963F70D9</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1168,6 +1297,9 @@ System.Security.Cryptography.CryptoStreamMode
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">5AD8273F998EBB9CCA2F7BD03143D3F6D57B5D560657B26D6F4E78D038010FB30C379A23A27C08730F15C9B66F4BA565A06984EC246DFC79ACF1A741B0DD4347</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1193,6 +1325,9 @@ System.Security.Cryptography.ProtectedData
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">48A062992F88839AFAC96BE5DB69FA8B9AC363449FF7B84D9DCE508E63470DE8229E69B683B470731E12D091B6BB75E41E2F8E0F2821A19913092F7769F4DECB</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1226,6 +1361,9 @@ System.Text.DecoderExceptionFallback
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">6FF7FEEC7313A7121F795EC7D376E4B8728C17294219FAFDFD4EA078F9DF1455B4685F0B3962C3810098E95D68594A8392C0B799D36EC8284CD6FCBD4CFE2C67</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1254,6 +1392,9 @@ System.Text.UTF32Encoding
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">E648C5DC781E35CF00C5CC8E7E42E815B963CF8FB788E8A817F9B53E318B2B42E2F7A556E9C3C64BF2F6A2FD4615F26AB4F0D4EB713A0151E71E0AF3FE9C3EED</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1285,6 +1426,9 @@ System.Threading.Mutex
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">97A2751BDCE69FAAF9C54F834A9FD5C60C7A786FAA52F420769828DBC9B5804C1F3721BA1EA945EA1D844835D909810F9E782C9A44D0FAAECCCB230C4CD95A88</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1314,6 +1458,9 @@ System.AggregateException
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">7D488FF82CB20A3B3CEF6380F2DAE5EA9F7BAA66BF75AD711AADE1E3301B25993CCF2694E33C847EA5B9BDB90FF34C46FCD8A6BA7D6F95605BA0C124ED7C5D13</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1340,6 +1487,9 @@ System.Threading.ParameterizedThreadStart
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">CFE12B6A60E79E2F7FCA779A511153D5B0DCAE59EA1B11606F6327DBF8B3C565E2551E8ECADA558E62DD3B684B5C9D676575025048EDFBD3988FAF7F7235A5FE</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>
@@ -1365,6 +1515,9 @@ System.Threading.WaitOrTimerCallback
  
 When using NuGet 3.x this package requires at least version 3.4.</description>
       <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">450A40F94A48E9396979E764E494AD624D8333F3378B91EA69B23FC836DF8F5C43BBD6C8CFD91DA2AB95A476E1FF042338968E09B720447F2241C014BFC75159</hash>
+      </hashes>
       <licenses>
         <license>
           <url>http://go.microsoft.com/fwlink/?LinkId=329770</url>

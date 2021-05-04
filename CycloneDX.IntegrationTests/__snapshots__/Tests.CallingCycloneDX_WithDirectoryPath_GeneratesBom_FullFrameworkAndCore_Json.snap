@@ -18,6 +18,12 @@
       "name": "Newtonsoft.Json",
       "version": "9.0.1",
       "description": "Json.NET is a popular high-performance JSON framework for .NET",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "DA8917A5347051C8106F4EA9BADE4BC300A3B60A05A3BE3390F92C8DCBCEA67223C7B4DA8065B9228042000E25B99C75FAD7E2221A0DAA8888ED8EF3C161B228"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -39,6 +45,12 @@
       "name": "NuGet.Common",
       "version": "5.2.0",
       "description": "NuGet client library.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "35132826145CA3F922D3BEDB6E739F83A5D5BF420225C3118A3EF1DF2E788174125D54B8C567BDDB1EA301EA9693F89D047DB1BDAFB643AC7715FD49F5E21ACF"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -65,6 +77,12 @@
       "name": "NuGet.Configuration",
       "version": "5.2.0",
       "description": "NuGet\u0027s client configuration settings implementation.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3FCB6A18B86556D81E8419A158F4BC0C8E8623EAC4BBCDC3CE17E4D88687D060938827D997E8D4BDF32766EC33D21F69D41F95258B8CDCA17A4F1B339A15A89B"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -91,6 +109,12 @@
       "name": "NuGet.DependencyResolver.Core",
       "version": "5.2.0",
       "description": "NuGet client library.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "9C39C53305E1FAF7C9B9A95DB247F05655DCD4E4CDF5C5C564BD28407B114D67C4603E571B981D1EAC989750B3C32FAF199F05AEAAD06C7AFAFB1C18B071D600"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -117,6 +141,12 @@
       "name": "NuGet.Frameworks",
       "version": "5.2.0",
       "description": "The understanding of target frameworks for NuGet.Packaging.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2ACBA3C3E6D1257968FCCB6E218776455ADE3C626E2829512310DDC1BEE8C142A3C9EF681BF793A1F6A158014FE4A5A7AE9278A55E560C4C8545343D7A2B7028"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -143,6 +173,12 @@
       "name": "NuGet.LibraryModel",
       "version": "5.2.0",
       "description": "NuGet client library.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2411D6BB82FFF5AA619C50B2978771934F6F1F1D39EDC9B87841050A76C0EAB61D84ADE46AC5B9C65F32F7654E283A92BDC685F8E8EF708B98A50F8591D19AD4"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -169,6 +205,12 @@
       "name": "NuGet.Packaging",
       "version": "5.2.0",
       "description": "NuGet\u0027s implementation for reading nupkg package and nuspec package specification files.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "A1C67FF4A8C02B8A548643A1EC3451CB77BBF9150407901190F39BB5E7A9D9D6C4F3BD44C0C161A115777AB09A9689D9708BC6E3BFFF3E2071BA55916EE6CF3D"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -195,6 +237,12 @@
       "name": "NuGet.ProjectModel",
       "version": "5.2.0",
       "description": "NuGet client library.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "E46FC853BAE913D57D00FA8B47DAC0485F9A4BE82AB312054542964777B68A4EC5B38317F357C329B2BD48458C47C6741032415EBAFF27B40CD87772444A4B57"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -221,6 +269,12 @@
       "name": "NuGet.Protocol",
       "version": "5.2.0",
       "description": "NuGet client library.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "B00781F9220093400F47FA077CBC5E3706CA917826CC47CE671B2990DC98FC2173DDB45E8D890B73BCFC4B07E9A628B1DBD35072E3FC7F36525C0CE28FC75679"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -247,6 +301,12 @@
       "name": "NuGet.Versioning",
       "version": "5.2.0",
       "description": "NuGet\u0027s implementation of Semantic Versioning.",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "FAE603B3C59407F57E53C711E261B0F677083303745241F8B453D7FFE90A5C6D5E8F05D86AAFD5D6DEBE5E67BC43FF1DE0A431C38CDDF6F78F980F4C986258BE"
+        }
+      ],
       "licenses": [
         {
           "license": {

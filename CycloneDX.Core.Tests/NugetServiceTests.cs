@@ -19,7 +19,10 @@ using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using CycloneDX.Models.v1_2;
 using Xunit;
 using Moq;
 using RichardSzalay.MockHttp;
@@ -80,6 +83,69 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task GetComponent_FromCachedNugetHashFile_ReturnsComponentWithHash()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                </metadata>
+                </package>";
+            byte[] sampleHash = new byte[]{1,2,3,4,5,6,78,125,200};
+
+            var nugetHashFileContents = Convert.ToBase64String(sampleHash);
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.1.0.0.nupkg.sha512"), new MockFileData(nugetHashFileContents) },
+            });
+            var nugetService = new NugetService(
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                new Mock<IGithubService>().Object,
+                new HttpClient());
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", "required").ConfigureAwait(false);
+
+            Assert.Equal(Hash.HashAlgorithm.SHA_512, component.Hashes[0].Alg);
+            Assert.Equal(BitConverter.ToString(sampleHash).Replace("-", string.Empty), component.Hashes[0].Content);
+        }
+
+        [Fact]
+        public async Task GetComponent_FromCachedNugetFile_ReturnsComponentWithHash()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                </metadata>
+                </package>";
+
+            var nugetFileContent = "FooBarBaz";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.1.0.0.nupkg"), new MockFileData(nugetFileContent) },
+            });
+            var nugetService = new NugetService(
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                new Mock<IGithubService>().Object,
+                new HttpClient());
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", "required").ConfigureAwait(false);
+
+            byte[] hashBytes;
+            using (SHA512 sha = new SHA512Managed())
+            {
+                hashBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(nugetFileContent));
+            }
+
+            Assert.Equal(Hash.HashAlgorithm.SHA_512, component.Hashes[0].Alg);
+            Assert.Equal(BitConverter.ToString(hashBytes).Replace("-", string.Empty), component.Hashes[0].Content);
+        }
+
+        [Fact]
         public async Task GetComponent_FromNugetOrg_ReturnsComponent()
         {
             var mockResponseContent = @"<?xml version=""1.0"" encoding=""utf-8""?>
@@ -101,6 +167,42 @@ namespace CycloneDX.Tests
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", "required").ConfigureAwait(false);
             
             Assert.Equal("testpackage", component.Name);
+        }
+
+        [Fact]
+        public async Task GetComponent_FromNugetOrg_ReturnsComponentWithHash()
+        {
+            var mockNuspecResponseContent = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <name>testpackage</name>
+                </metadata>
+                </package>";
+            var mockNugetResponseContent = @"123464dfdgfgr87rgDSGSGGDgdg4s58g6f7g5d;';243'2;446";
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.nuget.org/v3-flatcontainer/testpackage/1.0.0/testpackage.nuspec")
+                .Respond("application/xml", mockNuspecResponseContent);
+            mockHttp.When("https://api.nuget.org/v3-flatcontainer/testpackage/1.0.0/testpackage.1.0.0.nupkg")
+                .Respond("application/xml", mockNugetResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var nugetService = new NugetService(
+                new MockFileSystem(),
+                new List<string>(),
+                new Mock<IGithubService>().Object,
+                client);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", "required").ConfigureAwait(false);
+
+
+            byte[] hashBytes;
+            using (SHA512 sha = new SHA512Managed())
+            {
+                hashBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(mockNugetResponseContent));
+            }
+
+            Assert.Equal("testpackage", component.Name);
+            Assert.Equal(Hash.HashAlgorithm.SHA_512, component.Hashes[0].Alg);
+            Assert.Equal(BitConverter.ToString(hashBytes).Replace("-", string.Empty), component.Hashes[0].Content);
         }
 
         [Fact]

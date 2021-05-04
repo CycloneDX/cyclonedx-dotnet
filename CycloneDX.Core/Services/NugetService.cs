@@ -17,8 +17,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.IO.Abstractions;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using NuGet.Packaging.Licenses;
 using NuspecReader = NuGet.Packaging.NuspecReader;
@@ -41,6 +43,10 @@ namespace CycloneDX.Services
         private IGithubService _githubService;
         private IFileSystem _fileSystem;
         private List<string> _packageCachePaths;
+        private const string _nuspecExtension = ".nuspec";
+        private const string _nupkgExtension = ".nupkg";
+        private const string _sha512Extension = ".nupkg.sha512";
+
 
         public NugetService(
             IFileSystem fileSystem,
@@ -66,7 +72,7 @@ namespace CycloneDX.Services
             foreach (var packageCachePath in _packageCachePaths)
             {
                 var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, version);
-                var currentFilename = _fileSystem.Path.Combine(currentDirectory, lowerName + ".nuspec");
+                var currentFilename = _fileSystem.Path.Combine(currentDirectory, lowerName + _nuspecExtension);
                 if (_fileSystem.File.Exists(currentFilename))
                 {
                     nuspecFilename = currentFilename;
@@ -75,6 +81,14 @@ namespace CycloneDX.Services
             }
 
             return nuspecFilename;
+        }
+
+        private static byte[] ComputeSha215Hash(Stream stream)
+        {
+            using (SHA512 sha = new SHA512Managed())
+            {
+                return sha.ComputeHash(stream);
+            }
         }
 
         /// <summary>
@@ -101,21 +115,64 @@ namespace CycloneDX.Services
             var nuspecFilename = GetCachedNuspecFilename(name, version);
 
             NuspecReader nuspecReader = null;
+            byte[] hashBytes = null;
 
             if (nuspecFilename == null)
             {
-                var url = _baseUrl + name + "/" + version + "/" + name + ".nuspec";
-                using (var xmlStream = await _httpClient.GetXmlStreamAsync(url).ConfigureAwait(false))
+                var nugetUrlPrefix = _baseUrl + name + "/" + version + "/" + name;
+                var nuspecUrl = nugetUrlPrefix + _nuspecExtension;
+                var nupkgUrl = nugetUrlPrefix + "." + version + _nupkgExtension;
+                using (var xmlStream = await _httpClient.GetStreamWithStatusCheckAsync(nuspecUrl).ConfigureAwait(false))
                 {
                     if (xmlStream != null) nuspecReader = new NuspecReader(xmlStream);
+                }
+
+                using (var stream = await _httpClient.GetStreamWithStatusCheckAsync(nupkgUrl).ConfigureAwait(false))
+                {
+                    if (stream != null) hashBytes = ComputeSha215Hash(stream);
                 }
             }
             else
             {
-                using (var xmlStream = _fileSystem.File.Open(nuspecFilename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                using (var xmlStream = _fileSystem.File.OpenRead(nuspecFilename))
                 {
                     nuspecReader = new NuspecReader(xmlStream);
                 }
+
+                // reference: https://docs.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-add
+                // and: https://github.com/NuGet/Home/wiki/Nupkg-Metadata-File
+                //  └─<packageID>
+                //   └─<version>
+                //    ├─<packageID>.<version>.nupkg
+                //    ├─<packageID>.<version>.nupkg.sha512
+                //    └─<packageID>.nuspec
+
+                string shaFilename = Path.ChangeExtension(nuspecFilename, version + _sha512Extension);
+                string nupkgFilename = Path.ChangeExtension(nuspecFilename, version + _nupkgExtension);
+
+                if (_fileSystem.File.Exists(shaFilename))
+                {
+                    string base64Hash = _fileSystem.File.ReadAllText(shaFilename);
+                    hashBytes = Convert.FromBase64String(base64Hash);
+                }
+                else if (_fileSystem.File.Exists(nupkgFilename))
+                {
+                    using (var nupkgStream = _fileSystem.File.OpenRead(nupkgFilename))
+                    {
+                        hashBytes = ComputeSha215Hash(nupkgStream);
+                    }
+                }
+            }
+
+            if (hashBytes != null)
+            {
+                var hex = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+                Hash h = new Hash()
+                {
+                    Alg = Hash.HashAlgorithm.SHA_512,
+                    Content = hex
+                };
+                component.Hashes = new List<Hash>() { h };
             }
 
             if (nuspecReader == null) return component;
