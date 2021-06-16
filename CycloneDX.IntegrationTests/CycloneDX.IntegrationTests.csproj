@@ -16,7 +16,7 @@
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
     <PackageReference Include="Snapshooter.Xunit" Version="0.6.2" />
-    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.33" />
+    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.38" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
