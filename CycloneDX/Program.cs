@@ -33,8 +33,11 @@ using System.Reflection;
 namespace CycloneDX {
     [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")]
     class Program {
+        [Option(Description = "Output the tool version and exit", ShortName = "v", LongName = "version")]
+        bool version { get; }
+
         [Argument(0, Name = "path", Description = "The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
-        public string SolutionOrProjectFile { get; set; }
+        string SolutionOrProjectFile { get; set; }
 
         [Option(Description = "The directory to write the BOM", ShortName = "o", LongName = "out")]
         string outputDirectory { get; }
@@ -98,6 +101,12 @@ namespace CycloneDX {
             => await CommandLineApplication.ExecuteAsync<Program>(args).ConfigureAwait(false);
 
         async Task<int> OnExecuteAsync() {
+            if (version)
+            {
+                Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version?.ToString());
+                return 0;
+            }
+            
             Console.WriteLine();
 
             // check parameter values
@@ -286,7 +295,7 @@ namespace CycloneDX {
             return 0;
         }
 
-        static public Bom ReadMetaDataFromFile(Bom bom, string templatePath)
+        public static Bom ReadMetaDataFromFile(Bom bom, string templatePath)
         {
             try
             {
@@ -299,7 +308,7 @@ namespace CycloneDX {
             }
             return bom;
         }
-        static public void AddMetadataTool(Bom bom)
+        public static void AddMetadataTool(Bom bom)
         {
             string toolname = "CycloneDX module for .NET";
 
