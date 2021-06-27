@@ -60,7 +60,7 @@ jobs:
           echo "##[set-output name=package_filename;]$OUTPUT/CycloneDX.$VERSION.nupkg"
           REPO=cyclonedx/cyclonedx-dotnet
           dotnet build --configuration Release
-          dotnet pack CycloneDX/CycloneDX.csproj --configuration Release --version-suffix $VERSION --output $OUTPUT
+          dotnet pack CycloneDX/CycloneDX.csproj --configuration Release /p:Version=$VERSION --output $OUTPUT
           docker build -f Dockerfile --build-arg VERSION=$VERSION -t $REPO:$VERSION -t $REPO:latest .
 
       # We install the newly generated tool as bit of a "smoke test" and to generate an SBOM for the release
