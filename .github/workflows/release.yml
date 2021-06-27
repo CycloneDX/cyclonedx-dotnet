@@ -59,7 +59,7 @@ jobs:
           echo "##[set-output name=package_name;]CycloneDX.$VERSION.nupkg"
           echo "##[set-output name=package_filename;]$OUTPUT/CycloneDX.$VERSION.nupkg"
           REPO=cyclonedx/cyclonedx-dotnet
-          dotnet build --configuration Release
+          dotnet build --configuration Release /p:Version=$VERSION
           dotnet pack CycloneDX/CycloneDX.csproj --configuration Release /p:Version=$VERSION --output $OUTPUT
           docker build -f Dockerfile --build-arg VERSION=$VERSION -t $REPO:$VERSION -t $REPO:latest .
 
