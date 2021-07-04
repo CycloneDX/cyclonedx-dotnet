@@ -21,7 +21,7 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Threading.Tasks;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using Moq;
-using CycloneDX.Core.Models;
+using CycloneDX.Models;
 using CycloneDX.Services;
 using CycloneDX.Models.v1_2;
 using System.IO;

@@ -6,8 +6,6 @@ on: [pull_request, workflow_dispatch]
 jobs:
   # Fail if there are build warnings
   #
-  # As a general code quality check we use FxCop analyzers.
-  #
   # To check for build warnings locally you may need to run a clean build.
   #
   # This can be done by running `dotnet clean` before running `dotnet build`
