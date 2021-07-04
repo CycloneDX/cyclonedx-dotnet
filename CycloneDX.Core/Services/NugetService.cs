@@ -112,6 +112,7 @@ namespace CycloneDX.Services
                 Purl = Core.Utils.GeneratePackageUrl(name, version),
                 Type = Component.ComponentType.Library
             };
+            component.BomRef = component.Purl;
 
             var nuspecFilename = GetCachedNuspecFilename(name, version);
 
