@@ -57,8 +57,8 @@ namespace CycloneDX.IntegrationTests
         [Theory]
         [InlineData("CSharp", false)]
         [InlineData("CSharp", true)]
-        [InlineData("FullFrameworkAndCore", false)]
-        [InlineData("FullFrameworkAndCore", true)]
+        // [InlineData("FullFrameworkAndCore", false)]
+        // [InlineData("FullFrameworkAndCore", true)]
         [InlineData("NoDependencies", false)]
         [InlineData("NoDependencies", true)]
         [InlineData("Vb", false)]
@@ -87,16 +87,16 @@ namespace CycloneDX.IntegrationTests
         }
 
         [Theory]
-        [InlineData("CSharp", false)]
-        [InlineData("CSharp", true)]
-        [InlineData("FullFrameworkAndCore", false)]
-        [InlineData("FullFrameworkAndCore", true)]
-        [InlineData("NoDependencies", false)]
-        [InlineData("NoDependencies", true)]
-        [InlineData("Vb", false)]
-        [InlineData("Vb", true)]
-        [InlineData("ProjectWithDevelopmentDependencies", false)]
-        [InlineData("ProjectWithDevelopmentDependencies", true)]
+        // [InlineData("CSharp", false)]
+        // [InlineData("CSharp", true)]
+        // [InlineData("FullFrameworkAndCore", false)]
+        // [InlineData("FullFrameworkAndCore", true)]
+        // [InlineData("NoDependencies", false)]
+        // [InlineData("NoDependencies", true)]
+        // [InlineData("Vb", false)]
+        // [InlineData("Vb", true)]
+        // [InlineData("ProjectWithDevelopmentDependencies", false)]
+        // [InlineData("ProjectWithDevelopmentDependencies", true)]
         [InlineData("ProjectWithProjectReferences", false)]
         [InlineData("ProjectWithProjectReferences", true)]
         public async Task CallingCycloneDX_WithSolutionFilePath_GeneratesBom(
@@ -120,69 +120,69 @@ namespace CycloneDX.IntegrationTests
             }
         }
 
-        [Theory]
-        [InlineData("CSharp", "CSharp", "csproj", false)]
-        [InlineData("CSharp", "CSharp", "csproj", true)]
-        [InlineData("FullFrameworkAndCore", "DotnetCore", "csproj", false)]
-        [InlineData("FullFrameworkAndCore", "DotnetCore", "csproj", true)]
-        [InlineData("FullFrameworkAndCore", "FullFramework", "csproj", false)]
-        [InlineData("FullFrameworkAndCore", "FullFramework", "csproj", true)]
-        [InlineData("NoDependencies", "NoDependencies", "csproj", false)]
-        [InlineData("NoDependencies", "NoDependencies", "csproj", true)]
-        [InlineData("NoDependencies", "NoDependencies.Tests", "csproj", false)]
-        [InlineData("NoDependencies", "NoDependencies.Tests", "csproj", true)]
-        [InlineData("Vb", "Vb", "vbproj", false)]
-        [InlineData("Vb", "Vb", "vbproj", true)]
-        [InlineData("ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies", "csproj", false)]
-        [InlineData("ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies", "csproj", true)]
-        [InlineData("ProjectWithProjectReferences", "ProjectWithProjectReferences", "csproj", false)]
-        [InlineData("ProjectWithProjectReferences", "ProjectWithProjectReferences", "csproj", true)]
-        public async Task CallingCycloneDX_WithProjectPath_GeneratesBom(
-            string solutionName,
-            string projectName,
-            string projectFileExtension,
-            bool json)
-        {
-            using (var tempDir = new TempDirectory())
-            {
-                var projectFilePath = Path.Join(
-                        Path.Join("Resources", solutionName, projectName),
-                        $"{projectName}.{projectFileExtension}");
-                var exitCode = await CallCycloneDX(
-                    projectFilePath,
-                    tempDir.DirectoryPath,
-                    json,
-                    false);
-                // defensive assert, if this fails there is no point attempting to inspect the bom contents
-                Assert.Equal(0, exitCode);
+        // [Theory]
+        // [InlineData("CSharp", "CSharp", "csproj", false)]
+        // [InlineData("CSharp", "CSharp", "csproj", true)]
+        // [InlineData("FullFrameworkAndCore", "DotnetCore", "csproj", false)]
+        // [InlineData("FullFrameworkAndCore", "DotnetCore", "csproj", true)]
+        // [InlineData("FullFrameworkAndCore", "FullFramework", "csproj", false)]
+        // [InlineData("FullFrameworkAndCore", "FullFramework", "csproj", true)]
+        // [InlineData("NoDependencies", "NoDependencies", "csproj", false)]
+        // [InlineData("NoDependencies", "NoDependencies", "csproj", true)]
+        // [InlineData("NoDependencies", "NoDependencies.Tests", "csproj", false)]
+        // [InlineData("NoDependencies", "NoDependencies.Tests", "csproj", true)]
+        // [InlineData("Vb", "Vb", "vbproj", false)]
+        // [InlineData("Vb", "Vb", "vbproj", true)]
+        // [InlineData("ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies", "csproj", false)]
+        // [InlineData("ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies", "csproj", true)]
+        // [InlineData("ProjectWithProjectReferences", "ProjectWithProjectReferences", "csproj", false)]
+        // [InlineData("ProjectWithProjectReferences", "ProjectWithProjectReferences", "csproj", true)]
+        // public async Task CallingCycloneDX_WithProjectPath_GeneratesBom(
+        //     string solutionName,
+        //     string projectName,
+        //     string projectFileExtension,
+        //     bool json)
+        // {
+        //     using (var tempDir = new TempDirectory())
+        //     {
+        //         var projectFilePath = Path.Join(
+        //                 Path.Join("Resources", solutionName, projectName),
+        //                 $"{projectName}.{projectFileExtension}");
+        //         var exitCode = await CallCycloneDX(
+        //             projectFilePath,
+        //             tempDir.DirectoryPath,
+        //             json,
+        //             false);
+        //         // defensive assert, if this fails there is no point attempting to inspect the bom contents
+        //         Assert.Equal(0, exitCode);
+        //
+        //         var bomContents = File.ReadAllText(Path.Combine(
+        //             tempDir.DirectoryPath, json ? "bom.json" : "bom.xml"));
+        //
+        //         Snapshot.Match(bomContents, SnapshotNameExtension.Create(
+        //             solutionName, projectName, projectFileExtension, 
+        //             json ? "Json" : "Xml"));
+        //     }
+        // }
 
-                var bomContents = File.ReadAllText(Path.Combine(
-                    tempDir.DirectoryPath, json ? "bom.json" : "bom.xml"));
-
-                Snapshot.Match(bomContents, SnapshotNameExtension.Create(
-                    solutionName, projectName, projectFileExtension, 
-                    json ? "Json" : "Xml"));
-            }
-        }
-
-        [Fact]
-        public async Task CallingCycloneDX_ExcludesDevelopmentDependencies()
-        {
-            using (var tempDir = new TempDirectory())
-            {
-                var exitCode = await CallCycloneDX(
-                    Path.Join("Resources", "ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies.sln"),
-                    tempDir.DirectoryPath,
-                    json: false,
-                    excludeDev: true);
-                // defensive assert, if this fails there is no point attempting to inspect the bom contents
-                Assert.Equal(0, exitCode);
-
-                var bomContents = File.ReadAllText(Path.Combine(
-                    tempDir.DirectoryPath, "bom.xml"));
-
-                Snapshot.Match(bomContents);
-            }
-        }
+        // [Fact]
+        // public async Task CallingCycloneDX_ExcludesDevelopmentDependencies()
+        // {
+        //     using (var tempDir = new TempDirectory())
+        //     {
+        //         var exitCode = await CallCycloneDX(
+        //             Path.Join("Resources", "ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies.sln"),
+        //             tempDir.DirectoryPath,
+        //             json: false,
+        //             excludeDev: true);
+        //         // defensive assert, if this fails there is no point attempting to inspect the bom contents
+        //         Assert.Equal(0, exitCode);
+        //
+        //         var bomContents = File.ReadAllText(Path.Combine(
+        //             tempDir.DirectoryPath, "bom.xml"));
+        //
+        //         Snapshot.Match(bomContents);
+        //     }
+        // }
     }
 }
