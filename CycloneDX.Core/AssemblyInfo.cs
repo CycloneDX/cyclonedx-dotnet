@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 // SPDX-License-Identifier: Apache-2.0
-// Copyright (c) Steve Springett. All Rights Reserved.
+// Copyright (c) OWASP Foundation. All Rights Reserved.
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Core.Tests")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings")]

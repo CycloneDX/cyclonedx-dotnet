@@ -29,8 +29,8 @@
   </ItemGroup>-->
 
   <PropertyGroup>
-    <Authors>Steve Springett</Authors>
-    <Copyright>Copyright (c) Steve Springett</Copyright>
+    <Authors>Steve Springett &amp; Patrick Dwyer</Authors>
+    <Copyright>Copyright (c) OWASP Foundation</Copyright>
     <Description>A .NET Core global tool to generate CycloneDX bill-of-material documents for use with Software Composition Analysis (SCA).</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/CycloneDX/cyclonedx-dotnet</PackageProjectUrl>
