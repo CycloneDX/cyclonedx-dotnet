@@ -97,12 +97,13 @@ namespace CycloneDX.Services
                 return new HashSet<NugetPackage>();
             }
 
+            var isTestProject = IsTestProject(projectFilePath);
             var packages = new HashSet<NugetPackage>();
 
             Console.WriteLine();
             Console.WriteLine($"» Analyzing: {projectFilePath}");
 
-            if (excludeTestProjects && IsTestProject(projectFilePath))
+            if (excludeTestProjects && isTestProject)
             {
                 Console.WriteLine($"Skipping: {projectFilePath}");
                 return new HashSet<NugetPackage>();
@@ -118,7 +119,7 @@ namespace CycloneDX.Services
                 {
                   Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
                 }
-                packages.UnionWith(_projectAssetsFileService.GetNugetPackages(assetsFilename));
+                packages.UnionWith(_projectAssetsFileService.GetNugetPackages(assetsFilename, isTestProject));
             }
             else
             {
