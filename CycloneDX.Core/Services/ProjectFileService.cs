@@ -63,7 +63,15 @@ namespace CycloneDX.Services
         public static bool IsTestProject(string projectFilePath)
         {
             XmlDocument xmldoc = new XmlDocument();
-            xmldoc.Load(projectFilePath);
+            try
+            {
+                xmldoc.Load(projectFilePath);
+            }
+            catch(DirectoryNotFoundException /*ex*/)
+            {
+                // can only happen while testing (because it will be checked before this method is called)
+                return false;
+            }
 
             XmlElement elt = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
 
