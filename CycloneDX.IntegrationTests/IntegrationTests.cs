@@ -99,6 +99,10 @@ namespace CycloneDX.IntegrationTests
         [InlineData("ProjectWithDevelopmentDependencies", true)]
         [InlineData("ProjectWithProjectReferences", false)]
         [InlineData("ProjectWithProjectReferences", true)]
+        [InlineData("TestProject", false)]
+        [InlineData("TestProject", true)]
+        [InlineData("ProjectWithTestProject", false)]
+        [InlineData("ProjectWithTestProject", true)]
         public async Task CallingCycloneDX_WithSolutionFilePath_GeneratesBom(
             string solutionName, bool json)
         {
@@ -137,6 +141,8 @@ namespace CycloneDX.IntegrationTests
         [InlineData("ProjectWithDevelopmentDependencies", "ProjectWithDevelopmentDependencies", "csproj", true)]
         [InlineData("ProjectWithProjectReferences", "ProjectWithProjectReferences", "csproj", false)]
         [InlineData("ProjectWithProjectReferences", "ProjectWithProjectReferences", "csproj", true)]
+        [InlineData("TestProject", "TestProject", "csproj", false)]
+        [InlineData("TestProject", "TestProject", "csproj", true)]
         public async Task CallingCycloneDX_WithProjectPath_GeneratesBom(
             string solutionName,
             string projectName,
@@ -183,6 +189,7 @@ namespace CycloneDX.IntegrationTests
 
                 Snapshot.Match(bomContents);
             }
+
         }
     }
 }

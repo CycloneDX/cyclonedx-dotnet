@@ -63,7 +63,15 @@ namespace CycloneDX.Services
         public static bool IsTestProject(string projectFilePath)
         {
             XmlDocument xmldoc = new XmlDocument();
-            xmldoc.Load(projectFilePath);
+            try
+            {
+                xmldoc.Load(projectFilePath);
+            }
+            catch(DirectoryNotFoundException /*ex*/)
+            {
+                // can only happen while testing (because it will be checked before this method is called)
+                return false;
+            }
 
             XmlElement elt = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
 
@@ -97,12 +105,13 @@ namespace CycloneDX.Services
                 return new HashSet<NugetPackage>();
             }
 
+            var isTestProject = IsTestProject(projectFilePath);
             var packages = new HashSet<NugetPackage>();
 
             Console.WriteLine();
             Console.WriteLine($"» Analyzing: {projectFilePath}");
 
-            if (excludeTestProjects && IsTestProject(projectFilePath))
+            if (excludeTestProjects && isTestProject)
             {
                 Console.WriteLine($"Skipping: {projectFilePath}");
                 return new HashSet<NugetPackage>();
@@ -118,7 +127,7 @@ namespace CycloneDX.Services
                 {
                   Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
                 }
-                packages.UnionWith(_projectAssetsFileService.GetNugetPackages(assetsFilename));
+                packages.UnionWith(_projectAssetsFileService.GetNugetPackages(assetsFilename, isTestProject));
             }
             else
             {

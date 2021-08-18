@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO.Abstractions;
+using System.Linq;
 using CycloneDX.Core.Models;
 
 namespace CycloneDX.Services
@@ -105,7 +106,9 @@ namespace CycloneDX.Services
                 Console.WriteLine($"  {projectPaths.Count} project(s) found");
             }
 
-            foreach (var projectFilePath in projectPaths)
+            // Process first all productive projects, then test projects (scope order)
+            var projectQuery = from p in projectPaths orderby ProjectFileService.IsTestProject(p) select p;
+            foreach (var projectFilePath in projectQuery)
             {
                 Console.WriteLine();
                 var projectPackages = await _projectFileService.GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects).ConfigureAwait(false);
