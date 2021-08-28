@@ -32,7 +32,7 @@ namespace CycloneDX.Services
             _fileSystem = fileSystem;
         }
 
-        public HashSet<NugetPackage> GetNugetPackages(string projectAssetsFilePath)
+        public HashSet<NugetPackage> GetNugetPackages(string projectAssetsFilePath, bool isTestProject)
         {
             var packages = new HashSet<NugetPackage>();
 
@@ -55,13 +55,16 @@ namespace CycloneDX.Services
                             };
                             // is this only a development dependency
                             if (
-                                library.CompileTimeAssemblies.Count == 0
-                                && library.ContentFiles.Count == 0
-                                && library.EmbedAssemblies.Count == 0
-                                && library.FrameworkAssemblies.Count == 0
-                                && library.NativeLibraries.Count == 0
-                                && library.ResourceAssemblies.Count == 0
-                                && library.ToolsAssemblies.Count == 0
+                                 (
+                                     library.CompileTimeAssemblies.Count == 0
+                                  && library.ContentFiles.Count == 0
+                                  && library.EmbedAssemblies.Count == 0
+                                  && library.FrameworkAssemblies.Count == 0
+                                  && library.NativeLibraries.Count == 0
+                                  && library.ResourceAssemblies.Count == 0
+                                  && library.ToolsAssemblies.Count == 0
+                                 )
+                                 || isTestProject
                             )
                             {
                                 package.Scope = "excluded";
