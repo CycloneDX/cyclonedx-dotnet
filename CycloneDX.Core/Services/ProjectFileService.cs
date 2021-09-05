@@ -241,8 +241,11 @@ namespace CycloneDX.Services
                 {
                     if (!visitedProjectFiles.Contains(projectReferencePath))
                     {
-                        files.Enqueue(projectReferencePath);
-                        projectReferences.Add(projectReferencePath);
+                        if (Core.Utils.IsSupportedProjectType(projectReferencePath))
+                        {
+                            files.Enqueue(projectReferencePath);
+                            projectReferences.Add(projectReferencePath);
+                        }
                     }
                 }
 
