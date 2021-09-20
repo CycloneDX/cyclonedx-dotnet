@@ -22,7 +22,7 @@ using System.IO.Abstractions;
 using System.Net.Http;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
-using CycloneDX.Models.v1_2;
+using CycloneDX.Models.v1_3;
 using CycloneDX.Models;
 using CycloneDX.Services;
 using System.Reflection;
@@ -301,7 +301,7 @@ namespace CycloneDX {
         {
             try
             {
-                return Xml.Deserializer.Deserialize_v1_2(File.ReadAllText(templatePath));
+                return Xml.Deserializer.Deserialize(File.ReadAllText(templatePath));
             }
             catch (IOException ex)
             {

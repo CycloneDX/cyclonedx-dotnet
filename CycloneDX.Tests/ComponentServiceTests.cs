@@ -21,7 +21,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using CycloneDX.Models;
-using CycloneDX.Models.v1_2;
+using CycloneDX.Models.v1_3;
 using CycloneDX.Services;
 using Moq;
 

@@ -15,7 +15,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
-using CycloneDX.Models.v1_2;
+using CycloneDX.Models.v1_3;
 
 namespace CycloneDX {
     /// <summary>
