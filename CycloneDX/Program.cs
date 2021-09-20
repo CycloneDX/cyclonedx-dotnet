@@ -23,9 +23,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using CycloneDX.Models.v1_2;
-using CycloneDX.Core.Models;
+using CycloneDX.Models;
 using CycloneDX.Services;
-using CycloneDX.Xml;
 using System.Reflection;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
@@ -192,11 +191,11 @@ namespace CycloneDX {
                 {
                     packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects).ConfigureAwait(false);
                 }
-                else if (Core.Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
+                else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
                     packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects).ConfigureAwait(false);
                 }
-                else if (Core.Utils.IsSupportedProjectType(SolutionOrProjectFile))
+                else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
                     packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects).ConfigureAwait(false);
                 }
@@ -227,7 +226,7 @@ namespace CycloneDX {
                 {
                     var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
                     if (component != null
-                        && (component.Scope != "excluded" || !excludeDev)
+                        && (component.Scope != Component.ComponentScope.Excluded || !excludeDev)
                     )
                     {
                         components.Add(component);
@@ -250,7 +249,10 @@ namespace CycloneDX {
             // create the BOM
             Console.WriteLine();
             Console.WriteLine("Creating CycloneDX BOM");
-            var bom = new Bom();
+            var bom = new Bom
+            {
+                Version = 1,
+            };
 
             if (!string.IsNullOrEmpty(importMetadataPath))
             {
@@ -299,7 +301,7 @@ namespace CycloneDX {
         {
             try
             {
-                return XmlBomDeserializer.Deserialize(File.ReadAllText(templatePath));
+                return Xml.Deserializer.Deserialize_v1_2(File.ReadAllText(templatePath));
             }
             catch (IOException ex)
             {
