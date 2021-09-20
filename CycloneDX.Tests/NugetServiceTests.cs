@@ -23,7 +23,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using CycloneDX.Models.v1_2;
+using CycloneDX.Models.v1_3;
 using Xunit;
 using Moq;
 using RichardSzalay.MockHttp;
@@ -240,7 +240,7 @@ namespace CycloneDX.Tests
             var mockGithubService = new Mock<IGithubService>();
             mockGithubService
                 .Setup(service => service.GetLicenseAsync(It.IsAny<string>()))
-                .ReturnsAsync(new Models.v1_2.License
+                .ReturnsAsync(new Models.v1_3.License
                 {
                     Id = "TestLicenseId",
                     Name = "Test License",
