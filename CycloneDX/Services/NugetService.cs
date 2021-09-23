@@ -33,7 +33,7 @@ namespace CycloneDX.Services
 {
     public interface INugetService
     {
-        Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope scope);
+        Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope? scope);
         Task<Component> GetComponentAsync(NugetPackage nugetPackage);
     }
 
@@ -98,7 +98,7 @@ namespace CycloneDX.Services
         /// <param name="name">NuGet package name</param>
         /// <param name="version">Package version</param>
         /// <returns></returns>
-        public async Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope scope)
+        public async Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope? scope)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) return null;
 

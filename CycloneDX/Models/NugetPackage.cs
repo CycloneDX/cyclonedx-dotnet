@@ -27,7 +27,7 @@ namespace CycloneDX.Models
     {
         public string Name { get; set; }
         public string Version { get; set; }
-        public Component.ComponentScope Scope { get; set; }
+        public Component.ComponentScope? Scope { get; set; }
 
         public override bool Equals(object obj)
         {
