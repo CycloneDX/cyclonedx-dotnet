@@ -218,10 +218,12 @@ namespace CycloneDX {
                 return (int)ExitCode.DotnetRestoreFailed;
             }
             
-            // get all the components from the NuGet packages
+            // get all the components and depdency graph from the NuGet packages
             var components = new HashSet<Component>();
+            var dependencies = new List<Dependency>();
             try
             {
+                var bomRefLookup = new Dictionary<string,string>();
                 foreach (var package in packages)
                 {
                     var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
@@ -231,6 +233,24 @@ namespace CycloneDX {
                     {
                         components.Add(component);
                     }
+                    bomRefLookup[component.Name] = component.BomRef;
+                }
+                // now that we have all the bom ref lookups we need to enumerate all the dependencies
+                foreach (var package in packages)
+                {
+                    var packageDepencies = new Dependency
+                    {
+                        Ref = bomRefLookup[package.Name],
+                        Dependencies = new List<Dependency>()
+                    };
+                    foreach (var dep in package.Dependencies)
+                    {
+                        packageDepencies.Dependencies.Add(new Dependency
+                        {
+                            Ref = bomRefLookup[dep]
+                        });
+                    }
+                    dependencies.Add(packageDepencies);
                 }
             }
             catch (InvalidGitHubApiCredentialsException)
@@ -264,7 +284,7 @@ namespace CycloneDX {
                 }
                 else
                 {
-                    bom =  ReadMetaDataFromFile(bom, importMetadataPath);
+                    bom = ReadMetaDataFromFile(bom, importMetadataPath);
                 }
             }
             else
@@ -281,6 +301,8 @@ namespace CycloneDX {
                 else
                     return string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase);
             });
+            bom.Dependencies = dependencies;
+            bom.Dependencies.Sort((x, y) => string.Compare(x.Ref, y.Ref, StringComparison.InvariantCultureIgnoreCase));
 
             var bomContents = BomService.CreateDocument(bom, json);
 

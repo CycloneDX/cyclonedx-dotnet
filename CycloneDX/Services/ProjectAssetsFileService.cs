@@ -53,22 +53,28 @@ namespace CycloneDX.Services
                                 Name = library.Name,
                                 Version = library.Version.ToNormalizedString(),
                                 Scope = Component.ComponentScope.Required,
+                                Dependencies = new HashSet<string>(),
                             };
-                            // is this only a development dependency
+                            // is this a test project dependency or only a development dependency
                             if (
-                                 (
-                                     library.CompileTimeAssemblies.Count == 0
-                                  && library.ContentFiles.Count == 0
-                                  && library.EmbedAssemblies.Count == 0
-                                  && library.FrameworkAssemblies.Count == 0
-                                  && library.NativeLibraries.Count == 0
-                                  && library.ResourceAssemblies.Count == 0
-                                  && library.ToolsAssemblies.Count == 0
-                                 )
-                                 || isTestProject
+                                isTestProject
+                                || (
+                                    library.CompileTimeAssemblies.Count == 0
+                                    && library.ContentFiles.Count == 0
+                                    && library.EmbedAssemblies.Count == 0
+                                    && library.FrameworkAssemblies.Count == 0
+                                    && library.NativeLibraries.Count == 0
+                                    && library.ResourceAssemblies.Count == 0
+                                    && library.ToolsAssemblies.Count == 0
+                                )
                             )
                             {
                                 package.Scope = Component.ComponentScope.Excluded;
+                            }
+                            // include direct dependencies
+                            foreach (var dep in library.Dependencies)
+                            {
+                                package.Dependencies.Add(dep.Id);
                             }
                             packages.Add(package);
                         }
