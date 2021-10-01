@@ -113,6 +113,8 @@ namespace CycloneDX.Services
                 Type = Component.Classification.Library
             };
 
+            component.BomRef = component.Purl;
+
             var nuspecFilename = GetCachedNuspecFilename(name, version);
 
             NuspecReader nuspecReader = null;

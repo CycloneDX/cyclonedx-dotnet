@@ -16,18 +16,19 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using CycloneDX.Models.v1_3;
 
 namespace CycloneDX.Models
 {
-    // This suppression should maybe be revisited when/if a CycloneDX library is published
     [SuppressMessage("Microsoft.Design", "CA1036:OverrideMethodsOnComparableTypes")]
     public class NugetPackage : IComparable
     {
         public string Name { get; set; }
         public string Version { get; set; }
         public Component.ComponentScope? Scope { get; set; }
+        public HashSet<string> Dependencies { get; set; }
 
         public override bool Equals(object obj)
         {
