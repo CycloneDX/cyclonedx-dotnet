@@ -183,29 +183,40 @@ namespace CycloneDX {
 
             // determine what we are analyzing and do the analysis
             var fullSolutionOrProjectFilePath = Program.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
-            var attr = Program.fileSystem.File.GetAttributes(fullSolutionOrProjectFilePath);
+
+            var topLevelComponent = new Component
+            {
+                Name = "unspecified",
+                Version = "0.0.0",
+                Type = Component.Classification.Application,
+            };
 
             try
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
                     packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects).ConfigureAwait(false);
+                    topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
                     packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects).ConfigureAwait(false);
+                    topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
                     packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects).ConfigureAwait(false);
+                    topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {
                     packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
-                } 
-                else if (attr.HasFlag(FileAttributes.Directory))
+                    topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
+                }
+                else if (fileSystem.Directory.Exists(fullSolutionOrProjectFilePath))
                 {
                     packages = await packagesFileService.RecursivelyGetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
+                    topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
                 }
                 else
                 {
@@ -221,6 +232,8 @@ namespace CycloneDX {
             // get all the components and depdency graph from the NuGet packages
             var components = new HashSet<Component>();
             var dependencies = new List<Dependency>();
+            var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
+            var transitiveDepencies = new HashSet<string>();
             try
             {
                 var bomRefLookup = new Dictionary<string,string>();
@@ -245,6 +258,7 @@ namespace CycloneDX {
                     };
                     foreach (var dep in package.Dependencies)
                     {
+                        transitiveDepencies.Add(bomRefLookup[dep]);
                         packageDepencies.Dependencies.Add(new Dependency
                         {
                             Ref = bomRefLookup[dep]
@@ -265,6 +279,14 @@ namespace CycloneDX {
             {
                 return (int)ExitCode.GitHubLicenseResolutionFailed;
             }
+            // now we loop through all the dependencies to check which are direct
+            foreach (var dep in dependencies)
+            {
+                if (!transitiveDepencies.Contains(dep.Ref))
+                {
+                    directDependencies.Dependencies.Add(new Dependency { Ref = dep.Ref });
+                }
+            }
 
             // create the BOM
             Console.WriteLine();
@@ -279,7 +301,6 @@ namespace CycloneDX {
                 if (!File.Exists(importMetadataPath))
                 {
                     Console.Error.WriteLine($"Metadata template '{importMetadataPath}' does not exist.");
-                    //throw new FileNotFoundException($"{importMetadataPath} not found");
                     return (int)ExitCode.InvalidOptions;
                 }
                 else
@@ -287,10 +308,39 @@ namespace CycloneDX {
                     bom = ReadMetaDataFromFile(bom, importMetadataPath);
                 }
             }
+
+            if (bom.Metadata is null)
+            {
+                bom.Metadata = new Metadata
+                {
+                    Component = topLevelComponent
+                };
+            }
+            else if (bom.Metadata.Component is null)
+            {
+                bom.Metadata.Component = topLevelComponent;
+            }
             else
             {
-                bom.Metadata = new Metadata();
+                if (string.IsNullOrEmpty(bom.Metadata.Component.Name))
+                {
+                    bom.Metadata.Component.Name = topLevelComponent.Name;
+                }
+                if (string.IsNullOrEmpty(bom.Metadata.Component.Version))
+                {
+                    bom.Metadata.Component.Version = topLevelComponent.Version;
+                }
+                if (bom.Metadata.Component.Type == Component.Classification.Null)
+                {
+                    bom.Metadata.Component.Type = Component.Classification.Application;
+                }
             }
+
+            if (string.IsNullOrEmpty(bom.Metadata.Component.BomRef))
+            {
+                bom.Metadata.Component.BomRef = $"{bom.Metadata.Component.Name}@{bom.Metadata.Component.Version}";
+            }
+
             AddMetadataTool(bom);
 
             if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
@@ -302,6 +352,8 @@ namespace CycloneDX {
                     return string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase);
             });
             bom.Dependencies = dependencies;
+            directDependencies.Ref = bom.Metadata.Component.BomRef;
+            bom.Dependencies.Add(directDependencies);
             bom.Dependencies.Sort((x, y) => string.Compare(x.Ref, y.Ref, StringComparison.InvariantCultureIgnoreCase));
 
             var bomContents = BomService.CreateDocument(bom, json);
