@@ -250,7 +250,7 @@ namespace CycloneDX {
             var transitiveDepencies = new HashSet<string>();
             try
             {
-                var bomRefLookup = new Dictionary<string,string>();
+                var bomRefLookup = new Dictionary<string, string>();
                 foreach (var package in packages)
                 {
                     var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
@@ -260,22 +260,22 @@ namespace CycloneDX {
                     {
                         components.Add(component);
                     }
-                    bomRefLookup[component.Name] = component.BomRef;
+                    bomRefLookup[component.Name.ToLower()] = component.BomRef;
                 }
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
                 foreach (var package in packages)
                 {
                     var packageDepencies = new Dependency
                     {
-                        Ref = bomRefLookup[package.Name],
+                        Ref = bomRefLookup[package.Name.ToLower()],
                         Dependencies = new List<Dependency>()
                     };
                     foreach (var dep in package.Dependencies)
                     {
-                        transitiveDepencies.Add(bomRefLookup[dep]);
+                        transitiveDepencies.Add(bomRefLookup[dep.ToLower()]);
                         packageDepencies.Dependencies.Add(new Dependency
                         {
-                            Ref = bomRefLookup[dep]
+                            Ref = bomRefLookup[dep.ToLower()]
                         });
                     }
                     dependencies.Add(packageDepencies);
