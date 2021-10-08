@@ -104,7 +104,9 @@ namespace CycloneDX {
         static internal IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
         static internal IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
         static internal ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
-        
+
+        static private HashSet<string> NoDependencies = new HashSet<string>();
+
         public static async Task<int> Main(string[] args)
             => await CommandLineApplication.ExecuteAsync<Program>(args).ConfigureAwait(false);
 
@@ -270,7 +272,7 @@ namespace CycloneDX {
                         Ref = bomRefLookup[package.Name.ToLower()],
                         Dependencies = new List<Dependency>()
                     };
-                    foreach (var dep in package.Dependencies)
+                    foreach (var dep in package.Dependencies ?? NoDependencies)
                     {
                         transitiveDepencies.Add(bomRefLookup[dep.ToLower()]);
                         packageDepencies.Dependencies.Add(new Dependency
