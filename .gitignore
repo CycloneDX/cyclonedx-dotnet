@@ -9,3 +9,8 @@ coverage.cobertura.xml
 */__snapshots__/__mismatch__/
 global.json
 SBOM/
+.bash_history
+.dotnet/
+.local/
+.nuget/
+.opencode-server/

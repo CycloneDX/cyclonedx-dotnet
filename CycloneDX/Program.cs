@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Abstractions;
 using System.Net.Http;
@@ -104,8 +105,6 @@ namespace CycloneDX {
         static internal IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
         static internal IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
         static internal ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
-
-        static private HashSet<string> NoDependencies = new HashSet<string>();
 
         public static async Task<int> Main(string[] args)
             => await CommandLineApplication.ExecuteAsync<Program>(args).ConfigureAwait(false);
@@ -262,23 +261,26 @@ namespace CycloneDX {
                     {
                         components.Add(component);
                     }
-                    bomRefLookup[component.Name.ToLower()] = component.BomRef;
+                    bomRefLookup[component.Name.ToLower(CultureInfo.InvariantCulture)] = component.BomRef;
                 }
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
                 foreach (var package in packages)
                 {
                     var packageDepencies = new Dependency
                     {
-                        Ref = bomRefLookup[package.Name.ToLower()],
+                        Ref = bomRefLookup[package.Name.ToLower(CultureInfo.InvariantCulture)],
                         Dependencies = new List<Dependency>()
                     };
-                    foreach (var dep in package.Dependencies ?? NoDependencies)
+                    if (package.Dependencies != null)
                     {
-                        transitiveDepencies.Add(bomRefLookup[dep.ToLower()]);
-                        packageDepencies.Dependencies.Add(new Dependency
+                        foreach (var dep in package.Dependencies)
                         {
-                            Ref = bomRefLookup[dep.ToLower()]
-                        });
+                            transitiveDepencies.Add(bomRefLookup[dep.ToLower(CultureInfo.InvariantCulture)]);
+                            packageDepencies.Dependencies.Add(new Dependency
+                            {
+                                Ref = bomRefLookup[dep.ToLower(CultureInfo.InvariantCulture)]
+                            });
+                        }
                     }
                     dependencies.Add(packageDepencies);
                 }
