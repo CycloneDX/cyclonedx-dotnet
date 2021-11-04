@@ -29,19 +29,19 @@ namespace CycloneDX.Services
     public class DotnetRestoreException : Exception
     {
         public DotnetRestoreException() : base() {}
-        
+
         public DotnetRestoreException(string message) : base(message) {}
-        
+
         public DotnetRestoreException(string message, Exception innerException) : base(message, innerException) {}
     }
 
     public class ProjectFileService : IProjectFileService
     {
-        private XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings 
+        private XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings
         {
             Async = true
         };
-        
+
         private IFileSystem _fileSystem;
         private IDotnetUtilsService _dotnetUtilsService;
         private IPackagesFileService _packagesFileService;
@@ -91,6 +91,7 @@ namespace CycloneDX.Services
             }
         }
 
+        public bool DisablePackageRestore { get; set; }
 
         /// <summary>
         /// Analyzes a single Project file for NuGet package references.
@@ -117,24 +118,29 @@ namespace CycloneDX.Services
                 return new HashSet<NugetPackage>();
             }
 
-            Console.WriteLine("  Attempting to restore packages");
-            var restoreResult = _dotnetUtilsService.Restore(projectFilePath);
+            if (!DisablePackageRestore) {
+                Console.WriteLine("  Attempting to restore packages");
+                var restoreResult = _dotnetUtilsService.Restore(projectFilePath);
 
-            if (restoreResult.Success)
-            {
-                var assetsFilename = _fileSystem.Path.Combine(GetProjectProperty(projectFilePath, baseIntermediateOutputPath), "project.assets.json");
-                if (!File.Exists(assetsFilename))
+                if (restoreResult.Success)
                 {
-                  Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
+                    Console.WriteLine("  Packages restored");
                 }
-                packages.UnionWith(_projectAssetsFileService.GetNugetPackages(assetsFilename, isTestProject));
+                else
+                {
+                    Console.WriteLine("Dotnet restore failed:");
+                    Console.WriteLine(restoreResult.ErrorMessage);
+                    throw new DotnetRestoreException($"Dotnet restore failed with message: {restoreResult.ErrorMessage}");
+                }
             }
-            else
+
+            var assetsFilename = _fileSystem.Path.Combine(GetProjectProperty(projectFilePath, baseIntermediateOutputPath), "project.assets.json");
+            if (!File.Exists(assetsFilename))
             {
-                Console.WriteLine("Dotnet restore failed:");
-                Console.WriteLine(restoreResult.ErrorMessage);
-                throw new DotnetRestoreException($"Dotnet restore failed with message: {restoreResult.ErrorMessage}");
+                Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
             }
+            packages.UnionWith(_projectAssetsFileService.GetNugetPackages(assetsFilename, isTestProject));
+
 
             // if there are no project file package references look for a packages.config
             if (!packages.Any())
@@ -196,7 +202,7 @@ namespace CycloneDX.Services
                     {
                         if (reader.IsStartElement() && reader.Name == "ProjectReference")
                         {
-                            var relativeProjectReference = 
+                            var relativeProjectReference =
                                 reader["Include"].Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
                             var fullProjectReference = _fileSystem.Path.Combine(projectDirectory, relativeProjectReference);
                             var absoluteProjectReference = _fileSystem.Path.GetFullPath(fullProjectReference);
