@@ -1,10 +1,7 @@
-ARG BASE_IMAGE=gitpod/workspace-full:latest
-ARG USERNAME=gitpod
-
-FROM $BASE_IMAGE
+FROM gitpod/workspace-full-vnc:latest
 
 USER root
-# Install .NET runtime dependencies
+# Install .NET runtime dependencies and some dev tools
 RUN apt-get update \
     && apt-get install -y \
         libc6 \
@@ -14,18 +11,12 @@ RUN apt-get update \
         libssl1.1 \
         libstdc++6 \
         zlib1g \
+        git-gui \
+        meld \
     && rm -rf /var/lib/apt/lists/*
 
-USER $USERNAME
+USER gitpod
 
-# Install .NET SDK
-# Source: https://docs.microsoft.com/dotnet/core/install/linux-scripted-manual#scripted-install
-RUN mkdir -p "$HOME/dotnet" \
-    && wget --output-document="$HOME/dotnet/dotnet-install.sh" https://dot.net/v1/dotnet-install.sh \
-    && chmod +x "$HOME/dotnet/dotnet-install.sh"
-RUN "$HOME/dotnet/dotnet-install.sh" --channel 2.1 --install-dir "$HOME/dotnet"
-RUN "$HOME/dotnet/dotnet-install.sh" --channel 3.1 --install-dir "$HOME/dotnet"
-RUN "$HOME/dotnet/dotnet-install.sh" --channel 5.0 --install-dir "$HOME/dotnet"
-
-ENV DOTNET_ROOT="$HOME/dotnet"
-ENV PATH=$PATH:"$HOME/dotnet"
+ENV DOTNET_ROOT="/workspace/.dotnet"
+ENV PATH=$PATH:$DOTNET_ROOT
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=true
