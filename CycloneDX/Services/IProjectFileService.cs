@@ -23,6 +23,7 @@ namespace CycloneDX.Services
 {
     public interface IProjectFileService
     {
+        bool DisablePackageRestore { get; set; }
         Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects);
         Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects);
         Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);

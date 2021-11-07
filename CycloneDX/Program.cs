@@ -79,6 +79,9 @@ namespace CycloneDX {
         [Option(Description = "Optionally disable GitHub license resolution", ShortName = "dgl", LongName = "disable-github-licenses")]
         bool disableGithubLicenses { get; set; }
 
+        [Option(Description = "Optionally disable package restore", ShortName = "dpr", LongName = "disable-package-restore")]
+        bool disablePackageRestore { get; set; }
+
         [Option(Description = "dotnet command timeout in milliseconds (primarily used for long dotnet restore operations)", ShortName = "dct", LongName = "dotnet-command-timeout")]
         int dotnetCommandTimeout { get; set; } = 300000;
 
@@ -115,7 +118,7 @@ namespace CycloneDX {
                 Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version?.ToString());
                 return 0;
             }
-            
+
             Console.WriteLine();
 
             // check parameter values
@@ -138,6 +141,7 @@ namespace CycloneDX {
             }
 
             dotnetCommandService.TimeoutMilliseconds = dotnetCommandTimeout;
+            projectFileService.DisablePackageRestore = disablePackageRestore;
 
             // retrieve nuget package cache paths
             var packageCachePathsResult = dotnetUtilsService.GetPackageCachePaths();
