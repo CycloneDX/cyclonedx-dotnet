@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine3.12
+FROM mcr.microsoft.com/dotnet/sdk:6.0
 
 ARG VERSION
 COPY ./nupkgs /tmp/nupkgs/
