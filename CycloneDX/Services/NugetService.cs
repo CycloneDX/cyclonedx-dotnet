@@ -44,6 +44,7 @@ namespace CycloneDX.Services
         private IGithubService _githubService;
         private IFileSystem _fileSystem;
         private List<string> _packageCachePaths;
+        private bool _disableHashComputation;
         private const string _nuspecExtension = ".nuspec";
         private const string _nupkgExtension = ".nupkg";
         private const string _sha512Extension = ".nupkg.sha512";
@@ -54,13 +55,15 @@ namespace CycloneDX.Services
             List<string> packageCachePaths,
             IGithubService githubService,
             HttpClient httpClient,
-            string baseUrl = null)
+            string baseUrl = null,
+            bool disableHashComputation = false)
         {
             _fileSystem = fileSystem;
             _packageCachePaths = packageCachePaths;
             _githubService = githubService;
             _httpClient = httpClient;
             _baseUrl = baseUrl == null ? "https://api.nuget.org/v3-flatcontainer/" : baseUrl;
+            _disableHashComputation = disableHashComputation;
         }
 
         internal string GetCachedNuspecFilename(string name, string version)
@@ -130,9 +133,12 @@ namespace CycloneDX.Services
                     if (xmlStream != null) nuspecReader = new NuspecReader(xmlStream);
                 }
 
-                using (var stream = await _httpClient.GetStreamWithStatusCheckAsync(nupkgUrl).ConfigureAwait(false))
+                if (!_disableHashComputation)
                 {
-                    if (stream != null) hashBytes = ComputeSha215Hash(stream);
+                    using (var stream = await _httpClient.GetStreamWithStatusCheckAsync(nupkgUrl).ConfigureAwait(false))
+                    {
+                        if (stream != null) hashBytes = ComputeSha215Hash(stream);
+                    }
                 }
             }
             else
@@ -158,7 +164,7 @@ namespace CycloneDX.Services
                     string base64Hash = _fileSystem.File.ReadAllText(shaFilename);
                     hashBytes = Convert.FromBase64String(base64Hash);
                 }
-                else if (_fileSystem.File.Exists(nupkgFilename))
+                else if (!_disableHashComputation && _fileSystem.File.Exists(nupkgFilename))
                 {
                     using (var nupkgStream = _fileSystem.File.OpenRead(nupkgFilename))
                     {
@@ -229,7 +235,7 @@ namespace CycloneDX.Services
                 if (!string.IsNullOrEmpty(licenseUrl))
                 {
                     Models.v1_3.License license = null;
-                    
+
                     if (_githubService != null)
                     {
                         license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
@@ -242,7 +248,7 @@ namespace CycloneDX.Services
                             Url = licenseUrl
                         };
                     }
-                    
+
                     component.Licenses = new List<LicenseChoice>
                     {
                         new LicenseChoice

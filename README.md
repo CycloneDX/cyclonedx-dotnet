@@ -64,6 +64,7 @@ Options:
   -gbt|--github-bearer-token <GITHUB_BEARER_TOKEN>                       Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions
   -dgl|--disable-github-licenses                                         Optionally disable GitHub license resolution
   -dpr|--disable-package-restore                                         Optionally disable package restore
+  -dhc|--disable-hash-computation                                        Optionally disable hash computation for packages
   -biop|--base-intermediate-output-path <BASE_INTERMEDIATE_OUTPUT_PATH>  Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated.
   -imp|--import-metadata-path <METADATA_TEMPLATE>                        Optionally provide a metadata template which has project specific details
   -?|-h|--help                                                           Show help information
