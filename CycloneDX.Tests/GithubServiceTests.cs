@@ -320,6 +320,27 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task GitLicence_FromRawGithub()
+        {
+            var mockResponseContent = @"{
+                ""license"": {
+                    ""spdx_id"": ""LicenseSpdxId"",
+                    ""name"": ""Test License""
+                }
+            }";
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet/license?ref=master")
+                .Respond("application/json", mockResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var githubService = new GithubService(client);
+
+            var license = await githubService.GetLicenseAsync("https://raw.github.com/CycloneDX/cyclonedx-dotnet/master/LICENSE").ConfigureAwait(false);
+
+            Assert.Equal("LicenseSpdxId", license.Id);
+            Assert.Equal("Test License", license.Name);
+        }
+
+        [Fact]
         public async Task GetLicense_AddsAuthorizationHeader()
         {
             var mockResponseContent = @"{
