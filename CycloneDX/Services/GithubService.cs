@@ -68,7 +68,7 @@ namespace CycloneDX.Services
         private HttpClient _httpClient;
         private List<Regex> _githubRepositoryRegexes = new List<Regex>
         {
-            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/blob\/(?<refSpec>[^\/]+)\/LICENSE(\.((md)|(txt)))?$"),
+            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/LICENSE(\.((md)|(txt)))?$"),
             new Regex(@"^https?\:\/\/raw\.githubusercontent\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/LICENSE(\.((md)|(txt)))?$"),
         };
 
