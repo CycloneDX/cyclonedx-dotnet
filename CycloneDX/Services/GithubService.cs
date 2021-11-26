@@ -68,8 +68,8 @@ namespace CycloneDX.Services
         private HttpClient _httpClient;
         private List<Regex> _githubRepositoryRegexes = new List<Regex>
         {
-            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/LICENSE((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
-            new Regex(@"^https?\:\/\/raw\.githubusercontent\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/LICENSE((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
+            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][Ss][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
+            new Regex(@"^https?\:\/\/raw\.githubusercontent\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][Ss][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
         };
 
         public GithubService(HttpClient httpClient)
