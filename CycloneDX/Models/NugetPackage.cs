@@ -28,7 +28,7 @@ namespace CycloneDX.Models
         public string Name { get; set; }
         public string Version { get; set; }
         public Component.ComponentScope? Scope { get; set; }
-        public HashSet<string> Dependencies { get; set; }
+        public Dictionary<string, string> Dependencies { get; set; } //key: name ~ value: version
 
         public override bool Equals(object obj)
         {
