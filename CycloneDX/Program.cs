@@ -255,7 +255,7 @@ namespace CycloneDX {
             var transitiveDepencies = new HashSet<string>();
             try
             {
-                var bomRefLookup = new Dictionary<string, string>();
+                var bomRefLookup = new Dictionary<(string,string), string>();
                 foreach (var package in packages)
                 {
                     var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
@@ -265,24 +265,24 @@ namespace CycloneDX {
                     {
                         components.Add(component);
                     }
-                    bomRefLookup[component.Name.ToLower(CultureInfo.InvariantCulture)] = component.BomRef;
+                    bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture),(component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
                 }
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
                 foreach (var package in packages)
                 {
                     var packageDepencies = new Dependency
                     {
-                        Ref = bomRefLookup[package.Name.ToLower(CultureInfo.InvariantCulture)],
+                        Ref = bomRefLookup[(package.Name.ToLower(CultureInfo.InvariantCulture), package.Version.ToLower(CultureInfo.InvariantCulture))],
                         Dependencies = new List<Dependency>()
                     };
                     if (package.Dependencies != null)
                     {
                         foreach (var dep in package.Dependencies)
                         {
-                            transitiveDepencies.Add(bomRefLookup[dep.ToLower(CultureInfo.InvariantCulture)]);
+                            transitiveDepencies.Add(bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]);
                             packageDepencies.Dependencies.Add(new Dependency
                             {
-                                Ref = bomRefLookup[dep.ToLower(CultureInfo.InvariantCulture)]
+                                Ref = bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]
                             });
                         }
                     }
