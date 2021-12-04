@@ -171,7 +171,7 @@ namespace CycloneDX.Tests
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
 
-            Assert.Equal(null, component.Hashes);
+            Assert.Null(component.Hashes);
         }
 
         [Fact]
@@ -258,7 +258,7 @@ namespace CycloneDX.Tests
 
 
             Assert.Equal("testpackage", component.Name);
-            Assert.Equal(null, component.Hashes);
+            Assert.Null(component.Hashes);
         }
 
         [Fact]
