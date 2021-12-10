@@ -79,7 +79,7 @@ namespace CycloneDX.Tests
                 new HttpClient());
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
-            
+
             Assert.Equal("testpackage", component.Name);
         }
 
@@ -147,6 +147,34 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task GetComponent_FromCachedNugetFile_DoNotReturnsHash_WhenDisabled()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                </metadata>
+                </package>";
+
+            var nugetFileContent = "FooBarBaz";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.1.0.0.nupkg"), new MockFileData(nugetFileContent) },
+            });
+            var nugetService = new NugetService(
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                new Mock<IGithubService>().Object,
+                new HttpClient(),
+                disableHashComputation: true);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+
+            Assert.Null(component.Hashes);
+        }
+
+        [Fact]
         public async Task GetComponent_FromNugetOrg_ReturnsComponent()
         {
             var mockResponseContent = @"<?xml version=""1.0"" encoding=""utf-8""?>
@@ -166,7 +194,7 @@ namespace CycloneDX.Tests
                 client);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
-            
+
             Assert.Equal("testpackage", component.Name);
         }
 
@@ -207,6 +235,33 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task GetComponent_FromNugetOrg_DoNotReturnsHash_WhenDisabled()
+        {
+            var mockNuspecResponseContent = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <name>testpackage</name>
+                </metadata>
+                </package>";
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.nuget.org/v3-flatcontainer/testpackage/1.0.0/testpackage.nuspec")
+                .Respond("application/xml", mockNuspecResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var nugetService = new NugetService(
+                new MockFileSystem(),
+                new List<string>(),
+                new Mock<IGithubService>().Object,
+                client,
+                disableHashComputation: true);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+
+
+            Assert.Equal("testpackage", component.Name);
+            Assert.Null(component.Hashes);
+        }
+
+        [Fact]
         public async Task GetComponent_FromNugetOrgWhichDoesntExist_ReturnsComponent()
         {
             var mockHttp = new MockHttpMessageHandler();
@@ -220,7 +275,7 @@ namespace CycloneDX.Tests
                 client);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
-            
+
             Assert.Equal("testpackage", component.Name);
         }
 
@@ -254,7 +309,7 @@ namespace CycloneDX.Tests
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3", Component.ComponentScope.Required).ConfigureAwait(false);
 
-            Assert.Collection(component.Licenses, 
+            Assert.Collection(component.Licenses,
                 item => {
                     Assert.Equal("TestLicenseId", item.License.Id);
                     Assert.Equal("Test License", item.License.Name);
@@ -283,7 +338,7 @@ namespace CycloneDX.Tests
 
             var component = await nugetService.GetComponentAsync("PackageName", "1.2.3", Component.ComponentScope.Required).ConfigureAwait(false);
 
-            Assert.Collection(component.Licenses, 
+            Assert.Collection(component.Licenses,
                 item => {
                     Assert.Null(item.License.Id);
                     Assert.Null(item.License.Name);

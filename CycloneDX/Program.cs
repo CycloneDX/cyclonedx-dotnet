@@ -82,6 +82,9 @@ namespace CycloneDX {
         [Option(Description = "Optionally disable package restore", ShortName = "dpr", LongName = "disable-package-restore")]
         bool disablePackageRestore { get; set; }
 
+        [Option(Description = "Optionally disable hash computation for packages", ShortName = "dhc", LongName = "disable-hash-computation")]
+        bool disableHashComputation { get; set; }
+
         [Option(Description = "dotnet command timeout in milliseconds (primarily used for long dotnet restore operations)", ShortName = "dct", LongName = "dotnet-command-timeout")]
         int dotnetCommandTimeout { get; set; } = 300000;
 
@@ -191,7 +194,8 @@ namespace CycloneDX {
                 packageCachePathsResult.Result,
                 githubService,
                 Program.httpClient,
-                baseUrl);
+                baseUrl,
+                disableHashComputation);
 
             var packages = new HashSet<NugetPackage>();
 
