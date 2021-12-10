@@ -53,7 +53,7 @@ namespace CycloneDX.Services
                                 Name = library.Name,
                                 Version = library.Version.ToNormalizedString(),
                                 Scope = Component.ComponentScope.Required,
-                                Dependencies = new HashSet<string>(),
+                                Dependencies = new Dictionary<string, string>(),
                             };
                             // is this a test project dependency or only a development dependency
                             if (
@@ -74,7 +74,8 @@ namespace CycloneDX.Services
                             // include direct dependencies
                             foreach (var dep in library.Dependencies)
                             {
-                                package.Dependencies.Add(dep.Id);
+                                //Get the version from the nuget package as described here: https://github.com/NuGet/NuGet.Client/blob/ad81306fe7ada265cf44afb2a60a31fbfca978a2/src/NuGet.Core/NuGet.ProjectModel/JsonUtility.cs#L54
+                                package.Dependencies.Add(dep.Id, dep.VersionRange?.ToLegacyShortString());
                             }
                             packages.Add(package);
                         }
