@@ -231,6 +231,11 @@ namespace CycloneDX {
                     packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
                 }
+                else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("project.assets.json", StringComparison.OrdinalIgnoreCase))
+                {
+                    packages = projectAssetsFileService.GetNugetPackages(fullSolutionOrProjectFilePath, false);
+                    topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
+                }
                 else if (fileSystem.Directory.Exists(fullSolutionOrProjectFilePath))
                 {
                     packages = await packagesFileService.RecursivelyGetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
@@ -281,13 +286,14 @@ namespace CycloneDX {
                     };
                     if (package.Dependencies != null)
                     {
-                        foreach (var dep in package.Dependencies)
+                        foreach (var (key, value) in package.Dependencies)
                         {
-                            transitiveDepencies.Add(bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]);
-                            packageDepencies.Dependencies.Add(new Dependency
-                            {
-                                Ref = bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]
-                            });
+                            var component = await nugetService
+                                .GetComponentAsync(new NugetPackage { Name = key, Version = value })
+                                .ConfigureAwait(false);
+
+                            transitiveDepencies.Add(component.BomRef);
+                            packageDepencies.Dependencies.Add(new Dependency { Ref = component.BomRef });
                         }
                     }
                     dependencies.Add(packageDepencies);
