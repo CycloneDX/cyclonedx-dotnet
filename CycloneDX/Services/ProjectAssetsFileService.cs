@@ -21,6 +21,9 @@ using System.IO.Abstractions;
 using AssetFileReader = NuGet.ProjectModel.LockFileFormat;
 using CycloneDX.Models;
 using CycloneDX.Models.v1_3;
+using System.Linq;
+using NuGet.Versioning;
+using System.Globalization;
 
 namespace CycloneDX.Services
 {
@@ -32,7 +35,6 @@ namespace CycloneDX.Services
         {
             _fileSystem = fileSystem;
         }
-
         public HashSet<NugetPackage> GetNugetPackages(string projectAssetsFilePath, bool isTestProject)
         {
             var packages = new HashSet<NugetPackage>();
@@ -44,46 +46,76 @@ namespace CycloneDX.Services
 
                 foreach (var targetRuntime in assetsFile.Targets)
                 {
-                    foreach (var library in targetRuntime.Libraries)
+                    var runtimePackages = new HashSet<NugetPackage>();
+                    foreach (var library in targetRuntime.Libraries.Where(lib => lib.Type != "project"))
                     {
-                        if (library.Type != "project")
+                        var package = new NugetPackage
                         {
-                            var package = new NugetPackage
-                            {
-                                Name = library.Name,
-                                Version = library.Version.ToNormalizedString(),
-                                Scope = Component.ComponentScope.Required,
-                                Dependencies = new Dictionary<string, string>(),
-                            };
-                            // is this a test project dependency or only a development dependency
-                            if (
-                                isTestProject
-                                || (
-                                    library.CompileTimeAssemblies.Count == 0
-                                    && library.ContentFiles.Count == 0
-                                    && library.EmbedAssemblies.Count == 0
-                                    && library.FrameworkAssemblies.Count == 0
-                                    && library.NativeLibraries.Count == 0
-                                    && library.ResourceAssemblies.Count == 0
-                                    && library.ToolsAssemblies.Count == 0
-                                )
+                            Name = library.Name,
+                            Version = library.Version.ToNormalizedString(),
+                            Scope = Component.ComponentScope.Required,
+                            Dependencies = new Dictionary<string, string>(),
+                        };
+                        // is this a test project dependency or only a development dependency
+                        if (
+                            isTestProject
+                            || (
+                                library.CompileTimeAssemblies.Count == 0
+                                && library.ContentFiles.Count == 0
+                                && library.EmbedAssemblies.Count == 0
+                                && library.FrameworkAssemblies.Count == 0
+                                && library.NativeLibraries.Count == 0
+                                && library.ResourceAssemblies.Count == 0
+                                && library.ToolsAssemblies.Count == 0
                             )
-                            {
-                                package.Scope = Component.ComponentScope.Excluded;
-                            }
-                            // include direct dependencies
-                            foreach (var dep in library.Dependencies)
-                            {
-                                //Get the version from the nuget package as described here: https://github.com/NuGet/NuGet.Client/blob/ad81306fe7ada265cf44afb2a60a31fbfca978a2/src/NuGet.Core/NuGet.ProjectModel/JsonUtility.cs#L54
-                                package.Dependencies.Add(dep.Id, dep.VersionRange?.ToLegacyShortString());
-                            }
-                            packages.Add(package);
+                        )
+                        {
+                            package.Scope = Component.ComponentScope.Excluded;
                         }
+                        // include direct dependencies
+                        foreach (var dep in library.Dependencies)
+                        {
+                            //Get the version from the nuget package as described here: https://github.com/NuGet/NuGet.Client/blob/ad81306fe7ada265cf44afb2a60a31fbfca978a2/src/NuGet.Core/NuGet.ProjectModel/JsonUtility.cs#L54
+                            package.Dependencies.Add(dep.Id, dep.VersionRange?.ToNormalizedString());
+                        }
+                        runtimePackages.Add(package);
                     }
+
+                    SolidifyDependecyVersionRanges(runtimePackages);
+
+                    packages.UnionWith(runtimePackages);
                 }
             }
 
             return packages;
+        }
+
+        /// <summary>
+        /// Updates all dependencies with version ranges to the version it was resolved to.
+        /// </summary>
+        private static void SolidifyDependecyVersionRanges(HashSet<NugetPackage> runtimePackages)
+        {
+            var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
+            foreach (var runtimePackage in runtimePackages)
+            {
+                foreach (var dependency in runtimePackage.Dependencies)
+                {
+                    if (!NuGetVersion.TryParse(dependency.Value, out _) && VersionRange.TryParse(dependency.Value, out VersionRange versionRange))
+                    {
+                        var normalizedDependencyKey = dependency.Key.ToLowerInvariant();
+                        var package = runtimePackagesLookup[normalizedDependencyKey].FirstOrDefault(pkg => versionRange.Satisfies(NuGetVersion.Parse(pkg.Version)));
+                        if (package != default)
+                        {
+                            runtimePackage.Dependencies[dependency.Key] = package.Version;
+                        }
+                        else
+                        {
+                            // This should not happen, since all dependencies are resolved to a specific version.
+                            Console.Error.WriteLine($"Dependency ({dependency.Value}) with version range ({dependency.Value}) did not resolve to a specific version.");
+                        }
+                    }
+                }
+            }
         }
     }
 }

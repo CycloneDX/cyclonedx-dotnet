@@ -107,7 +107,6 @@ namespace CycloneDX.Services
             }
 
             var isTestProject = IsTestProject(projectFilePath);
-            var packages = new HashSet<NugetPackage>();
 
             Console.WriteLine();
             Console.WriteLine($"» Analyzing: {projectFilePath}");
@@ -139,7 +138,7 @@ namespace CycloneDX.Services
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
             }
-            packages.UnionWith(_projectAssetsFileService.GetNugetPackages(assetsFilename, isTestProject));
+            var packages = _projectAssetsFileService.GetNugetPackages(assetsFilename, isTestProject);
 
 
             // if there are no project file package references look for a packages.config
