@@ -27,6 +27,7 @@ using CycloneDX.Models.v1_3;
 using CycloneDX.Models;
 using CycloneDX.Services;
 using System.Reflection;
+using System.Linq;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.IntegrationTests")]
@@ -105,8 +106,8 @@ namespace CycloneDX {
 
         static internal IFileSystem fileSystem = new FileSystem();
         static internal HttpClient httpClient = new HttpClient();
-        static internal IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem);
         static internal IDotnetCommandService dotnetCommandService = new DotnetCommandService();
+        static internal IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, dotnetCommandService);
         static internal IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
         static internal IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
         static internal IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
@@ -257,6 +258,7 @@ namespace CycloneDX {
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
             var transitiveDepencies = new HashSet<string>();
+            var packageToComponent = new Dictionary<NugetPackage, Component>();
             try
             {
                 var bomRefLookup = new Dictionary<(string,string), string>();
@@ -267,6 +269,7 @@ namespace CycloneDX {
                         && (component.Scope != Component.ComponentScope.Excluded || !excludeDev)
                     )
                     {
+                        packageToComponent[package] = component;
                         components.Add(component);
                     }
                     bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture),(component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
@@ -305,10 +308,12 @@ namespace CycloneDX {
             {
                 return (int)ExitCode.GitHubLicenseResolutionFailed;
             }
+
+            var directPackageDependencies = packages.Where(p => p.IsDirectReference).Select(p => packageToComponent[p].BomRef).ToHashSet();
             // now we loop through all the dependencies to check which are direct
             foreach (var dep in dependencies)
             {
-                if (!transitiveDepencies.Contains(dep.Ref))
+                if (directPackageDependencies.Contains((dep.Ref)) || !transitiveDepencies.Contains(dep.Ref))
                 {
                     directDependencies.Dependencies.Add(new Dependency { Ref = dep.Ref });
                 }

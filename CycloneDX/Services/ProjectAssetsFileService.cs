@@ -30,12 +30,15 @@ namespace CycloneDX.Services
     public class ProjectAssetsFileService : IProjectAssetsFileService 
     {
         private IFileSystem _fileSystem;
+        private IDotnetCommandService _dotnetCommandService;
 
-        public ProjectAssetsFileService(IFileSystem fileSystem)
+        public ProjectAssetsFileService(IFileSystem fileSystem, IDotnetCommandService dotnetCommandService)
         {
             _fileSystem = fileSystem;
+            _dotnetCommandService = dotnetCommandService;
         }
-        public HashSet<NugetPackage> GetNugetPackages(string projectAssetsFilePath, bool isTestProject)
+
+        public HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool isTestProject)
         {
             var packages = new HashSet<NugetPackage>();
 
@@ -46,6 +49,7 @@ namespace CycloneDX.Services
 
                 foreach (var targetRuntime in assetsFile.Targets)
                 {
+                    var directPackageDependencies = GetDirectPackageDependencies(targetRuntime.Name, projectFilePath);
                     var runtimePackages = new HashSet<NugetPackage>();
                     foreach (var library in targetRuntime.Libraries.Where(lib => lib.Type != "project"))
                     {
@@ -56,6 +60,11 @@ namespace CycloneDX.Services
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
                         };
+                        var topLevelReferenceKey = (package.Name, package.Version);
+                        if (directPackageDependencies.Contains(topLevelReferenceKey))
+                        {
+                            package.IsDirectReference = true;
+                        }
                         // is this a test project dependency or only a development dependency
                         if (
                             isTestProject
@@ -75,13 +84,12 @@ namespace CycloneDX.Services
                         // include direct dependencies
                         foreach (var dep in library.Dependencies)
                         {
-                            //Get the version from the nuget package as described here: https://github.com/NuGet/NuGet.Client/blob/ad81306fe7ada265cf44afb2a60a31fbfca978a2/src/NuGet.Core/NuGet.ProjectModel/JsonUtility.cs#L54
                             package.Dependencies.Add(dep.Id, dep.VersionRange?.ToNormalizedString());
                         }
                         runtimePackages.Add(package);
                     }
 
-                    SolidifyDependecyVersionRanges(runtimePackages);
+                    ResolveDependecyVersionRanges(runtimePackages);
 
                     packages.UnionWith(runtimePackages);
                 }
@@ -90,10 +98,48 @@ namespace CycloneDX.Services
             return packages;
         }
 
+        // Future: Instead of invoking the dotnet CLI to get direct dependencies, once asset file version 3 is available through the Nuget library,
+        //         The direct dependencies could be retrieved from the asset file json path: .project.frameworks.<framework>.dependencies
+        private List<(string, string)> GetDirectPackageDependencies(string targetRuntime, string projectFilePath)
+        {
+            var directPackageDependencies = new List<(string, string)>();
+            var framework = TargetFrameworkToAlias(targetRuntime);
+            var output = _dotnetCommandService.Run($"list \"{projectFilePath}\" package --framework {framework}");
+            var result = output.Success ? output.StdOut : null;
+            if (result != null)
+            {
+                directPackageDependencies = result.Split('\r', '\n').Select(line => line.Trim())
+                    .Where(line => line.StartsWith(">", StringComparison.InvariantCulture))
+                    .Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+                    .Where(parts => parts.Length == 4)
+                    .Select(parts => (parts[1], parts[3]))
+                    .ToList();
+            }
+            return directPackageDependencies;
+        }
+
+        /// <summary>
+        /// Converts an asset file's target framework value into a csproj target framework value.
+        ///
+        /// Examples:
+        ///     .NetStandard,Version=V3.1 => netstandard3.1
+        ///     .NetCoreApp,Version=V3.1  => netcoreapp3.1
+        /// </summary>
+        private string TargetFrameworkToAlias(string target)
+        {
+            target = target.ToLowerInvariant().TrimStart('.');
+            var targetParts = target.Split(",version=v");
+            if (targetParts.Length == 2)
+            {
+                return string.Join("", targetParts);
+            }
+            return null;
+        }
+
         /// <summary>
         /// Updates all dependencies with version ranges to the version it was resolved to.
         /// </summary>
-        private static void SolidifyDependecyVersionRanges(HashSet<NugetPackage> runtimePackages)
+        private static void ResolveDependecyVersionRanges(HashSet<NugetPackage> runtimePackages)
         {
             var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
             foreach (var runtimePackage in runtimePackages)

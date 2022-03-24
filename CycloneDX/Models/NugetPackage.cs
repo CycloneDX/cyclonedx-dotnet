@@ -27,6 +27,7 @@ namespace CycloneDX.Models
     {
         public string Name { get; set; }
         public string Version { get; set; }
+        public bool IsDirectReference { get; set; }
         public Component.ComponentScope? Scope { get; set; }
         public Dictionary<string, string> Dependencies { get; set; } //key: name ~ value: version
 

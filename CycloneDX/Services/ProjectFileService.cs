@@ -138,7 +138,7 @@ namespace CycloneDX.Services
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
             }
-            var packages = _projectAssetsFileService.GetNugetPackages(assetsFilename, isTestProject);
+            var packages = _projectAssetsFileService.GetNugetPackages(projectFilePath, assetsFilename, isTestProject);
 
 
             // if there are no project file package references look for a packages.config

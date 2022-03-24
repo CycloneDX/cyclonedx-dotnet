@@ -67,7 +67,7 @@ namespace CycloneDX.Tests
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
-                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new HashSet<NugetPackage>
                 {
                     new NugetPackage { Name = "Package", Version = "1.2.3" },
@@ -102,7 +102,7 @@ namespace CycloneDX.Tests
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
-                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new HashSet<NugetPackage>
                 {
                     new NugetPackage { Name = "Package", Version = "1.2.3" },
@@ -138,7 +138,7 @@ namespace CycloneDX.Tests
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
-                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new HashSet<NugetPackage>
                 {
                     new NugetPackage { Name = "Package1", Version = "1.2.3" },
@@ -184,7 +184,7 @@ namespace CycloneDX.Tests
                 );
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
-                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new HashSet<NugetPackage>());
             var projectFileService = new ProjectFileService(
                 mockFileSystem,
@@ -226,7 +226,7 @@ namespace CycloneDX.Tests
                 );
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
-                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new HashSet<NugetPackage>());
             var projectFileService = new ProjectFileService(
                 mockFileSystem,
