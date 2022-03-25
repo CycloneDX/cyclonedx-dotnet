@@ -105,16 +105,19 @@ namespace CycloneDX.Services
         {
             var directPackageDependencies = new List<(string, string)>();
             var framework = TargetFrameworkToAlias(targetRuntime);
-            var output = _dotnetCommandService.Run($"list \"{projectFilePath}\" package --framework {framework}");
-            var result = output.Success ? output.StdOut : null;
-            if (result != null)
+            if (framework != null)
             {
-                directPackageDependencies = result.Split('\r', '\n').Select(line => line.Trim())
-                    .Where(line => line.StartsWith(">", StringComparison.InvariantCulture))
-                    .Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-                    .Where(parts => parts.Length == 4)
-                    .Select(parts => (parts[1], parts[3]))
-                    .ToList();
+                var output = _dotnetCommandService.Run($"list \"{projectFilePath}\" package --framework {framework}");
+                var result = output.Success ? output.StdOut : null;
+                if (result != null)
+                {
+                    directPackageDependencies = result.Split('\r', '\n').Select(line => line.Trim())
+                        .Where(line => line.StartsWith(">", StringComparison.InvariantCulture))
+                        .Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+                        .Where(parts => parts.Length == 4)
+                        .Select(parts => (parts[1], parts[3]))
+                        .ToList();
+                }
             }
             return directPackageDependencies;
         }

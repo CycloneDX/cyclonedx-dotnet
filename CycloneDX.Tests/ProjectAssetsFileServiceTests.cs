@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
@@ -136,6 +135,89 @@ namespace CycloneDX.Tests
                     Assert.Equal(@"4.5.1", item.Version);
                     Assert.True(item.IsDirectReference, "Package2 was expected to be a direct reference.");
                     Assert.Empty(item.Dependencies);
+                });
+        }
+
+        [Fact]
+        public void GetNugetPackages_MissingResolvedPackageVersion()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+                {
+                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
+                        new NugetPackage[] {
+                            new NugetPackage()
+                            {
+                                Name = "Package1",
+                                Version = "1.5.0",
+                                Dependencies = new Dictionary<string, string>
+                                {
+                                    { "Package2", "[4.5, )" },
+                                },
+                            }
+                        })
+                    },
+                    { XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), new MockFileData("")
+                    }
+                });
+            var mockDotnetCommandsService = new Mock<IDotnetCommandService>();
+            mockDotnetCommandsService.Setup(m => m.Run(It.IsAny<string>()))
+                .Returns(() => Helpers.GetDotnetListPackagesResult(
+                        new (string, (string, string)[])[]
+                        {
+                            ("Package1", new (string, string)[]{ ("Package1", "1.5.0") }),
+                        }));
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockAssetReader = new Mock<IAssetFileReader>();
+            mockAssetReader
+                .Setup(m => m.Read(It.IsAny<string>()))
+                .Returns(() =>
+                {
+                    return new LockFile()
+                    {
+                        Targets = new[]
+                        {
+                            new LockFileTarget()
+                            {
+                                TargetFramework = new NuGet.Frameworks.NuGetFramework(".NetStandard", new Version(2, 1, 0)),
+                                RuntimeIdentifier = "",
+                                Libraries = new[]
+                                {
+                                    new LockFileTargetLibrary()
+                                    {
+                                        Name = "Package1",
+                                        Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package1.dll")
+                                        },
+                                        Dependencies = new[]
+                                        {
+                                            new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), originalString:"[4.5, )"))
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                });
+
+            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () => mockAssetReader.Object);
+            var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false);
+            var sortedPackages = new List<NugetPackage>(packages);
+            sortedPackages.Sort();
+
+            Assert.Collection(sortedPackages,
+                item =>
+                {
+                    Assert.Equal(@"Package1", item.Name);
+                    Assert.Equal(@"1.5.0", item.Version);
+                    Assert.True(item.IsDirectReference, "Package1 was expected to be a direct reference.");
+                    Assert.Collection(item.Dependencies,
+                        dep =>
+                        {
+                            Assert.Equal(@"Package2", dep.Key);
+                            Assert.Equal(@"[4.5.0, )", dep.Value);
+                        });
                 });
         }
     }
