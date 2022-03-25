@@ -144,7 +144,7 @@ namespace CycloneDX.Services
             var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
             foreach (var runtimePackage in runtimePackages)
             {
-                foreach (var dependency in runtimePackage.Dependencies)
+                foreach (var dependency in runtimePackage.Dependencies.ToList())
                 {
                     if (!NuGetVersion.TryParse(dependency.Value, out _) && VersionRange.TryParse(dependency.Value, out VersionRange versionRange))
                     {
