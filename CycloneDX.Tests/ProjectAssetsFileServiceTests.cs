@@ -61,7 +61,7 @@ namespace CycloneDX.Tests
             var mockDotnetCommandsService = new Mock<IDotnetCommandService>();
             mockDotnetCommandsService.Setup(m => m.Run(It.IsAny<string>()))
                 .Returns(() => Helpers.GetDotnetListPackagesResult(
-                        new (string, (string, string)[])[]
+                        new[]
                         {
                             ("Package1", new[]{ ("Package1", "1.5.0") }),
                             ("Package2", new[]{ ("Package2", "4.5.1") }),
@@ -143,7 +143,7 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
-                        new NugetPackage[] {
+                        new[] {
                             new NugetPackage
                             {
                                 Name = "Package1",
@@ -165,13 +165,12 @@ namespace CycloneDX.Tests
                         {
                             ("Package1", new[]{ ("Package1", "1.5.0") }),
                         }));
-            var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockAssetReader = new Mock<IAssetFileReader>();
             mockAssetReader
                 .Setup(m => m.Read(It.IsAny<string>()))
                 .Returns(() =>
                 {
-                    return new LockFile()
+                    return new LockFile
                     {
                         Targets = new[]
                         {
