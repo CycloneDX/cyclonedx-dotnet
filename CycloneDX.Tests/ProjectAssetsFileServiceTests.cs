@@ -161,7 +161,7 @@ namespace CycloneDX.Tests
             var mockDotnetCommandsService = new Mock<IDotnetCommandService>();
             mockDotnetCommandsService.Setup(m => m.Run(It.IsAny<string>()))
                 .Returns(() => Helpers.GetDotnetListPackagesResult(
-                        new (string, (string, string)[])[]
+                        new[]
                         {
                             ("Package1", new[]{ ("Package1", "1.5.0") }),
                         }));
