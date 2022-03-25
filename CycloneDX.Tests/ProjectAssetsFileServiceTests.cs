@@ -37,8 +37,8 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
-                        new NugetPackage[] {
-                            new NugetPackage()
+                        new[] {
+                            new NugetPackage
                             {
                                 Name = "Package1",
                                 Version = "1.5.0",
@@ -47,7 +47,7 @@ namespace CycloneDX.Tests
                                     { "Package2", "[4.5, )" },
                                 },
                             },
-                            new NugetPackage()
+                            new NugetPackage
                             {
                                 Name = "Package2",
                                 Version = "4.5.1",
@@ -63,26 +63,25 @@ namespace CycloneDX.Tests
                 .Returns(() => Helpers.GetDotnetListPackagesResult(
                         new (string, (string, string)[])[]
                         {
-                            ("Package1", new (string, string)[]{ ("Package1", "1.5.0") }),
-                            ("Package2", new (string, string)[]{ ("Package2", "4.5.1") }),
+                            ("Package1", new[]{ ("Package1", "1.5.0") }),
+                            ("Package2", new[]{ ("Package2", "4.5.1") }),
                         }));
-            var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockAssetReader = new Mock<IAssetFileReader>();
             mockAssetReader
                 .Setup(m => m.Read(It.IsAny<string>()))
                 .Returns(() =>
                 {
-                    return new LockFile()
+                    return new LockFile
                     {
                         Targets = new[]
                         {
-                            new LockFileTarget()
+                            new LockFileTarget
                             {
                                 TargetFramework = new NuGet.Frameworks.NuGetFramework(".NetStandard", new Version(2, 1, 0)),
                                 RuntimeIdentifier = "",
                                 Libraries = new[]
                                 {
-                                    new LockFileTargetLibrary()
+                                    new LockFileTargetLibrary
                                     {
                                         Name = "Package1",
                                         Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
@@ -95,7 +94,7 @@ namespace CycloneDX.Tests
                                             new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), originalString:"[4.5, )"))
                                         }
                                     },
-                                    new LockFileTargetLibrary()
+                                    new LockFileTargetLibrary
                                     {
                                         Name = "Package2",
                                         Version = new NuGet.Versioning.NuGetVersion("4.5.1"),
@@ -145,7 +144,7 @@ namespace CycloneDX.Tests
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
                         new NugetPackage[] {
-                            new NugetPackage()
+                            new NugetPackage
                             {
                                 Name = "Package1",
                                 Version = "1.5.0",
@@ -164,7 +163,7 @@ namespace CycloneDX.Tests
                 .Returns(() => Helpers.GetDotnetListPackagesResult(
                         new (string, (string, string)[])[]
                         {
-                            ("Package1", new (string, string)[]{ ("Package1", "1.5.0") }),
+                            ("Package1", new[]{ ("Package1", "1.5.0") }),
                         }));
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockAssetReader = new Mock<IAssetFileReader>();
@@ -176,13 +175,13 @@ namespace CycloneDX.Tests
                     {
                         Targets = new[]
                         {
-                            new LockFileTarget()
+                            new LockFileTarget
                             {
                                 TargetFramework = new NuGet.Frameworks.NuGetFramework(".NetStandard", new Version(2, 1, 0)),
                                 RuntimeIdentifier = "",
                                 Libraries = new[]
                                 {
-                                    new LockFileTargetLibrary()
+                                    new LockFileTargetLibrary
                                     {
                                         Name = "Package1",
                                         Version = new NuGet.Versioning.NuGetVersion("1.5.0"),

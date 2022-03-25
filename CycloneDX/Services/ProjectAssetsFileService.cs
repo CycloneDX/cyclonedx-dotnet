@@ -22,15 +22,14 @@ using CycloneDX.Models;
 using CycloneDX.Models.v1_3;
 using System.Linq;
 using NuGet.Versioning;
-using System.Globalization;
 
 namespace CycloneDX.Services
 {
     public class ProjectAssetsFileService : IProjectAssetsFileService 
     {
-        private IFileSystem _fileSystem;
-        private IDotnetCommandService _dotnetCommandService;
-        private Func<IAssetFileReader> _assetFileReaderFactory;
+        private readonly IFileSystem _fileSystem;
+        private readonly IDotnetCommandService _dotnetCommandService;
+        private readonly Func<IAssetFileReader> _assetFileReaderFactory;
 
         public ProjectAssetsFileService(IFileSystem fileSystem, IDotnetCommandService dotnetCommandService, Func<IAssetFileReader> assetFileReaderFactory)
         {

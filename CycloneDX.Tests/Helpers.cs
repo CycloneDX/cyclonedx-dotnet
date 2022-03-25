@@ -22,6 +22,7 @@ using RichardSzalay.MockHttp;
 using CycloneDX.Models;
 using System.Linq;
 using System;
+using System.Text;
 
 namespace CycloneDX.Tests
 {
@@ -99,19 +100,19 @@ namespace CycloneDX.Tests
 
         public static DotnetCommandResult GetDotnetListPackagesResult(IEnumerable<(string projectName, (string packageName, string version)[] packages)> projects)
         {
-            string stdout = "";
+            StringBuilder stdout = new StringBuilder();
             foreach (var project in projects)
             {
-                stdout += string.Join(Environment.NewLine, new[] { $"Project '{project.projectName}' has the following package references", $"    [netcoreapp3.1]:", $"Top-level Package    Requested    Resolved", "" });
+                stdout.AppendLine(string.Join(Environment.NewLine, new[] { $"Project '{project.projectName}' has the following package references", $"    [netcoreapp3.1]:", $"Top-level Package    Requested    Resolved" }));
                 foreach (var package in project.packages)
                 {
-                    stdout += $"    > {package.packageName}    {package.version}    {package.version}    {Environment.NewLine}";
+                    stdout.AppendLine($"    > {package.packageName}    {package.version}    {package.version}    ");
                 }
             }
-            return new DotnetCommandResult()
+            return new DotnetCommandResult
             {
                 ExitCode = 0,
-                StdOut = stdout
+                StdOut = stdout.ToString()
             };
         }
 
