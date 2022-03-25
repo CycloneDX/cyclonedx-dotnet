@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
-using AssetFileReader = NuGet.ProjectModel.LockFileFormat;
 using CycloneDX.Models;
 using CycloneDX.Models.v1_3;
 using System.Linq;
@@ -31,11 +30,13 @@ namespace CycloneDX.Services
     {
         private IFileSystem _fileSystem;
         private IDotnetCommandService _dotnetCommandService;
+        private Func<IAssetFileReader> _assetFileReaderFactory;
 
-        public ProjectAssetsFileService(IFileSystem fileSystem, IDotnetCommandService dotnetCommandService)
+        public ProjectAssetsFileService(IFileSystem fileSystem, IDotnetCommandService dotnetCommandService, Func<IAssetFileReader> assetFileReaderFactory)
         {
             _fileSystem = fileSystem;
             _dotnetCommandService = dotnetCommandService;
+            _assetFileReaderFactory = assetFileReaderFactory;
         }
 
         public HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool isTestProject)
@@ -44,7 +45,7 @@ namespace CycloneDX.Services
 
             if (_fileSystem.File.Exists(projectAssetsFilePath))
             {
-                var assetFileReader = new AssetFileReader();
+                var assetFileReader = _assetFileReaderFactory();
                 var assetsFile = assetFileReader.Read(projectAssetsFilePath);
 
                 foreach (var targetRuntime in assetsFile.Targets)

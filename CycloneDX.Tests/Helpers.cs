@@ -20,6 +20,8 @@ using System.Net.Http;
 using System.IO.Abstractions.TestingHelpers;
 using RichardSzalay.MockHttp;
 using CycloneDX.Models;
+using System.Linq;
+using System;
 
 namespace CycloneDX.Tests
 {
@@ -93,6 +95,24 @@ namespace CycloneDX.Tests
             fileData += "</packages>";
             return new MockFileData(fileData);
 
+        }
+
+        public static DotnetCommandResult GetDotnetListPackagesResult(IEnumerable<(string projectName, (string packageName, string version)[] packages)> projects)
+        {
+            string stdout = "";
+            foreach (var project in projects)
+            {
+                stdout += string.Join(Environment.NewLine, new[] { $"Project '{project.projectName}' has the following package references", $"    [netcoreapp3.1]:", $"Top-level Package    Requested    Resolved", "" });
+                foreach (var package in project.packages)
+                {
+                    stdout += $"    > {package.packageName}    {package.version}    {package.version}    {Environment.NewLine}";
+                }
+            }
+            return new DotnetCommandResult()
+            {
+                ExitCode = 0,
+                StdOut = stdout
+            };
         }
 
         public static MockFileData GetPackagesFileWithPackageReference(string packageName, string packageVersion)

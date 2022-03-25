@@ -107,7 +107,7 @@ namespace CycloneDX {
         static internal IFileSystem fileSystem = new FileSystem();
         static internal HttpClient httpClient = new HttpClient();
         static internal IDotnetCommandService dotnetCommandService = new DotnetCommandService();
-        static internal IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, dotnetCommandService);
+        static internal IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, dotnetCommandService, () => new AssetFileReader());
         static internal IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
         static internal IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
         static internal IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
