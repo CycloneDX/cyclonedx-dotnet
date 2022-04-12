@@ -313,7 +313,8 @@ namespace CycloneDX {
             // now we loop through all the dependencies to check which are direct
             foreach (var dep in dependencies)
             {
-                if (directPackageDependencies.Contains((dep.Ref)) || !transitiveDepencies.Contains(dep.Ref))
+                if (directPackageDependencies.Contains((dep.Ref)) ||
+                    (directPackageDependencies.Count == 0 && !transitiveDepencies.Contains(dep.Ref)))
                 {
                     directDependencies.Dependencies.Add(new Dependency { Ref = dep.Ref });
                 }
