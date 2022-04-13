@@ -31,8 +31,10 @@ namespace CycloneDX.Tests
 {
     public class ProjectAssetsFileServiceTests
     {
-        [Fact]
-        public void GetNugetPackages_PackageAsTopLevelAndTransitive()
+        [Theory]
+        [InlineData(".NetStandard", 2, 1)]
+        [InlineData("net", 6, 0)]
+        public void GetNugetPackages_PackageAsTopLevelAndTransitive(string framework, int frameworkMajor, int frameworkMinor)
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
@@ -77,7 +79,7 @@ namespace CycloneDX.Tests
                         {
                             new LockFileTarget
                             {
-                                TargetFramework = new NuGet.Frameworks.NuGetFramework(".NetStandard", new Version(2, 1, 0)),
+                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
                                 RuntimeIdentifier = "",
                                 Libraries = new[]
                                 {
@@ -137,8 +139,10 @@ namespace CycloneDX.Tests
                 });
         }
 
-        [Fact]
-        public void GetNugetPackages_MissingResolvedPackageVersion()
+        [Theory]
+        [InlineData(".NetStandard", 2, 1)]
+        [InlineData("net", 6, 0)]
+        public void GetNugetPackages_MissingResolvedPackageVersion(string framework, int frameworkMajor, int frameworkMinor)
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
@@ -176,7 +180,7 @@ namespace CycloneDX.Tests
                         {
                             new LockFileTarget
                             {
-                                TargetFramework = new NuGet.Frameworks.NuGetFramework(".NetStandard", new Version(2, 1, 0)),
+                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
                                 RuntimeIdentifier = "",
                                 Libraries = new[]
                                 {

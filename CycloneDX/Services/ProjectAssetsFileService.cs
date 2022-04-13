@@ -127,14 +127,20 @@ namespace CycloneDX.Services
         /// Examples:
         ///     .NetStandard,Version=V3.1 => netstandard3.1
         ///     .NetCoreApp,Version=V3.1  => netcoreapp3.1
+        ///     netcoreapp3.1  => netcoreapp3.1
+        ///     net6.0  => net6.0
         /// </summary>
         private string TargetFrameworkToAlias(string target)
         {
-            target = target.ToLowerInvariant().TrimStart('.');
-            var targetParts = target.Split(",version=v");
-            if (targetParts.Length == 2)
+            if (!string.IsNullOrEmpty(target))
             {
-                return string.Join("", targetParts);
+                target = target.ToLowerInvariant().TrimStart('.');
+                var targetParts = target.Split(",version=v");
+                if (targetParts.Length == 2)
+                {
+                    return string.Join("", targetParts);
+                }
+                return targetParts[0];
             }
             return null;
         }
