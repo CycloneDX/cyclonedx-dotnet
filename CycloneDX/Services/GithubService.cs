@@ -67,8 +67,8 @@ namespace CycloneDX.Services
         private readonly HttpClient _httpClient;
         private readonly List<Regex> _githubRepositoryRegexes = new List<Regex>
         {
-            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][Ss][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
-            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][Ss][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
+            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][CcSs][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
+            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][CcSs][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
         };
 
         public GithubService(HttpClient httpClient)
@@ -130,7 +130,7 @@ namespace CycloneDX.Services
 
             // GitHub API doesn't necessarily return the correct license for any ref other than master
             // support ticket has been raised, in the meantime will ignore non-master refs
-            if (refSpec.ToString() != "master") {return null;}
+            if (refSpec.ToString() != "master" && refSpec.ToString() != "main") {return null;}
 
             Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec}");
 
