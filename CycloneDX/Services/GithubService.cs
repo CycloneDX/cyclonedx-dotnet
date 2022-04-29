@@ -67,8 +67,8 @@ namespace CycloneDX.Services
         private readonly HttpClient _httpClient;
         private readonly List<Regex> _githubRepositoryRegexes = new List<Regex>
         {
-            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][CcSs][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
-            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][CcSs][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
+            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[l][i][c][e][n][cs][e]((\.|-)((md)|([t][x][t])|([m][i][t])|([b][s][d])))?$", RegexOptions.IgnoreCase),
+            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[l][i][c][e][n][cs][e]((\.|-)((md)|([t][x][t])|([m][i][t])|([b][s][d])))?$", RegexOptions.IgnoreCase),
         };
 
         public GithubService(HttpClient httpClient)
@@ -87,9 +87,9 @@ namespace CycloneDX.Services
             var userTokenBase64 = Convert.ToBase64String(userTokenBytes);
 
             var authorizationHeader = new AuthenticationHeaderValue(
-                "Basic", 
+                "Basic",
                 userTokenBase64);
-            
+
             _httpClient.DefaultRequestHeaders.Authorization = authorizationHeader;
         }
 
@@ -99,9 +99,9 @@ namespace CycloneDX.Services
             _httpClient = httpClient;
 
             var authorizationHeader = new AuthenticationHeaderValue(
-                "Bearer", 
+                "Bearer",
                 bearerToken);
-            
+
             _httpClient.DefaultRequestHeaders.Authorization = authorizationHeader;
         }
 
