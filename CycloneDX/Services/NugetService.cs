@@ -89,7 +89,7 @@ namespace CycloneDX.Services
 
         private static byte[] ComputeSha215Hash(Stream stream)
         {
-            using (SHA512 sha = new SHA512Managed())
+            using (SHA512 sha = SHA512.Create())
             {
                 return sha.ComputeHash(stream);
             }

@@ -137,7 +137,7 @@ namespace CycloneDX.Tests
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
 
             byte[] hashBytes;
-            using (SHA512 sha = new SHA512Managed())
+            using (SHA512 sha = SHA512.Create())
             {
                 hashBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(nugetFileContent));
             }
@@ -224,7 +224,7 @@ namespace CycloneDX.Tests
 
 
             byte[] hashBytes;
-            using (SHA512 sha = new SHA512Managed())
+            using (SHA512 sha = SHA512.Create())
             {
                 hashBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(mockNugetResponseContent));
             }
