@@ -29,6 +29,6 @@
     </PackageReference>
     <PackageReference Include="System.IO.Abstractions" Version="17.0.3" />
     <PackageReference Include="CycloneDX.Core" Version="4.0.0" />
-    <PackageReference Include="nuget.projectmodel" Version="6.0.0" />
+    <PackageReference Include="nuget.projectmodel" Version="6.1.0" />
   </ItemGroup>
 </Project>
