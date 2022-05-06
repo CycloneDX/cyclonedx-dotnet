@@ -26,6 +26,7 @@ using McMaster.Extensions.CommandLineUtils;
 using CycloneDX.Models;
 using CycloneDX.Services;
 using System.Reflection;
+using CycloneDX.Interfaces;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.IntegrationTests")]

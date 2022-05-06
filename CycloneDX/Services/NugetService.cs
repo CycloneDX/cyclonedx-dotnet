@@ -27,14 +27,11 @@ using NuGet.Packaging.Licenses;
 using NuspecReader = NuGet.Packaging.NuspecReader;
 using CycloneDX.Models;
 using CycloneDX.Extensions;
+using CycloneDX.Interfaces;
 
 namespace CycloneDX.Services
 {
-    public interface INugetService
-    {
-        Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope? scope);
-        Task<Component> GetComponentAsync(NugetPackage nugetPackage);
-    }
+
 
     public class NugetService : INugetService
     {

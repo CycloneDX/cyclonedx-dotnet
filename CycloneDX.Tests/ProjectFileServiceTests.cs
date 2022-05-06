@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
+using CycloneDX.Interfaces;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using Moq;
 using CycloneDX.Models;

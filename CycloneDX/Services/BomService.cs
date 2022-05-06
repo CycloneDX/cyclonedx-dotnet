@@ -18,7 +18,7 @@
 
 using CycloneDX.Models;
 
-namespace CycloneDX {
+namespace CycloneDX.Services {
     /// <summary>
     /// Service to generate bill of materials
     /// </summary>

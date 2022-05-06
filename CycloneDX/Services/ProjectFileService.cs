@@ -22,6 +22,7 @@ using System.Xml;
 using System.IO;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
+using CycloneDX.Interfaces;
 using CycloneDX.Models;
 
 namespace CycloneDX.Services

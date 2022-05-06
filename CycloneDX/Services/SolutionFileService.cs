@@ -21,6 +21,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO.Abstractions;
 using System.Linq;
+using CycloneDX.Interfaces;
 using CycloneDX.Models;
 
 namespace CycloneDX.Services

@@ -18,6 +18,7 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
+using CycloneDX.Interfaces;
 using CycloneDX.Models;
 
 namespace CycloneDX.Services

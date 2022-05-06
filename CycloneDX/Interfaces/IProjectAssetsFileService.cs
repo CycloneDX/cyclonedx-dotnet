@@ -18,7 +18,7 @@
 using System.Collections.Generic;
 using CycloneDX.Models;
 
-namespace CycloneDX.Services
+namespace CycloneDX.Interfaces
 {
     public interface IProjectAssetsFileService 
     {
