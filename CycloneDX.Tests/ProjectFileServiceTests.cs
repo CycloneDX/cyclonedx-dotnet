@@ -41,14 +41,14 @@ namespace CycloneDX.Tests
         [Fact]
         public void IsTestProjectTrue()
         {
-            string szProjectPath = System.Environment.CurrentDirectory + XFS.Path(@"\..\..\..\..\CycloneDX.Tests\CycloneDX.Tests.csproj");
+            string szProjectPath = Environment.CurrentDirectory + XFS.Path(@"\..\..\..\..\CycloneDX.Tests\CycloneDX.Tests.csproj");
             Assert.True(ProjectFileService.IsTestProject(szProjectPath));
         }
 
         [Fact]
         public void IsTestProjectFalse()
         {
-            string szProjectPath = System.Environment.CurrentDirectory + XFS.Path(@"\..\..\..\..\CycloneDX\CycloneDX.csproj");
+            string szProjectPath = Environment.CurrentDirectory + XFS.Path(@"\..\..\..\..\CycloneDX\CycloneDX.csproj");
             Assert.False(ProjectFileService.IsTestProject(szProjectPath));
         }
 

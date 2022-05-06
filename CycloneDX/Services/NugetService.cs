@@ -27,7 +27,6 @@ using NuGet.Packaging.Licenses;
 using NuspecReader = NuGet.Packaging.NuspecReader;
 using CycloneDX.Models;
 using CycloneDX.Extensions;
-using CycloneDX.Models.v1_3;
 
 namespace CycloneDX.Services
 {
@@ -214,7 +213,7 @@ namespace CycloneDX.Services
             {
                 Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
                 {
-                    var license = new Models.v1_3.License
+                    var license = new License
                     {
                         Id = nugetLicense.Identifier,
                         Name = nugetLicense.Identifier
@@ -234,7 +233,7 @@ namespace CycloneDX.Services
                 var licenseUrl = nuspecReader.GetLicenseUrl();
                 if (!string.IsNullOrEmpty(licenseUrl))
                 {
-                    Models.v1_3.License license = null;
+                    License license = null;
 
                     if (_githubService != null)
                     {
@@ -243,7 +242,7 @@ namespace CycloneDX.Services
 
                     if (license == null)
                     {
-                        license = new Models.v1_3.License
+                        license = new License
                         {
                             Url = licenseUrl
                         };
@@ -262,8 +261,8 @@ namespace CycloneDX.Services
             var projectUrl = nuspecReader.GetProjectUrl();
             if (!string.IsNullOrEmpty(projectUrl))
             {
-                var externalReference = new Models.v1_3.ExternalReference();
-                externalReference.Type = Models.v1_3.ExternalReference.ExternalReferenceType.Website;
+                var externalReference = new ExternalReference();
+                externalReference.Type = ExternalReference.ExternalReferenceType.Website;
                 externalReference.Url = projectUrl;
                 component.ExternalReferences = new List<ExternalReference>
                 {
@@ -276,8 +275,8 @@ namespace CycloneDX.Services
             var vcsUrl = repoMeta?.Url;
             if (!string.IsNullOrEmpty(vcsUrl))
             {
-                var externalReference = new Models.v1_3.ExternalReference();
-                externalReference.Type = Models.v1_3.ExternalReference.ExternalReferenceType.Vcs;
+                var externalReference = new ExternalReference();
+                externalReference.Type = ExternalReference.ExternalReferenceType.Vcs;
                 externalReference.Url = vcsUrl;
                 if (null == component.ExternalReferences)
                 {

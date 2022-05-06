@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using AssetFileReader = NuGet.ProjectModel.LockFileFormat;
 using CycloneDX.Models;
-using CycloneDX.Models.v1_3;
 
 namespace CycloneDX.Services
 {

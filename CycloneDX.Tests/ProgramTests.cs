@@ -23,7 +23,6 @@ using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using Moq;
 using CycloneDX.Models;
 using CycloneDX.Services;
-using CycloneDX.Models.v1_3;
 using System.IO;
 using Microsoft.DotNet.PlatformAbstractions;
 

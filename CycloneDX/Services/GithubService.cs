@@ -1,4 +1,4 @@
-﻿// This file is part of CycloneDX Tool for .NET
+// This file is part of CycloneDX Tool for .NET
 //
 // Licensed under the Apache License, Version 2.0 (the “License”);
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CycloneDX.Models;
-using License = CycloneDX.Models.v1_3.License;
 
 namespace CycloneDX.Services
 {
@@ -85,7 +84,7 @@ namespace CycloneDX.Services
             // implemented as per RFC 7617 https://tools.ietf.org/html/rfc7617.html
             var userToken = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", username, token);
             var userTokenBytes = System.Text.Encoding.UTF8.GetBytes(userToken);
-            var userTokenBase64 = System.Convert.ToBase64String(userTokenBytes);
+            var userTokenBase64 = Convert.ToBase64String(userTokenBytes);
 
             var authorizationHeader = new AuthenticationHeaderValue(
                 "Basic", 
