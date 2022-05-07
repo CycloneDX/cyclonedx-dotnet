@@ -54,6 +54,15 @@ namespace CycloneDX {
         [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
 
+        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "us", LongName = "baseUrlUsername")]
+        string baseUrlUserName { get; set; }
+
+        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "usp", LongName = "baseUrlUserPassword")]
+        string baseUrlUserPassword { get; set; }
+
+        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "uspct", LongName = "isBaseUrlPasswordClearText")]
+        bool isPasswordClearText { get; set; }
+
         [Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied .csproj", ShortName = "r", LongName = "recursive")]
         bool scanProjectReferences { get; set; }
 
@@ -189,13 +198,11 @@ namespace CycloneDX {
                     githubService = new GithubService(new HttpClient());
                 }
             }
-            var nugetService = new NugetService(
-                fileSystem,
-                packageCachePathsResult.Result,
-                githubService,
-                httpClient,
-                baseUrl,
-                disableHashComputation);
+            var nugetLogger = new NuGet.Common.NullLogger();
+            var nugetInput =
+                NugetInputFactory.Create(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText);
+            var nugetService = new NugetV3Service(nugetInput, fileSystem, packageCachePathsResult.Result, githubService, nugetLogger, disableHashComputation);
+
 
             var packages = new HashSet<NugetPackage>();
 
