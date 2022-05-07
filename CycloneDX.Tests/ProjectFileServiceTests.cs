@@ -283,12 +283,12 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithProjectReferences(
-                        new string[] {
+                        new[] {
                             @"..\Project2\Project2.csproj",
                         })
                     },
                     { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), Helpers.GetProjectFileWithProjectReferences(
-                        new string[] {
+                        new[] {
                             @"..\Project3\Project3.csproj",
                         })
                     },
