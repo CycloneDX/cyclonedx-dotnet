@@ -114,7 +114,6 @@ namespace CycloneDX {
         public Component.Classification setType { get; }
 
         static internal IFileSystem fileSystem = new FileSystem();
-        static internal HttpClient httpClient = new HttpClient();
         static internal IDotnetCommandService dotnetCommandService = new DotnetCommandService();
         static internal readonly IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, dotnetCommandService, () => new AssetFileReader());
         static internal IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
@@ -199,13 +198,6 @@ namespace CycloneDX {
                     githubService = new GithubService(new HttpClient());
                 }
             }
-            //var nugetService = new NugetService(
-            //    Program.fileSystem,
-            //    packageCachePathsResult.Result,
-            //    githubService,
-            //    Program.httpClient,
-            //    baseUrl,
-            //    disableHashComputation);
             var nugetLogger = new NuGet.Common.NullLogger();
             var nugetInput =
                 NugetInputFactory.Create(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText);

@@ -23,15 +23,15 @@ namespace CycloneDX.Services
     /// </summary>
     public class NugetV3Service : INugetService
     {
-        private SourceRepository _sourceRepository;
-        private SourceCacheContext _sourceCacheContext;
-        private CancellationToken _cancellationToken;
-        private ILogger _logger;
+        private readonly SourceRepository _sourceRepository;
+        private readonly SourceCacheContext _sourceCacheContext;
+        private readonly CancellationToken _cancellationToken;
+        private readonly ILogger _logger;
 
-        private IGithubService _githubService;
-        private IFileSystem _fileSystem;
-        private List<string> _packageCachePaths;
-        private bool _disableHashComputation;
+        private readonly IGithubService _githubService;
+        private readonly IFileSystem _fileSystem;
+        private readonly List<string> _packageCachePaths;
+        private readonly bool _disableHashComputation;
 
         // Used in local files
         private const string _nuspecExtension = ".nuspec";
@@ -60,7 +60,7 @@ namespace CycloneDX.Services
 
         internal string GetCachedNuspecFilename(string name, string version)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) return null;
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) {return null;}
 
             var lowerName = name.ToLowerInvariant();
             string nuspecFilename = null;
@@ -194,15 +194,15 @@ namespace CycloneDX.Services
             if (hashBytes != null)
             {
                 var hex = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
-                Hash h = new Hash()
+                Hash h = new Hash
                 {
                     Alg = Hash.HashAlgorithm.SHA_512,
                     Content = hex
                 };
-                component.Hashes = new List<Hash>() { h };
+                component.Hashes = new List<Hash> { h };
             }
 
-            if (nuspecReader == null) return component;
+            if (nuspecReader == null){ return component;}
 
             component.Publisher = nuspecReader.GetAuthors();
             component.Copyright = nuspecReader.GetCopyright();
