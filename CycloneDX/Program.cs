@@ -26,6 +26,7 @@ using McMaster.Extensions.CommandLineUtils;
 using CycloneDX.Models;
 using CycloneDX.Services;
 using System.Reflection;
+using System.Linq;
 using CycloneDX.Interfaces;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
@@ -114,8 +115,8 @@ namespace CycloneDX {
 
         static internal IFileSystem fileSystem = new FileSystem();
         static internal HttpClient httpClient = new HttpClient();
-        static internal IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem);
         static internal IDotnetCommandService dotnetCommandService = new DotnetCommandService();
+        static internal readonly IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, dotnetCommandService, () => new AssetFileReader());
         static internal IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
         static internal IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
         static internal IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
@@ -172,7 +173,7 @@ namespace CycloneDX {
 
             // instantiate services
 
-            var fileDiscoveryService = new FileDiscoveryService(fileSystem);
+            var fileDiscoveryService = new FileDiscoveryService(Program.fileSystem);
             GithubService githubService = null;
             if (!(disableGithubLicenses || disableGithubLicensesDeprecated))
             {
@@ -198,16 +199,22 @@ namespace CycloneDX {
                     githubService = new GithubService(new HttpClient());
                 }
             }
+            //var nugetService = new NugetService(
+            //    Program.fileSystem,
+            //    packageCachePathsResult.Result,
+            //    githubService,
+            //    Program.httpClient,
+            //    baseUrl,
+            //    disableHashComputation);
             var nugetLogger = new NuGet.Common.NullLogger();
             var nugetInput =
                 NugetInputFactory.Create(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText);
             var nugetService = new NugetV3Service(nugetInput, fileSystem, packageCachePathsResult.Result, githubService, nugetLogger, disableHashComputation);
 
-
             var packages = new HashSet<NugetPackage>();
 
             // determine what we are analyzing and do the analysis
-            var fullSolutionOrProjectFilePath = fileSystem.Path.GetFullPath(SolutionOrProjectFile);
+            var fullSolutionOrProjectFilePath = Program.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
 
             var topLevelComponent = new Component
             {
@@ -233,7 +240,7 @@ namespace CycloneDX {
                     packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
-                else if (fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
+                else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {
                     packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
@@ -264,6 +271,7 @@ namespace CycloneDX {
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
             var transitiveDepencies = new HashSet<string>();
+            var packageToComponent = new Dictionary<NugetPackage, Component>();
             try
             {
                 var bomRefLookup = new Dictionary<(string,string), string>();
@@ -274,6 +282,7 @@ namespace CycloneDX {
                         && (component.Scope != Component.ComponentScope.Excluded || !excludeDev)
                     )
                     {
+                        packageToComponent[package] = component;
                         components.Add(component);
                     }
                     bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture),(component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
@@ -312,10 +321,13 @@ namespace CycloneDX {
             {
                 return (int)ExitCode.GitHubLicenseResolutionFailed;
             }
+
+            var directPackageDependencies = packages.Where(p => p.IsDirectReference).Select(p => packageToComponent[p].BomRef).ToHashSet();
             // now we loop through all the dependencies to check which are direct
             foreach (var dep in dependencies)
             {
-                if (!transitiveDepencies.Contains(dep.Ref))
+                if (directPackageDependencies.Contains((dep.Ref)) ||
+                    (directPackageDependencies.Count == 0 && !transitiveDepencies.Contains(dep.Ref)))
                 {
                     directDependencies.Dependencies.Add(new Dependency { Ref = dep.Ref });
                 }
@@ -376,7 +388,7 @@ namespace CycloneDX {
 
             AddMetadataTool(bom);
 
-            if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + Guid.NewGuid().ToString();
+            if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
             bom.Components = new List<Component>(components);
             bom.Components.Sort((x, y) => {
                 if (x.Name == y.Name)
@@ -392,14 +404,14 @@ namespace CycloneDX {
             var bomContents = BomService.CreateDocument(bom, json);
 
             // check if the output directory exists and create it if needed
-            var bomPath = fileSystem.Path.GetFullPath(outputDirectory);
-            if (!fileSystem.Directory.Exists(bomPath))
-                fileSystem.Directory.CreateDirectory(bomPath);
+            var bomPath = Program.fileSystem.Path.GetFullPath(outputDirectory);
+            if (!Program.fileSystem.Directory.Exists(bomPath))
+                Program.fileSystem.Directory.CreateDirectory(bomPath);
 
             // write the BOM to disk
-            var bomFilename = fileSystem.Path.Combine(bomPath, json ? "bom.json" : "bom.xml");
+            var bomFilename = Program.fileSystem.Path.Combine(bomPath, json ? "bom.json" : "bom.xml");
             Console.WriteLine("Writing to: " + bomFilename);
-            fileSystem.File.WriteAllText(bomFilename, bomContents);
+            Program.fileSystem.File.WriteAllText(bomFilename, bomContents);
 
             return 0;
         }

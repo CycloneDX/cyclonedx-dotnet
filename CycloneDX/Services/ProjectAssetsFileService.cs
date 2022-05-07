@@ -15,74 +15,162 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
-using CycloneDX.Interfaces;
-using AssetFileReader = NuGet.ProjectModel.LockFileFormat;
 using CycloneDX.Models;
+using System.Linq;
+using CycloneDX.Interfaces;
+using NuGet.Versioning;
 
 namespace CycloneDX.Services
 {
     public class ProjectAssetsFileService : IProjectAssetsFileService 
     {
-        private IFileSystem _fileSystem;
+        private readonly IFileSystem _fileSystem;
+        private readonly IDotnetCommandService _dotnetCommandService;
+        private readonly Func<IAssetFileReader> _assetFileReaderFactory;
 
-        public ProjectAssetsFileService(IFileSystem fileSystem)
+        public ProjectAssetsFileService(IFileSystem fileSystem, IDotnetCommandService dotnetCommandService, Func<IAssetFileReader> assetFileReaderFactory)
         {
             _fileSystem = fileSystem;
+            _dotnetCommandService = dotnetCommandService;
+            _assetFileReaderFactory = assetFileReaderFactory;
         }
 
-        public HashSet<NugetPackage> GetNugetPackages(string projectAssetsFilePath, bool isTestProject)
+        public HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool isTestProject)
         {
             var packages = new HashSet<NugetPackage>();
 
             if (_fileSystem.File.Exists(projectAssetsFilePath))
             {
-                var assetFileReader = new AssetFileReader();
+                var assetFileReader = _assetFileReaderFactory();
                 var assetsFile = assetFileReader.Read(projectAssetsFilePath);
 
                 foreach (var targetRuntime in assetsFile.Targets)
                 {
-                    foreach (var library in targetRuntime.Libraries)
+                    var directPackageDependencies = GetDirectPackageDependencies(targetRuntime.Name, projectFilePath);
+                    var runtimePackages = new HashSet<NugetPackage>();
+                    foreach (var library in targetRuntime.Libraries.Where(lib => lib.Type != "project"))
                     {
-                        if (library.Type != "project")
+                        var package = new NugetPackage
                         {
-                            var package = new NugetPackage
-                            {
-                                Name = library.Name,
-                                Version = library.Version.ToNormalizedString(),
-                                Scope = Component.ComponentScope.Required,
-                                Dependencies = new Dictionary<string, string>(),
-                            };
-                            // is this a test project dependency or only a development dependency
-                            if (
-                                isTestProject
-                                || (
-                                    library.CompileTimeAssemblies.Count == 0
-                                    && library.ContentFiles.Count == 0
-                                    && library.EmbedAssemblies.Count == 0
-                                    && library.FrameworkAssemblies.Count == 0
-                                    && library.NativeLibraries.Count == 0
-                                    && library.ResourceAssemblies.Count == 0
-                                    && library.ToolsAssemblies.Count == 0
-                                )
-                            )
-                            {
-                                package.Scope = Component.ComponentScope.Excluded;
-                            }
-                            // include direct dependencies
-                            foreach (var dep in library.Dependencies)
-                            {
-                                //Get the version from the nuget package as described here: https://github.com/NuGet/NuGet.Client/blob/ad81306fe7ada265cf44afb2a60a31fbfca978a2/src/NuGet.Core/NuGet.ProjectModel/JsonUtility.cs#L54
-                                package.Dependencies.Add(dep.Id, dep.VersionRange?.ToLegacyShortString());
-                            }
-                            packages.Add(package);
+                            Name = library.Name,
+                            Version = library.Version.ToNormalizedString(),
+                            Scope = Component.ComponentScope.Required,
+                            Dependencies = new Dictionary<string, string>(),
+                        };
+                        var topLevelReferenceKey = (package.Name, package.Version);
+                        if (directPackageDependencies.Contains(topLevelReferenceKey))
+                        {
+                            package.IsDirectReference = true;
                         }
+                        // is this a test project dependency or only a development dependency
+                        if (
+                            isTestProject
+                            || (
+                                library.CompileTimeAssemblies.Count == 0
+                                && library.ContentFiles.Count == 0
+                                && library.EmbedAssemblies.Count == 0
+                                && library.FrameworkAssemblies.Count == 0
+                                && library.NativeLibraries.Count == 0
+                                && library.ResourceAssemblies.Count == 0
+                                && library.ToolsAssemblies.Count == 0
+                            )
+                        )
+                        {
+                            package.Scope = Component.ComponentScope.Excluded;
+                        }
+                        // include direct dependencies
+                        foreach (var dep in library.Dependencies)
+                        {
+                            package.Dependencies.Add(dep.Id, dep.VersionRange?.ToNormalizedString());
+                        }
+                        runtimePackages.Add(package);
                     }
+
+                    ResolveDependecyVersionRanges(runtimePackages);
+
+                    packages.UnionWith(runtimePackages);
                 }
             }
 
             return packages;
+        }
+
+        // Future: Instead of invoking the dotnet CLI to get direct dependencies, once asset file version 3 is available through the Nuget library,
+        //         The direct dependencies could be retrieved from the asset file json path: .project.frameworks.<framework>.dependencies
+        private List<(string, string)> GetDirectPackageDependencies(string targetRuntime, string projectFilePath)
+        {
+            var directPackageDependencies = new List<(string, string)>();
+            var framework = TargetFrameworkToAlias(targetRuntime);
+            if (framework != null)
+            {
+                var output = _dotnetCommandService.Run($"list \"{projectFilePath}\" package --framework {framework}");
+                var result = output.Success ? output.StdOut : null;
+                if (result != null)
+                {
+                    directPackageDependencies = result.Split('\r', '\n').Select(line => line.Trim())
+                        .Where(line => line.StartsWith(">", StringComparison.InvariantCulture))
+                        .Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+                        .Where(parts => parts.Length == 4)
+                        .Select(parts => (parts[1], parts[3]))
+                        .ToList();
+                }
+            }
+            return directPackageDependencies;
+        }
+
+        /// <summary>
+        /// Converts an asset file's target framework value into a csproj target framework value.
+        ///
+        /// Examples:
+        ///     .NetStandard,Version=V3.1 => netstandard3.1
+        ///     .NetCoreApp,Version=V3.1  => netcoreapp3.1
+        ///     netcoreapp3.1  => netcoreapp3.1
+        ///     net6.0  => net6.0
+        /// </summary>
+        private string TargetFrameworkToAlias(string target)
+        {
+            if (!string.IsNullOrEmpty(target))
+            {
+                target = target.ToLowerInvariant().TrimStart('.');
+                var targetParts = target.Split(",version=v");
+                if (targetParts.Length == 2)
+                {
+                    return string.Join("", targetParts);
+                }
+                return targetParts[0];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Updates all dependencies with version ranges to the version it was resolved to.
+        /// </summary>
+        private static void ResolveDependecyVersionRanges(HashSet<NugetPackage> runtimePackages)
+        {
+            var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
+            foreach (var runtimePackage in runtimePackages)
+            {
+                foreach (var dependency in runtimePackage.Dependencies.ToList())
+                {
+                    if (!NuGetVersion.TryParse(dependency.Value, out _) && VersionRange.TryParse(dependency.Value, out VersionRange versionRange))
+                    {
+                        var normalizedDependencyKey = dependency.Key.ToLowerInvariant();
+                        var package = runtimePackagesLookup[normalizedDependencyKey].FirstOrDefault(pkg => versionRange.Satisfies(NuGetVersion.Parse(pkg.Version)));
+                        if (package != default)
+                        {
+                            runtimePackage.Dependencies[dependency.Key] = package.Version;
+                        }
+                        else
+                        {
+                            // This should not happen, since all dependencies are resolved to a specific version.
+                            Console.Error.WriteLine($"Dependency ({dependency.Value}) with version range ({dependency.Value}) did not resolve to a specific version.");
+                        }
+                    }
+                }
+            }
         }
     }
 }
