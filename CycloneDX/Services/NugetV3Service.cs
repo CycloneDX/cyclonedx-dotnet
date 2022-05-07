@@ -253,7 +253,6 @@ namespace CycloneDX.Services
                 await resource.CopyNupkgToStreamAsync(name, packageVersion, packageStream, _sourceCacheContext,
                     _logger, _cancellationToken);
 
-                Console.WriteLine($"Downloaded package {name} {packageVersion}");
                 using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
                 nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
 

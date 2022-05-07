@@ -50,7 +50,7 @@ namespace CycloneDX.Services
                 var currentPackage = packages.Dequeue();
                 var component = await _nugetService.GetComponentAsync(currentPackage).ConfigureAwait(false);
 
-                if (component == null) continue;
+                if (component == null) {continue;}
 
                 components.Add(component);
 

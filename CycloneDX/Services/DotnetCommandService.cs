@@ -30,8 +30,6 @@ namespace CycloneDX.Services
     {
         public int TimeoutMilliseconds { get; set; } = 300000;
 
-        public DotnetCommandService() {}
-        
         public DotnetCommandResult Run(string arguments)
         {
             return Run(Directory.GetCurrentDirectory(), arguments);

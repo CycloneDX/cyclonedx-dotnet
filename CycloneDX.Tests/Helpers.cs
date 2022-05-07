@@ -57,13 +57,14 @@ namespace CycloneDX.Tests
 
         public static MockFileData GetProjectFileWithReferences(IEnumerable<string> projects, IEnumerable<NugetPackage> packages)
         {
-            var fileData = "<Project>";
+            var stringBuilder = new StringBuilder();
+           stringBuilder.Append("<Project>");
 
             if (projects != null)
             {
                 foreach (var project in projects)
                 {
-                    fileData += @"<ProjectReference Include=""" + project + @""" />";
+                    stringBuilder.Append(@"<ProjectReference Include=""" + project + @""" />");
                 }
             }
 
@@ -71,12 +72,12 @@ namespace CycloneDX.Tests
             {
                 foreach (var package in packages)
                 {
-                    fileData += @"<PackageReference Include=""" + package.Name + @""" Version=""" + package.Version +
-                                @""" />";
+                    stringBuilder.Append(@"<PackageReference Include=""" + package.Name + @""" Version=""" + package.Version + @""" />");
                 }
             }
 
-            fileData += "</Project>";
+            stringBuilder.Append("</Project>");
+            var fileData = stringBuilder.ToString();
             return new MockFileData(fileData);
         }
 
