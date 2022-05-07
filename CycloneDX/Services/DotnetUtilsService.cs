@@ -18,6 +18,7 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
+using CycloneDX.Interfaces;
 using CycloneDX.Models;
 
 namespace CycloneDX.Services
@@ -25,10 +26,10 @@ namespace CycloneDX.Services
     public class DotnetUtilsService : IDotnetUtilsService
     {
         private Regex _sdkPathRegex = new Regex(@"(\S)+ \[(?<path>.*)\]");
-        private Regex _globalPackageCacheLocationPath = new Regex(@"global-packages: (?<path>.*)$");
+        private readonly Regex _globalPackageCacheLocationPath = new Regex(@"global-packages: (?<path>.*)$");
 
         private IFileSystem _fileSystem;
-        private IDotnetCommandService _dotnetCommandService;
+        private readonly IDotnetCommandService _dotnetCommandService;
 
         public DotnetUtilsService(IFileSystem fileSystem, IDotnetCommandService dotNetCommandService)
         {
@@ -91,15 +92,14 @@ namespace CycloneDX.Services
 
         private static string CombineErrorMessages(string currentErrorMessage, string additionalErrorMessage)
         {
-            if (additionalErrorMessage == null) return currentErrorMessage;
+            if (additionalErrorMessage == null) { return currentErrorMessage; }
+
             if (currentErrorMessage.Length == 0)
             {
                 return additionalErrorMessage;
             }
-            else
-            {
-                return $"{currentErrorMessage}\n{additionalErrorMessage}";
-            }
+
+            return $"{currentErrorMessage}\n{additionalErrorMessage}";
         }
 
         public DotnetUtilsResult<List<string>> GetPackageCachePaths()
@@ -111,7 +111,8 @@ namespace CycloneDX.Services
             if (cacheLocation.Success && fallbackLocation.Success)
             {
                 result.Add(cacheLocation.Result);
-                if (fallbackLocation.Result != null) result.Add(fallbackLocation.Result);
+                if (fallbackLocation.Result != null) { result.Add(fallbackLocation.Result); }
+
                 return new DotnetUtilsResult<List<string>>
                 {
                     Result = result

@@ -15,25 +15,12 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using NuGet.ProjectModel;
 
-using CycloneDX.Models;
-
-namespace CycloneDX.Services {
-    /// <summary>
-    /// Service to generate bill of materials
-    /// </summary>
-    public static class BomService
+namespace CycloneDX.Interfaces
+{
+    public interface IAssetFileReader
     {
-        public static string CreateDocument(Bom bom, bool json)
-        {
-            if (json)
-            {
-                return Json.Serializer.Serialize(bom);
-            }
-            else
-            {
-                return Xml.Serializer.Serialize(bom);
-            }
-        }
+        LockFile Read(string filePath);
     }
 }
