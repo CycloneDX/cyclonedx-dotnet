@@ -4,12 +4,12 @@ namespace CycloneDX.Models
 {
     public class NuspecModel
     {
-        public NuspecReader NuspecReader { get; set; }
+        public NuspecReader nuspecReader { get; set; }
         public byte[] hashBytes { get; set; }
 
         public NuspecModel()
         {
-            NuspecReader = null;
+            nuspecReader = null;
             hashBytes = null;
         }
     }
