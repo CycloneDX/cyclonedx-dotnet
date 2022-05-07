@@ -15,14 +15,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
-using System.Collections.Generic;
-using CycloneDX.Models;
+using CycloneDX.Interfaces;
 
 namespace CycloneDX.Services
 {
-    public interface IDotnetUtilsService
+    public class AssetFileReader : NuGet.ProjectModel.LockFileFormat, IAssetFileReader
     {
-        DotnetUtilsResult<List<string>> GetPackageCachePaths();
-        DotnetUtilsResult Restore(string path);
     }
 }

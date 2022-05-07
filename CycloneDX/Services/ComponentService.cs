@@ -17,14 +17,14 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CycloneDX.Interfaces;
 using CycloneDX.Models;
-using CycloneDX.Models.v1_3;
 
 namespace CycloneDX.Services
 {
     public class ComponentService
     {
-        private INugetService _nugetService;
+        private readonly INugetService _nugetService;
 
         public ComponentService(INugetService nugetService)
         {

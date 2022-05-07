@@ -16,14 +16,12 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using CycloneDX.Models;
 
-namespace CycloneDX.Services
+namespace CycloneDX.Interfaces
 {
-    public interface ISolutionFileService
+    public interface IProjectAssetsFileService 
     {
-        Task<HashSet<string>> GetSolutionProjectReferencesAsync(string solutionFilePath);
-        Task<HashSet<NugetPackage>> GetSolutionNugetPackages(string solutionFilePath, string baseIntermediateOutputPath, bool excludeTestProjects);
+        HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool IsTestProject);
     }
 }
