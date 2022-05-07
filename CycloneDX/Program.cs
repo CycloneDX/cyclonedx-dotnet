@@ -52,16 +52,16 @@ namespace CycloneDX {
         [Option(Description = "Exclude test projects from the BOM", ShortName = "t", LongName = "exclude-test-projects")]
         bool excludetestprojects { get; }
 
-        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "u", LongName = "url")]
+        [Option(Description = "Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
 
-        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "us", LongName = "baseUrlUsername")]
+        [Option(Description = "Alternative NuGet repository username", ShortName = "us", LongName = "baseUrlUsername")]
         string baseUrlUserName { get; set; }
 
-        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "usp", LongName = "baseUrlUserPassword")]
+        [Option(Description = "Alternative NuGet repository username password/apikey", ShortName = "usp", LongName = "baseUrlUserPassword")]
         string baseUrlUserPassword { get; set; }
 
-        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "uspct", LongName = "isBaseUrlPasswordClearText")]
+        [Option(Description = "Alternative NuGet repository password is cleartext", ShortName = "uspct", LongName = "isBaseUrlPasswordClearText")]
         bool isPasswordClearText { get; set; }
 
         [Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied .csproj", ShortName = "r", LongName = "recursive")]
