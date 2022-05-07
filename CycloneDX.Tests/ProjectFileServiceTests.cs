@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
+using CycloneDX.Interfaces;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using Moq;
 using CycloneDX.Models;
@@ -67,7 +68,7 @@ namespace CycloneDX.Tests
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
-                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new HashSet<NugetPackage>
                 {
                     new NugetPackage { Name = "Package", Version = "1.2.3" },
@@ -102,7 +103,7 @@ namespace CycloneDX.Tests
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
-                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new HashSet<NugetPackage>
                 {
                     new NugetPackage { Name = "Package", Version = "1.2.3" },
@@ -138,7 +139,7 @@ namespace CycloneDX.Tests
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
-                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new HashSet<NugetPackage>
                 {
                     new NugetPackage { Name = "Package1", Version = "1.2.3" },
@@ -184,7 +185,7 @@ namespace CycloneDX.Tests
                 );
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
-                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new HashSet<NugetPackage>());
             var projectFileService = new ProjectFileService(
                 mockFileSystem,
@@ -226,7 +227,7 @@ namespace CycloneDX.Tests
                 );
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
-                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.GetNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new HashSet<NugetPackage>());
             var projectFileService = new ProjectFileService(
                 mockFileSystem,
@@ -250,7 +251,7 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\SolutionPath\Project\Project.csproj"), Helpers.GetProjectFileWithProjectReferences(
-                        new string[] {
+                        new[] {
                             @"..\Project1\Project1.csproj",
                             @"..\Project2\Project2.csproj",
                             @"..\Project3\Project3.csproj",

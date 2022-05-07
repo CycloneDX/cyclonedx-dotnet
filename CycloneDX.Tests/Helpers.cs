@@ -20,6 +20,8 @@ using System.Net.Http;
 using System.IO.Abstractions.TestingHelpers;
 using RichardSzalay.MockHttp;
 using CycloneDX.Models;
+using System;
+using System.Text;
 
 namespace CycloneDX.Tests
 {
@@ -58,15 +60,20 @@ namespace CycloneDX.Tests
             var fileData = "<Project>";
 
             if (projects != null)
-            foreach (var project in projects)
             {
-                fileData += @"<ProjectReference Include=""" + project + @""" />";
+                foreach (var project in projects)
+                {
+                    fileData += @"<ProjectReference Include=""" + project + @""" />";
+                }
             }
 
             if (packages != null)
-            foreach (var package in packages)
             {
-                fileData += @"<PackageReference Include=""" + package.Name + @""" Version=""" + package.Version + @""" />";
+                foreach (var package in packages)
+                {
+                    fileData += @"<PackageReference Include=""" + package.Name + @""" Version=""" + package.Version +
+                                @""" />";
+                }
             }
 
             fileData += "</Project>";
@@ -93,6 +100,24 @@ namespace CycloneDX.Tests
             fileData += "</packages>";
             return new MockFileData(fileData);
 
+        }
+
+        public static DotnetCommandResult GetDotnetListPackagesResult(IEnumerable<(string projectName, (string packageName, string version)[] packages)> projects)
+        {
+            StringBuilder stdout = new StringBuilder();
+            foreach (var project in projects)
+            {
+                stdout.AppendLine(string.Join(Environment.NewLine, new[] { $"Project '{project.projectName}' has the following package references", $"    [netcoreapp3.1]:", $"Top-level Package    Requested    Resolved" }));
+                foreach (var package in project.packages)
+                {
+                    stdout.AppendLine($"    > {package.packageName}    {package.version}    {package.version}    ");
+                }
+            }
+            return new DotnetCommandResult
+            {
+                ExitCode = 0,
+                StdOut = stdout.ToString()
+            };
         }
 
         public static MockFileData GetPackagesFileWithPackageReference(string packageName, string packageVersion)
