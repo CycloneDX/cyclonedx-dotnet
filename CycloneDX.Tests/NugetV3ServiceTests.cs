@@ -30,7 +30,7 @@ namespace CycloneDX.Tests
             };
             var mockGithubService = new Mock<IGithubService>();
             var nugetService = new NugetV3Service(null, mockFileSystem, cachePaths, mockGithubService.Object,
-                new NullLogger());
+                new NullLogger(), false);
 
             var nuspecFilename = nugetService.GetCachedNuspecFilename("TestPackage", "1.2.3");
 
@@ -55,7 +55,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger());
+                new NullLogger(), false);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
 
@@ -83,7 +83,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger());
+                new NullLogger(),false);
 
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
@@ -113,7 +113,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger());
+                new NullLogger(), false);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
 
@@ -164,7 +164,7 @@ namespace CycloneDX.Tests
                 new MockFileSystem(),
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger());
+                new NullLogger(), false);
 
 
             var packageName = "Newtonsoft.Json";

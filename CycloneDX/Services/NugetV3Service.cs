@@ -44,7 +44,7 @@ namespace CycloneDX.Services
             List<string> packageCachePaths,
             IGithubService githubService,
             ILogger logger,
-            bool disableHashComputation = false
+            bool disableHashComputation
             )
         {
             _fileSystem = fileSystem;
@@ -130,7 +130,7 @@ namespace CycloneDX.Services
 
         public async Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope? scope)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) return null;
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) { return null; }
 
             // https://docs.microsoft.com/en-us/nuget/reference/nuget-client-sdk - Download a package
             var resource = await _sourceRepository.GetResourceAsync<FindPackageByIdResource>();
