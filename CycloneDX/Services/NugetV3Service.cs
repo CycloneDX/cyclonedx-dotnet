@@ -138,62 +138,12 @@ namespace CycloneDX.Services
 
             var component = SetupComponent(name, version, scope);
             var nuspecFilename = GetCachedNuspecFilename(name, version);
-            NuspecReader nuspecReader;
-            byte[] hashBytes = null;
 
-            if (nuspecFilename == null)
+           var nuspecModel = await GetNuspec(name, version, nuspecFilename, resource);
+
+            if (nuspecModel.hashBytes != null)
             {
-                var packageVersion = new NuGetVersion(version);
-                await using MemoryStream packageStream = new MemoryStream();
-                await resource.CopyNupkgToStreamAsync(name, packageVersion, packageStream, _sourceCacheContext,
-                    _logger, _cancellationToken);
-
-                Console.WriteLine($"Downloaded package {name} {packageVersion}");
-                using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
-                nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
-
-
-                if (!_disableHashComputation)
-                {
-                    hashBytes = ComputeSha215Hash(packageStream);
-                }
-
-            }
-            else
-            {
-                using (var xmlStream = _fileSystem.File.OpenRead(nuspecFilename))
-                {
-                    nuspecReader = new NuspecReader(xmlStream);
-                }
-
-                // reference: https://docs.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-add
-                // and: https://github.com/NuGet/Home/wiki/Nupkg-Metadata-File
-                //  └─<packageID>
-                //   └─<version>
-                //    ├─<packageID>.<version>.nupkg
-                //    ├─<packageID>.<version>.nupkg.sha512
-                //    └─<packageID>.nuspec
-
-                string shaFilename = Path.ChangeExtension(nuspecFilename, version + _sha512Extension);
-                string nupkgFilename = Path.ChangeExtension(nuspecFilename, version + _nupkgExtension);
-
-                if (_fileSystem.File.Exists(shaFilename))
-                {
-                    string base64Hash = _fileSystem.File.ReadAllText(shaFilename);
-                    hashBytes = Convert.FromBase64String(base64Hash);
-                }
-                else if (!_disableHashComputation && _fileSystem.File.Exists(nupkgFilename))
-                {
-                    using (var nupkgStream = _fileSystem.File.OpenRead(nupkgFilename))
-                    {
-                        hashBytes = ComputeSha215Hash(nupkgStream);
-                    }
-                }
-            }
-
-            if (hashBytes != null)
-            {
-                var hex = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+                var hex = BitConverter.ToString(nuspecModel.hashBytes).Replace("-", string.Empty);
                 Hash h = new Hash
                 {
                     Alg = Hash.HashAlgorithm.SHA_512,
@@ -202,33 +152,12 @@ namespace CycloneDX.Services
                 component.Hashes = new List<Hash> { h };
             }
 
-            if (nuspecReader == null){ return component;}
+            if (nuspecModel.nuspecReader == null){ return component;}
 
-            component.Publisher = nuspecReader.GetAuthors();
-            component.Copyright = nuspecReader.GetCopyright();
-            // this prevents empty copyright values in the JSON BOM
-            if (string.IsNullOrEmpty(component.Copyright))
-            {
-                component.Copyright = null;
-            }
-            var title = nuspecReader.GetTitle();
-            var summary = nuspecReader.GetSummary();
-            var description = nuspecReader.GetDescription();
-            if (!string.IsNullOrEmpty(summary))
-            {
-                component.Description = summary;
-            }
-            else if (!string.IsNullOrEmpty(description))
-            {
-                component.Description = description;
-            }
-            else if (!string.IsNullOrEmpty(title))
-            {
-                component.Description = title;
-            }
+            component = SetupComponentProperties(component, nuspecModel);
 
-            var licenseMetadata = nuspecReader.GetLicenseMetadata();
-            if (licenseMetadata != null && licenseMetadata.Type == NuGet.Packaging.LicenseType.Expression)
+            var licenseMetadata = nuspecModel.nuspecReader.GetLicenseMetadata();
+            if (licenseMetadata != null && licenseMetadata.Type == LicenseType.Expression)
             {
                 Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
                 {
@@ -249,7 +178,7 @@ namespace CycloneDX.Services
             }
             else
             {
-                var licenseUrl = nuspecReader.GetLicenseUrl();
+                var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
                 if (!string.IsNullOrEmpty(licenseUrl))
                 {
                     License license = null;
@@ -277,12 +206,13 @@ namespace CycloneDX.Services
                 }
             }
 
-            var projectUrl = nuspecReader.GetProjectUrl();
+            var projectUrl = nuspecModel.nuspecReader.GetProjectUrl();
             if (!string.IsNullOrEmpty(projectUrl))
             {
-                var externalReference = new ExternalReference();
-                externalReference.Type = ExternalReference.ExternalReferenceType.Website;
-                externalReference.Url = projectUrl;
+                var externalReference = new ExternalReference
+                    {
+                        Type = ExternalReference.ExternalReferenceType.Website, Url = projectUrl
+                    };
                 component.ExternalReferences = new List<ExternalReference>
                 {
                     externalReference
@@ -290,13 +220,14 @@ namespace CycloneDX.Services
             }
 
             // Source: https://docs.microsoft.com/de-de/nuget/reference/nuspec#repository
-            var repoMeta = nuspecReader.GetRepositoryMetadata();
+            var repoMeta = nuspecModel.nuspecReader.GetRepositoryMetadata();
             var vcsUrl = repoMeta?.Url;
             if (!string.IsNullOrEmpty(vcsUrl))
             {
-                var externalReference = new ExternalReference();
-                externalReference.Type = ExternalReference.ExternalReferenceType.Vcs;
-                externalReference.Url = vcsUrl;
+                var externalReference = new ExternalReference
+                    {
+                        Type = ExternalReference.ExternalReferenceType.Vcs, Url = vcsUrl
+                    };
                 if (null == component.ExternalReferences)
                 {
                     component.ExternalReferences = new List<ExternalReference>
@@ -311,6 +242,90 @@ namespace CycloneDX.Services
             }
 
             return component;
+        }
+
+        private static Component SetupComponentProperties(Component component, NuspecModel nuspecModel)
+        {
+            component.Publisher = nuspecModel.nuspecReader.GetAuthors();
+            component.Copyright = nuspecModel.nuspecReader.GetCopyright();
+            // this prevents empty copyright values in the JSON BOM
+            if (string.IsNullOrEmpty(component.Copyright))
+            {
+                component.Copyright = null;
+            }
+
+            var title = nuspecModel.nuspecReader.GetTitle();
+            var summary = nuspecModel.nuspecReader.GetSummary();
+            var description = nuspecModel.nuspecReader.GetDescription();
+            if (!string.IsNullOrEmpty(summary))
+            {
+                component.Description = summary;
+            }
+            else if (!string.IsNullOrEmpty(description))
+            {
+                component.Description = description;
+            }
+            else if (!string.IsNullOrEmpty(title))
+            {
+                component.Description = title;
+            }
+
+            return component;
+        }
+
+        private async Task<NuspecModel> GetNuspec(string name, string version, string nuspecFilename, FindPackageByIdResource resource)
+        {
+            var nuspecModel = new NuspecModel();
+            if (nuspecFilename == null)
+            {
+                var packageVersion = new NuGetVersion(version);
+                await using MemoryStream packageStream = new MemoryStream();
+                await resource.CopyNupkgToStreamAsync(name, packageVersion, packageStream, _sourceCacheContext,
+                    _logger, _cancellationToken);
+
+                Console.WriteLine($"Downloaded package {name} {packageVersion}");
+                using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
+                nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
+
+
+                if (!_disableHashComputation)
+                {
+                    nuspecModel.hashBytes = ComputeSha215Hash(packageStream);
+                }
+            }
+            else
+            {
+                await using (var xmlStream = _fileSystem.File.OpenRead(nuspecFilename))
+                {
+                    nuspecModel.nuspecReader = new NuspecReader(xmlStream);
+                }
+
+                // reference: https://docs.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-add
+                // and: https://github.com/NuGet/Home/wiki/Nupkg-Metadata-File
+                //  └─<packageID>
+                //   └─<version>
+                //    ├─<packageID>.<version>.nupkg
+                //    ├─<packageID>.<version>.nupkg.sha512
+                //    └─<packageID>.nuspec
+
+                string shaFilename = Path.ChangeExtension(nuspecFilename, version + _sha512Extension);
+                string nupkgFilename = Path.ChangeExtension(nuspecFilename, version + _nupkgExtension);
+
+                if (_fileSystem.File.Exists(shaFilename))
+                {
+                    string base64Hash = _fileSystem.File.ReadAllText(shaFilename);
+                    nuspecModel.hashBytes = Convert.FromBase64String(base64Hash);
+                }
+                else if (!_disableHashComputation && _fileSystem.File.Exists(nupkgFilename))
+                {
+                    await using (var nupkgStream = _fileSystem.File.OpenRead(nupkgFilename))
+                    {
+                        nuspecModel.hashBytes = ComputeSha215Hash(nupkgStream);
+                    }
+                }
+            }
+
+            return nuspecModel;
         }
 
         public async Task<Component> GetComponentAsync(NugetPackage nugetPackage)
