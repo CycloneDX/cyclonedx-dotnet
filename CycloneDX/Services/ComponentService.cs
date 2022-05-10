@@ -17,14 +17,14 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CycloneDX.Interfaces;
 using CycloneDX.Models;
-using CycloneDX.Models.v1_3;
 
 namespace CycloneDX.Services
 {
     public class ComponentService
     {
-        private INugetService _nugetService;
+        private readonly INugetService _nugetService;
 
         public ComponentService(INugetService nugetService)
         {
@@ -50,7 +50,7 @@ namespace CycloneDX.Services
                 var currentPackage = packages.Dequeue();
                 var component = await _nugetService.GetComponentAsync(currentPackage).ConfigureAwait(false);
 
-                if (component == null) continue;
+                if (component == null) {continue;}
 
                 components.Add(component);
 
