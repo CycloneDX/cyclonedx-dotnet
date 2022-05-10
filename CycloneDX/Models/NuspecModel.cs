@@ -15,30 +15,19 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Abstractions;
+using NuGet.Packaging;
 
-namespace CycloneDX.Services
+namespace CycloneDX.Models
 {
-    public class FileDiscoveryService
+    public class NuspecModel
     {
-        private readonly IFileSystem _fileSystem;
+        public NuspecReader nuspecReader { get; set; }
+        public byte[] hashBytes { get; set; }
 
-        public FileDiscoveryService(IFileSystem fileSystem)
+        public NuspecModel()
         {
-            _fileSystem = fileSystem;
+            nuspecReader = null;
+            hashBytes = null;
         }
-
-        /// <summary>
-        /// Recursively searches a directory for packages.config files.
-        /// </summary>
-        /// <param name="directory">Directory path to search</param>
-        /// <returns>List of full file paths</returns>
-        public IEnumerable<string> GetPackagesConfigFiles(string directory)
-        {
-            return _fileSystem.Directory.GetFiles(directory, "packages.config", SearchOption.AllDirectories);
-        }
-
     }
 }
