@@ -262,7 +262,7 @@ namespace CycloneDX {
             var components = new HashSet<Component>();
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
-            var transitiveDepencies = new HashSet<string>();
+            var transitiveDependencies = new HashSet<string>();
             var packageToComponent = new Dictionary<NugetPackage, Component>();
             try
             {
@@ -291,7 +291,7 @@ namespace CycloneDX {
                     {
                         foreach (var dep in package.Dependencies)
                         {
-                            transitiveDepencies.Add(bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]);
+                            transitiveDependencies.Add(bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]);
                             packageDepencies.Dependencies.Add(new Dependency
                             {
                                 Ref = bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]
@@ -319,7 +319,7 @@ namespace CycloneDX {
             foreach (var dep in dependencies)
             {
                 if (directPackageDependencies.Contains((dep.Ref)) ||
-                    (directPackageDependencies.Count == 0 && !transitiveDepencies.Contains(dep.Ref)))
+                    (directPackageDependencies.Count == 0 && !transitiveDependencies.Contains(dep.Ref)))
                 {
                     directDependencies.Dependencies.Add(new Dependency { Ref = dep.Ref });
                 }
