@@ -19,14 +19,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CycloneDX.Models;
 
-namespace CycloneDX.Services
+namespace CycloneDX.Interfaces
 {
-    public interface IProjectFileService
+    public interface ISolutionFileService
     {
-        bool DisablePackageRestore { get; set; }
-        Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects);
-        Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects);
-        Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);
-        Task<HashSet<string>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
+        Task<HashSet<string>> GetSolutionProjectReferencesAsync(string solutionFilePath);
+        Task<HashSet<NugetPackage>> GetSolutionNugetPackages(string solutionFilePath, string baseIntermediateOutputPath, bool excludeTestProjects);
     }
 }

@@ -22,14 +22,13 @@ using System.Xml;
 using System.IO;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
+using CycloneDX.Interfaces;
 using CycloneDX.Models;
 
 namespace CycloneDX.Services
 {
     public class DotnetRestoreException : Exception
     {
-        public DotnetRestoreException() : base() {}
-
         public DotnetRestoreException(string message) : base(message) {}
 
         public DotnetRestoreException(string message, Exception innerException) : base(message, innerException) {}
@@ -82,12 +81,12 @@ namespace CycloneDX.Services
         {
             if (string.IsNullOrEmpty(baseIntermediateOutputPath))
             {
-            return Path.Combine(Path.GetDirectoryName(projectFilePath), "obj");
+                return Path.Combine(Path.GetDirectoryName(projectFilePath), "obj");
             }
             else
             {
-            string folderName = Path.GetFileNameWithoutExtension(projectFilePath);
-            return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
+                string folderName = Path.GetFileNameWithoutExtension(projectFilePath);
+                return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
             }
         }
 
@@ -107,7 +106,6 @@ namespace CycloneDX.Services
             }
 
             var isTestProject = IsTestProject(projectFilePath);
-            var packages = new HashSet<NugetPackage>();
 
             Console.WriteLine();
             Console.WriteLine($"» Analyzing: {projectFilePath}");
@@ -139,7 +137,7 @@ namespace CycloneDX.Services
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
             }
-            packages.UnionWith(_projectAssetsFileService.GetNugetPackages(assetsFilename, isTestProject));
+            var packages = _projectAssetsFileService.GetNugetPackages(projectFilePath, assetsFilename, isTestProject);
 
 
             // if there are no project file package references look for a packages.config
