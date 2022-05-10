@@ -20,6 +20,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using CycloneDX.Interfaces;
 using McMaster.Extensions.CommandLineUtils;
 using CycloneDX.Models;
 
@@ -29,8 +30,6 @@ namespace CycloneDX.Services
     {
         public int TimeoutMilliseconds { get; set; } = 300000;
 
-        public DotnetCommandService() {}
-        
         public DotnetCommandResult Run(string arguments)
         {
             return Run(Directory.GetCurrentDirectory(), arguments);
