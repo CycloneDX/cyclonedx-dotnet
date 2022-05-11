@@ -53,6 +53,7 @@ Arguments:
 
 Options:
   -o|--out <OUTPUT_DIRECTORY>                                            The directory to write the BOM
+  -f|--filename <OUTPUT_FILENAME>                                        Optionally provide a filename for the BOM (default: bom.xml or bom.json)
   -j|--json                                                              Produce a JSON BOM instead of XML
   -d|--exclude-dev                                                       Exclude development dependencies from the BOM
   -t|--exclude-test-projects                                             Exclude test projects from the BOM

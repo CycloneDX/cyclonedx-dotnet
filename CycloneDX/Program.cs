@@ -42,6 +42,9 @@ namespace CycloneDX {
         [Option(Description = "The directory to write the BOM", ShortName = "o", LongName = "out")]
         string outputDirectory { get; }
 
+        [Option(Description = "Optionally provide a filename for the BOM (default: bom.xml or bom.json)", ShortName = "f", LongName = "filename")]
+        string outputFilename { get; }
+
         [Option(Description = "Produce a JSON BOM instead of XML", ShortName = "j", LongName = "json")]
         bool json { get; }
 
@@ -387,12 +390,19 @@ namespace CycloneDX {
             // check if the output directory exists and create it if needed
             var bomPath = Program.fileSystem.Path.GetFullPath(outputDirectory);
             if (!Program.fileSystem.Directory.Exists(bomPath))
+            {
                 Program.fileSystem.Directory.CreateDirectory(bomPath);
+            }
 
             // write the BOM to disk
-            var bomFilename = Program.fileSystem.Path.Combine(bomPath, json ? "bom.json" : "bom.xml");
-            Console.WriteLine("Writing to: " + bomFilename);
-            Program.fileSystem.File.WriteAllText(bomFilename, bomContents);
+            var bomFilename = outputFilename;
+            if (string.IsNullOrEmpty(bomFilename))
+            {
+                bomFilename = json ? "bom.json" : "bom.xml";
+            }
+            var bomFilePath = Program.fileSystem.Path.Combine(bomPath, bomFilename);
+            Console.WriteLine("Writing to: " + bomFilePath);
+            Program.fileSystem.File.WriteAllText(bomFilePath, bomContents);
 
             return 0;
         }
