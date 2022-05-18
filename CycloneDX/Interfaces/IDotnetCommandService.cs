@@ -15,15 +15,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using CycloneDX.Models;
 
-namespace CycloneDX.Services
+namespace CycloneDX.Interfaces
 {
-    public interface IPackagesFileService 
+    public interface IDotnetCommandService
     {
-        Task<HashSet<NugetPackage>> GetNugetPackagesAsync(string packagesFilePath);
-        Task<HashSet<NugetPackage>> RecursivelyGetNugetPackagesAsync(string directoryPath);
+        int TimeoutMilliseconds { get; set; }
+        DotnetCommandResult Run(string arguments);
+        DotnetCommandResult Run(string workingDirectory, string arguments);
     }
 }
