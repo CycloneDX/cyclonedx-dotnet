@@ -89,6 +89,8 @@ namespace CycloneDX {
         bool disableGithubLicensesDeprecated { get; set; }
         [Option(Description = "Optionally disable GitHub license resolution", ShortName = "dgl", LongName = "disable-github-licenses")]
         bool disableGithubLicenses { get; set; }
+        [Option(Description = "Optionally enables GitHub license resolution on branches other than main or master", ShortName = "eglndb", LongName = "enable-github-licenses-non-default-branch")]
+        bool enableGithubLicensesOnNonDefaultBranch { get; set; }
 
         [Option(Description = "Optionally disable package restore", ShortName = "dpr", LongName = "disable-package-restore")]
         bool disablePackageRestore { get; set; }
@@ -173,31 +175,29 @@ namespace CycloneDX {
             }
 
             // instantiate services
-
-            var fileDiscoveryService = new FileDiscoveryService(Program.fileSystem);
             GithubService githubService = null;
             if (!(disableGithubLicenses || disableGithubLicensesDeprecated))
             {
                 // GitHubService requires its own HttpClient as it adds a default authorization header
                 if (!string.IsNullOrEmpty(githubBearerToken))
                 {
-                    githubService = new GithubService(new HttpClient(), githubBearerToken);
+                    githubService = new GithubService(new HttpClient(), enableGithubLicensesOnNonDefaultBranch, githubBearerToken);
                 }
                 else if (!string.IsNullOrEmpty(githubBearerTokenDeprecated))
                 {
-                    githubService = new GithubService(new HttpClient(), githubBearerTokenDeprecated);
+                    githubService = new GithubService(new HttpClient(), enableGithubLicensesOnNonDefaultBranch, githubBearerTokenDeprecated);
                 }
                 else if (!string.IsNullOrEmpty(githubUsername))
                 {
-                    githubService = new GithubService(new HttpClient(), githubUsername, githubToken);
+                    githubService = new GithubService(new HttpClient(), enableGithubLicensesOnNonDefaultBranch, githubUsername, githubToken);
                 }
                 else if (!string.IsNullOrEmpty(githubUsernameDeprecated))
                 {
-                    githubService = new GithubService(new HttpClient(), githubUsernameDeprecated, githubTokenDeprecated);
+                    githubService = new GithubService(new HttpClient(), enableGithubLicensesOnNonDefaultBranch, githubUsernameDeprecated, githubTokenDeprecated);
                 }
                 else
                 {
-                    githubService = new GithubService(new HttpClient());
+                    githubService = new GithubService(new HttpClient(), enableGithubLicensesOnNonDefaultBranch);
                 }
             }
             var nugetLogger = new NuGet.Common.NullLogger();

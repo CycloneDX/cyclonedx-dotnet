@@ -55,101 +55,137 @@ namespace CycloneDX.Services
         public GitHubLicenseResolutionException(string message, Exception innerException) : base(message, innerException) {}
     }
 
+    public class GetLicenseParameters
+    {
+        /// <summary>
+        /// URL for the license file. Supporting both github.com and raw.githubusercontent.com URLs.
+        /// </summary>
+        public string LicenseUrl { get; set; }
+
+        /// <summary>
+        /// The URL of the Git repository. Only GitHub repositories are supported.
+        /// </summary>
+        public string RepositoryUrl { get; set; }
+
+        /// <summary>
+        /// The Git commit ID linked with the Nuget package Git repository.
+        /// </summary>
+        public string CommitRef { get; set; }
+    }
+
     public interface IGithubService
     {
-        Task<License> GetLicenseAsync(string licenseUrl);
+        Task<License> GetLicenseAsync(GetLicenseParameters parameters);
     }
 
     public class GithubService : IGithubService
     {
+        private const string BaseUrl = "https://api.github.com/";
 
-        private string _baseUrl = "https://api.github.com/";
-        private readonly HttpClient _httpClient;
-        private readonly List<Regex> _githubRepositoryRegexes = new List<Regex>
+        private static readonly Regex GitHubRepositoryRegex = new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)(?:\.git)", RegexOptions.Singleline | RegexOptions.Compiled);
+
+        private static readonly Regex[] GitHubLicenseUrlRegexes =
         {
-            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][Ss][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
-            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][Ss][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
+            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][Ss][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$", RegexOptions.Singleline | RegexOptions.Compiled),
+            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][Ss][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$", RegexOptions.Singleline | RegexOptions.Compiled),
         };
 
-        public GithubService(HttpClient httpClient)
+        private readonly HttpClient _httpClient;
+        private readonly bool _allowNonDefaultBranch;
+
+        public GithubService(HttpClient httpClient, bool allowNonDefaultBranch)
         {
             _httpClient = httpClient;
+            _allowNonDefaultBranch = allowNonDefaultBranch;
         }
 
-        public GithubService(HttpClient httpClient, string username, string token)
+        public GithubService(HttpClient httpClient, bool allowNonDefaultBranch, string username, string token)
+            : this(httpClient, allowNonDefaultBranch, GetBasicAuthorizationHeader(username, token))
+        {
+        }
+
+        public GithubService(HttpClient httpClient, bool allowNonDefaultBranch, string bearerToken)
+            : this(httpClient, allowNonDefaultBranch, new AuthenticationHeaderValue("Bearer", bearerToken))
+        {
+        }
+
+        private GithubService(HttpClient httpClient, bool allowNonDefaultBranch, AuthenticationHeaderValue authorizationHeader)
         {
             Contract.Requires(httpClient != null);
             _httpClient = httpClient;
-
-            // implemented as per RFC 7617 https://tools.ietf.org/html/rfc7617.html
-            var userToken = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", username, token);
-            var userTokenBytes = System.Text.Encoding.UTF8.GetBytes(userToken);
-            var userTokenBase64 = Convert.ToBase64String(userTokenBytes);
-
-            var authorizationHeader = new AuthenticationHeaderValue(
-                "Basic", 
-                userTokenBase64);
-            
-            _httpClient.DefaultRequestHeaders.Authorization = authorizationHeader;
-        }
-
-        public GithubService(HttpClient httpClient, string bearerToken)
-        {
-            Contract.Requires(httpClient != null);
-            _httpClient = httpClient;
-
-            var authorizationHeader = new AuthenticationHeaderValue(
-                "Bearer", 
-                bearerToken);
-            
+            _allowNonDefaultBranch = allowNonDefaultBranch;
             _httpClient.DefaultRequestHeaders.Authorization = authorizationHeader;
         }
 
         /// <summary>
         /// Tries to get a license from GitHub.
         /// </summary>
-        /// <param name="licenseUrl">URL for the license file. Supporting both github.com and raw.githubusercontent.com URLs.</param>
         /// <returns></returns>
-        public async Task<License> GetLicenseAsync(string licenseUrl)
+        public async Task<License> GetLicenseAsync(GetLicenseParameters parameters)
         {
-            if (licenseUrl == null) return null;
+            if (parameters == null) return null;
 
-            // Detect correct repository id starting from URL
-            Match match = null;
-
-            foreach(var regex in _githubRepositoryRegexes)
+            // Try to get license using the LicenseUrl listed in the .nuspec file
+            if (!string.IsNullOrWhiteSpace(parameters.LicenseUrl))
             {
-                match = regex.Match(licenseUrl);
-                if (match.Success) {break;}
+                // Detect correct repository id starting from URL
+                foreach (var regex in GitHubLicenseUrlRegexes)
+                {
+                    var match = regex.Match(parameters.LicenseUrl);
+                    if (match.Success)
+                    {
+                        var repositoryId = match.Groups["repositoryId"];
+                        var refSpec = match.Groups["refSpec"];
+                        return await GetLicenseFromRepositoryAndRefAsync(repositoryId.Value, refSpec.Value)
+                            .ConfigureAwait(false);
+                    }
+                }
             }
 
-            // License is not on GitHub, we need to abort
-            if (!match.Success) return null;
-            var repositoryId = match.Groups["repositoryId"];
-            var refSpec = match.Groups["refSpec"];
+            if (!string.IsNullOrWhiteSpace(parameters.RepositoryUrl) &&
+                !string.IsNullOrWhiteSpace(parameters.CommitRef))
+            {
+                var match = GitHubRepositoryRegex.Match(parameters.RepositoryUrl);
+                if (match.Success)
+                {
+                    var repositoryId = match.Groups["repositoryId"];
+                    return await GetLicenseFromRepositoryAndRefAsync(repositoryId.Value, parameters.CommitRef)
+                        .ConfigureAwait(false);
+                }
+            }
 
+            return null;
+        }
+
+        private async Task<License> GetLicenseFromRepositoryAndRefAsync(string repositoryId, string refSpec)
+        {
             // GitHub API doesn't necessarily return the correct license for any ref other than master
             // support ticket has been raised, in the meantime will ignore non-master refs
-            if (refSpec.ToString() != "master") {return null;}
+            if (!this._allowNonDefaultBranch && refSpec != "master" && refSpec != "main")
+            {
+                return null;
+            }
 
             Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec}");
 
             // Try getting license for the specified version
-            GithubLicenseRoot githubLicense = null;
+            GithubLicenseRoot githubLicense;
             try
             {
-                githubLicense = await GetGithubLicenseAsync($"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}").ConfigureAwait(false);
+                githubLicense = await GetGithubLicenseAsync($"{BaseUrl}repos/{repositoryId}/license?ref={refSpec}")
+                    .ConfigureAwait(false);
             }
             catch (HttpRequestException exc)
             {
                 Console.Error.WriteLine($"GitHub license resolution failed: {exc.Message}");
-                Console.Error.WriteLine("For offline environments use --disable-github-licenses to disable GitHub license resolution.");
+                Console.Error.WriteLine(
+                    "For offline environments use --disable-github-licenses to disable GitHub license resolution.");
                 throw new GitHubLicenseResolutionException("GitHub license resolution failed.", exc);
             }
 
-            if (githubLicense == null) {
+            if (githubLicense == null)
+            {
                 Console.WriteLine($"No license found on GitHub for repository {repositoryId} using ref {refSpec}");
-
                 return null;
             }
 
@@ -158,7 +194,7 @@ namespace CycloneDX.Services
             {
                 Id = githubLicense.License.SpdxId,
                 Name = githubLicense.License.Name,
-                Url = licenseUrl
+                Url = (githubLicense.HtmlUrl ?? githubLicense.DownloadUrl)?.ToString(),
             };
         }
 
@@ -198,6 +234,16 @@ namespace CycloneDX.Services
                 Console.WriteLine($"GitHub API failed with status code {githubResponse.StatusCode} and message {githubResponse.ReasonPhrase}.");
                 return null;
             }
+        }
+
+        private static AuthenticationHeaderValue GetBasicAuthorizationHeader(string username, string token)
+        {
+            // implemented as per RFC 7617 https://tools.ietf.org/html/rfc7617.html
+            var userToken = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", username, token);
+            var userTokenBytes = System.Text.Encoding.UTF8.GetBytes(userToken);
+            var userTokenBase64 = Convert.ToBase64String(userTokenBytes);
+            var authorizationHeader = new AuthenticationHeaderValue("Basic", userTokenBase64);
+            return authorizationHeader;
         }
     }
 }
