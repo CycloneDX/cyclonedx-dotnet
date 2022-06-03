@@ -180,22 +180,25 @@ namespace CycloneDX.Services
             else
             {
                 var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
-                if (!string.IsNullOrEmpty(licenseUrl))
+
+                License license = null;
+
+                if (_githubService != null)
                 {
-                    License license = null;
-
-                    if (_githubService != null)
+                    var repository = nuspecModel.nuspecReader.GetRepositoryMetadata();
+                    var parameters = new GetLicenseParameters
                     {
-                        license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
-                    }
+                        LicenseUrl = licenseUrl,
+                        RepositoryUrl = repository?.Url,
+                        CommitRef = repository?.Commit,
+                    };
 
-                    if (license == null)
-                    {
-                        license = new License { Url = licenseUrl };
-                    }
-
-                    component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
+                    license = await _githubService.GetLicenseAsync(parameters).ConfigureAwait(false);
                 }
+
+                license ??= new License { Url = licenseUrl };
+
+                component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
             }
 
             var projectUrl = nuspecModel.nuspecReader.GetProjectUrl();
