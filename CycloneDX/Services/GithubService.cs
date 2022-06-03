@@ -123,7 +123,7 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<License> GetLicenseAsync(GetLicenseParameters parameters)
         {
-            if (parameters == null) return null;
+            if (parameters == null) { return null; }
 
             // Try to get license using the LicenseUrl listed in the .nuspec file
             if (!string.IsNullOrWhiteSpace(parameters.LicenseUrl))
