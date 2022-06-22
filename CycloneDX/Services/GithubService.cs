@@ -1,4 +1,4 @@
-﻿// This file is part of CycloneDX Tool for .NET
+// This file is part of CycloneDX Tool for .NET
 //
 // Licensed under the Apache License, Version 2.0 (the “License”);
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CycloneDX.Models;
-using License = CycloneDX.Models.v1_3.License;
 
 namespace CycloneDX.Services
 {
@@ -65,8 +64,8 @@ namespace CycloneDX.Services
     {
 
         private string _baseUrl = "https://api.github.com/";
-        private HttpClient _httpClient;
-        private List<Regex> _githubRepositoryRegexes = new List<Regex>
+        private readonly HttpClient _httpClient;
+        private readonly List<Regex> _githubRepositoryRegexes = new List<Regex>
         {
             new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][Ss][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
             new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[Ll][Ii][Cc][Ee][Nn][Ss][Ee]((\.|-)((md)|([Tt][Xx][Tt])|([Mm][Ii][Tt])|([Bb][Ss][Dd])))?$"),
@@ -85,7 +84,7 @@ namespace CycloneDX.Services
             // implemented as per RFC 7617 https://tools.ietf.org/html/rfc7617.html
             var userToken = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", username, token);
             var userTokenBytes = System.Text.Encoding.UTF8.GetBytes(userToken);
-            var userTokenBase64 = System.Convert.ToBase64String(userTokenBytes);
+            var userTokenBase64 = Convert.ToBase64String(userTokenBytes);
 
             var authorizationHeader = new AuthenticationHeaderValue(
                 "Basic", 
@@ -121,7 +120,7 @@ namespace CycloneDX.Services
             foreach(var regex in _githubRepositoryRegexes)
             {
                 match = regex.Match(licenseUrl);
-                if (match.Success) break;
+                if (match.Success) {break;}
             }
 
             // License is not on GitHub, we need to abort
@@ -131,7 +130,7 @@ namespace CycloneDX.Services
 
             // GitHub API doesn't necessarily return the correct license for any ref other than master
             // support ticket has been raised, in the meantime will ignore non-master refs
-            if (refSpec.ToString() != "master") return null;
+            if (refSpec.ToString() != "master") {return null;}
 
             Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec}");
 

@@ -23,16 +23,18 @@ using System.IO.Abstractions;
 using System.Net.Http;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
-using CycloneDX.Models.v1_3;
 using CycloneDX.Models;
 using CycloneDX.Services;
 using System.Reflection;
+using System.Linq;
+using CycloneDX.Interfaces;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.IntegrationTests")]
 namespace CycloneDX {
     [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")]
     class Program {
+        #region Options
         [Option(Description = "Output the tool version and exit", ShortName = "v", LongName = "version")]
         bool version { get; }
 
@@ -54,8 +56,17 @@ namespace CycloneDX {
         [Option(Description = "Exclude test projects from the BOM", ShortName = "t", LongName = "exclude-test-projects")]
         bool excludetestprojects { get; }
 
-        [Option(Description = "Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)", ShortName = "u", LongName = "url")]
+        [Option(Description = "Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json", ShortName = "u", LongName = "url")]
         string baseUrl { get; set; }
+
+        [Option(Description = "Alternative NuGet repository username", ShortName = "us", LongName = "baseUrlUsername")]
+        string baseUrlUserName { get; set; }
+
+        [Option(Description = "Alternative NuGet repository username password/apikey", ShortName = "usp", LongName = "baseUrlUserPassword")]
+        string baseUrlUserPassword { get; set; }
+
+        [Option(Description = "Alternative NuGet repository password is cleartext", ShortName = "uspct", LongName = "isBaseUrlPasswordClearText")]
+        bool isPasswordClearText { get; set; }
 
         [Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied .csproj", ShortName = "r", LongName = "recursive")]
         bool scanProjectReferences { get; set; }
@@ -105,15 +116,15 @@ namespace CycloneDX {
 
         [Option(Description = "Override the default BOM metadata component type (defaults to application).", ShortName = "st", LongName = "set-type")]
         public Component.Classification setType { get; }
+#endregion options
 
-        static internal IFileSystem fileSystem = new FileSystem();
-        static internal HttpClient httpClient = new HttpClient();
-        static internal IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem);
-        static internal IDotnetCommandService dotnetCommandService = new DotnetCommandService();
-        static internal IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
-        static internal IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
-        static internal IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
-        static internal ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
+        internal static IFileSystem fileSystem = new FileSystem();
+        internal static readonly IDotnetCommandService dotnetCommandService = new DotnetCommandService();
+        internal static readonly IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, dotnetCommandService, () => new AssetFileReader());
+        internal static readonly IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
+        internal static readonly IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
+        internal static readonly IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
+        internal static ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
 
         public static async Task<int> Main(string[] args)
             => await CommandLineApplication.ExecuteAsync<Program>(args).ConfigureAwait(false);
@@ -192,13 +203,10 @@ namespace CycloneDX {
                     githubService = new GithubService(new HttpClient());
                 }
             }
-            var nugetService = new NugetService(
-                Program.fileSystem,
-                packageCachePathsResult.Result,
-                githubService,
-                Program.httpClient,
-                baseUrl,
-                disableHashComputation);
+            var nugetLogger = new NuGet.Common.NullLogger();
+            var nugetInput =
+                NugetInputFactory.Create(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText);
+            var nugetService = new NugetV3Service(nugetInput, fileSystem, packageCachePathsResult.Result, githubService, nugetLogger, disableHashComputation);
 
             var packages = new HashSet<NugetPackage>();
 
@@ -259,7 +267,8 @@ namespace CycloneDX {
             var components = new HashSet<Component>();
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
-            var transitiveDepencies = new HashSet<string>();
+            var transitiveDependencies = new HashSet<string>();
+            var packageToComponent = new Dictionary<NugetPackage, Component>();
             try
             {
                 var bomRefLookup = new Dictionary<(string,string), string>();
@@ -270,6 +279,7 @@ namespace CycloneDX {
                         && (component.Scope != Component.ComponentScope.Excluded || !excludeDev)
                     )
                     {
+                        packageToComponent[package] = component;
                         components.Add(component);
                     }
                     bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture),(component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
@@ -286,7 +296,7 @@ namespace CycloneDX {
                     {
                         foreach (var dep in package.Dependencies)
                         {
-                            transitiveDepencies.Add(bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]);
+                            transitiveDependencies.Add(bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]);
                             packageDepencies.Dependencies.Add(new Dependency
                             {
                                 Ref = bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]
@@ -308,10 +318,13 @@ namespace CycloneDX {
             {
                 return (int)ExitCode.GitHubLicenseResolutionFailed;
             }
+
+            var directPackageDependencies = packages.Where(p => p.IsDirectReference).Select(p => packageToComponent[p].BomRef).ToHashSet();
             // now we loop through all the dependencies to check which are direct
             foreach (var dep in dependencies)
             {
-                if (!transitiveDepencies.Contains(dep.Ref))
+                if (directPackageDependencies.Contains((dep.Ref)) ||
+                    (directPackageDependencies.Count == 0 && !transitiveDependencies.Contains(dep.Ref)))
                 {
                     directDependencies.Dependencies.Add(new Dependency { Ref = dep.Ref });
                 }
@@ -374,11 +387,11 @@ namespace CycloneDX {
 
             if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
             bom.Components = new List<Component>(components);
-            bom.Components.Sort((x, y) => {
+            bom.Components.Sort((x, y) =>
+            {
                 if (x.Name == y.Name)
                     return string.Compare(x.Version, y.Version, StringComparison.InvariantCultureIgnoreCase);
-                else
-                    return string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase);
+                return string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase);
             });
             bom.Dependencies = dependencies;
             directDependencies.Ref = bom.Metadata.Component.BomRef;
@@ -411,7 +424,7 @@ namespace CycloneDX {
         {
             try
             {
-                return Xml.Deserializer.Deserialize(File.ReadAllText(templatePath));
+                return Xml.Serializer.Deserialize(File.ReadAllText(templatePath));
             }
             catch (IOException ex)
             {

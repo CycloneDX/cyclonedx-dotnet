@@ -16,29 +16,12 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Abstractions;
+using CycloneDX.Models;
 
-namespace CycloneDX.Services
+namespace CycloneDX.Interfaces
 {
-    public class FileDiscoveryService
+    public interface IProjectAssetsFileService 
     {
-        private readonly IFileSystem _fileSystem;
-
-        public FileDiscoveryService(IFileSystem fileSystem)
-        {
-            _fileSystem = fileSystem;
-        }
-
-        /// <summary>
-        /// Recursively searches a directory for packages.config files.
-        /// </summary>
-        /// <param name="directory">Directory path to search</param>
-        /// <returns>List of full file paths</returns>
-        public IEnumerable<string> GetPackagesConfigFiles(string directory)
-        {
-            return _fileSystem.Directory.GetFiles(directory, "packages.config", SearchOption.AllDirectories);
-        }
-
+        HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool IsTestProject);
     }
 }

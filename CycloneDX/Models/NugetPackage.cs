@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using CycloneDX.Models.v1_3;
 
 namespace CycloneDX.Models
 {
@@ -27,6 +26,7 @@ namespace CycloneDX.Models
     {
         public string Name { get; set; }
         public string Version { get; set; }
+        public bool IsDirectReference { get; set; }
         public Component.ComponentScope? Scope { get; set; }
         public Dictionary<string, string> Dependencies { get; set; } //key: name ~ value: version
 
