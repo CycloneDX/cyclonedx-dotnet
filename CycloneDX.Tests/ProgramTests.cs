@@ -72,6 +72,32 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task CallingCycloneDX_WithOutputFilename_CreatesOutputFilename()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+                {
+                    { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), "" }
+                });
+            var mockSolutionFileService = new Mock<ISolutionFileService>();
+            mockSolutionFileService
+                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .ReturnsAsync(new HashSet<NugetPackage>());
+            Program.fileSystem = mockFileSystem;
+            Program.solutionFileService = mockSolutionFileService.Object;
+            var args = new string[]
+            {
+                XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
+                "-o", XFS.Path(@"c:\NewDirectory"),
+                "-f", "my_bom.xml"
+            };
+
+            var exitCode = await Program.Main(args).ConfigureAwait(false);
+
+            Assert.Equal((int)ExitCode.OK, exitCode);
+            Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\my_bom.xml")));
+        }
+
+        [Fact]
         public void CheckMetaDataTemplate()
         {
             var bom = new Bom();
