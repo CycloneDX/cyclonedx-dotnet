@@ -126,7 +126,7 @@ namespace CycloneDX {
         public static async Task<int> Main(string[] args)
             => await CommandLineApplication.ExecuteAsync<Program>(args).ConfigureAwait(false);
 
-        async Task<int> OnExecuteAsync() {
+        async Task<int> OnExecuteAsync(CommandLineApplication app) {
             if (version)
             {
                 Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version?.ToString());
@@ -136,21 +136,25 @@ namespace CycloneDX {
             Console.WriteLine();
 
             // check parameter values
-            if (string.IsNullOrEmpty(SolutionOrProjectFile)) {
-
-                Console.Error.WriteLine($"A path is required");
+            if (string.IsNullOrEmpty(SolutionOrProjectFile))
+            {
+                app.ExtendedHelpText = Environment.NewLine + "A path is required";
+                app.ShowHelp();
                 return (int)ExitCode.SolutionOrProjectFileParameterMissing;
             }
 
-            if (string.IsNullOrEmpty(outputDirectory)) {
-                Console.Error.WriteLine($"The output directory is required");
+            if (string.IsNullOrEmpty(outputDirectory))
+            {
+                app.ExtendedHelpText = Environment.NewLine + "The output directory is required";
+                app.ShowHelp();
                 return (int)ExitCode.OutputDirectoryParameterMissing;
             }
 
-            if ((string.IsNullOrEmpty(githubUsername) ^ string.IsNullOrEmpty(githubToken))
-                || (string.IsNullOrEmpty(githubUsernameDeprecated) ^ string.IsNullOrEmpty(githubTokenDeprecated)))
+            if ((string.IsNullOrEmpty(githubUsername) ^ string.IsNullOrEmpty(githubToken)) ||
+                (string.IsNullOrEmpty(githubUsernameDeprecated) ^ string.IsNullOrEmpty(githubTokenDeprecated)))
             {
-                Console.Error.WriteLine($"Both GitHub username and token are required");
+                app.ExtendedHelpText = Environment.NewLine + "Both GitHub username and token are required";
+                app.ShowHelp();
                 return (int)ExitCode.GitHubParameterMissing;
             }
 
