@@ -83,6 +83,38 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\
         }
 
         [Fact]
+        public async Task GetSolutionProjectReferences_ReturnsListOfProjectsIncludingFSharpAndVB()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+                {
+                    { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), new MockFileData(@"
+Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project1\Project1.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
+Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project2\Project2.fsproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
+Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\Project3.vbproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
+                        ")},
+                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetEmptyProjectFile() },
+                    { XFS.Path(@"c:\SolutionPath\Project2\Project2.fsproj"), Helpers.GetEmptyProjectFile() },
+                    { XFS.Path(@"c:\SolutionPath\Project3\Project3.vbproj"), Helpers.GetEmptyProjectFile() },
+                });
+            var mockProjectFileService = new Mock<IProjectFileService>();
+            mockProjectFileService
+                .SetupSequence(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<string>())
+                .ReturnsAsync(new HashSet<string>())
+                .ReturnsAsync(new HashSet<string>());
+            var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
+
+            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(false);
+            var sortedProjects = new List<string>(projects);
+            sortedProjects.Sort();
+            
+            Assert.Collection(sortedProjects,
+                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), item),
+                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project2\Project2.fsproj"), item),
+                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project3\Project3.vbproj"), item));
+        }
+
+        [Fact]
         public async Task GetSolutionProjectReferences_ReturnsListOfProjects_IncludingSecondaryProjectReferences()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
