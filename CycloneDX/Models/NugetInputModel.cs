@@ -31,7 +31,8 @@ namespace CycloneDX.Models
             {
                 return new NugetInputModel(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText);
             }
-            return null;
+
+            return new NugetInputModel(baseUrl);
         }
 
     }
@@ -42,6 +43,11 @@ namespace CycloneDX.Models
         public string nugetUsername { get; set; }
         public string nugetPassword { get; set; }
         public bool IsPasswordClearText { get; set; }
+
+        public NugetInputModel(string baseUrl)
+        {
+            nugetFeedUrl = baseUrl;
+        }
 
         public NugetInputModel(string baseUrl, string baseUrlUserName, string baseUrlUserPassword,
             bool isPasswordClearText)
