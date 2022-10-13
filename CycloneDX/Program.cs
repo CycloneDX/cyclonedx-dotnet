@@ -279,14 +279,15 @@ namespace CycloneDX {
                 foreach (var package in packages)
                 {
                     var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
-                    if (component != null
-                        && (component.Scope != Component.ComponentScope.Excluded || !excludeDev)
-                    )
+                    if (component != null)
                     {
+                        if (component.Scope != Component.ComponentScope.Excluded || !excludeDev)
+                        {
+                            components.Add(component);
+                        }
                         packageToComponent[package] = component;
-                        components.Add(component);
+                        bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture),(component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
                     }
-                    bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture),(component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
                 }
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
                 foreach (var package in packages)
