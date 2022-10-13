@@ -212,7 +212,7 @@ namespace CycloneDX.Services
 
             if (projectReferences.Count == 0)
             {
-                Console.Error.WriteLine("  No project references found");
+                Console.WriteLine("  No project references found");
             }
 
             return projectReferences;
