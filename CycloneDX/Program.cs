@@ -267,7 +267,7 @@ namespace CycloneDX {
                 topLevelComponent.Name = setName;
             }
 
-            // get all the components and depdency graph from the NuGet packages
+            // get all the components and dependency graph from the NuGet packages
             var components = new HashSet<Component>();
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
@@ -292,7 +292,7 @@ namespace CycloneDX {
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
                 foreach (var package in packages)
                 {
-                    var packageDepencies = new Dependency
+                    var packageDependencies = new Dependency
                     {
                         Ref = bomRefLookup[(package.Name.ToLower(CultureInfo.InvariantCulture), package.Version.ToLower(CultureInfo.InvariantCulture))],
                         Dependencies = new List<Dependency>()
@@ -302,13 +302,13 @@ namespace CycloneDX {
                         foreach (var dep in package.Dependencies)
                         {
                             transitiveDependencies.Add(bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]);
-                            packageDepencies.Dependencies.Add(new Dependency
+                            packageDependencies.Dependencies.Add(new Dependency
                             {
                                 Ref = bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]
                             });
                         }
                     }
-                    dependencies.Add(packageDepencies);
+                    dependencies.Add(packageDependencies);
                 }
             }
             catch (InvalidGitHubApiCredentialsException)
