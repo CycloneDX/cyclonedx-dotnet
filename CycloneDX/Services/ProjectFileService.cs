@@ -200,11 +200,17 @@ namespace CycloneDX.Services
                     {
                         if (reader.IsStartElement() && reader.Name == "ProjectReference")
                         {
-                            var relativeProjectReference =
-                                reader["Include"].Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
-                            var fullProjectReference = _fileSystem.Path.Combine(projectDirectory, relativeProjectReference);
-                            var absoluteProjectReference = _fileSystem.Path.GetFullPath(fullProjectReference);
-                            projectReferences.Add(absoluteProjectReference);
+                            string includeAttribute = reader["Include"];
+
+                            if (includeAttribute != null)
+                            {
+                                var relativeProjectReference =
+                                    includeAttribute.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
+                                var fullProjectReference =
+                                    _fileSystem.Path.Combine(projectDirectory, relativeProjectReference);
+                                var absoluteProjectReference = _fileSystem.Path.GetFullPath(fullProjectReference);
+                                projectReferences.Add(absoluteProjectReference);
+                            }
                         }
                     }
                 }
