@@ -267,7 +267,7 @@ namespace CycloneDX {
                 topLevelComponent.Name = setName;
             }
 
-            // get all the components and depdency graph from the NuGet packages
+            // get all the components and dependency graph from the NuGet packages
             var components = new HashSet<Component>();
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
@@ -279,19 +279,20 @@ namespace CycloneDX {
                 foreach (var package in packages)
                 {
                     var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
-                    if (component != null
-                        && (component.Scope != Component.ComponentScope.Excluded || !excludeDev)
-                    )
+                    if (component != null)
                     {
+                        if (component.Scope != Component.ComponentScope.Excluded || !excludeDev)
+                        {
+                            components.Add(component);
+                        }
                         packageToComponent[package] = component;
-                        components.Add(component);
+                        bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture),(component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
                     }
-                    bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture),(component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
                 }
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
                 foreach (var package in packages)
                 {
-                    var packageDepencies = new Dependency
+                    var packageDependencies = new Dependency
                     {
                         Ref = bomRefLookup[(package.Name.ToLower(CultureInfo.InvariantCulture), package.Version.ToLower(CultureInfo.InvariantCulture))],
                         Dependencies = new List<Dependency>()
@@ -301,13 +302,13 @@ namespace CycloneDX {
                         foreach (var dep in package.Dependencies)
                         {
                             transitiveDependencies.Add(bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]);
-                            packageDepencies.Dependencies.Add(new Dependency
+                            packageDependencies.Dependencies.Add(new Dependency
                             {
                                 Ref = bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]
                             });
                         }
                     }
-                    dependencies.Add(packageDepencies);
+                    dependencies.Add(packageDependencies);
                 }
             }
             catch (InvalidGitHubApiCredentialsException)
