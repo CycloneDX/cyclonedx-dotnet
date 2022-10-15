@@ -56,7 +56,7 @@ docker run cyclonedx/cyclonedx-dotnet [OPTIONS] <path>
 Usage: dotnet CycloneDX [options] <path>
 
 Arguments:
-  path                                              The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files
+  path                                              The path to a .sln, .csproj, .fsproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files
 
 Options:
   -o|--out <OUTPUT_DIRECTORY>                                            The directory to write the BOM
@@ -65,7 +65,7 @@ Options:
   -d|--exclude-dev                                                       Exclude development dependencies from the BOM
   -t|--exclude-test-projects                                             Exclude test projects from the BOM
   -u|--url <BASE_URL>                                                    Alternative NuGet repository URL to v3-flatcontainer API (a trailing slash is required)
-  -r|--recursive                                                         To be used with a single project file, it will recursively scan project references of the supplied .csproj
+  -r|--recursive                                                         To be used with a single project file, it will recursively scan project references of the supplied project file
   -ns|--no-serial-number                                                 Optionally omit the serial number from the resulting BOM
   -gu|--github-username <GITHUB_USERNAME>                                Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token
   -gt|--github-token <GITHUB_TOKEN>                                      Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username
@@ -91,7 +91,7 @@ The following will recursively scan the directory structure for packages.config 
 dotnet CycloneDX /path/to/project -o /output/path
 ```
 
-The following will recursively scan the project references of the supplied .csproj file, and create a BOM of all package references from all included projects:
+The following will recursively scan the project references of the supplied project file, and create a BOM of all package references from all included projects:
 ```bash
 dotnet CycloneDX /path/to/project/MyProject.csproj -o /output/path -r
 ```

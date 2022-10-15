@@ -38,7 +38,7 @@ namespace CycloneDX {
         [Option(Description = "Output the tool version and exit", ShortName = "v", LongName = "version")]
         bool version { get; }
 
-        [Argument(0, Name = "path", Description = "The path to a .sln, .csproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
+        [Argument(0, Name = "path", Description = "The path to a .sln, .csproj, .fsproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
         string SolutionOrProjectFile { get; set; }
 
         [Option(Description = "The directory to write the BOM", ShortName = "o", LongName = "out")]
@@ -68,7 +68,7 @@ namespace CycloneDX {
         [Option(Description = "Alternative NuGet repository password is cleartext", ShortName = "uspct", LongName = "isBaseUrlPasswordClearText")]
         bool isPasswordClearText { get; set; }
 
-        [Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied .csproj", ShortName = "r", LongName = "recursive")]
+        [Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied project file", ShortName = "r", LongName = "recursive")]
         bool scanProjectReferences { get; set; }
 
         [Option(Description = "DEPRECATED: Optionally omit the serial number from the resulting BOM", ShowInHelpText = false, ShortName = "nsdeprecated", LongName = "noSerialNumber")]
@@ -253,7 +253,7 @@ namespace CycloneDX {
                 }
                 else
                 {
-                    Console.Error.WriteLine($"Only .sln, .csproj, .vbproj, and packages.config files are supported");
+                    Console.Error.WriteLine($"Only .sln, .csproj, .fsproj, .vbproj, and packages.config files are supported");
                     return (int)ExitCode.InvalidOptions;
                 }
             }
