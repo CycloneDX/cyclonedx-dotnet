@@ -31,7 +31,9 @@ using CycloneDX.Interfaces;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.IntegrationTests")]
-namespace CycloneDX {
+
+namespace CycloneDX
+{
     [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")]
     class Program {
         #region Options
@@ -275,7 +277,7 @@ namespace CycloneDX {
             var packageToComponent = new Dictionary<NugetPackage, Component>();
             try
             {
-                var bomRefLookup = new Dictionary<(string,string), string>();
+                var bomRefLookup = new Dictionary<(string, string), string>();
                 foreach (var package in packages)
                 {
                     var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
@@ -286,7 +288,7 @@ namespace CycloneDX {
                             components.Add(component);
                         }
                         packageToComponent[package] = component;
-                        bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture),(component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
+                        bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture), (component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
                     }
                 }
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
@@ -297,14 +299,30 @@ namespace CycloneDX {
                         Ref = bomRefLookup[(package.Name.ToLower(CultureInfo.InvariantCulture), package.Version.ToLower(CultureInfo.InvariantCulture))],
                         Dependencies = new List<Dependency>()
                     };
-                    if (package.Dependencies != null)
+                    if (package.Dependencies != null && package.Dependencies.Any())
                     {
                         foreach (var dep in package.Dependencies)
                         {
-                            transitiveDependencies.Add(bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]);
+                            var lookupKey = (dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture));
+                            if (!bomRefLookup.ContainsKey(lookupKey))
+                            {
+                                var packageNameMatch = bomRefLookup.Where(x => x.Key.Item1 == dep.Key.ToLower(CultureInfo.InvariantCulture)).ToList();
+                                if (packageNameMatch.Count == 1)
+                                {
+                                    lookupKey = packageNameMatch.First().Key;
+                                }
+                                else
+                                {
+                                    Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value}");
+                                    return (int)ExitCode.UnableToLocateDependencyBomRef;
+                                }
+                            }
+
+                            var bomRef = bomRefLookup[lookupKey];
+                            transitiveDependencies.Add(bomRef);
                             packageDependencies.Dependencies.Add(new Dependency
                             {
-                                Ref = bomRefLookup[(dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture))]
+                                Ref = bomRef
                             });
                         }
                     }
@@ -438,11 +456,13 @@ namespace CycloneDX {
             }
             return bom;
         }
+
         public static void AddMetadataTool(Bom bom)
         {
             string toolname = "CycloneDX module for .NET";
 
-            if (bom.Metadata == null) {
+            if (bom.Metadata == null)
+            {
                 bom.Metadata = new Metadata();
             }
             if (bom.Metadata.Tools == null)
@@ -464,8 +484,6 @@ namespace CycloneDX {
             {
                 bom.Metadata.Tools[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
-
         }
-
     }
 }
