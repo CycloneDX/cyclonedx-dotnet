@@ -72,9 +72,14 @@ namespace CycloneDX.Services
                 return false;
             }
 
-            XmlElement elt = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
-
-            return elt != null;
+            XmlElement testSdkReference = xmldoc.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.NET.Test.Sdk']") as XmlElement;
+            if (testSdkReference != null)
+            {
+                return true;
+            }
+            
+            XmlElement testProjectPropertyGroup = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
+            return testProjectPropertyGroup != null;
         }
 
         static internal String GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
