@@ -27,6 +27,7 @@ namespace CycloneDX
         GitHubApiRateLimitExceeded,
         LocalPackageCacheError,
         DotnetRestoreFailed,
-        GitHubLicenseResolutionFailed
+        GitHubLicenseResolutionFailed,
+        UnableToLocateDependencyBomRef
     }
 }
