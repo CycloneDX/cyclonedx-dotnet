@@ -101,7 +101,7 @@ namespace CycloneDX.Services
             if (nugetInput == null || string.IsNullOrEmpty(nugetInput.nugetFeedUrl) ||
                 string.IsNullOrEmpty(nugetInput.nugetUsername) || string.IsNullOrEmpty(nugetInput.nugetPassword))
             {
-                return Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.json");
+                return Repository.Factory.GetCoreV3(nugetInput?.nugetFeedUrl ?? "https://api.nuget.org/v3/index.json");
             }
 
             var packageSource =
