@@ -192,6 +192,12 @@ namespace CycloneDX.Services
                     license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
                 }
 
+                var branchesToCheck = new List<string>
+                {
+                    "master",
+                    "main",
+                };
+
                 if (license == null)
                 {
                     // try repository URLs for potential that they are github
@@ -205,11 +211,6 @@ namespace CycloneDX.Services
 
                         if (license == null)
                         {
-                            var branchesToCheck = new List<string>
-                            {
-                                "master",
-                                "main",
-                            };
                             foreach (var branchToCheck in branchesToCheck)
                             {
                                 license = await _githubService.GetLicenseAsync($"{repository.Url}/blob/{branchToCheck}/licence").ConfigureAwait(false);
@@ -217,6 +218,23 @@ namespace CycloneDX.Services
                                 {
                                     break;
                                 }
+                            }
+                        }
+                    }
+                }
+
+                if (license == null)
+                {
+                    // try project URL for potential that they are github
+                    var project = nuspecModel.nuspecReader.GetProjectUrl();
+                    if (!string.IsNullOrWhiteSpace(project))
+                    {
+                        foreach (var branchToCheck in branchesToCheck)
+                        {
+                            license = await _githubService.GetLicenseAsync($"{project}/blob/{branchToCheck}/licence").ConfigureAwait(false);
+                            if (license != null)
+                            {
+                                break;
                             }
                         }
                     }
