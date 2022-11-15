@@ -177,23 +177,53 @@ namespace CycloneDX.Services
                 };
                 licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
             }
+            else if (_githubService == null)
+            {
+                var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
+                var license = new License { Url = licenseUrl };
+                component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
+            }
             else
             {
+                License license = null;
                 var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
                 if (!string.IsNullOrEmpty(licenseUrl))
                 {
-                    License license = null;
+                    license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
+                }
 
-                    if (_githubService != null)
+                if (license == null)
+                {
+                    // try repository URLs for potential that they are github
+                    var repository = nuspecModel.nuspecReader.GetRepositoryMetadata();
+                    if (repository != null && !string.IsNullOrWhiteSpace(repository.Url))
                     {
-                        license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
-                    }
+                        if (!string.IsNullOrWhiteSpace(repository.Commit))
+                        {
+                            license = await _githubService.GetLicenseAsync($"{repository.Url}/blob/{repository.Commit}/licence").ConfigureAwait(false);
+                        }
 
-                    if (license == null)
-                    {
-                        license = new License { Url = licenseUrl };
+                        if (license == null)
+                        {
+                            var branchesToCheck = new List<string>
+                            {
+                                "master",
+                                "main",
+                            };
+                            foreach (var branchToCheck in branchesToCheck)
+                            {
+                                license = await _githubService.GetLicenseAsync($"{repository.Url}/blob/{branchToCheck}/licence").ConfigureAwait(false);
+                                if (license != null)
+                                {
+                                    break;
+                                }
+                            }
+                        }
                     }
+                }
 
+                if (license != null)
+                {
                     component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
                 }
             }
