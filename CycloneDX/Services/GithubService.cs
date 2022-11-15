@@ -158,7 +158,7 @@ namespace CycloneDX.Services
             {
                 Id = githubLicense.License.SpdxId,
                 Name = githubLicense.License.Name,
-                Url = licenseUrl
+                Url = githubLicense.HtmlUrl?.ToString() ?? licenseUrl
             };
         }
 
