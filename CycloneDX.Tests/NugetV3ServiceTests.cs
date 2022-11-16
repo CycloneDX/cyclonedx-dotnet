@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -211,6 +212,162 @@ namespace CycloneDX.Tests
 
             Assert.Equal(packageName, component.Name);
             Assert.Equal(packageVersion, component.Version);
+        }
+
+        [Fact]
+        public async Task GetComponent_GitHubLicenseLookup_ReturnsComponent()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <licenseUrl>https://licence.url</licenseUrl>
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+            mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+
+            mockGitHubService.Verify(x => x.GetLicenseAsync(It.IsAny<string>()), Times.Once);
+            Assert.Single(component.Licenses);
+            Assert.Equal("LicenseId", component.Licenses.First().License.Id);
+        }
+
+        [Fact]
+        public async Task GetComponent_GitHubLicenseLookup_FromRepository_ReturnsComponent()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <repository url=""https://licence.url"" />
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+            mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+
+            mockGitHubService.Verify(x => x.GetLicenseAsync(It.IsAny<string>()), Times.Once);
+            Assert.Single(component.Licenses);
+            Assert.Equal("LicenseId", component.Licenses.First().License.Id);
+        }
+
+        [Fact]
+        public async Task GetComponent_GitHubLicenseLookup_FromRepositoryAndCommit_ReturnsComponent()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <repository url=""https://licence.url"" commit=""123456"" />
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+            mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url/blob/123456/licence")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+
+            mockGitHubService.Verify(x => x.GetLicenseAsync(It.IsAny<string>()), Times.Once);
+            Assert.Single(component.Licenses);
+            Assert.Equal("LicenseId", component.Licenses.First().License.Id);
+        }
+
+        [Fact]
+        public async Task GetComponent_GitHubLicenseLookup_FromProjectUrl_ReturnsComponent()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <projectUrl>https://licence.url</projectUrl>
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+            mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+
+            mockGitHubService.Verify(x => x.GetLicenseAsync(It.IsAny<string>()), Times.Once);
+            Assert.Single(component.Licenses);
+            Assert.Equal("LicenseId", component.Licenses.First().License.Id);
+        }
+
+        [Fact]
+        public async Task GetComponent_GitHubLicenseLookup_FromRepository_WhenLicenceInvalid_ReturnsComponent()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <licenseUrl>https://not-licence.url</licenseUrl>
+                    <repository url=""https://licence.url"" />
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+            mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+
+            mockGitHubService.Verify(x => x.GetLicenseAsync(It.IsAny<string>()), Times.Exactly(2));
+            Assert.Single(component.Licenses);
+            Assert.Equal("LicenseId", component.Licenses.First().License.Id);
         }
     }
 }
