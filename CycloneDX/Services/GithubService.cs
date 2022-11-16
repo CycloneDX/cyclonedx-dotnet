@@ -69,8 +69,8 @@ namespace CycloneDX.Services
         {
             new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[l][i][c][e][n][cs][e]((\.|-)((md)|([t][x][t])|([m][i][t])|([b][s][d])))?$", RegexOptions.IgnoreCase),
             new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[l][i][c][e][n][cs][e]((\.|-)((md)|([t][x][t])|([m][i][t])|([b][s][d])))?$", RegexOptions.IgnoreCase),
-            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+).*$", RegexOptions.IgnoreCase),
-            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+).*$", RegexOptions.IgnoreCase)
+            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/?$", RegexOptions.IgnoreCase),
+            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/?$", RegexOptions.IgnoreCase)
         };
 
         public GithubService(HttpClient httpClient)
