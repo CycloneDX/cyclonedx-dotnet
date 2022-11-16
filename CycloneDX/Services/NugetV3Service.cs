@@ -192,12 +192,6 @@ namespace CycloneDX.Services
                     license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
                 }
 
-                var branchesToCheck = new List<string>
-                {
-                    "master",
-                    "main",
-                };
-
                 if (license == null)
                 {
                     // try repository URLs for potential that they are github
@@ -211,14 +205,7 @@ namespace CycloneDX.Services
 
                         if (license == null)
                         {
-                            foreach (var branchToCheck in branchesToCheck)
-                            {
-                                license = await _githubService.GetLicenseAsync($"{repository.Url}/blob/{branchToCheck}/licence").ConfigureAwait(false);
-                                if (license != null)
-                                {
-                                    break;
-                                }
-                            }
+                            license = await _githubService.GetLicenseAsync(repository.Url).ConfigureAwait(false);
                         }
                     }
                 }
@@ -229,14 +216,7 @@ namespace CycloneDX.Services
                     var project = nuspecModel.nuspecReader.GetProjectUrl();
                     if (!string.IsNullOrWhiteSpace(project))
                     {
-                        foreach (var branchToCheck in branchesToCheck)
-                        {
-                            license = await _githubService.GetLicenseAsync($"{project}/blob/{branchToCheck}/licence").ConfigureAwait(false);
-                            if (license != null)
-                            {
-                                break;
-                            }
-                        }
+                        license = await _githubService.GetLicenseAsync(project).ConfigureAwait(false);
                     }
                 }
 
