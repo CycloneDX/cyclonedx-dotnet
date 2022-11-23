@@ -69,6 +69,8 @@ namespace CycloneDX.Services
         {
             new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[l][i][c][e][n][cs][e]((\.|-)((md)|([t][x][t])|([m][i][t])|([b][s][d])))?$", RegexOptions.IgnoreCase),
             new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[l][i][c][e][n][cs][e]((\.|-)((md)|([t][x][t])|([m][i][t])|([b][s][d])))?$", RegexOptions.IgnoreCase),
+            new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/?$", RegexOptions.IgnoreCase),
+            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/?$", RegexOptions.IgnoreCase)
         };
 
         public GithubService(HttpClient httpClient)
@@ -125,12 +127,17 @@ namespace CycloneDX.Services
 
             // License is not on GitHub, we need to abort
             if (!match.Success) return null;
-            var repositoryId = match.Groups["repositoryId"];
-            var refSpec = match.Groups["refSpec"];
+            var repositoryId = match.Groups["repositoryId"].Value;
+            string refSpec = null;
+
+            if (match.Groups["refSpec"].Success)
+            {
+                refSpec = match.Groups["refSpec"].Value;
+            }
 
             // GitHub API doesn't necessarily return the correct license for any ref other than master
             // support ticket has been raised, in the meantime will ignore non-master refs
-            if (refSpec.ToString() != "master" && refSpec.ToString() != "main") {return null;}
+            if (refSpec != null && refSpec != "master" && refSpec != "main") { return null; }
 
             Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec}");
 
@@ -138,7 +145,10 @@ namespace CycloneDX.Services
             GithubLicenseRoot githubLicense = null;
             try
             {
-                githubLicense = await GetGithubLicenseAsync($"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}").ConfigureAwait(false);
+                var url = string.IsNullOrWhiteSpace(refSpec) ? $"{_baseUrl}repos/{repositoryId}/license" :
+                                                               $"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}";
+
+                githubLicense = await GetGithubLicenseAsync(url).ConfigureAwait(false);
             }
             catch (HttpRequestException exc)
             {
@@ -158,7 +168,7 @@ namespace CycloneDX.Services
             {
                 Id = githubLicense.License.SpdxId,
                 Name = githubLicense.License.Name,
-                Url = licenseUrl
+                Url = githubLicense.HtmlUrl?.ToString() ?? licenseUrl
             };
         }
 

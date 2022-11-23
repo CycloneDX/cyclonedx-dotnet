@@ -177,23 +177,51 @@ namespace CycloneDX.Services
                 };
                 licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
             }
+            else if (_githubService == null)
+            {
+                var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
+                var license = new License { Url = licenseUrl };
+                component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
+            }
             else
             {
+                License license = null;
                 var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
                 if (!string.IsNullOrEmpty(licenseUrl))
                 {
-                    License license = null;
+                    license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
+                }
 
-                    if (_githubService != null)
+                if (license == null)
+                {
+                    // try repository URLs for potential that they are github
+                    var repository = nuspecModel.nuspecReader.GetRepositoryMetadata();
+                    if (repository != null && !string.IsNullOrWhiteSpace(repository.Url))
                     {
-                        license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
-                    }
+                        if (!string.IsNullOrWhiteSpace(repository.Commit))
+                        {
+                            license = await _githubService.GetLicenseAsync($"{repository.Url}/blob/{repository.Commit}/licence").ConfigureAwait(false);
+                        }
 
-                    if (license == null)
+                        if (license == null)
+                        {
+                            license = await _githubService.GetLicenseAsync(repository.Url).ConfigureAwait(false);
+                        }
+                    }
+                }
+
+                if (license == null)
+                {
+                    // try project URL for potential that they are github
+                    var project = nuspecModel.nuspecReader.GetProjectUrl();
+                    if (!string.IsNullOrWhiteSpace(project))
                     {
-                        license = new License { Url = licenseUrl };
+                        license = await _githubService.GetLicenseAsync(project).ConfigureAwait(false);
                     }
+                }
 
+                if (license != null)
+                {
                     component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
                 }
             }
