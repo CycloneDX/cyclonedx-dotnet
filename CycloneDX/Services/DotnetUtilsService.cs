@@ -130,9 +130,11 @@ namespace CycloneDX.Services
             }
         }
 
-        public DotnetUtilsResult Restore(string path)
+        public DotnetUtilsResult Restore(string path, string framework, string runtime)
         {
             var arguments = "restore";
+            if (!string.IsNullOrEmpty(framework)) arguments = $"{arguments} -p:TargetFramework={framework}";
+            if (runtime != null) arguments = $"{arguments} -r {runtime}";
             if (!string.IsNullOrEmpty(path)) arguments = $"{arguments} \"{path}\"";
 
             var commandResult = _dotnetCommandService.Run(arguments);
