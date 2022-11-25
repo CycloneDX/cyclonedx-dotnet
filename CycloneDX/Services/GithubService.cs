@@ -16,6 +16,7 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
@@ -62,9 +63,10 @@ namespace CycloneDX.Services
 
     public class GithubService : IGithubService
     {
-
+        private readonly ConcurrentDictionary<string, Task<License>> licenseCache = new ConcurrentDictionary<string, Task<License>>();
         private string _baseUrl = "https://api.github.com/";
         private readonly HttpClient _httpClient;
+
         private readonly List<Regex> _githubRepositoryRegexes = new List<Regex>
         {
             new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[l][i][c][e][n][cs][e]((\.|-)((md)|([t][x][t])|([m][i][t])|([b][s][d])))?$", RegexOptions.IgnoreCase),
@@ -117,13 +119,18 @@ namespace CycloneDX.Services
         {
             if (licenseUrl == null) return null;
 
+            return await licenseCache.GetOrAdd(licenseUrl, GetLicenseForCacheAsync);
+        }
+
+        private async Task<License> GetLicenseForCacheAsync(string licenseUrl)
+        {
             // Detect correct repository id starting from URL
             Match match = null;
 
-            foreach(var regex in _githubRepositoryRegexes)
+            foreach (var regex in _githubRepositoryRegexes)
             {
                 match = regex.Match(licenseUrl);
-                if (match.Success) {break;}
+                if (match.Success) { break; }
             }
 
             // License is not on GitHub, we need to abort
@@ -213,7 +220,7 @@ namespace CycloneDX.Services
             }
             else if (githubResponse.StatusCode == System.Net.HttpStatusCode.NotFound && repositoryId.EndsWith(".git", StringComparison.InvariantCultureIgnoreCase))
             {
-                Console.WriteLine($"GitHub API failed with status code NotFound - will try again without '.git' on the repository name");
+                Console.WriteLine("GitHub API failed with status code NotFound - will try again without '.git' on the repository name");
                 return await GetGithubLicenseAsync(repositoryId.Substring(0, repositoryId.Length - 4), refSpec);
             }
             else
