@@ -397,7 +397,7 @@ namespace CycloneDX.Tests
             var client = mockHttp.ToHttpClient();
             var githubService = new GithubService(client);
 
-            var license = await githubService.GetLicenseAsync("git@github.com/CycloneDX/cyclonedx-dotnet.git").ConfigureAwait(false);
+            var license = await githubService.GetLicenseAsync("git@github.com:CycloneDX/cyclonedx-dotnet.git").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
             Assert.Equal("Test License", license.Name);
