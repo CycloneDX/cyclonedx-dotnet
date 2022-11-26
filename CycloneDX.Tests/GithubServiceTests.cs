@@ -15,17 +15,18 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.Net;
 using System.Threading.Tasks;
-using Xunit;
-using RichardSzalay.MockHttp;
 using CycloneDX.Services;
+using RichardSzalay.MockHttp;
+using Xunit;
 
 namespace CycloneDX.Tests
 {
     public class GithubServiceTests
     {
         [Fact]
-        public async Task GitLicence_FromMasterBranch()
+        public async Task GitLicense_FromMasterBranch()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -40,13 +41,13 @@ namespace CycloneDX.Tests
             var githubService = new GithubService(client);
 
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE").ConfigureAwait(false);
-            
+
             Assert.Equal("LicenseSpdxId", license.Id);
             Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
-        public async Task GitLicence_FromRawMasterBranch()
+        public async Task GitLicense_FromRawMasterBranch()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -67,7 +68,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_FromMainBranch()
+        public async Task GitLicense_FromMainBranch()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -88,7 +89,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_NonAmericanSpelling()
+        public async Task GitLicense_NonAmericanSpelling()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -108,8 +109,8 @@ namespace CycloneDX.Tests
             Assert.Equal("Test License", license.Name);
         }
 
-        [Fact(Skip="Currently failing as GitHub license API only returns the current license")]
-        public async Task GitLicence_FromVersionTag()
+        [Fact(Skip = "Currently failing as GitHub license API only returns the current license")]
+        public async Task GitLicense_FromVersionTag()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -124,13 +125,13 @@ namespace CycloneDX.Tests
             var githubService = new GithubService(client);
 
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/v1.2.3/LICENSE").ConfigureAwait(false);
-            
+
             Assert.Equal("LicenseSpdxId", license.Id);
             Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
-        public async Task GitLicence_FromMarkdownExtensionLicense()
+        public async Task GitLicense_FromMarkdownExtensionLicense()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -145,13 +146,13 @@ namespace CycloneDX.Tests
             var githubService = new GithubService(client);
 
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE.md").ConfigureAwait(false);
-            
+
             Assert.Equal("LicenseSpdxId", license.Id);
             Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
-        public async Task GitLicence_FromTextExtensionLicense()
+        public async Task GitLicense_FromTextExtensionLicense()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -166,13 +167,13 @@ namespace CycloneDX.Tests
             var githubService = new GithubService(client);
 
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE.txt").ConfigureAwait(false);
-            
+
             Assert.Equal("LicenseSpdxId", license.Id);
             Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
-        public async Task GitLicence_FromUpperCaseTextExtensionLicense()
+        public async Task GitLicense_FromUpperCaseTextExtensionLicense()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -193,7 +194,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_FromBsdExtensionLicense()
+        public async Task GitLicense_FromBsdExtensionLicense()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -214,7 +215,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_FromUpperCaseBsdExtensionLicense()
+        public async Task GitLicense_FromUpperCaseBsdExtensionLicense()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -235,7 +236,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_FromMitExtensionLicense()
+        public async Task GitLicense_FromMitExtensionLicense()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -256,7 +257,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_FromUpperCaseMitExtensionLicense()
+        public async Task GitLicense_FromUpperCaseMitExtensionLicense()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -277,7 +278,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_FromLicenseNameWithHyphenLicenseId()
+        public async Task GitLicense_FromLicenseNameWithHyphenLicenseId()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -298,7 +299,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_FromLicenseFileWithPascalCaseFileName()
+        public async Task GitLicense_FromLicenseFileWithPascalCaseFileName()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -319,7 +320,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_FromLicenseFileWithLowerCaseFileName()
+        public async Task GitLicense_FromLicenseFileWithLowerCaseFileName()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -340,7 +341,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_FromGithubUserContent()
+        public async Task GitLicense_FromGithubUserContent()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -355,13 +356,13 @@ namespace CycloneDX.Tests
             var githubService = new GithubService(client);
 
             var license = await githubService.GetLicenseAsync("https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/master/LICENSE").ConfigureAwait(false);
-            
+
             Assert.Equal("LicenseSpdxId", license.Id);
             Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
-        public async Task GitLicence_FromRawGithub()
+        public async Task GitLicense_FromRawGithub()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -448,7 +449,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_DifferentHtmlUrl()
+        public async Task GitLicense_DifferentHtmlUrl()
         {
             var mockResponseContent = @"{
                 ""license"": {
@@ -471,7 +472,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GitLicence_NoRef()
+        public async Task GitLicense_NoRef()
         {
             var mockResponseContent = @"{
                 ""license"": {
