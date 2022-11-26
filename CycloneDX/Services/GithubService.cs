@@ -184,7 +184,6 @@ namespace CycloneDX.Services
             // Send HTTP request and handle its response
             var githubResponse = await _httpClient.SendAsync(githubLicenseRequestMessage).ConfigureAwait(false);
             
-            
             if (githubResponse.StatusCode == System.Net.HttpStatusCode.MovedPermanently && githubResponse.Headers.Location != null) 
             {
                 // Authorization header won't be sent in redirect requests
