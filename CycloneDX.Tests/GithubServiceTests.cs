@@ -382,6 +382,50 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task GitLicense_FromSshGithub()
+        {
+            var mockResponseContent = @"{
+                ""license"": {
+                    ""spdx_id"": ""LicenseSpdxId"",
+                    ""name"": ""Test License""
+                }
+            }";
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet/license")
+                .Respond("application/json", mockResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var githubService = new GithubService(client);
+
+            var license = await githubService.GetLicenseAsync("git@github.com/CycloneDX/cyclonedx-dotnet.git").ConfigureAwait(false);
+
+            Assert.Equal("LicenseSpdxId", license.Id);
+            Assert.Equal("Test License", license.Name);
+        }
+
+        [Fact]
+        public async Task GitLicense_FromGithubWithDotGit()
+        {
+            var mockResponseContent = @"{
+                ""license"": {
+                    ""spdx_id"": ""LicenseSpdxId"",
+                    ""name"": ""Test License""
+                }
+            }";
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet.git/license")
+                .Respond(HttpStatusCode.NotFound);
+            mockHttp.When("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet/license")
+                .Respond("application/json", mockResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var githubService = new GithubService(client);
+
+            var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet.git").ConfigureAwait(false);
+
+            Assert.Equal("LicenseSpdxId", license.Id);
+            Assert.Equal("Test License", license.Name);
+        }
+
+        [Fact]
         public async Task GetLicense_AddsAuthorizationHeader()
         {
             var mockResponseContent = @"{
