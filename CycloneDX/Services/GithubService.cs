@@ -195,14 +195,17 @@ namespace CycloneDX.Services
                 Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec} - URL: {githubLicenseUrl}");
             }
 
-            var githubLicenseRequestMessage = new HttpRequestMessage(HttpMethod.Get, githubLicenseUrl);
-
-            // Add needed headers
-            githubLicenseRequestMessage.Headers.UserAgent.ParseAdd("CycloneDX/1.0");
-            githubLicenseRequestMessage.Headers.Accept.ParseAdd("application/json");
+            var githubLicenseRequestMessage = ConfigureGithubRequestMessage(githubLicenseUrl);
 
             // Send HTTP request and handle its response
             var githubResponse = await _httpClient.SendAsync(githubLicenseRequestMessage).ConfigureAwait(false);
+            
+            if (githubResponse.StatusCode == System.Net.HttpStatusCode.MovedPermanently && githubResponse.Headers.Location != null) 
+            {
+                // Authorization header won't be sent in redirect requests
+                githubLicenseRequestMessage = ConfigureGithubRequestMessage(githubResponse.Headers.Location.ToString());
+                githubResponse = await _httpClient.SendAsync(githubLicenseRequestMessage).ConfigureAwait(false);
+            }
             if (githubResponse.IsSuccessStatusCode)
             {
                 // License found, extract data
@@ -230,5 +233,14 @@ namespace CycloneDX.Services
                 return null;
             }
         }
+        private HttpRequestMessage ConfigureGithubRequestMessage(String githubUrl) {
+            var githubRequestMessage = new HttpRequestMessage(HttpMethod.Get, githubUrl);
+
+            // Add needed headers
+            githubRequestMessage.Headers.UserAgent.ParseAdd("CycloneDX/1.0");
+            githubRequestMessage.Headers.Accept.ParseAdd("application/json");
+
+            return githubRequestMessage;
+	    }
     }
 }
