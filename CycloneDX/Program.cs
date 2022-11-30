@@ -188,21 +188,25 @@ namespace CycloneDX
             if (!(disableGithubLicenses || disableGithubLicensesDeprecated))
             {
                 // GitHubService requires its own HttpClient as it adds a default authorization header
+                HttpClient httpClient = new HttpClient(new HttpClientHandler {
+                    AllowAutoRedirect = false
+                });
+                
                 if (!string.IsNullOrEmpty(githubBearerToken))
                 {
-                    githubService = new GithubService(new HttpClient(), githubBearerToken);
+                    githubService = new GithubService(httpClient, githubBearerToken);
                 }
                 else if (!string.IsNullOrEmpty(githubBearerTokenDeprecated))
                 {
-                    githubService = new GithubService(new HttpClient(), githubBearerTokenDeprecated);
+                    githubService = new GithubService(httpClient, githubBearerTokenDeprecated);
                 }
                 else if (!string.IsNullOrEmpty(githubUsername))
                 {
-                    githubService = new GithubService(new HttpClient(), githubUsername, githubToken);
+                    githubService = new GithubService(httpClient, githubUsername, githubToken);
                 }
                 else if (!string.IsNullOrEmpty(githubUsernameDeprecated))
                 {
-                    githubService = new GithubService(new HttpClient(), githubUsernameDeprecated, githubTokenDeprecated);
+                    githubService = new GithubService(httpClient, githubUsernameDeprecated, githubTokenDeprecated);
                 }
                 else
                 {
