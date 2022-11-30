@@ -101,8 +101,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger(),false);
-
+                new NullLogger(), false);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
 
@@ -177,13 +176,11 @@ namespace CycloneDX.Tests
         [Fact]
         public async Task GetComponentFromNugetOrgReturnsComponent()
         {
-
             var nugetService = new NugetV3Service(null,
                 new MockFileSystem(),
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
                 new NullLogger(), false);
-
 
             var packageName = "Newtonsoft.Json";
             var packageVersion = "13.0.1";
@@ -202,7 +199,7 @@ namespace CycloneDX.Tests
                 new MockFileSystem(),
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger(),true);
+                new NullLogger(), true);
 
             var packageName = "Newtonsoft.Json";
             var packageVersion = "13.0.1";
@@ -339,7 +336,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GetComponent_GitHubLicenseLookup_FromRepository_WhenLicenceInvalid_ReturnsComponent()
+        public async Task GetComponent_GitHubLicenseLookup_FromRepository_WhenLicenseInvalid_ReturnsComponent()
         {
             var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">

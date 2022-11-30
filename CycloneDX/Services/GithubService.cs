@@ -16,6 +16,7 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
@@ -62,15 +63,17 @@ namespace CycloneDX.Services
 
     public class GithubService : IGithubService
     {
-
+        private readonly ConcurrentDictionary<string, Task<License>> licenseCache = new ConcurrentDictionary<string, Task<License>>();
         private string _baseUrl = "https://api.github.com/";
         private readonly HttpClient _httpClient;
+
         private readonly List<Regex> _githubRepositoryRegexes = new List<Regex>
         {
             new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/((blob)|(raw))\/(?<refSpec>[^\/]+)\/[l][i][c][e][n][cs][e]((\.|-)((md)|([t][x][t])|([m][i][t])|([b][s][d])))?$", RegexOptions.IgnoreCase),
             new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/(?<refSpec>[^\/]+)\/[l][i][c][e][n][cs][e]((\.|-)((md)|([t][x][t])|([m][i][t])|([b][s][d])))?$", RegexOptions.IgnoreCase),
             new Regex(@"^https?\:\/\/github\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/?$", RegexOptions.IgnoreCase),
-            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/?$", RegexOptions.IgnoreCase)
+            new Regex(@"^https?\:\/\/raw\.github(usercontent)?\.com\/(?<repositoryId>[^\/]+\/[^\/]+)\/?$", RegexOptions.IgnoreCase),
+            new Regex(@"^git\@github\.com:(?<repositoryId>[^\/]+\/[^\/]+)\/?$", RegexOptions.IgnoreCase)
         };
 
         public GithubService(HttpClient httpClient)
@@ -116,13 +119,18 @@ namespace CycloneDX.Services
         {
             if (licenseUrl == null) return null;
 
+            return await licenseCache.GetOrAdd(licenseUrl, GetLicenseForCacheAsync);
+        }
+
+        private async Task<License> GetLicenseForCacheAsync(string licenseUrl)
+        {
             // Detect correct repository id starting from URL
             Match match = null;
 
-            foreach(var regex in _githubRepositoryRegexes)
+            foreach (var regex in _githubRepositoryRegexes)
             {
                 match = regex.Match(licenseUrl);
-                if (match.Success) {break;}
+                if (match.Success) { break; }
             }
 
             // License is not on GitHub, we need to abort
@@ -139,16 +147,11 @@ namespace CycloneDX.Services
             // support ticket has been raised, in the meantime will ignore non-master refs
             if (refSpec != null && refSpec != "master" && refSpec != "main") { return null; }
 
-            Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec}");
-
             // Try getting license for the specified version
             GithubLicenseRoot githubLicense = null;
             try
             {
-                var url = string.IsNullOrWhiteSpace(refSpec) ? $"{_baseUrl}repos/{repositoryId}/license" :
-                                                               $"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}";
-
-                githubLicense = await GetGithubLicenseAsync(url).ConfigureAwait(false);
+                githubLicense = await GetGithubLicenseAsync(repositoryId, refSpec).ConfigureAwait(false);
             }
             catch (HttpRequestException exc)
             {
@@ -157,7 +160,8 @@ namespace CycloneDX.Services
                 throw new GitHubLicenseResolutionException("GitHub license resolution failed.", exc);
             }
 
-            if (githubLicense == null) {
+            if (githubLicense == null)
+            {
                 Console.WriteLine($"No license found on GitHub for repository {repositoryId} using ref {refSpec}");
 
                 return null;
@@ -177,8 +181,20 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="githubLicenseUrl"></param>
         /// <returns></returns>
-        private async Task<GithubLicenseRoot> GetGithubLicenseAsync(string githubLicenseUrl)
+        private async Task<GithubLicenseRoot> GetGithubLicenseAsync(string repositoryId, string refSpec)
         {
+            string githubLicenseUrl;
+            if (string.IsNullOrWhiteSpace(refSpec))
+            {
+                githubLicenseUrl = $"{_baseUrl}repos/{repositoryId}/license";
+                Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} - URL: {githubLicenseUrl}");
+            }
+            else
+            {
+                githubLicenseUrl = $"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}";
+                Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec} - URL: {githubLicenseUrl}");
+            }
+
             var githubLicenseRequestMessage = new HttpRequestMessage(HttpMethod.Get, githubLicenseUrl);
 
             // Add needed headers
@@ -201,6 +217,11 @@ namespace CycloneDX.Services
             {
                 Console.Error.WriteLine("GitHub API rate limit exceeded.");
                 throw new GitHubApiRateLimitExceededException("GitHub API rate limit exceeded http status code 403");
+            }
+            else if (githubResponse.StatusCode == System.Net.HttpStatusCode.NotFound && repositoryId.EndsWith(".git", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Console.WriteLine("GitHub API failed with status code NotFound - will try again without '.git' on the repository name");
+                return await GetGithubLicenseAsync(repositoryId.Substring(0, repositoryId.Length - 4), refSpec);
             }
             else
             {
