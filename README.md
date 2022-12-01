@@ -14,12 +14,12 @@ The CycloneDX module for .NET creates a valid CycloneDX bill-of-material documen
 
 This module runs on 
 *   .NET Core 3.1 
-*   .NET 6.0.
+*   .NET 6.0
 
 This module no longer runs on
 
 *   .NET Core 2.1
-*   .NET5 
+*   .NET 5 
 *   see https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core for more infomation
 
 ## Usage
@@ -56,10 +56,12 @@ docker run cyclonedx/cyclonedx-dotnet [OPTIONS] <path>
 Usage: dotnet CycloneDX [options] <path>
 
 Arguments:
-  path                                              The path to a .sln, .csproj, .fsproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files
+  path                                                                   The path to a .sln, .csproj, .fsproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files
 
 Options:
   -v|--version                                                           Output the tool version and exit
+  -tfm|--framework <FRAMEWORK>                                           The target framework to use. If not defined, all will be aggregated.
+  -rt|--runtime <RUNTIME>                                                The runtime to use. If not defined, all will be aggregated.
   -o|--out <OUTPUT_DIRECTORY>                                            The directory to write the BOM
   -f|--filename <OUTPUT_FILENAME>                                        Optionally provide a filename for the BOM (default: bom.xml or bom.json)
   -j|--json                                                              Produce a JSON BOM instead of XML
@@ -86,7 +88,7 @@ Options:
   -st|--set-type <SET_TYPE>                                              Override the default BOM metadata component type (defaults to application).
                                                                          Allowed values are: Null, Application, Framework, Library, OperationSystem, Device, File, Container, Firmware.
                                                                          Default value is: Null.
-  -?|-h|--help                                                           Show help information. 
+  -?|-h|--help                                                           Show help information.
 ```
 
 #### Examples
