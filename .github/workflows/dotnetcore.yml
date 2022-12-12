@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.2.0
       - name: Setup dotnet 3.1
         uses: actions/setup-dotnet@v3.0.3
         with:
@@ -50,7 +50,7 @@ jobs:
     timeout-minutes: 30
     
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.2.0
       - name: Setup dotnet 3.1
         uses: actions/setup-dotnet@v3.0.3
         with:
