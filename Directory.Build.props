@@ -17,16 +17,10 @@
 
     <!-- use command "dotnet new globaljson" for local develpment environment -->
     
-    <!-- .NET 5.0 SDK includes Microsoft.CodeAnalysis.NetAnalyzers which replaces Microsoft.CodeAnalysis.FxCopAnalyzers -->
     <AnalysisMode>AllEnableByDefault</AnalysisMode>
-  </PropertyGroup>
 
-  <!--<ItemGroup>
-    <PackageReference Include="AsyncFixer" Version="1.5.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>-->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
 
   <PropertyGroup>
     <Authors>Steve Springett &amp; Patrick Dwyer</Authors>
