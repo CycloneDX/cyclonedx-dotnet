@@ -23,14 +23,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="NuGet.Protocol" Version="6.4.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="17.2.3" />
-    <PackageReference Include="CycloneDX.Core" Version="5.3.0" />
-    <PackageReference Include="nuget.projectmodel" Version="6.4.0" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" />
+    <PackageReference Include="NuGet.Protocol" />
+    <PackageReference Include="System.IO.Abstractions" />
+    <PackageReference Include="CycloneDX.Core" />
+    <PackageReference Include="NuGet.ProjectModel" />
   </ItemGroup>
 </Project>

@@ -19,8 +19,9 @@ This module runs on
 This module no longer runs on
 *   .NET Core 3.1
 *   .NET Core 2.1
-*   .NET5 
-*   see https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core for more infomation
+*   .NET Core 3.1
+*   .NET 5.0 
+*   see https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core for more information
 
 ## Usage
 
@@ -163,7 +164,7 @@ Permission to modify and redistribute is granted under the terms of the Apache 2
 Pull requests are welcome. But please read the
 [CycloneDX contributing guidelines](https://github.com/CycloneDX/.github/blob/master/CONTRIBUTING.md) first.
 
-To build and test the solution locally you should have .NET Core 3.1 or .NET 6.0
+To build and test the solution locally you should have .NET 7.0 or .NET 6.0
 installed. Standard commands like `dotnet build` and `dotnet test` work.
 
 Alternatively, you can use VS Code and the included devcontainer configuration
