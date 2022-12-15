@@ -170,10 +170,11 @@ namespace CycloneDX.Services
             var licenseMetadata = nuspecModel.nuspecReader.GetLicenseMetadata();
             if (licenseMetadata != null && licenseMetadata.Type == LicenseType.Expression)
             {
-                Action<NuGetLicense> licenseProcessor = delegate(NuGetLicense nugetLicense)
+                Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
                 {
                     var license = new License { Id = nugetLicense.Identifier, Name = nugetLicense.Identifier };
-                    component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
+                    component.Licenses ??= new List<LicenseChoice>();
+                    component.Licenses.Add(new LicenseChoice { License = license });
                 };
                 licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
             }
@@ -231,7 +232,8 @@ namespace CycloneDX.Services
             {
                 var externalReference = new ExternalReference
                 {
-                    Type = ExternalReference.ExternalReferenceType.Website, Url = projectUrl
+                    Type = ExternalReference.ExternalReferenceType.Website,
+                    Url = projectUrl
                 };
                 component.ExternalReferences = new List<ExternalReference> { externalReference };
             }
@@ -243,7 +245,8 @@ namespace CycloneDX.Services
             {
                 var externalReference = new ExternalReference
                 {
-                    Type = ExternalReference.ExternalReferenceType.Vcs, Url = vcsUrl
+                    Type = ExternalReference.ExternalReferenceType.Vcs,
+                    Url = vcsUrl
                 };
                 if (null == component.ExternalReferences)
                 {
@@ -300,7 +303,6 @@ namespace CycloneDX.Services
 
                 using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
                 nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
-
 
                 if (!_disableHashComputation)
                 {

@@ -366,5 +366,64 @@ namespace CycloneDX.Tests
             Assert.Single(component.Licenses);
             Assert.Equal("LicenseId", component.Licenses.First().License.Id);
         }
+
+        [Fact]
+        public async Task GetComponent_SingleLicenseExpression_ReturnsComponent()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""expression"">Apache-2.0</license>
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+
+            Assert.Single(component.Licenses);
+            Assert.Equal("Apache-2.0", component.Licenses.First().License.Id);
+        }
+
+        [Fact]
+        public async Task GetComponent_MultiLicenseExpression_ReturnsComponent()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""expression"">Apache-2.0 OR MPL-2.0</license>
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+        {
+            { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+        });
+
+            var mockGitHubService = new Mock<IGithubService>();
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+
+            Assert.Equal(2, component.Licenses.Count);
+            Assert.Contains(component.Licenses, choice => choice.License.Id.Equals("Apache-2.0"));
+            Assert.Contains(component.Licenses, choice => choice.License.Id.Equals("MPL-2.0"));
+        }
     }
 }
