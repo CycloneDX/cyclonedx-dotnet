@@ -195,7 +195,7 @@ namespace CycloneDX.Services
             Console.WriteLine("  Getting project references");
 
             var projectReferences = new HashSet<string>();
-            var projectDirectory = _fileSystem.FileInfo.FromFileName(projectFilePath).Directory.FullName;
+            var projectDirectory = _fileSystem.FileInfo.New(projectFilePath).Directory.FullName;
 
             using (StreamReader fileReader = _fileSystem.File.OpenText(projectFilePath))
             {
@@ -240,7 +240,7 @@ namespace CycloneDX.Services
 
             // Initialize the queue with the current project file
             var files = new Queue<string>();
-            files.Enqueue(_fileSystem.FileInfo.FromFileName(projectFilePath).FullName);
+            files.Enqueue(_fileSystem.FileInfo.New(projectFilePath).FullName);
 
             var visitedProjectFiles = new HashSet<string>();
 
