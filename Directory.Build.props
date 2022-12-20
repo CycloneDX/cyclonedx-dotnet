@@ -36,7 +36,6 @@
     <PackageProjectUrl>https://github.com/CycloneDX/cyclonedx-dotnet</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageReleaseNotes>See $(PackageProjectUrl)/blob/master/CHANGELOG.md#$(VersionSuffix.Replace('.','')) for release notes.</PackageReleaseNotes>
     <PackageVersion>$(VersionSuffix)</PackageVersion>
     <PackAsTool>true</PackAsTool>
     <RepositoryType>git</RepositoryType>
