@@ -29,7 +29,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NuGet.Protocol" Version="6.4.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="17.2.3" />
+    <PackageReference Include="System.IO.Abstractions" Version="19.1.14" />
     <PackageReference Include="CycloneDX.Core" Version="5.3.0" />
     <PackageReference Include="nuget.projectmodel" Version="6.4.0" />
   </ItemGroup>
