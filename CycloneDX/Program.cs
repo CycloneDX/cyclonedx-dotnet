@@ -28,7 +28,6 @@ using CycloneDX.Services;
 using System.Reflection;
 using System.Linq;
 using CycloneDX.Interfaces;
-using System.Threading;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.IntegrationTests")]
