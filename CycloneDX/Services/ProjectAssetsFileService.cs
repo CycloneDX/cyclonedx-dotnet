@@ -166,7 +166,7 @@ namespace CycloneDX.Services
                         else
                         {
                             // This should not happen, since all dependencies are resolved to a specific version.
-                            Console.Error.WriteLine($"Dependency ({dependency.Value}) with version range ({dependency.Value}) did not resolve to a specific version.");
+                            Console.Error.WriteLine($"Dependency ({dependency.Key}) with version range ({dependency.Value}) referenced by (Name:{runtimePackage.Name} Version:{runtimePackage.Version}) in did not resolve to a specific version.");
                         }
                     }
                 }

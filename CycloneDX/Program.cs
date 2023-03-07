@@ -28,6 +28,7 @@ using CycloneDX.Services;
 using System.Reflection;
 using System.Linq;
 using CycloneDX.Interfaces;
+using System.Threading;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.IntegrationTests")]
@@ -323,7 +324,7 @@ namespace CycloneDX
                                 }
                                 else
                                 {
-                                    Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value}");
+                                    Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value} referenced by (Name: {package.Name} Version: {package.Version})");
                                     return (int)ExitCode.UnableToLocateDependencyBomRef;
                                 }
                             }
