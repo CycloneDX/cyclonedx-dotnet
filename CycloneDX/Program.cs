@@ -197,7 +197,7 @@ namespace CycloneDX
                 HttpClient httpClient = new HttpClient(new HttpClientHandler {
                     AllowAutoRedirect = false
                 });
-                
+
                 if (!string.IsNullOrEmpty(githubBearerToken))
                 {
                     githubService = new GithubService(httpClient, githubBearerToken);
@@ -304,6 +304,11 @@ namespace CycloneDX
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
                 foreach (var package in packages)
                 {
+                    if (excludeDev && package.Scope.HasValue && package.Scope.Value.Equals(Component.ComponentScope.Excluded))
+                    {
+                        continue;
+                    }
+
                     var packageDependencies = new Dependency
                     {
                         Ref = bomRefLookup[(package.Name.ToLower(CultureInfo.InvariantCulture), package.Version.ToLower(CultureInfo.InvariantCulture))],
