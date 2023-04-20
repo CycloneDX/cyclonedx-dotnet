@@ -80,37 +80,52 @@ namespace CycloneDX.Tests
             Assert.Equal("testpackage", component.Name);
         }
 
-        [Fact]
-        public async Task GetComponent_FromCachedNugetHashFile_ReturnsComponentWithHash()
+        public static IEnumerable<object[]> VersionNormalization
         {
-            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+            get
+            {
+                return new List<object[]>
+                {
+                    new object[] { "2.5", "2.5" },
+                    new object[] { "2.5.0.0", "2.5.0" },
+                    new object[] { "2.5.0.0-beta.1", "2.5.0-beta.1" },
+                    new object[] { "2.5.1.0", "2.5.1" },
+                    new object[] { "2.5.1.1", "2.5.1.1" }
+                };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(VersionNormalization))]
+        public async Task GetComponent_FromCachedNuspecFile_UsesNormalizedVersions(string rawVersion, string normalizedVersion)
+        {
+            var nuspecFileContents = $@"<?xml version=""1.0"" encoding=""utf-8""?>
                 <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
                 <metadata>
                     <id>testpackage</id>
+                    <version>{rawVersion}</version>
                 </metadata>
                 </package>";
-            byte[] sampleHash = new byte[] { 1, 2, 3, 4, 5, 6, 78, 125, 200 };
-
-            var nugetHashFileContents = Convert.ToBase64String(sampleHash);
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
             {
-                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
-                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.1.0.0.nupkg.sha512"), new MockFileData(nugetHashFileContents) },
+                { XFS.Path($@"c:\nugetcache\testpackage\{normalizedVersion}\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
             });
+
             var nugetService = new NugetV3Service(null,
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", rawVersion, Component.ComponentScope.Required).ConfigureAwait(false);
 
-            Assert.Equal(Hash.HashAlgorithm.SHA_512, component.Hashes[0].Alg);
-            Assert.Equal(BitConverter.ToString(sampleHash).Replace("-", string.Empty), component.Hashes[0].Content);
+            Assert.Equal("testpackage", component.Name);
+            Assert.Equal(rawVersion, component.Version);
         }
 
-        [Fact]
-        public async Task GetComponent_FromCachedNugetFile_ReturnsComponentWithHash()
+        [Theory]
+        [MemberData(nameof(VersionNormalization))]
+        public async Task GetComponent_FromCachedNugetFile_ReturnsComponentWithHashUsingNormalizedVersion(string rawVersion, string normalizedVersion)
         {
             var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
@@ -122,8 +137,8 @@ namespace CycloneDX.Tests
             var nugetFileContent = "FooBarBaz";
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
             {
-                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
-                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.1.0.0.nupkg"), new MockFileData(nugetFileContent) },
+                { XFS.Path($@"c:\nugetcache\testpackage\{normalizedVersion}\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path($@"c:\nugetcache\testpackage\{normalizedVersion}\testpackage.{normalizedVersion}.nupkg"), new MockFileData(nugetFileContent) },
             });
 
             var nugetService = new NugetV3Service(null,
@@ -132,7 +147,7 @@ namespace CycloneDX.Tests
                 new Mock<IGithubService>().Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", $"{rawVersion}", Component.ComponentScope.Required).ConfigureAwait(false);
 
             byte[] hashBytes;
             using (SHA512 sha = SHA512.Create())

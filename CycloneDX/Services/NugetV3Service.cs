@@ -84,7 +84,7 @@ namespace CycloneDX.Services
 
             foreach (var packageCachePath in _packageCachePaths)
             {
-                var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, version);
+                var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, NormalizeVersion(version));
                 var currentFilename = _fileSystem.Path.Combine(currentDirectory, lowerName + _nuspecExtension);
                 if (_fileSystem.File.Exists(currentFilename))
                 {
@@ -94,6 +94,24 @@ namespace CycloneDX.Services
             }
 
             return nuspecFilename;
+        }
+
+        /// <summary>
+        /// Normalize the version string according to
+        /// https://learn.microsoft.com/en-us/nuget/concepts/package-versioning#normalized-version-numbers
+        /// </summary>
+        private string NormalizeVersion(string version)
+        {
+            var separator = Math.Max(version.IndexOf('-'), version.IndexOf('+'));
+            var part1 = separator < 0 ? version : version.Substring(0, separator);
+            var part2 = separator < 0 ? string.Empty : version.Substring(separator);
+            if (Version.TryParse(part1, out var parsed) && parsed.Revision == 0)
+            {
+                part1 = parsed.ToString(3);
+                version = part1 + part2;
+            }
+
+            return version;
         }
 
         private SourceRepository SetupNugetRepository(NugetInputModel nugetInput)
@@ -153,9 +171,7 @@ namespace CycloneDX.Services
 
             var component = SetupComponent(name, version, scope);
             var nuspecFilename = GetCachedNuspecFilename(name, version);
-
             var nuspecModel = await GetNuspec(name, version, nuspecFilename, resource).ConfigureAwait(false);
-
             if (nuspecModel.hashBytes != null)
             {
                 var hex = BitConverter.ToString(nuspecModel.hashBytes).Replace("-", string.Empty);
@@ -322,8 +338,9 @@ namespace CycloneDX.Services
                 //    ├─<packageID>.<version>.nupkg.sha512
                 //    └─<packageID>.nuspec
 
-                string shaFilename = Path.ChangeExtension(nuspecFilename, version + _sha512Extension);
-                string nupkgFilename = Path.ChangeExtension(nuspecFilename, version + _nupkgExtension);
+                var normalizedVersion = NormalizeVersion(version);
+                string shaFilename = Path.ChangeExtension(nuspecFilename, normalizedVersion + _sha512Extension);
+                string nupkgFilename = Path.ChangeExtension(nuspecFilename, normalizedVersion + _nupkgExtension);
 
                 if (_fileSystem.File.Exists(shaFilename))
                 {
