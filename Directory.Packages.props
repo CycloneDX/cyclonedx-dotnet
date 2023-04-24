@@ -22,6 +22,6 @@
     <PackageVersion Include="coverlet.msbuild" Version="3.2.0" />
 
     <PackageVersion Include="System.IO.Abstractions" Version="19.2.16" />
-    <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="19.2.16" />
+    <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="19.2.18" />
   </ItemGroup>
 </Project>
