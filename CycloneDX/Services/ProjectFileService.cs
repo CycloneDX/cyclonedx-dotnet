@@ -102,7 +102,7 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
+        public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
@@ -142,7 +142,7 @@ namespace CycloneDX.Services
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
             }
-            var packages = _projectAssetsFileService.GetNugetPackages(projectFilePath, assetsFilename, isTestProject);
+            var packages = _projectAssetsFileService.GetNugetPackages(projectFilePath, assetsFilename, isTestProject, excludeDev);
 
 
             // if there are no project file package references look for a packages.config
@@ -165,13 +165,13 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
+        public async Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
         {
-            var nugetPackages = await GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
+            var nugetPackages = await GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
             var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
             foreach (var project in projectReferences)
             {
-                var projectNugetPackages = await GetProjectNugetPackagesAsync(project, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
+                var projectNugetPackages = await GetProjectNugetPackagesAsync(project, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
                 nugetPackages.UnionWith(projectNugetPackages);
             }
             return nugetPackages;

@@ -22,6 +22,8 @@ using CycloneDX.Models;
 using System.Linq;
 using CycloneDX.Interfaces;
 using NuGet.Versioning;
+using System.IO;
+using System.Text.Json;
 
 namespace CycloneDX.Services
 {
@@ -38,12 +40,17 @@ namespace CycloneDX.Services
             _assetFileReaderFactory = assetFileReaderFactory;
         }
 
-        public HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool isTestProject)
+        public HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool isTestProject, bool excludeDev)
         {
             var packages = new HashSet<NugetPackage>();
 
             if (_fileSystem.File.Exists(projectAssetsFilePath))
             {
+                var jsonContent = File.ReadAllText(projectAssetsFilePath);
+                var assetFileObject = JsonDocument.Parse(jsonContent);
+                // get all direct nuget dependencies of the project
+                var frameworksProperties = assetFileObject.RootElement.GetProperty("project").GetProperty("frameworks");
+
                 var assetFileReader = _assetFileReaderFactory();
                 var assetsFile = assetFileReader.Read(projectAssetsFilePath);
 
@@ -59,6 +66,8 @@ namespace CycloneDX.Services
                             Version = library.Version.ToNormalizedString(),
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
+                            // get value from project.assets.json file ( x."project"."frameworks".<framework>."dependencies".<library.Name>."suppressParent") 
+                            IsDevDependency = SetIsDevDependency(library.Name, targetRuntime.Name, frameworksProperties)
                         };
                         var topLevelReferenceKey = (package.Name, package.Version);
                         if (directPackageDependencies.Contains(topLevelReferenceKey))
@@ -68,15 +77,7 @@ namespace CycloneDX.Services
                         // is this a test project dependency or only a development dependency
                         if (
                             isTestProject
-                            || (
-                                library.CompileTimeAssemblies.Count == 0
-                                && library.ContentFiles.Count == 0
-                                && library.EmbedAssemblies.Count == 0
-                                && library.FrameworkAssemblies.Count == 0
-                                && library.NativeLibraries.Count == 0
-                                && library.ResourceAssemblies.Count == 0
-                                && library.ToolsAssemblies.Count == 0
-                            )
+                            || (package.IsDevDependency && excludeDev)
                         )
                         {
                             package.Scope = Component.ComponentScope.Excluded;
@@ -119,6 +120,20 @@ namespace CycloneDX.Services
                 }
             }
             return directPackageDependencies;
+        }
+
+        public bool SetIsDevDependency(string packageName, string targetRuntime, JsonElement jsonContent)
+        {
+            string framework = TargetFrameworkToAlias(targetRuntime);
+            JsonElement packageProperties;
+            var output = System.Text.Json.JsonSerializer.Serialize(jsonContent);
+            if (jsonContent.GetProperty(framework).GetProperty("dependencies").TryGetProperty(packageName, out packageProperties))
+            {
+                output = System.Text.Json.JsonSerializer.Serialize(packageProperties);
+                // suppressParent: exists only for development dependencies
+                return packageProperties.TryGetProperty("suppressParent", out _);
+            }
+            return false;
         }
 
         /// <summary>
