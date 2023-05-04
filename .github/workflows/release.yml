@@ -8,7 +8,7 @@
 #
 # For an example commit browse to
 # https://github.com/CycloneDX/cyclonedx-dotnet/commit/d110af854371374460430bb8438225a7d7a84274.
-# 
+#
 # The resulting release is here
 # https://github.com/CycloneDX/cyclonedx-dotnet/releases/tag/v1.0.0.
 #
@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v2.3.5
+      - uses: actions/checkout@v3
       - name: Setup dotnet 2.1
         uses: actions/setup-dotnet@v1
         with:
@@ -45,7 +45,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.x'
-      
+
       # The tests should have already been run during the PR workflow, so this is really just a sanity check
       - name: Tests
         run: dotnet test --framework net6.0
@@ -56,9 +56,9 @@ jobs:
         run: |
           VERSION=`cat semver.txt`
           OUTPUT=./nupkgs
-          echo "##[set-output name=version;]$VERSION"
-          echo "##[set-output name=package_name;]CycloneDX.$VERSION.nupkg"
-          echo "##[set-output name=package_filename;]$OUTPUT/CycloneDX.$VERSION.nupkg"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "package_name=CycloneDX.$VERSION.nupkg" >> $GITHUB_OUTPUT
+          echo "package_filename=CycloneDX.$VERSION.nupkg" >> $GITHUB_OUTPUT
           REPO=cyclonedx/cyclonedx-dotnet
           dotnet build --configuration Release /p:Version=$VERSION
           dotnet pack CycloneDX/CycloneDX.csproj --configuration Release /p:Version=$VERSION --output $OUTPUT

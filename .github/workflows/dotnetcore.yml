@@ -56,9 +56,9 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         framework: ['netcoreapp2.1', 'netcoreapp3.1', 'net5.0', 'net6.0']
     timeout-minutes: 30
-    
+
     steps:
-      - uses: actions/checkout@v2.3.5
+      - uses: actions/checkout@v3
       - name: Setup dotnet 2.1
         uses: actions/setup-dotnet@v1
         with:
