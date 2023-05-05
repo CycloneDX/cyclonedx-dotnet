@@ -34,7 +34,7 @@ namespace CycloneDX.Tests
     public class ProjectAssetsFileServiceTests
     {
 
-        readonly string jsonString1 = /*lang=json,strict*/ """
+        protected readonly string jsonString1 = /*lang=json,strict*/ """
 {
     "version": 3,
     "libraries": {
@@ -79,7 +79,7 @@ namespace CycloneDX.Tests
 }
 """;
 
-        readonly string jsonString2 = /*lang=json,strict*/ """
+        protected readonly string jsonString2 = /*lang=json,strict*/ """
 {
     "version": 3,
     "targets": {
