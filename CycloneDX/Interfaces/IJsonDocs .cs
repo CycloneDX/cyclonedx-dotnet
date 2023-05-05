@@ -15,17 +15,13 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
-using System.IO;
-using NuGet.ProjectModel;
+using System.Text.Json;
 
 namespace CycloneDX.Interfaces
 {
-    public interface IAssetFileReader
+    public interface IJsonDocs
     {
-        LockFile Read(string filePath);
-        string ReadAllText(string filePath)
-        {
-            return File.ReadAllText(filePath);
-        }
+        public JsonDocument Parse(string json);
+
     }
 }

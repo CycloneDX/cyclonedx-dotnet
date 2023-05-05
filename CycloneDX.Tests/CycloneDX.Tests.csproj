@@ -5,10 +5,11 @@
     <IsTestProject>true</IsTestProject>
     <IsPackable>false</IsPackable>
     <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" >
+    <PackageReference Include="coverlet.msbuild">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -18,11 +19,11 @@
     <PackageReference Include="RichardSzalay.MockHttp" />
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" />
     <PackageReference Include="xunit" />
-    <PackageReference Include="xunit.runner.visualstudio" >
+    <PackageReference Include="xunit.runner.visualstudio">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" >
+    <PackageReference Include="coverlet.collector">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
