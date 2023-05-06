@@ -87,7 +87,7 @@ namespace CycloneDX.Services
                         runtimePackages.Add(package);
                     }
 
-                    ResolveDependecyVersionRanges(runtimePackages);
+                    ResolveDependencyVersionRanges(runtimePackages);
 
                     packages.UnionWith(runtimePackages);
                 }
@@ -145,7 +145,7 @@ namespace CycloneDX.Services
         /// <summary>
         /// Updates all dependencies with version ranges to the version it was resolved to.
         /// </summary>
-        private static void ResolveDependecyVersionRanges(HashSet<NugetPackage> runtimePackages)
+        private static void ResolveDependencyVersionRanges(HashSet<NugetPackage> runtimePackages)
         {
             var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
             foreach (var runtimePackage in runtimePackages)
