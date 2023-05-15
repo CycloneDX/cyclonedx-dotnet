@@ -15,6 +15,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.IO;
 using NuGet.ProjectModel;
 
 namespace CycloneDX.Interfaces
@@ -22,5 +23,9 @@ namespace CycloneDX.Interfaces
     public interface IAssetFileReader
     {
         LockFile Read(string filePath);
+        string ReadAllText(string filePath)
+        {
+            return File.ReadAllText(filePath);
+        }
     }
 }

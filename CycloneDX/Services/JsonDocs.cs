@@ -15,15 +15,18 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using CycloneDX.Models;
+using System.Text.Json;
+using CycloneDX.Interfaces;
 
-namespace CycloneDX.Interfaces
+namespace CycloneDX.Services
 {
-    public interface ISolutionFileService
+    public class JsonDocs : IJsonDocs
     {
-        Task<HashSet<string>> GetSolutionProjectReferencesAsync(string solutionFilePath);
-        Task<HashSet<NugetPackage>> GetSolutionNugetPackages(string solutionFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime);
+
+        public JsonDocument Parse(string json)
+        {
+            return JsonDocument.Parse(json);
+            
+        }
     }
 }
