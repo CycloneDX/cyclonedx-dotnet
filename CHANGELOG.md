@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. See [versio
 
 ### Fixed
 
+- use suppressParent to identify development dependencies #693
 - Fix bug when nuget package has a multiple condition license expression #640
 - Normalize version string when locating files in the local cache #674
 - Fix dependency name in Error log #650
@@ -20,8 +21,8 @@ All notable changes to this project will be documented in this file. See [versio
 
 ### Changed
 
-- Bump System.IO.Abstractions.TestingHelpers from 17.2.3 to 19.2.16 #685
-- Bump System.IO.Abstractions.TestingHelpers from 17.2.3 to 19.2.16 #685
+- Bump System.IO.Abstractions.TestingHelpers from 17.2.16 to 19.2.26 #702
+- Bump System.IO.Abstractions from 19.2.16 to 19.2.26 #701
 - Bump actions/checkout from 3.1.0 to 3.5.2 #680
 - Bump Moq from 4.18.2 to 4.18.4 #645
 - Update ReadMe.md
