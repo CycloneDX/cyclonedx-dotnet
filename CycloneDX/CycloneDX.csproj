@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <InternalsVisibleToAttribute Include="CycloneDX.Core.Tests" />
+    <InternalsVisibleTo Include="CycloneDX.Core.Tests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
