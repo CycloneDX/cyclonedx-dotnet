@@ -20,9 +20,9 @@ namespace CycloneDX
     {
         OK,
         InvalidOptions,
-        SolutionOrProjectFileParameterMissing,
-        OutputDirectoryParameterMissing,
-        GitHubParameterMissing,
+//        SolutionOrProjectFileParameterMissing,
+//        OutputDirectoryParameterMissing,
+//        GitHubParameterMissing,
         InvalidGitHubApiCredentials,
         GitHubApiRateLimitExceeded,
         LocalPackageCacheError,
