@@ -44,53 +44,40 @@ namespace CycloneDX
         internal static readonly IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
         internal static ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
 
-        #region alias
-        internal static string SolutionOrProjectFile;
-        internal static string outputDirectory;
-        internal static string outputFilename;
-        internal static string baseUrl;
-        internal static bool scanProjectReferences;
-        internal static int dotnetCommandTimeout;
-        internal static bool isPasswordClearText;
-
-        #endregion alias
-
         public static async Task<int> Main(string[] args)
         {
 
-            var root = new RootCommand()
+            var root = new RootCommand
             {
             new Argument<string>("path", description: "The path to a .sln, .csproj, .fsproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files."  ),
-            new Option<string?>(new[] { "--framework", "-tfm" }, "The target framework to use. If not defined, all will be aggregated."),
-            new Option<string?>(new[] { "--runtime", "-rt" }, "The runtime to use. If not defined, all will be aggregated."),
-            new Option<string>(new[] { "--output", "-o" }, description: "The directory to write the BOM"),
-            new Option<string?>(new[] { "--filename", "-f" }, "Optionally provide a filename for the BOM (default: bom.xml or bom.json"),
-            new Option<bool?>(new[] { "--json", "-j" }, "Produce a JSON BOM instead of XML"),
-            new Option<bool?>(new[] { "--exclude-dev", "-d" }, "Exclude development dependencies from the BOM"),
-            new Option<bool?>(new[] { "--exclude-test-projects", "-t" }, "Exclude test projects from the BOM"),
-            new Option<string?>(new[] { "--url", "-u" }, "Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json"),
-            new Option<string?>(new[] { "--baseUrlUsername", "-us" }, "Alternative NuGet repository username"),
-            new Option<string?>(new[] { "--baseUrlUserPassword", "-usp" }, "Alternative NuGet repository username password/apikey"),
-            new Option<bool?>(new[] { "--isBaseUrlPasswordClearText", "-uspct" }, "Alternative NuGet repository password is cleartext"),
-            new Option<bool?>(new[] { "--recursive", "-r" }, "To be used with a single project file, it will recursively scan project references of the supplied project file"),
-            new Option<string?>(new[] { "--no-serial-number", "-ns" }, "Optionally omit the serial number from the resulting BOM"),
-            new Option<string?>(new[] { "--github-username", "-gu" }, "Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token"),
-            new Option<string?>(new[] { "--github-token", "-gt" }, "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username"),
-            new Option<string?>(new[] { "--github-bearer-token", "-gbt" }, "Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions"),
-            new Option<bool?>(new[] { "--disable-github-licenses", "-dgl" }, "Optionally disable GitHub license resolution"),
-            new Option<bool?>(new[] { "--disable-package-restore", "-dpr" }, "Optionally disable package restore"),
-            new Option<bool?>(new[] { "--disable-hash-computation", "-dhc" }, "Optionally disable hash computation for packages"),
+            new Option<string>(new[] { "--framework", "-tfm" }, "The target framework to use. If not defined, all will be aggregated."),
+            new Option<string>(new[] { "--runtime", "-rt" }, "The runtime to use. If not defined, all will be aggregated."),
+            new Option<string>(new[] { "--output", "-o" }, description: "The directory to write the BOM") {IsRequired = true},
+            new Option<string>(new[] { "--filename", "-f" }, "Optionally provide a filename for the BOM (default: bom.xml or bom.json"),
+            new Option<bool>(new[] { "--json", "-j" }, "Produce a JSON BOM instead of XML"),
+            new Option<bool>(new[] { "--exclude-dev", "-d" }, "Exclude development dependencies from the BOM"),
+            new Option<bool>(new[] { "--exclude-test-projects", "-t" }, "Exclude test projects from the BOM"),
+            new Option<string>(new[] { "--url", "-u" }, "Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json"),
+            new Option<string>(new[] { "--baseUrlUsername", "-us" }, "Alternative NuGet repository username"),
+            new Option<string>(new[] { "--baseUrlUserPassword", "-usp" }, "Alternative NuGet repository username password/apikey"),
+            new Option<bool>(new[] { "--isBaseUrlPasswordClearText", "-uspct" }, "Alternative NuGet repository password is cleartext"),
+            new Option<bool>(new[] { "--recursive", "-r" }, "To be used with a single project file, it will recursively scan project references of the supplied project file"),
+            new Option<string>(new[] { "--no-serial-number", "-ns" }, "Optionally omit the serial number from the resulting BOM"),
+            new Option<string>(new[] { "--github-username", "-gu" }, "Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token"),
+            new Option<string>(new[] { "--github-token", "-gt" }, "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username"),
+            new Option<string>(new[] { "--github-bearer-token", "-gbt" }, "Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions"),
+            new Option<bool>(new[] { "--disable-github-licenses", "-dgl" }, "Optionally disable GitHub license resolution"),
+            new Option<bool>(new[] { "--disable-package-restore", "-dpr" }, "Optionally disable package restore"),
+            new Option<bool>(new[] { "--disable-hash-computation", "-dhc" }, "Optionally disable hash computation for packages"),
             new Option<int>(new[] { "--dotnet-command-timeout", "-dct" }, description: "dotnet command timeout in milliseconds (primarily used for long dotnet restore operations)", getDefaultValue: () => 300000),
-            new Option<string?>(new[] { "--base-intermediate-output-path", "-biop" }, "Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated."),
-            new Option<string?>(new[] { "--import-metadata-path", "-imp" }, "Optionally provide a metadata template which has project specific details."),
-            new Option<string?>(new[] { "--set-name", "-sn" }, "Override the autogenerated BOM metadata component name."),
-            new Option<string?>(new[] { "--set-version", "-sv" }, "Override the default BOM metadata component version (defaults to 0.0.0)."),
-            new Option<Component.Classification?>(new[] { "--set-type", "-st" }, "Override the default BOM metadata component type (defaults to application).")
+            new Option<string>(new[] { "--base-intermediate-output-path", "-biop" }, "Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated."),
+            new Option<string>(new[] { "--import-metadata-path", "-imp" }, "Optionally provide a metadata template which has project specific details."),
+            new Option<string>(new[] { "--set-name", "-sn" }, "Override the autogenerated BOM metadata component name."),
+            new Option<string>(new[] { "--set-version", "-sv" }, "Override the default BOM metadata component version (defaults to 0.0.0)."),
+            new Option<Component.Classification>(new[] { "--set-type", "-st" }, "Override the default BOM metadata component type (defaults to application).")
             }.WithHandler(nameof(HandleCommandAsync));
 
             root.Description = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.";
-
-            //root.AddGlobalOption(new Option<bool>(new string[] { "--verbose", "-v" }, "Show verbose output"));
 
             return await root.InvokeAsync(args);
         }
@@ -124,12 +111,12 @@ namespace CycloneDX
                                                           Component.Classification SetType
             )
         {
-            SolutionOrProjectFile = path;
-            outputDirectory = output;
-            outputFilename = filename;
-            scanProjectReferences = recursive;
-            baseUrl = url;
-            isPasswordClearText = IsBaseUrlPasswordClearText;
+            string SolutionOrProjectFile = path;
+            string outputDirectory = output;
+            string outputFilename = filename;
+            bool scanProjectReferences = recursive;
+            string baseUrl = url;
+            bool isPasswordClearText = IsBaseUrlPasswordClearText;
 
 
             Console.WriteLine();
@@ -377,7 +364,10 @@ namespace CycloneDX
 
             AddMetadataTool(bom);
 
-            if (!(NoSerialNumber)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
+            if (!(NoSerialNumber))
+            {
+                bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
+            }
             bom.Components = new List<Component>(components);
             bom.Components.Sort((x, y) =>
             {
