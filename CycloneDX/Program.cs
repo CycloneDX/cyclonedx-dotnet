@@ -28,7 +28,6 @@ using CycloneDX.Services;
 using System.Reflection;
 using System.Linq;
 using CycloneDX.Interfaces;
-using System.Text.Json;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.IntegrationTests")]
@@ -130,7 +129,7 @@ namespace CycloneDX
         internal static IFileSystem fileSystem = new FileSystem();
         internal static readonly IJsonDocs jsonDoc = new JsonDocs();
         internal static readonly IDotnetCommandService dotnetCommandService = new DotnetCommandService();
-        internal static readonly IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, dotnetCommandService, () => new AssetFileReader(), jsonDoc);
+        internal static readonly IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, () => new AssetFileReader(), jsonDoc);
         internal static readonly IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
         internal static readonly IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
         internal static readonly IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
