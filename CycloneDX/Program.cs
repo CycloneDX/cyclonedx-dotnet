@@ -22,110 +22,18 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Net.Http;
 using System.Threading.Tasks;
-using McMaster.Extensions.CommandLineUtils;
 using CycloneDX.Models;
 using CycloneDX.Services;
 using System.Reflection;
 using System.Linq;
 using CycloneDX.Interfaces;
-using System.Text.Json;
-
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.Tests")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("CycloneDX.IntegrationTests")]
+using System.CommandLine;
+using System.CommandLine.NamingConventionBinder;
 
 namespace CycloneDX
 {
-    [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")]
-    class Program {
-        #region Options
-        [Option(Description = "Output the tool version and exit", ShortName = "v", LongName = "version")]
-        bool version { get; }
-
-        [Argument(0, Name = "path", Description = "The path to a .sln, .csproj, .fsproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files")]
-        string SolutionOrProjectFile { get; set; }
-
-        [Option(Description = "The target framework to use. If not defined, all will be aggregated.", ShortName = "tfm", LongName = "framework")]
-        string framework { get; }
-
-        [Option(Description = "The runtime to use. If not defined, all will be aggregated.", ShortName = "rt", LongName = "runtime")]
-        string runtime { get; }
-
-        [Option(Description = "The directory to write the BOM", ShortName = "o", LongName = "out")]
-        string outputDirectory { get; }
-
-        [Option(Description = "Optionally provide a filename for the BOM (default: bom.xml or bom.json)", ShortName = "f", LongName = "filename")]
-        string outputFilename { get; }
-
-        [Option(Description = "Produce a JSON BOM instead of XML", ShortName = "j", LongName = "json")]
-        bool json { get; }
-
-        [Option(Description = "Exclude development dependencies from the BOM", ShortName = "d", LongName = "exclude-dev")]
-        bool excludeDev { get; }
-
-        [Option(Description = "Exclude test projects from the BOM", ShortName = "t", LongName = "exclude-test-projects")]
-        bool excludetestprojects { get; }
-
-        [Option(Description = "Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json", ShortName = "u", LongName = "url")]
-        string baseUrl { get; set; }
-
-        [Option(Description = "Alternative NuGet repository username", ShortName = "us", LongName = "baseUrlUsername")]
-        string baseUrlUserName { get; set; }
-
-        [Option(Description = "Alternative NuGet repository username password/apikey", ShortName = "usp", LongName = "baseUrlUserPassword")]
-        string baseUrlUserPassword { get; set; }
-
-        [Option(Description = "Alternative NuGet repository password is cleartext", ShortName = "uspct", LongName = "isBaseUrlPasswordClearText")]
-        bool isPasswordClearText { get; set; }
-
-        [Option(Description = "To be used with a single project file, it will recursively scan project references of the supplied project file", ShortName = "r", LongName = "recursive")]
-        bool scanProjectReferences { get; set; }
-
-        [Option(Description = "DEPRECATED: Optionally omit the serial number from the resulting BOM", ShowInHelpText = false, ShortName = "nsdeprecated", LongName = "noSerialNumber")]
-        bool noSerialNumberDeprecated { get; set; }
-        [Option(Description = "Optionally omit the serial number from the resulting BOM", ShortName = "ns", LongName = "no-serial-number")]
-        bool noSerialNumber { get; set; }
-
-        [Option(Description = "DEPRECATED: Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token", ShowInHelpText = false, ShortName = "gudeprecated", LongName = "githubUsername")]
-        string githubUsernameDeprecated { get; set; }
-        [Option(Description = "Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token", ShortName = "gu", LongName = "github-username")]
-        string githubUsername { get; set; }
-        [Option(Description = "DEPRECATED: Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username", ShowInHelpText = false, ShortName = "gtdeprecated", LongName = "githubToken")]
-        string githubTokenDeprecated { get; set; }
-        [Option(Description = "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username", ShortName = "gt", LongName = "github-token")]
-        string githubToken { get; set; }
-        [Option(Description = "DEPRECATED: Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions", ShowInHelpText = false, ShortName = "gbtdeprecated", LongName = "githubBearerToken")]
-        string githubBearerTokenDeprecated { get; set; }
-        [Option(Description = "Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions", ShortName = "gbt", LongName = "github-bearer-token")]
-        string githubBearerToken { get; set; }
-        [Option(Description = "DEPRECATED: Optionally disable GitHub license resolution", ShowInHelpText = false, ShortName = "dgldeprecated", LongName = "disableGithubLicenses")]
-        bool disableGithubLicensesDeprecated { get; set; }
-        [Option(Description = "Optionally disable GitHub license resolution", ShortName = "dgl", LongName = "disable-github-licenses")]
-        bool disableGithubLicenses { get; set; }
-
-        [Option(Description = "Optionally disable package restore", ShortName = "dpr", LongName = "disable-package-restore")]
-        bool disablePackageRestore { get; set; }
-
-        [Option(Description = "Optionally disable hash computation for packages", ShortName = "dhc", LongName = "disable-hash-computation")]
-        bool disableHashComputation { get; set; }
-
-        [Option(Description = "dotnet command timeout in milliseconds (primarily used for long dotnet restore operations)", ShortName = "dct", LongName = "dotnet-command-timeout")]
-        int dotnetCommandTimeout { get; set; } = 300000;
-
-        [Option(Description = "Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated.", ShortName = "biop", LongName = "base-intermediate-output-path")]
-        public string baseIntermediateOutputPath { get; }
-
-        [Option(Description = "Optionally provide a metadata template which has project specific details.", ShortName = "imp", LongName = "import-metadata-path")]
-        public string importMetadataPath { get; }
-
-        [Option(Description = "Override the autogenerated BOM metadata component name.", ShortName = "sn", LongName = "set-name")]
-        public string setName { get; }
-
-        [Option(Description = "Override the default BOM metadata component version (defaults to 0.0.0).", ShortName = "sv", LongName = "set-version")]
-        public string setVersion { get; }
-
-        [Option(Description = "Override the default BOM metadata component type (defaults to application).", ShortName = "st", LongName = "set-type")]
-        public Component.Classification setType { get; }
-#endregion options
+    public static class Program
+    {
 
         internal static IFileSystem fileSystem = new FileSystem();
         internal static readonly IJsonDocs jsonDoc = new JsonDocs();
@@ -137,42 +45,84 @@ namespace CycloneDX
         internal static ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
 
         public static async Task<int> Main(string[] args)
-            => await CommandLineApplication.ExecuteAsync<Program>(args).ConfigureAwait(false);
+        {
 
-        async Task<int> OnExecuteAsync(CommandLineApplication app) {
-            if (version)
+            var root = new RootCommand
             {
-                Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version?.ToString());
-                return 0;
-            }
+            new Argument<string>("path", description: "The path to a .sln, .csproj, .fsproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files."  ),
+            new Option<string>(new[] { "--framework", "-tfm" }, "The target framework to use. If not defined, all will be aggregated."),
+            new Option<string>(new[] { "--runtime", "-rt" }, "The runtime to use. If not defined, all will be aggregated."),
+            new Option<string>(new[] { "--output", "-o" }, description: "The directory to write the BOM") {IsRequired = true},
+            new Option<string>(new[] { "--filename", "-f" }, "Optionally provide a filename for the BOM (default: bom.xml or bom.json"),
+            new Option<bool>(new[] { "--json", "-j" }, "Produce a JSON BOM instead of XML"),
+            new Option<bool>(new[] { "--exclude-dev", "-d" }, "Exclude development dependencies from the BOM"),
+            new Option<bool>(new[] { "--exclude-test-projects", "-t" }, "Exclude test projects from the BOM"),
+            new Option<string>(new[] { "--url", "-u" }, "Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json"),
+            new Option<string>(new[] { "--baseUrlUsername", "-us" }, "Alternative NuGet repository username"),
+            new Option<string>(new[] { "--baseUrlUserPassword", "-usp" }, "Alternative NuGet repository username password/apikey"),
+            new Option<bool>(new[] { "--isBaseUrlPasswordClearText", "-uspct" }, "Alternative NuGet repository password is cleartext"),
+            new Option<bool>(new[] { "--recursive", "-r" }, "To be used with a single project file, it will recursively scan project references of the supplied project file"),
+            new Option<string>(new[] { "--no-serial-number", "-ns" }, "Optionally omit the serial number from the resulting BOM"),
+            new Option<string>(new[] { "--github-username", "-gu" }, "Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token"),
+            new Option<string>(new[] { "--github-token", "-gt" }, "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username"),
+            new Option<string>(new[] { "--github-bearer-token", "-gbt" }, "Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions"),
+            new Option<bool>(new[] { "--disable-github-licenses", "-dgl" }, "Optionally disable GitHub license resolution"),
+            new Option<bool>(new[] { "--disable-package-restore", "-dpr" }, "Optionally disable package restore"),
+            new Option<bool>(new[] { "--disable-hash-computation", "-dhc" }, "Optionally disable hash computation for packages"),
+            new Option<int>(new[] { "--dotnet-command-timeout", "-dct" }, description: "dotnet command timeout in milliseconds (primarily used for long dotnet restore operations)", getDefaultValue: () => 300000),
+            new Option<string>(new[] { "--base-intermediate-output-path", "-biop" }, "Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated."),
+            new Option<string>(new[] { "--import-metadata-path", "-imp" }, "Optionally provide a metadata template which has project specific details."),
+            new Option<string>(new[] { "--set-name", "-sn" }, "Override the autogenerated BOM metadata component name."),
+            new Option<string>(new[] { "--set-version", "-sv" }, "Override the default BOM metadata component version (defaults to 0.0.0)."),
+            new Option<Component.Classification>(new[] { "--set-type", "-st" }, "Override the default BOM metadata component type (defaults to application).")
+            }.WithHandler(nameof(HandleCommandAsync));
+
+            root.Description = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.";
+
+            return await root.InvokeAsync(args);
+        }
+
+
+        private static async Task<int> HandleCommandAsync(string path,
+                                                          string framework,
+                                                          string runtime,
+                                                          string output,
+                                                          string filename,
+                                                          bool json,
+                                                          bool ExcludeDev,
+                                                          bool ExcludeTestProjects,
+                                                          string url,
+                                                          string BaseUrlUserName,
+                                                          string BaseUrlUserPassword,
+                                                          bool IsBaseUrlPasswordClearText,
+                                                          bool recursive,
+                                                          bool NoSerialNumber,
+                                                          string GithubUsername,
+                                                          string GithubToken,
+                                                          string GithubBearerToken,
+                                                          bool DisableGithubLicenses,
+                                                          bool DisablePackageRestore,
+                                                          bool DisableHashComputation,
+                                                          int dotnetCommandTimeout,
+                                                          string BaseIntermediateOutputPath,
+                                                          string ImportMetadataPath,
+                                                          string SetName,
+                                                          string SetVersion,
+                                                          Component.Classification SetType
+            )
+        {
+            string SolutionOrProjectFile = path;
+            string outputDirectory = output;
+            string outputFilename = filename;
+            bool scanProjectReferences = recursive;
+            string baseUrl = url;
+            bool isPasswordClearText = IsBaseUrlPasswordClearText;
+
 
             Console.WriteLine();
 
-            // check parameter values
-            if (string.IsNullOrEmpty(SolutionOrProjectFile))
-            {
-                app.ExtendedHelpText = Environment.NewLine + "A path is required";
-                app.ShowHelp();
-                return (int)ExitCode.SolutionOrProjectFileParameterMissing;
-            }
-
-            if (string.IsNullOrEmpty(outputDirectory))
-            {
-                app.ExtendedHelpText = Environment.NewLine + "The output directory is required";
-                app.ShowHelp();
-                return (int)ExitCode.OutputDirectoryParameterMissing;
-            }
-
-            if ((string.IsNullOrEmpty(githubUsername) ^ string.IsNullOrEmpty(githubToken)) ||
-                (string.IsNullOrEmpty(githubUsernameDeprecated) ^ string.IsNullOrEmpty(githubTokenDeprecated)))
-            {
-                app.ExtendedHelpText = Environment.NewLine + "Both GitHub username and token are required";
-                app.ShowHelp();
-                return (int)ExitCode.GitHubParameterMissing;
-            }
-
             dotnetCommandService.TimeoutMilliseconds = dotnetCommandTimeout;
-            projectFileService.DisablePackageRestore = disablePackageRestore;
+            projectFileService.DisablePackageRestore = DisablePackageRestore;
 
             // retrieve nuget package cache paths
             var packageCachePathsResult = dotnetUtilsService.GetPackageCachePaths();
@@ -184,37 +134,30 @@ namespace CycloneDX
             }
 
             Console.WriteLine("Found the following local nuget package cache locations:");
-            foreach (var path in packageCachePathsResult.Result)
+            foreach (var cachePath in packageCachePathsResult.Result)
             {
-                Console.WriteLine($"    {path}");
+                Console.WriteLine($"    {cachePath}");
             }
 
             // instantiate services
 
             var fileDiscoveryService = new FileDiscoveryService(Program.fileSystem);
             GithubService githubService = null;
-            if (!(disableGithubLicenses || disableGithubLicensesDeprecated))
+            if (!(DisableGithubLicenses))
             {
                 // GitHubService requires its own HttpClient as it adds a default authorization header
-                HttpClient httpClient = new HttpClient(new HttpClientHandler {
+                HttpClient httpClient = new HttpClient(new HttpClientHandler
+                {
                     AllowAutoRedirect = false
                 });
-                
-                if (!string.IsNullOrEmpty(githubBearerToken))
+
+                if (!string.IsNullOrEmpty(GithubBearerToken))
                 {
-                    githubService = new GithubService(httpClient, githubBearerToken);
+                    githubService = new GithubService(httpClient, GithubBearerToken);
                 }
-                else if (!string.IsNullOrEmpty(githubBearerTokenDeprecated))
+                else if (!string.IsNullOrEmpty(GithubUsername))
                 {
-                    githubService = new GithubService(httpClient, githubBearerTokenDeprecated);
-                }
-                else if (!string.IsNullOrEmpty(githubUsername))
-                {
-                    githubService = new GithubService(httpClient, githubUsername, githubToken);
-                }
-                else if (!string.IsNullOrEmpty(githubUsernameDeprecated))
-                {
-                    githubService = new GithubService(httpClient, githubUsernameDeprecated, githubTokenDeprecated);
+                    githubService = new GithubService(httpClient, GithubUsername, GithubToken);
                 }
                 else
                 {
@@ -223,8 +166,8 @@ namespace CycloneDX
             }
             var nugetLogger = new NuGet.Common.NullLogger();
             var nugetInput =
-                NugetInputFactory.Create(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText);
-            var nugetService = new NugetV3Service(nugetInput, fileSystem, packageCachePathsResult.Result, githubService, nugetLogger, disableHashComputation);
+                NugetInputFactory.Create(baseUrl, BaseUrlUserName, BaseUrlUserPassword, isPasswordClearText);
+            var nugetService = new NugetV3Service(nugetInput, fileSystem, packageCachePathsResult.Result, githubService, nugetLogger, DisableHashComputation);
 
             var packages = new HashSet<NugetPackage>();
 
@@ -234,25 +177,26 @@ namespace CycloneDX
             var topLevelComponent = new Component
             {
                 // name is set below
-                Version = string.IsNullOrEmpty(setVersion) ? "0.0.0" : setVersion,
-                Type = setType == Component.Classification.Null ? Component.Classification.Application : setType,
+                Version = string.IsNullOrEmpty(SetVersion) ? "0.0.0" : SetVersion,
+                Type = SetType == Component.Classification.Null ? Component.Classification.Application : SetType
+
             };
 
             try
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
-                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath, BaseIntermediateOutputPath, ExcludeTestProjects, ExcludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
-                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, BaseIntermediateOutputPath, ExcludeTestProjects, ExcludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
-                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, BaseIntermediateOutputPath, ExcludeTestProjects, ExcludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
@@ -276,9 +220,9 @@ namespace CycloneDX
                 return (int)ExitCode.DotnetRestoreFailed;
             }
 
-            if (!string.IsNullOrEmpty(setName))
+            if (!string.IsNullOrEmpty(SetName))
             {
-                topLevelComponent.Name = setName;
+                topLevelComponent.Name = SetName;
             }
 
             // get all the components and dependency graph from the NuGet packages
@@ -295,7 +239,7 @@ namespace CycloneDX
                     var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
                     if (component != null)
                     {
-                        if (component.Scope != Component.ComponentScope.Excluded || !excludeDev)
+                        if (component.Scope != Component.ComponentScope.Excluded || !ExcludeDev)
                         {
                             components.Add(component);
                         }
@@ -373,16 +317,16 @@ namespace CycloneDX
                 Version = 1,
             };
 
-            if (!string.IsNullOrEmpty(importMetadataPath))
+            if (!string.IsNullOrEmpty(ImportMetadataPath))
             {
-                if (!File.Exists(importMetadataPath))
+                if (!File.Exists(ImportMetadataPath))
                 {
-                    Console.Error.WriteLine($"Metadata template '{importMetadataPath}' does not exist.");
+                    Console.Error.WriteLine($"Metadata template '{ImportMetadataPath}' does not exist.");
                     return (int)ExitCode.InvalidOptions;
                 }
                 else
                 {
-                    bom = ReadMetaDataFromFile(bom, importMetadataPath);
+                    bom = ReadMetaDataFromFile(bom, ImportMetadataPath);
                 }
             }
 
@@ -420,7 +364,10 @@ namespace CycloneDX
 
             AddMetadataTool(bom);
 
-            if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
+            if (!(NoSerialNumber))
+            {
+                bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
+            }
             bom.Components = new List<Component>(components);
             bom.Components.Sort((x, y) =>
             {
@@ -497,5 +444,15 @@ namespace CycloneDX
                 bom.Metadata.Tools[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
+        private static Command WithHandler(this Command command, string methodName)
+        {
+            var method = typeof(Program).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static);
+            var handler = CommandHandler.Create(method!);
+            command.Handler = handler;
+            return command;
+        }
+
     }
+
+
 }

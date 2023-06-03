@@ -5,7 +5,6 @@
 
   <ItemGroup>
     <PackageVersion Include="CycloneDX.Core" Version="5.4.0" />
-    <PackageVersion Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
     <PackageVersion Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageVersion Include="NuGet.ProjectModel" Version="6.5.0" />
@@ -21,6 +20,8 @@
     <PackageVersion Include="coverlet.collector" Version="3.2.0" />
     <PackageVersion Include="coverlet.msbuild" Version="3.2.0" />
 
+    <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+    <PackageVersion Include="System.CommandLine.NamingConventionBinder" Version="2.0.0-beta4.22272.1" />
     <PackageVersion Include="System.IO.Abstractions" Version="19.2.26" />
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="19.2.26" />
   </ItemGroup>
