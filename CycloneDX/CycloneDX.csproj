@@ -6,6 +6,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>A .NET Core global tool to generate CycloneDX bill-of-material documents for use with Software Composition Analysis (SCA).</Description>
     <PackAsTool>true</PackAsTool>
+    <Version>2.7.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ToolCommandName>dotnet-CycloneDX</ToolCommandName>
     <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
