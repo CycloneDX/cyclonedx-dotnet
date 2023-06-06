@@ -31,19 +31,19 @@ namespace CycloneDX.Tests
     public class ProgramTests
     {
         [Fact]
-        public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsSolutionOrProjectFileParameterMissingExitCode()
+        public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsInvalidOptionsExitCode()
         {
             var exitCode = await Program.Main(new string[] {}).ConfigureAwait(false);
 
-            Assert.Equal((int)ExitCode.SolutionOrProjectFileParameterMissing, exitCode);
+            Assert.Equal((int)ExitCode.InvalidOptions, exitCode);
         }
 
         [Fact]
-        public async Task CallingCycloneDX_WithoutOutputDirectory_ReturnsOutputDirectoryParameterMissingExitCode()
+        public async Task CallingCycloneDX_WithoutOutputDirectory_ReturnsInvalidOptionsExitCode()
         {
             var exitCode = await Program.Main(new string[] { XFS.Path(@"c:\SolutionPath\Solution.sln") }).ConfigureAwait(false);
 
-            Assert.Equal((int)ExitCode.OutputDirectoryParameterMissing, exitCode);
+            Assert.Equal((int)ExitCode.InvalidOptions, exitCode);
         }
 
         [Fact]
