@@ -71,6 +71,11 @@ namespace CycloneDX.Services
                 // can only happen while testing (because it will be checked before this method is called)
                 return false;
             }
+            catch (FileNotFoundException /*ex*/)
+            {
+                // can only happen while testing (because it will be checked before this method is called)
+                return false;
+            }
 
             XmlElement testSdkReference = xmldoc.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.NET.Test.Sdk']") as XmlElement;
             if (testSdkReference != null)
