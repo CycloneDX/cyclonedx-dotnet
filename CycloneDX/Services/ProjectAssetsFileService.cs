@@ -23,6 +23,7 @@ using System.Linq;
 using CycloneDX.Interfaces;
 using NuGet.Versioning;
 using System.Text.Json;
+using NuGet.Frameworks;
 
 namespace CycloneDX.Services
 {
@@ -60,6 +61,7 @@ namespace CycloneDX.Services
                     var runtimePackages = new HashSet<NugetPackage>();
                     foreach (var library in targetRuntime.Libraries.Where(lib => lib.Type != "project"))
                     {
+                        var targetAlias = TargetFrameworkToAlias(targetRuntime.TargetFramework);
                         var package = new NugetPackage
                         {
                             Name = library.Name,
@@ -67,8 +69,8 @@ namespace CycloneDX.Services
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
                             // get value from project.assets.json file ( x."project"."frameworks".<framework>."dependencies".<library.Name>."suppressParent") 
-                            IsDevDependency = SetIsDevDependency(library.Name, targetRuntime.Name, frameworksProperties),
-                            IsDirectReference = SetIsDirectReference(library.Name, targetRuntime.Name, frameworksProperties)
+                            IsDevDependency = SetIsDevDependency(library.Name, targetAlias, frameworksProperties),
+                            IsDirectReference = SetIsDirectReference(library.Name, targetAlias, frameworksProperties)
                         };
 
                         // is this a test project dependency or only a development dependency
@@ -95,9 +97,8 @@ namespace CycloneDX.Services
 
             return packages;
         }
-        public bool SetIsDirectReference(string packageName, string targetRuntime, JsonElement jsonContent)
+        public bool SetIsDirectReference(string packageName, string framework, JsonElement jsonContent)
         {
-            string framework = TargetFrameworkToAlias(targetRuntime);
             JsonElement packageProperties;
             if (jsonContent.GetProperty(framework).GetProperty("dependencies").TryGetProperty(packageName, out packageProperties))
             {
@@ -106,9 +107,8 @@ namespace CycloneDX.Services
             }
             return false;
         }
-        public bool SetIsDevDependency(string packageName, string targetRuntime, JsonElement jsonContent)
+        public bool SetIsDevDependency(string packageName, string framework, JsonElement jsonContent)
         {
-            string framework = TargetFrameworkToAlias(targetRuntime);
             JsonElement packageProperties;
             if (jsonContent.GetProperty(framework).GetProperty("dependencies").TryGetProperty(packageName, out packageProperties))
             {
@@ -127,8 +127,9 @@ namespace CycloneDX.Services
         ///     netcoreapp3.1  => netcoreapp3.1
         ///     net6.0  => net6.0
         /// </summary>
-        private string TargetFrameworkToAlias(string target)
+        private string TargetFrameworkToAlias(NuGetFramework framework)
         {
+            var target = framework.ToString();
             if (!string.IsNullOrEmpty(target))
             {
                 target = target.ToLowerInvariant().TrimStart('.');

@@ -73,7 +73,6 @@ namespace CycloneDX.Tests
                     }
                 }
             }
-
         }
     }
 }
@@ -84,19 +83,33 @@ namespace CycloneDX.Tests
     "version": 3,
     "targets": {
        "net6.0": {
-       "Package1/1.5.0": {
-            "type": "package",
-            "dependencies": {
-                "Package2": "4.5.1"
+           "Package1/1.5.0": {
+                "type": "package",
+                "dependencies": {
+                    "Package2": "4.5.1"
+                    }
+               },
+            "Package2/4.5.1": {
+                 "type": "package"
+                },
+            "Package3/1.0.0": {
+                 "type": "package"
                 }
-           },
-        "Package2/4.5.1": {
-             "type": "package"
             },
-        "Package3/1.0.0": {
-             "type": "package"
+       "net6.0/win-x64": {
+           "Package1/1.5.0": {
+                "type": "package",
+                "dependencies": {
+                    "Package2": "4.5.1"
+                    }
+               },
+            "Package2/4.5.1": {
+                 "type": "package"
+                },
+            "Package3/1.0.0": {
+                 "type": "package"
+                }
             }
-        }
        },
     "libraries": {
         "Package1/1.5.0": {
@@ -159,7 +172,11 @@ namespace CycloneDX.Tests
                     }
                 }
             }
-
+        }
+    },
+    "runtimes": {
+        "win-x64": {
+            "#import": []
         }
     }
 }
@@ -222,6 +239,47 @@ namespace CycloneDX.Tests
                             {
                                 TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
                                 RuntimeIdentifier = "",
+                                Libraries = new[]
+                                {
+                                    new LockFileTargetLibrary
+                                    {
+                                        Name = "Package1",
+                                        Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package1.dll")
+                                        },
+                                        Dependencies = new[]
+                                        {
+                                            new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), originalString:"[4.5, )"))
+                                        }
+                                    },
+                                    new LockFileTargetLibrary
+                                    {
+                                        Name = "Package2",
+                                        Version = new NuGet.Versioning.NuGetVersion("4.5.1"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package2.dll")
+                                        },
+                                        Dependencies = new PackageDependency[0]
+                                    },
+                                    new LockFileTargetLibrary
+                                    {
+                                        Name = "Package3",
+                                        Version = new NuGet.Versioning.NuGetVersion("1.0.0"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package3.dll")
+                                        },
+                                        Dependencies = new PackageDependency[0]
+                                    }
+                                }
+                            },
+                            new LockFileTarget
+                            {
+                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
+                                RuntimeIdentifier = "win-x64",
                                 Libraries = new[]
                                 {
                                     new LockFileTargetLibrary
@@ -352,6 +410,27 @@ namespace CycloneDX.Tests
                             {
                                 TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
                                 RuntimeIdentifier = "",
+                                Libraries = new[]
+                                {
+                                    new LockFileTargetLibrary
+                                    {
+                                        Name = "Package1",
+                                        Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package1.dll")
+                                        },
+                                        Dependencies = new[]
+                                        {
+                                            new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), originalString:"[4.5, )"))
+                                        }
+                                    }
+                                }
+                            },
+                            new LockFileTarget
+                            {
+                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
+                                RuntimeIdentifier = "win-x64",
                                 Libraries = new[]
                                 {
                                     new LockFileTargetLibrary
