@@ -480,5 +480,102 @@ namespace CycloneDX.Tests
                         });
                 });
         }
+
+        [Theory]
+        [InlineData(".NetStandard", 2, 1)]
+        [InlineData("net", 6, 0)]
+        public void GetNugetPackages_MissingDependencies(string framework, int frameworkMajor, int frameworkMinor)
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+                {
+                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
+                        new[] {
+                            new NugetPackage
+                            {
+                                Name = "Package1",
+                                Version = "1.5.0",
+                            }
+                        })
+                    },
+                    { XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), new MockFileData("")
+                    }
+                });
+            var mockDotnetCommandsService = new Mock<IDotnetCommandService>();
+            mockDotnetCommandsService.Setup(m => m.Run(It.IsAny<string>()))
+                .Returns(() => Helpers.GetDotnetListPackagesResult(
+                        new[]
+                        {
+                            ("Package1", new[]{ ("Package1", "1.5.0") }),
+                        }));
+            var mockAssetReader = new Mock<IAssetFileReader>(MockBehavior.Strict);
+            mockAssetReader
+                .Setup(m => m.Read(It.IsAny<string>()))
+                .Returns(() =>
+                {
+                    return new LockFile
+                    {
+                        Targets = new[]
+                        {
+                            new LockFileTarget
+                            {
+                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
+                                RuntimeIdentifier = "",
+                                Libraries = new[]
+                                {
+                                    new LockFileTargetLibrary
+                                    {
+                                        Name = "Package1",
+                                        Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package1.dll")
+                                        }
+                                    }
+                                }
+                            },
+                            new LockFileTarget
+                            {
+                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
+                                RuntimeIdentifier = "win-x64",
+                                Libraries = new[]
+                                {
+                                    new LockFileTargetLibrary
+                                    {
+                                        Name = "Package1",
+                                        Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package1.dll")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                });
+            mockAssetReader.Setup(m => m.ReadAllText(It.IsAny<string>())).Returns(() =>
+            {
+                return "empty";
+            });
+            var mockJsonDoc = new Mock<IJsonDocs>(MockBehavior.Strict);
+            mockJsonDoc
+                .Setup(m => m.Parse(It.IsAny<string>()))
+                .Returns(() => JsonDocument.Parse(jsonString2)
+                );
+
+            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () =>mockAssetReader.Object, mockJsonDoc.Object);
+            var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false, false);
+            var sortedPackages = new List<NugetPackage>(packages);
+            sortedPackages.Sort();
+
+            Assert.Collection(sortedPackages,
+                item =>
+                {
+                    Assert.Equal(@"Package1", item.Name);
+                    Assert.Equal(@"1.5.0", item.Version);
+                    Assert.True(item.IsDirectReference, "Package1 was expected to be a direct reference.");
+                    Assert.Empty(item.Dependencies);
+                });
+        }
     }
 }

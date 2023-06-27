@@ -59,9 +59,17 @@ namespace CycloneDX.Services
                 foreach (var targetRuntime in assetsFile.Targets)
                 {
                     var runtimePackages = new HashSet<NugetPackage>();
+                    var targetAlias = TargetFrameworkToAlias(targetRuntime.TargetFramework);
+                    var dependenciesProperties = default(JsonElement);
+                    var hasDependencyProperties = frameworksProperties.TryGetProperty(targetAlias, out var frameworkProperties)
+                                          && frameworkProperties.TryGetProperty("dependencies", out dependenciesProperties);
+
                     foreach (var library in targetRuntime.Libraries.Where(lib => lib.Type != "project"))
                     {
-                        var targetAlias = TargetFrameworkToAlias(targetRuntime.TargetFramework);
+                        var packageProperties = default(JsonElement);
+                        var hasPackageProperties = hasDependencyProperties
+                                                   && dependenciesProperties.TryGetProperty(library.Name, out packageProperties);
+
                         var package = new NugetPackage
                         {
                             Name = library.Name,
@@ -69,8 +77,8 @@ namespace CycloneDX.Services
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
                             // get value from project.assets.json file ( x."project"."frameworks".<framework>."dependencies".<library.Name>."suppressParent") 
-                            IsDevDependency = SetIsDevDependency(library.Name, targetAlias, frameworksProperties),
-                            IsDirectReference = SetIsDirectReference(library.Name, targetAlias, frameworksProperties)
+                            IsDevDependency = hasPackageProperties && SetIsDevDependency(packageProperties),
+                            IsDirectReference = hasPackageProperties && SetIsDirectReference(packageProperties)
                         };
 
                         // is this a test project dependency or only a development dependency
@@ -97,25 +105,15 @@ namespace CycloneDX.Services
 
             return packages;
         }
-        public bool SetIsDirectReference(string packageName, string framework, JsonElement jsonContent)
+        public bool SetIsDirectReference(JsonElement jsonContent)
         {
-            JsonElement packageProperties;
-            if (jsonContent.GetProperty(framework).GetProperty("dependencies").TryGetProperty(packageName, out packageProperties))
-            {
-                // every direct reference has target property
-                return packageProperties.TryGetProperty("target", out _);
-            }
-            return false;
+            // every direct reference has target property
+            return jsonContent.TryGetProperty("target", out _);
         }
-        public bool SetIsDevDependency(string packageName, string framework, JsonElement jsonContent)
+        public bool SetIsDevDependency(JsonElement jsonContent)
         {
-            JsonElement packageProperties;
-            if (jsonContent.GetProperty(framework).GetProperty("dependencies").TryGetProperty(packageName, out packageProperties))
-            {
-                // suppressParent: exists only for development dependencies
-                return packageProperties.TryGetProperty("suppressParent", out _);
-            }
-            return false;
+            // suppressParent: exists only for development dependencies
+            return jsonContent.TryGetProperty("suppressParent", out _);
         }
 
         /// <summary>
