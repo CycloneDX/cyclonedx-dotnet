@@ -24,164 +24,15 @@ using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using Moq;
 using CycloneDX.Models;
 using CycloneDX.Services;
+using NuGet.LibraryModel;
 using NuGet.ProjectModel;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
-using System.Text.Json;
 
 namespace CycloneDX.Tests
 {
     public class ProjectAssetsFileServiceTests
     {
-
-        protected readonly string jsonString1 = /*lang=json,strict*/ """
-{
-    "version": 3,
-    "libraries": {
-        "Package1/1.5.0": {
-            "files": [
-                "Package1.dll"
-            ],
-            "path": "Package1/1.5.0",
-            "type": "package"
-        },
-        "Package2/4.5.1": {
-            "files": [
-                "Package2.dll"
-            ],
-            "path": "Package2/4.5.1",
-            "type": "package"
-        }
-    },
-    "project": {
-        "frameworks": {
-            "net6.0": {
-            "targetAlias": "net6.0",
-                "dependencies": {
-                    "Package1": {
-                        "target": "Package",
-                        "version": "[1.6.0,)"
-                    }
-                }
-            },
-            "netstandard2.1": {
-            "targetAlias": "netstandard2.1",
-                "dependencies": {
-                    "Package1": {
-                        "target": "Package",
-                        "version": "[1.6.0,)"
-                    }
-                }
-            }
-        }
-    }
-}
-""";
-
-        protected readonly string jsonString2 = /*lang=json,strict*/ """
-{
-    "version": 3,
-    "targets": {
-       "net6.0": {
-           "Package1/1.5.0": {
-                "type": "package",
-                "dependencies": {
-                    "Package2": "4.5.1"
-                    }
-               },
-            "Package2/4.5.1": {
-                 "type": "package"
-                },
-            "Package3/1.0.0": {
-                 "type": "package"
-                }
-            },
-       "net6.0/win-x64": {
-           "Package1/1.5.0": {
-                "type": "package",
-                "dependencies": {
-                    "Package2": "4.5.1"
-                    }
-               },
-            "Package2/4.5.1": {
-                 "type": "package"
-                },
-            "Package3/1.0.0": {
-                 "type": "package"
-                }
-            }
-       },
-    "libraries": {
-        "Package1/1.5.0": {
-            "files": [
-                "Package1.dll"
-            ],
-            "path": "Package1/1.5.0",
-            "type": "package"
-        },
-        "Package2/4.5.1": {
-            "files": [
-                "Package2.dll"
-            ],
-            "path": "Package2/4.5.1",
-            "type": "package"
-        },
-        "Package3/1.0.0": {
-            "files": [
-                "Package3.dll"
-            ],
-            "path": "Package3/1.0.0",
-            "type": "package"
-            }
-    },
-    "project": {
-        "frameworks": {
-            "net6.0": {
-            "targetAlias": "net6.0",
-                "dependencies": {
-                    "Package1": {
-                        "target": "Package",
-                        "version": "[1.5.0,)"
-                    },
-                    "Package2": {
-                        "target": "Package",
-                        "version": "[4.5.1,)"
-                    },
-                    "Package3": {
-                        "suppressParent": "All",
-                        "target": "Package",
-                        "version": "[1.0.0,)"
-                    }
-                }
-            },
-            "netstandard2.1": {
-            "targetAlias": "netstandard2.1",
-                "dependencies": {
-                    "Package1": {
-                        "target": "Package",
-                        "version": "[1.5.0,)"
-                        },
-                    "Package2": {
-                        "target": "Package",
-                        "version": "[4.5.1,)"
-                    },
-                    "Package3": {
-                        "suppressParent": "All",
-                        "target": "Package",
-                        "version": "[1.0.0,)"
-                    }
-                }
-            }
-        }
-    },
-    "runtimes": {
-        "win-x64": {
-            "#import": []
-        }
-    }
-}
-""";
-
         [Theory]
         [InlineData(".NetStandard", 2, 1)]
         [InlineData("net", 6, 0)]
@@ -211,6 +62,7 @@ namespace CycloneDX.Tests
                                 Name = "Package3",
                                 Version = "1.0.0",
                                 Dependencies = new Dictionary<string, string>(),
+                                IsDevDependency = true
                             }
                         })
                     },
@@ -231,13 +83,14 @@ namespace CycloneDX.Tests
                 .Setup(m => m.Read(It.IsAny<string>()))
                 .Returns(() =>
                 {
+                    var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
                     return new LockFile
                     {
                         Targets = new[]
                         {
                             new LockFileTarget
                             {
-                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
+                                TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "",
                                 Libraries = new[]
                                 {
@@ -278,7 +131,7 @@ namespace CycloneDX.Tests
                             },
                             new LockFileTarget
                             {
-                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
+                                TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "win-x64",
                                 Libraries = new[]
                                 {
@@ -317,6 +170,53 @@ namespace CycloneDX.Tests
                                     }
                                 }
                             }
+                        },
+                        PackageSpec = new PackageSpec
+                        {
+                            TargetFrameworks =
+                            {
+                                new TargetFrameworkInformation
+                                {
+                                    FrameworkName = nuGetFramework,
+                                    TargetAlias = nuGetFramework.Framework,
+                                    Dependencies = new List<LibraryDependency>
+                                    {
+                                        new()
+                                        {
+                                            SuppressParent = LibraryIncludeFlagUtils.DefaultSuppressParent,
+                                            ReferenceType = LibraryDependencyReferenceType.Direct,
+                                            LibraryRange = new LibraryRange
+                                            {
+                                                Name = "Package1",
+                                                VersionRange = VersionRange.Parse("1.5.0"),
+                                                TypeConstraint = LibraryDependencyTarget.Package
+                                            }
+                                        },
+                                        new()
+                                        {
+                                            SuppressParent = LibraryIncludeFlagUtils.DefaultSuppressParent,
+                                            ReferenceType = LibraryDependencyReferenceType.Direct,
+                                            LibraryRange = new LibraryRange
+                                            {
+                                                Name = "Package2",
+                                                VersionRange = VersionRange.Parse("4.5.1"),
+                                                TypeConstraint = LibraryDependencyTarget.Package
+                                            }
+                                        },
+                                        new()
+                                        {
+                                            SuppressParent = LibraryIncludeFlags.All,
+                                            ReferenceType = LibraryDependencyReferenceType.Direct,
+                                            LibraryRange = new LibraryRange
+                                            {
+                                                Name = "Package3",
+                                                VersionRange = VersionRange.Parse("1.0.0"),
+                                                TypeConstraint = LibraryDependencyTarget.Package
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     };
                 });
@@ -325,13 +225,7 @@ namespace CycloneDX.Tests
                 return "empty";
             });
 
-            var mockJsonDoc = new Mock<IJsonDocs>();
-            mockJsonDoc
-                .Setup(m => m.Parse(It.IsAny<string>()))
-                .Returns(() => JsonDocument.Parse(jsonString2)
-                );
-
-            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () => mockAssetReader.Object, mockJsonDoc.Object );
+            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () => mockAssetReader.Object);
             var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false, false);
             var sortedPackages = new List<NugetPackage>(packages);
             sortedPackages.Sort();
@@ -402,13 +296,14 @@ namespace CycloneDX.Tests
                 .Setup(m => m.Read(It.IsAny<string>()))
                 .Returns(() =>
                 {
+                    var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
                     return new LockFile
                     {
                         Targets = new[]
                         {
                             new LockFileTarget
                             {
-                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
+                                TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "",
                                 Libraries = new[]
                                 {
@@ -429,7 +324,7 @@ namespace CycloneDX.Tests
                             },
                             new LockFileTarget
                             {
-                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
+                                TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "win-x64",
                                 Libraries = new[]
                                 {
@@ -448,6 +343,31 @@ namespace CycloneDX.Tests
                                     }
                                 }
                             }
+                        },
+                        PackageSpec = new PackageSpec
+                        {
+                            TargetFrameworks =
+                            {
+                                new TargetFrameworkInformation
+                                {
+                                    FrameworkName = nuGetFramework,
+                                    TargetAlias = nuGetFramework.Framework,
+                                    Dependencies = new List<LibraryDependency>
+                                    {
+                                        new()
+                                        {
+                                            SuppressParent = LibraryIncludeFlagUtils.DefaultSuppressParent,
+                                            ReferenceType = LibraryDependencyReferenceType.Direct,
+                                            LibraryRange = new LibraryRange
+                                            {
+                                                Name = "Package1",
+                                                VersionRange = VersionRange.Parse("1.5.0"),
+                                                TypeConstraint = LibraryDependencyTarget.Package
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     };
                 });
@@ -455,13 +375,8 @@ namespace CycloneDX.Tests
             {
                 return "empty";
             });
-            var mockJsonDoc = new Mock<IJsonDocs>(MockBehavior.Strict);
-            mockJsonDoc
-                .Setup(m => m.Parse(It.IsAny<string>()))
-                .Returns(() => JsonDocument.Parse(jsonString2)
-                );
 
-            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () =>mockAssetReader.Object, mockJsonDoc.Object);
+            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () => mockAssetReader.Object);
             var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false, false);
             var sortedPackages = new List<NugetPackage>(packages);
             sortedPackages.Sort();
@@ -512,13 +427,14 @@ namespace CycloneDX.Tests
                 .Setup(m => m.Read(It.IsAny<string>()))
                 .Returns(() =>
                 {
+                    var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
                     return new LockFile
                     {
                         Targets = new[]
                         {
                             new LockFileTarget
                             {
-                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
+                                TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "",
                                 Libraries = new[]
                                 {
@@ -535,7 +451,7 @@ namespace CycloneDX.Tests
                             },
                             new LockFileTarget
                             {
-                                TargetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0)),
+                                TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "win-x64",
                                 Libraries = new[]
                                 {
@@ -550,6 +466,31 @@ namespace CycloneDX.Tests
                                     }
                                 }
                             }
+                        },
+                        PackageSpec = new PackageSpec
+                        {
+                            TargetFrameworks =
+                            {
+                                new TargetFrameworkInformation
+                                {
+                                    FrameworkName = nuGetFramework,
+                                    TargetAlias = nuGetFramework.Framework,
+                                    Dependencies = new List<LibraryDependency>
+                                    {
+                                        new()
+                                        {
+                                            SuppressParent = LibraryIncludeFlagUtils.DefaultSuppressParent,
+                                            ReferenceType = LibraryDependencyReferenceType.Direct,
+                                            LibraryRange = new LibraryRange
+                                            {
+                                                Name = "Package1",
+                                                VersionRange = VersionRange.Parse("1.5.0"),
+                                                TypeConstraint = LibraryDependencyTarget.Package
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     };
                 });
@@ -557,13 +498,8 @@ namespace CycloneDX.Tests
             {
                 return "empty";
             });
-            var mockJsonDoc = new Mock<IJsonDocs>(MockBehavior.Strict);
-            mockJsonDoc
-                .Setup(m => m.Parse(It.IsAny<string>()))
-                .Returns(() => JsonDocument.Parse(jsonString2)
-                );
 
-            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () =>mockAssetReader.Object, mockJsonDoc.Object);
+            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () => mockAssetReader.Object);
             var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false, false);
             var sortedPackages = new List<NugetPackage>(packages);
             sortedPackages.Sort();

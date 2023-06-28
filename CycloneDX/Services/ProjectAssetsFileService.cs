@@ -22,8 +22,8 @@ using CycloneDX.Models;
 using System.Linq;
 using CycloneDX.Interfaces;
 using NuGet.Versioning;
-using System.Text.Json;
-using NuGet.Frameworks;
+using NuGet.LibraryModel;
+using NuGet.ProjectModel;
 
 namespace CycloneDX.Services
 {
@@ -32,14 +32,12 @@ namespace CycloneDX.Services
         private readonly IFileSystem _fileSystem;
         private readonly IDotnetCommandService _dotnetCommandService;
         private readonly Func<IAssetFileReader> _assetFileReaderFactory;
-        private readonly IJsonDocs _assetJsonObject;
 
-        public ProjectAssetsFileService(IFileSystem fileSystem, IDotnetCommandService dotnetCommandService, Func<IAssetFileReader> assetFileReaderFactory, IJsonDocs assetJsonObject)
+        public ProjectAssetsFileService(IFileSystem fileSystem, IDotnetCommandService dotnetCommandService, Func<IAssetFileReader> assetFileReaderFactory)
         {
             _fileSystem = fileSystem;
             _dotnetCommandService = dotnetCommandService;
             _assetFileReaderFactory = assetFileReaderFactory;
-            _assetJsonObject = assetJsonObject;
         }
 
         public HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool isTestProject, bool excludeDev)
@@ -49,36 +47,25 @@ namespace CycloneDX.Services
             if (_fileSystem.File.Exists(projectAssetsFilePath))
             {
                 var assetFileReader = _assetFileReaderFactory();
-                string jsonContent = assetFileReader.ReadAllText(projectAssetsFilePath);
-                JsonDocument assetFileObject = _assetJsonObject.Parse(jsonContent);
-                // get all direct nuget dependencies of the project
-                JsonElement frameworksProperties = assetFileObject.RootElement.GetProperty("project").GetProperty("frameworks");
-
                 var assetsFile = assetFileReader.Read(projectAssetsFilePath);
 
                 foreach (var targetRuntime in assetsFile.Targets)
                 {
                     var runtimePackages = new HashSet<NugetPackage>();
-                    var targetAlias = TargetFrameworkToAlias(targetRuntime.TargetFramework);
-                    var dependenciesProperties = default(JsonElement);
-                    var hasDependencyProperties = frameworksProperties.TryGetProperty(targetAlias, out var frameworkProperties)
-                                          && frameworkProperties.TryGetProperty("dependencies", out dependenciesProperties);
+                    var targetFramework = assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
+                    var dependencies = targetFramework.Dependencies;
 
                     foreach (var library in targetRuntime.Libraries.Where(lib => lib.Type != "project"))
                     {
-                        var packageProperties = default(JsonElement);
-                        var hasPackageProperties = hasDependencyProperties
-                                                   && dependenciesProperties.TryGetProperty(library.Name, out packageProperties);
-
+                        var libs = dependencies.FirstOrDefault(ld => ld.Name.Equals(library.Name));
                         var package = new NugetPackage
                         {
                             Name = library.Name,
                             Version = library.Version.ToNormalizedString(),
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
-                            // get value from project.assets.json file ( x."project"."frameworks".<framework>."dependencies".<library.Name>."suppressParent") 
-                            IsDevDependency = hasPackageProperties && SetIsDevDependency(packageProperties),
-                            IsDirectReference = hasPackageProperties && SetIsDirectReference(packageProperties)
+                            IsDevDependency = SetIsDevDependency(libs),
+                            IsDirectReference = SetIsDirectReference(libs)
                         };
 
                         // is this a test project dependency or only a development dependency
@@ -105,40 +92,13 @@ namespace CycloneDX.Services
 
             return packages;
         }
-        public bool SetIsDirectReference(JsonElement jsonContent)
+        public bool SetIsDirectReference(LibraryDependency dependency)
         {
-            // every direct reference has target property
-            return jsonContent.TryGetProperty("target", out _);
+            return dependency?.ReferenceType == LibraryDependencyReferenceType.Direct;
         }
-        public bool SetIsDevDependency(JsonElement jsonContent)
+        public bool SetIsDevDependency(LibraryDependency dependency)
         {
-            // suppressParent: exists only for development dependencies
-            return jsonContent.TryGetProperty("suppressParent", out _);
-        }
-
-        /// <summary>
-        /// Converts an asset file's target framework value into a csproj target framework value.
-        ///
-        /// Examples:
-        ///     .NetStandard,Version=V3.1 => netstandard3.1
-        ///     .NetCoreApp,Version=V3.1  => netcoreapp3.1
-        ///     netcoreapp3.1  => netcoreapp3.1
-        ///     net6.0  => net6.0
-        /// </summary>
-        private string TargetFrameworkToAlias(NuGetFramework framework)
-        {
-            var target = framework.ToString();
-            if (!string.IsNullOrEmpty(target))
-            {
-                target = target.ToLowerInvariant().TrimStart('.');
-                var targetParts = target.Split(",version=v");
-                if (targetParts.Length == 2)
-                {
-                    return string.Join("", targetParts);
-                }
-                return targetParts[0];
-            }
-            return null;
+            return dependency != null && dependency.SuppressParent != LibraryIncludeFlagUtils.DefaultSuppressParent;
         }
 
         /// <summary>
