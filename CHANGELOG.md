@@ -7,17 +7,21 @@ All notable changes to this project will be documented in this file. See [versio
 ### Added
 
 - use central package management and update dependencies #672
+- introduce CHANGELOG.md
+
+## [2.8.0](https://github.com/CycloneDX/cyclonedx-dotnet/compare/v2.7.0...v2.8.0) 2023-06-21
+
+### Added
+
 - Adding .net 7 references to project #666
-- GitHub Performance & Edge case improvements #625
-- Additional Lookups For License #615
 
 ### Fixed
 
-- use suppressParent to identify development dependencies #693
+- Use suppressParent to identify development dependencies #693
 - Fix bug when nuget package has a multiple condition license expression #640
 - Normalize version string when locating files in the local cache #674
 - Fix dependency name in Error log #650
-- GitHub rate limit error fix #626
+- Fix: populate authors as Author, not Publisher #688
 
 ### Changed
 
@@ -25,9 +29,10 @@ All notable changes to this project will be documented in this file. See [versio
 - Bump System.IO.Abstractions from 19.2.16 to 19.2.26 #701
 - Bump actions/checkout from 3.1.0 to 3.5.2 #680
 - Bump Moq from 4.18.2 to 4.18.4 #645
-- Update ReadMe.md
+- Updated README.md
 
-## [2.7.0](https://github.com/CycloneDX/cyclonedx-dotnet/compare/v2.6.0...v2.7.0) 022-11-30
+
+## [2.7.0](https://github.com/CycloneDX/cyclonedx-dotnet/compare/v2.6.0...v2.7.0) 2022-11-30
 
 ### Added
 
