@@ -21,8 +21,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CycloneDX.Models
 {
-    [SuppressMessage("Microsoft.Design", "CA1036:OverrideMethodsOnComparableTypes")]
-    public abstract class BasePackage : IComparable
+    public abstract class BasePackage : IEquatable<BasePackage>, IComparable<BasePackage>, IComparable
     {
         private readonly PackageType _packageType;
 
@@ -80,6 +79,71 @@ namespace CycloneDX.Models
         {
             var other = obj as BasePackage;
             return CompareTo(other);
+        }
+
+        public static bool operator ==(BasePackage left, BasePackage right)
+        {
+            if (left is null)
+            {
+                return right is null;
+            }
+            else
+            {
+                return left.Equals(right);
+            }
+        }
+
+        public static bool operator !=(BasePackage left, BasePackage right)
+        {
+            return !(left == right);
+        }
+
+        public static bool operator <(BasePackage left, BasePackage right)
+        {
+            if (left is null)
+            {
+                return right is object;
+            }
+            else
+            {
+                return left.CompareTo(right) < 0;
+            }
+        }
+
+        public static bool operator >(BasePackage left, BasePackage right)
+        {
+            if (left is null)
+            {
+                return false;
+            }
+            else
+            {
+                return left.CompareTo(right) > 0;
+            }
+        }
+
+        public static bool operator <=(BasePackage left, BasePackage right)
+        {
+            if (left is null)
+            {
+                return true;
+            }
+            else
+            {
+                return left.CompareTo(right) <= 0;
+            }
+        }
+
+        public static bool operator >=(BasePackage left, BasePackage right)
+        {
+            if (left is null)
+            {
+                return right is null;
+            }
+            else
+            {
+                return left.CompareTo(right) >= 0;
+            }
         }
     }
 }
