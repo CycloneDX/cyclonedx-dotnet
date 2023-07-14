@@ -124,6 +124,9 @@ namespace CycloneDX
 
         [Option(Description = "Override the default BOM metadata component type (defaults to application).", ShortName = "st", LongName = "set-type")]
         public Component.Classification setType { get; }
+
+        [Option(Description = "Optionally disable adding Libman dependencies", ShortName = "dl", LongName = "disable-libman")]
+        bool disableLibman { get; set; }
 #endregion options
 
         internal static IFileSystem fileSystem = new FileSystem();
@@ -131,7 +134,8 @@ namespace CycloneDX
         internal static readonly IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, dotnetCommandService, () => new AssetFileReader());
         internal static readonly IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
         internal static readonly IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
-        internal static readonly IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
+        internal static readonly ILibmanFileService libmanFileService = new LibmanFileService(fileSystem);
+        internal static readonly IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService, libmanFileService);
         internal static ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
 
         public static async Task<int> Main(string[] args)
@@ -224,7 +228,7 @@ namespace CycloneDX
                 NugetInputFactory.Create(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText);
             var nugetService = new NugetV3Service(nugetInput, fileSystem, packageCachePathsResult.Result, githubService, nugetLogger, disableHashComputation);
 
-            var packages = new HashSet<NugetPackage>();
+            var packages = new HashSet<BasePackage>();
 
             // determine what we are analyzing and do the analysis
             var fullSolutionOrProjectFilePath = Program.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
@@ -240,17 +244,17 @@ namespace CycloneDX
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
-                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await solutionFileService.GetSolutionPackages(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime, disableLibman).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
-                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await projectFileService.RecursivelyGetProjectPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime, disableLibman).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
-                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await projectFileService.GetProjectPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime, disableLibman).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Program.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
@@ -279,16 +283,16 @@ namespace CycloneDX
                 topLevelComponent.Name = setName;
             }
 
-            // get all the components and dependency graph from the NuGet packages
+            // get all the components and dependency graph from the packages
             var components = new HashSet<Component>();
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
             var transitiveDependencies = new HashSet<string>();
-            var packageToComponent = new Dictionary<NugetPackage, Component>();
+            var packageToComponent = new Dictionary<BasePackage, Component>();
             try
             {
                 var bomRefLookup = new Dictionary<(string, string), string>();
-                foreach (var package in packages)
+                foreach (var package in packages.OfType<NugetPackage>())
                 {
                     var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
                     if (component != null)
@@ -302,7 +306,7 @@ namespace CycloneDX
                     }
                 }
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
-                foreach (var package in packages)
+                foreach (var package in packages.OfType<NugetPackage>())
                 {
                     var packageDependencies = new Dependency
                     {
@@ -338,6 +342,26 @@ namespace CycloneDX
                     }
                     dependencies.Add(packageDependencies);
                 }
+
+                foreach (var package in packages.OfType<LibmanPackage>())
+                {
+                    Component component = null;
+
+                    if (package.Provider == LibmanProvider.cdnjs)
+                        component = await new CdnjsService(new HttpClient()).GetComponentAsync(package).ConfigureAwait(false);
+                    else if (package.Provider == LibmanProvider.unpkg || package.Provider == LibmanProvider.jsdelivr)
+                        component = await new NpmService(new HttpClient()).GetComponentAsync(package).ConfigureAwait(false);
+
+                    if (component != null)
+                    {
+                        components.Add(component);
+                        dependencies.Add(new Dependency()
+                        {
+                            Ref = component.BomRef,
+                            Dependencies = new List<Dependency>()
+                        });
+                    }
+                }
             }
             catch (InvalidGitHubApiCredentialsException)
             {
@@ -352,7 +376,7 @@ namespace CycloneDX
                 return (int)ExitCode.GitHubLicenseResolutionFailed;
             }
 
-            var directPackageDependencies = packages.Where(p => p.IsDirectReference).Select(p => packageToComponent[p].BomRef).ToHashSet();
+            var directPackageDependencies = packages.OfType<NugetPackage>().Where(p => p.IsDirectReference).Select(p => packageToComponent[p].BomRef).ToHashSet();
             // now we loop through all the dependencies to check which are direct
             foreach (var dep in dependencies)
             {

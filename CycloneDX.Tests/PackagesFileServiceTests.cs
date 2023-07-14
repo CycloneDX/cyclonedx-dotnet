@@ -32,7 +32,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\packages.config"), Helpers.GetPackagesFileWithPackageReference("Package", "1.2.3") },
+                    { XFS.Path(@"c:\Project\packages.config"), Helpers.GetNugetPackagesFileWithPackageReference("Package", "1.2.3") },
                 });
             var packagesFileService = new PackagesFileService(mockFileSystem);
 
@@ -50,7 +50,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\packages.config"), Helpers.GetPackagesFileWithPackageReferences(
+                    { XFS.Path(@"c:\Project\packages.config"), Helpers.GetNugetPackagesFileWithPackageReferences(
                         new List<NugetPackage> {
                             new NugetPackage { Name = "Package1", Version = "1.2.3"},
                             new NugetPackage { Name = "Package2", Version = "1.2.3"},
@@ -61,7 +61,7 @@ namespace CycloneDX.Tests
             var packagesFileService = new PackagesFileService(mockFileSystem);
 
             var packages = await packagesFileService.GetNugetPackagesAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(false);
-            var sortedPackages = new List<NugetPackage>(packages);
+            var sortedPackages = new List<BasePackage>(packages);
             sortedPackages.Sort();
 
             Assert.Collection(sortedPackages,

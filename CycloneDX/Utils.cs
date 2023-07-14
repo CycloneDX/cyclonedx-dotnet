@@ -17,6 +17,7 @@
 
 using System;
 using System.Diagnostics.Contracts;
+using CycloneDX.Models;
 
 namespace CycloneDX
 {
@@ -25,11 +26,11 @@ namespace CycloneDX
         /*
          * Creates a PackageURL from the specified package name and version. 
          */
-        public static string GeneratePackageUrl(string packageName, string packageVersion) {
+        public static string GeneratePackageUrl(PackageType packageType, string packageName, string packageVersion) {
             if (packageName == null || packageVersion == null) {
                 return null;
             }
-            return $"pkg:nuget/{packageName}@{packageVersion}";
+            return $"pkg:{packageType.ToString().ToLower()}/{packageName}@{packageVersion}";
         }
         public static bool IsSupportedProjectType(string filename) {
             Contract.Requires(filename != null);

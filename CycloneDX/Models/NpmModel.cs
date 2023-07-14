@@ -15,12 +15,34 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.Text.Json.Serialization;
+
 namespace CycloneDX.Models
 {
-    public class NugetPackage : BasePackage
+    public class NpmModel
     {
-        public NugetPackage() : base(PackageType.Nuget)
-        {
-        }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("homepage")]
+        public string Homepage { get; set; }
+
+        [JsonPropertyName("license")]
+        public string License { get; set; }
+
+        [JsonPropertyName("author")]
+        public AuthorModel Author { get; set; }
+    }
+
+    public class AuthorModel
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("url")]
+        public string Url { get; set; }
     }
 }

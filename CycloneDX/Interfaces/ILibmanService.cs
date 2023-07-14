@@ -15,18 +15,13 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using CycloneDX.Models;
 
 namespace CycloneDX.Interfaces
 {
-    public interface IProjectFileService
+    public interface ILibmanService
     {
-        bool DisablePackageRestore { get; set; }
-        Task<HashSet<BasePackage>> GetProjectPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime, bool disableLibman);
-        Task<HashSet<BasePackage>> RecursivelyGetProjectPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime, bool disableLibman);
-        Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);
-        Task<HashSet<string>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
+        Task<Component> GetComponentAsync(LibmanPackage package);
     }
 }

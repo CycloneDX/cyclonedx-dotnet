@@ -17,10 +17,9 @@
 
 namespace CycloneDX.Models
 {
-    public class NugetPackage : BasePackage
+    public enum PackageType
     {
-        public NugetPackage() : base(PackageType.Nuget)
-        {
-        }
+        Nuget,
+        Libman
     }
 }

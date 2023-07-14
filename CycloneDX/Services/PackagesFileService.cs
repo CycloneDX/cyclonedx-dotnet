@@ -31,7 +31,6 @@ namespace CycloneDX.Services
         {
             Async = true
         };
-        
         private IFileSystem _fileSystem;
         private FileDiscoveryService _fileDiscoveryService;
 
@@ -46,9 +45,9 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="packagesFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> GetNugetPackagesAsync(string packagesFilePath)
+        public async Task<HashSet<BasePackage>> GetNugetPackagesAsync(string packagesFilePath)
         {
-            var packages = new HashSet<NugetPackage>();
+            var packages = new HashSet<BasePackage>();
             using (StreamReader fileReader = _fileSystem.File.OpenText(packagesFilePath))
             {
                 using (XmlReader reader = XmlReader.Create(fileReader, _xmlReaderSettings))
@@ -74,9 +73,9 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="directoryPath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> RecursivelyGetNugetPackagesAsync(string directoryPath)
+        public async Task<HashSet<BasePackage>> RecursivelyGetNugetPackagesAsync(string directoryPath)
         {
-            var packages = new HashSet<NugetPackage>();
+            var packages = new HashSet<BasePackage>();
             var packageFiles = _fileDiscoveryService.GetPackagesConfigFiles(directoryPath);
 
             foreach (var packageFile in packageFiles)

@@ -17,10 +17,15 @@
 
 namespace CycloneDX.Models
 {
-    public class NugetPackage : BasePackage
+    public class LibmanPackage : BasePackage
     {
-        public NugetPackage() : base(PackageType.Nuget)
+        public LibmanProvider Provider { get; private set; }
+
+        public string Namespace { get; set; }
+
+        public LibmanPackage(LibmanProvider provider) : base(PackageType.Libman)
         {
+            Provider = provider;
         }
     }
 }

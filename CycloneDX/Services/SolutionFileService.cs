@@ -78,23 +78,23 @@ namespace CycloneDX.Services
         }
 
         /// <summary>
-        /// Analyzes a single Solution file for NuGet package references in referenced project files
+        /// Analyzes a single Solution file for package references in referenced project files
         /// </summary>
         /// <param name="solutionFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> GetSolutionNugetPackages(string solutionFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
+        public async Task<HashSet<BasePackage>> GetSolutionPackages(string solutionFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime, bool disableLibman)
         {
             if (!_fileSystem.File.Exists(solutionFilePath))
             {
                 Console.Error.WriteLine($"Solution file \"{solutionFilePath}\" does not exist");
-                return new HashSet<NugetPackage>();
+                return new HashSet<BasePackage>();
             }
 
             Console.WriteLine();
             Console.WriteLine($"» Solution: {solutionFilePath}");
             Console.WriteLine("  Getting projects");
 
-            var packages = new HashSet<NugetPackage>();
+            var packages = new HashSet<BasePackage>();
 
             var projectPaths = await GetSolutionProjectReferencesAsync(solutionFilePath).ConfigureAwait(false);
 
@@ -109,11 +109,11 @@ namespace CycloneDX.Services
 
             // Process first all productive projects, then test projects (scope order)
             var projectQuery = from p in projectPaths orderby ProjectFileService.IsTestProject(p) select p;
-            var directReferencePackages = new HashSet<NugetPackage>();
+            var directReferencePackages = new HashSet<BasePackage>();
             foreach (var projectFilePath in projectQuery)
             {
                 Console.WriteLine();
-                var projectPackages = await _projectFileService.GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
+                var projectPackages = await _projectFileService.GetProjectPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime, disableLibman).ConfigureAwait(false);
                 directReferencePackages.UnionWith(projectPackages.Where(p => p.IsDirectReference));
                 packages.UnionWith(projectPackages);
             }
