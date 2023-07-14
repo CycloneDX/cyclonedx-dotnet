@@ -46,7 +46,9 @@ namespace CycloneDX.Services
                 var model = JsonSerializer.Deserialize<CdnjsModel>(response);
 
                 if (model != null)
+                {
                     return CreateComponent(model, package.Version);
+                }
             }
             catch (HttpRequestException ex)
             {
@@ -74,17 +76,21 @@ namespace CycloneDX.Services
             component.BomRef = component.Purl;
 
             if (!string.IsNullOrEmpty(model.License))
+            {
                 component.Licenses.Add(new LicenseChoice
                 {
                     License = new License { Id = model.License }
                 });
+            }
 
             if (!string.IsNullOrEmpty(model.Homepage))
+            {
                 component.ExternalReferences.Add(new ExternalReference
                 {
                     Type = ExternalReference.ExternalReferenceType.Website,
                     Url = model.Homepage
                 });
+            }
 
             return component;
         }

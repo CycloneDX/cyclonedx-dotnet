@@ -35,7 +35,7 @@ namespace CycloneDX.Tests
                 ""description"": ""Test Description"",
                 ""author"": ""Test Author"",
                 ""license"": ""MIT"",
-                ""homepage"": ""http://www.google.com""
+                ""homepage"": ""https://www.google.com""
             }";
 
             using var mockHttp = new MockHttpMessageHandler();
@@ -55,7 +55,7 @@ namespace CycloneDX.Tests
             Assert.Equal("testpackage", component.Name);
             Assert.Equal("1.0.2", component.Version);
             Assert.Equal("Test Description", component.Description);
-            Assert.Equal("http://www.google.com", component.ExternalReferences[0].Url);
+            Assert.Equal("https://www.google.com", component.ExternalReferences[0].Url);
             Assert.Equal("MIT", component.Licenses[0].License.Id);
             Assert.Equal("Test Author", component.Author);
             Assert.Equal(packageUrl, component.BomRef);

@@ -35,7 +35,8 @@ using CycloneDX.Interfaces;
 namespace CycloneDX
 {
     [Command(Name = "dotnet cyclonedx", FullName = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")]
-    class Program {
+    class Program
+    {
         #region Options
         [Option(Description = "Output the tool version and exit", ShortName = "v", LongName = "version")]
         bool version { get; }
@@ -127,7 +128,7 @@ namespace CycloneDX
 
         [Option(Description = "Optionally disable adding Libman dependencies", ShortName = "dl", LongName = "disable-libman")]
         bool disableLibman { get; set; }
-#endregion options
+        #endregion options
 
         internal static IFileSystem fileSystem = new FileSystem();
         internal static readonly IDotnetCommandService dotnetCommandService = new DotnetCommandService();
@@ -141,7 +142,8 @@ namespace CycloneDX
         public static async Task<int> Main(string[] args)
             => await CommandLineApplication.ExecuteAsync<Program>(args).ConfigureAwait(false);
 
-        async Task<int> OnExecuteAsync(CommandLineApplication app) {
+        async Task<int> OnExecuteAsync(CommandLineApplication app)
+        {
             if (version)
             {
                 Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version?.ToString());
@@ -198,10 +200,11 @@ namespace CycloneDX
             if (!(disableGithubLicenses || disableGithubLicensesDeprecated))
             {
                 // GitHubService requires its own HttpClient as it adds a default authorization header
-                HttpClient httpClient = new HttpClient(new HttpClientHandler {
+                HttpClient httpClient = new HttpClient(new HttpClientHandler
+                {
                     AllowAutoRedirect = false
                 });
-                
+
                 if (!string.IsNullOrEmpty(githubBearerToken))
                 {
                     githubService = new GithubService(httpClient, githubBearerToken);
@@ -348,14 +351,18 @@ namespace CycloneDX
                     Component component = null;
 
                     if (package.Provider == LibmanProvider.cdnjs)
+                    {
                         component = await new CdnjsService(new HttpClient()).GetComponentAsync(package).ConfigureAwait(false);
+                    }
                     else if (package.Provider == LibmanProvider.unpkg || package.Provider == LibmanProvider.jsdelivr)
+                    {
                         component = await new NpmService(new HttpClient()).GetComponentAsync(package).ConfigureAwait(false);
+                    }
 
                     if (component != null)
                     {
                         components.Add(component);
-                        dependencies.Add(new Dependency()
+                        dependencies.Add(new Dependency
                         {
                             Ref = component.BomRef,
                             Dependencies = new List<Dependency>()

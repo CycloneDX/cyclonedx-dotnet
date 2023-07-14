@@ -29,9 +29,9 @@ namespace CycloneDX.Services
 {
     public class DotnetRestoreException : Exception
     {
-        public DotnetRestoreException(string message) : base(message) {}
+        public DotnetRestoreException(string message) : base(message) { }
 
-        public DotnetRestoreException(string message, Exception innerException) : base(message, innerException) {}
+        public DotnetRestoreException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class ProjectFileService : IProjectFileService
@@ -45,7 +45,7 @@ namespace CycloneDX.Services
         private IDotnetUtilsService _dotnetUtilsService;
         private IPackagesFileService _packagesFileService;
         private IProjectAssetsFileService _projectAssetsFileService;
-        private ILibmanFileService _libmanFileService;
+        private readonly ILibmanFileService _libmanFileService;
 
         public ProjectFileService(
             IFileSystem fileSystem,
@@ -69,7 +69,7 @@ namespace CycloneDX.Services
             {
                 xmldoc.Load(projectFilePath);
             }
-            catch(DirectoryNotFoundException /*ex*/)
+            catch (DirectoryNotFoundException /*ex*/)
             {
                 // can only happen while testing (because it will be checked before this method is called)
                 return false;

@@ -86,7 +86,9 @@ namespace CycloneDX.Models
                 Version = match.Groups["version"].Value;
 
                 if (match.Groups.ContainsKey("ns"))
+                {
                     Namespace = match.Groups["ns"].Value;
+                }
             }
         }
     }
