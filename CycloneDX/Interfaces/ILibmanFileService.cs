@@ -21,12 +21,8 @@ using CycloneDX.Models;
 
 namespace CycloneDX.Interfaces
 {
-    public interface IProjectFileService
+    public interface ILibmanFileService
     {
-        bool DisablePackageRestore { get; set; }
-        Task<HashSet<BasePackage>> GetProjectPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime, bool disableLibman);
-        Task<HashSet<BasePackage>> RecursivelyGetProjectPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime, bool disableLibman);
-        Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);
-        Task<HashSet<string>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
+        Task<HashSet<BasePackage>> GetLibmanPackagesAsync(string libmanFilePath);
     }
 }

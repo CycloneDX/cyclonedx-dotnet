@@ -27,7 +27,7 @@ namespace CycloneDX.Tests
 {
     static class Helpers
     {
-        static string NugetResponse(NugetPackage package)
+        static string NugetResponse(BasePackage package)
         {
             return @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
@@ -91,7 +91,7 @@ namespace CycloneDX.Tests
             return GetProjectFileWithPackageReferences(new List<NugetPackage> { new NugetPackage { Name = packageName, Version = packageVersion } });
         }
 
-        public static MockFileData GetPackagesFileWithPackageReferences(IEnumerable<NugetPackage> packages)
+        public static MockFileData GetNugetPackagesFileWithPackageReferences(IEnumerable<NugetPackage> packages)
         {
             var fileData = "<packages>";
             foreach (var package in packages)
@@ -121,9 +121,9 @@ namespace CycloneDX.Tests
             };
         }
 
-        public static MockFileData GetPackagesFileWithPackageReference(string packageName, string packageVersion)
+        public static MockFileData GetNugetPackagesFileWithPackageReference(string packageName, string packageVersion)
         {
-            return GetPackagesFileWithPackageReferences(new List<NugetPackage> { new NugetPackage { Name = packageName, Version = packageVersion}});
+            return GetNugetPackagesFileWithPackageReferences(new List<NugetPackage> { new NugetPackage { Name = packageName, Version = packageVersion }});
         }
 
         public static MockFileData GetProjectFileWithProjectReferences(IEnumerable<string> projects)

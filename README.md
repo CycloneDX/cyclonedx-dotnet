@@ -79,6 +79,7 @@ Options:
   -dgl|--disable-github-licenses                                         Optionally disable GitHub license resolution
   -dpr|--disable-package-restore                                         Optionally disable package restore
   -dhc|--disable-hash-computation                                        Optionally disable hash computation for packages
+  -dl|--disable-libman                                                   Optionally disable adding Libman dependencies
   -dct|--dotnet-command-timeout <DOTNET_COMMAND_TIMEOUT>                 dotnet command timeout in milliseconds (primarily used for long dotnet restore operations)
                                                                          Default value is: 300000.
   -biop|--base-intermediate-output-path <BASE_INTERMEDIATE_OUTPUT_PATH>  Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated.

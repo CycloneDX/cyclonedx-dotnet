@@ -55,8 +55,8 @@ namespace CycloneDX.Tests
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
-                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<NugetPackage>());
+                .Setup(s => s.GetSolutionPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .ReturnsAsync(new HashSet<BasePackage>());
             Program.fileSystem = mockFileSystem;
             Program.solutionFileService = mockSolutionFileService.Object;
             var args = new string[]
@@ -80,8 +80,8 @@ namespace CycloneDX.Tests
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
-                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<NugetPackage>());
+                .Setup(s => s.GetSolutionPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .ReturnsAsync(new HashSet<BasePackage>());
             Program.fileSystem = mockFileSystem;
             Program.solutionFileService = mockSolutionFileService.Object;
             var args = new string[]

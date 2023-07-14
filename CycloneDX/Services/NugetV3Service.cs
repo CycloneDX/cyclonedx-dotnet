@@ -154,7 +154,7 @@ namespace CycloneDX.Services
                 Name = name,
                 Version = version,
                 Scope = scope,
-                Purl = Utils.GeneratePackageUrl(name, version),
+                Purl = Utils.GeneratePackageUrl(PackageType.Nuget, name, version),
                 Type = Component.Classification.Library
             };
 

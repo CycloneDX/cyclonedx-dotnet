@@ -29,9 +29,9 @@ namespace CycloneDX.Services
 {
     public class DotnetRestoreException : Exception
     {
-        public DotnetRestoreException(string message) : base(message) {}
+        public DotnetRestoreException(string message) : base(message) { }
 
-        public DotnetRestoreException(string message, Exception innerException) : base(message, innerException) {}
+        public DotnetRestoreException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class ProjectFileService : IProjectFileService
@@ -45,17 +45,20 @@ namespace CycloneDX.Services
         private IDotnetUtilsService _dotnetUtilsService;
         private IPackagesFileService _packagesFileService;
         private IProjectAssetsFileService _projectAssetsFileService;
+        private readonly ILibmanFileService _libmanFileService;
 
         public ProjectFileService(
             IFileSystem fileSystem,
             IDotnetUtilsService dotnetUtilsService,
             IPackagesFileService packagesFileService,
-            IProjectAssetsFileService projectAssetsFileService)
+            IProjectAssetsFileService projectAssetsFileService,
+            ILibmanFileService libmanFileService)
         {
             _fileSystem = fileSystem;
             _dotnetUtilsService = dotnetUtilsService;
             _packagesFileService = packagesFileService;
             _projectAssetsFileService = projectAssetsFileService;
+            _libmanFileService = libmanFileService;
         }
 
 
@@ -66,7 +69,7 @@ namespace CycloneDX.Services
             {
                 xmldoc.Load(projectFilePath);
             }
-            catch(DirectoryNotFoundException /*ex*/)
+            catch (DirectoryNotFoundException /*ex*/)
             {
                 // can only happen while testing (because it will be checked before this method is called)
                 return false;
@@ -77,7 +80,6 @@ namespace CycloneDX.Services
             {
                 return true;
             }
-            
             XmlElement testProjectPropertyGroup = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
             return testProjectPropertyGroup != null;
         }
@@ -102,12 +104,12 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
+        public async Task<HashSet<BasePackage>> GetProjectPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime, bool disableLibman)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
                 Console.Error.WriteLine($"Project file \"{projectFilePath}\" does not exist");
-                return new HashSet<NugetPackage>();
+                return new HashSet<BasePackage>();
             }
 
             var isTestProject = IsTestProject(projectFilePath);
@@ -118,10 +120,11 @@ namespace CycloneDX.Services
             if (excludeTestProjects && isTestProject)
             {
                 Console.WriteLine($"Skipping: {projectFilePath}");
-                return new HashSet<NugetPackage>();
+                return new HashSet<BasePackage>();
             }
 
-            if (!DisablePackageRestore) {
+            if (!DisablePackageRestore)
+            {
                 Console.WriteLine("  Attempting to restore packages");
                 var restoreResult = _dotnetUtilsService.Restore(projectFilePath, framework, runtime);
 
@@ -157,24 +160,36 @@ namespace CycloneDX.Services
                     packages = await _packagesFileService.GetNugetPackagesAsync(packagesPath).ConfigureAwait(false);
                 }
             }
+
+            if (!disableLibman)
+            {
+                var libmanFilePath = Path.Combine(Path.GetDirectoryName(projectFilePath), "libman.json");
+                if (_fileSystem.File.Exists(libmanFilePath))
+                {
+                    Console.WriteLine("  Found libman.json. Will attempt to process");
+                    var libmanPackages = await _libmanFileService.GetLibmanPackagesAsync(libmanFilePath).ConfigureAwait(false);
+                    packages.UnionWith(libmanPackages);
+                }
+            }
+
             return packages;
         }
 
         /// <summary>
-        /// Analyzes all Project file references for NuGet package references.
+        /// Analyzes all Project file references for package references.
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
+        public async Task<HashSet<BasePackage>> RecursivelyGetProjectPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime, bool disableLibman)
         {
-            var nugetPackages = await GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
+            var packages = await GetProjectPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime, disableLibman).ConfigureAwait(false);
             var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
             foreach (var project in projectReferences)
             {
-                var projectNugetPackages = await GetProjectNugetPackagesAsync(project, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
-                nugetPackages.UnionWith(projectNugetPackages);
+                var projectPackages = await GetProjectPackagesAsync(project, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime, disableLibman).ConfigureAwait(false);
+                packages.UnionWith(projectPackages);
             }
-            return nugetPackages;
+            return packages;
         }
 
         /// <summary>
