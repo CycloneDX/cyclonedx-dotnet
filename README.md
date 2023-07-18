@@ -91,6 +91,10 @@ Options:
   -?|-h|--help                                                           Show help information.
 ```
 
+Limitations:
+
+* `--exclude-test-projects` option resolves `IsTestProject` property value from *project file* after a build is executed. Therefore `<IsTestProject>true</IsTestProject>` shall be defined in csproj file or in an explicit import property file within the csproj file without conditions.
+
 #### Examples
 To run the **CycloneDX** tool you need to specify a solution or project file. In case you pass a solution, the tool will aggregate all the projects.
 
