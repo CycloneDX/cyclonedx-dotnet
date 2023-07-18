@@ -12,21 +12,23 @@
 
 The CycloneDX module for .NET creates a valid CycloneDX bill-of-material document containing an aggregate of all project dependencies. CycloneDX is a lightweight BOM specification that is easily created, human readable, and simple to parse.
 
-This module runs on 
-*   .NET 6.0
-*   .NET 7.0
+This module runs on
+
+* .NET 6.0
+* .NET 7.0
 
 This module no longer runs on
-*   .NET Core 2.1
-*   .NET Core 3.1
-*   .NET 5.0 
-*   see https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core for more information
+
+* .NET Core 2.1
+* .NET Core 3.1
+* .NET 5.0
+* see https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core for more information
 
 ## Usage
 
 CycloneDX for .NET is distributed via NuGet and Docker Hub. 
 
-#### Installing via NuGet
+### Installing via NuGet
 
 ```bash
 dotnet tool install --global CycloneDX
@@ -38,19 +40,19 @@ If you already have a previous version of **CycloneDX** installed, you can upgra
 dotnet tool update --global CycloneDX
 ```
 
-#### Execution via DotNet
+### Execution via DotNet
 
 ```bash
 dotnet CycloneDX <path> -o <OUTPUT_DIRECTORY>
 ```
 
-#### Execution via Docker
+### Execution via Docker
 
 ```bash
 docker run cyclonedx/cyclonedx-dotnet [OPTIONS] <path>
 ```
 
-#### Options
+### Options
 
 ```text
 Usage: dotnet CycloneDX [options] <path>
@@ -96,19 +98,23 @@ Limitations:
 * `--exclude-test-projects` option resolves `IsTestProject` property value from *project file* after a build is executed. Therefore `<IsTestProject>true</IsTestProject>` shall be defined in csproj file or in an explicit import property file within the csproj file without conditions.
 
 #### Examples
+
 To run the **CycloneDX** tool you need to specify a solution or project file. In case you pass a solution, the tool will aggregate all the projects.
 
 The following will create a BOM from a solution and all projects defined within:
+
 ```bash
 dotnet CycloneDX YourSolution.sln -o /output/path
 ```
 
 The following will recursively scan the directory structure for packages.config and create a BOM:
+
 ```bash
 dotnet CycloneDX /path/to/project -o /output/path
 ```
 
 The following will recursively scan the project references of the supplied project file, and create a BOM of all package references from all included projects:
+
 ```bash
 dotnet CycloneDX /path/to/project/MyProject.csproj -o /output/path -r
 ```
@@ -135,7 +141,7 @@ Project [metadata](https://cyclonedx.org/docs/1.2/#type_metadata) **template exa
     </component>
   </metadata>
 </bom>
-``` 
+```
 
 _Update the data and import it within a build pipeline e.g. create the file using a script and add also dynamic data (version, timestamp, ...)_ 
 
