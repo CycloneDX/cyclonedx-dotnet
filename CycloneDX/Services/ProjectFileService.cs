@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using System.Text.RegularExpressions;
+using Buildalyzer;
 
 namespace CycloneDX.Services
 {
@@ -65,19 +66,21 @@ namespace CycloneDX.Services
             {
                 return false;
             }
-
-            XmlDocument xmldoc = new XmlDocument();
-            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
-            xmldoc.Load(fileStream);
-
-            XmlElement testSdkReference = xmldoc.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.NET.Test.Sdk']") as XmlElement;
-            if (testSdkReference != null)
+            var manager = new AnalyzerManager();
+            try
             {
-                return true;
+                var project = manager.GetProject(projectFilePath);
+                var buildResults = project.Build();
+                var isTestProject = buildResults.SelectMany(x => x.Properties)
+                        .Any(x => x.Key.Equals("IsTestProject", StringComparison.OrdinalIgnoreCase) && x.Value.Equals("true", StringComparison.OrdinalIgnoreCase));
+
+                return isTestProject;
             }
-            // if this is meant for old csproj file format, then it's probably not working because there is no namespace given
-            XmlElement testProjectPropertyGroup = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
-            return testProjectPropertyGroup != null;
+            catch (ArgumentException)
+            {
+                // can only happen while testing (because it will be checked before this method is called)
+                return false;
+            }
         }
 
         private (string name, string version) GetProjectNameAndVersion(string projectFilePath)
@@ -148,7 +151,7 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
+        public async Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime, bool? isTestProject)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
@@ -156,12 +159,15 @@ namespace CycloneDX.Services
                 return new HashSet<DotnetDependency>();
             }
 
-            var isTestProject = IsTestProject(projectFilePath);
+            if (!isTestProject.HasValue)
+            {
+                isTestProject = IsTestProject(projectFilePath);
+            }
 
             Console.WriteLine();
             Console.WriteLine($"» Analyzing: {projectFilePath}");
 
-            if (excludeTestProjects && isTestProject)
+            if (excludeTestProjects && isTestProject.Value)
             {
                 Console.WriteLine($"Skipping: {projectFilePath}");
                 return new HashSet<DotnetDependency>();
@@ -189,7 +195,7 @@ namespace CycloneDX.Services
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
             }
-            var packages = _projectAssetsFileService.GetDotnetDependencys(projectFilePath, assetsFilename, isTestProject);
+            var packages = _projectAssetsFileService.GetDotnetDependencys(projectFilePath, assetsFilename, isTestProject.Value);
 
 
             // if there are no project file package references look for a packages.config
@@ -214,7 +220,7 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
         {
-            var dotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
+            var dotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, null).ConfigureAwait(false);
             foreach (var item in dotnetDependencys)
             {
                 item.IsDirectReference = true;
@@ -230,7 +236,7 @@ namespace CycloneDX.Services
 
             foreach (var project in projectReferences)
             {
-                var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project.Path, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
+                var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project.Path, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, null).ConfigureAwait(false);
 
                 //Add dependencies for dependency graph
                 foreach (var dependency in projectDotnetDependencys)

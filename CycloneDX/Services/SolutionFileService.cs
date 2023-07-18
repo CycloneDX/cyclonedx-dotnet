@@ -17,10 +17,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Buildalyzer;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 
@@ -96,7 +97,17 @@ namespace CycloneDX.Services
 
             var packages = new HashSet<DotnetDependency>();
 
-            var projectPaths = await GetSolutionProjectReferencesAsync(solutionFilePath).ConfigureAwait(false);
+            HashSet<(string path,bool isTestProject)> projectPaths = new();
+
+            AnalyzerManager manager = new AnalyzerManager(solutionFilePath);
+            foreach (var (key, project) in manager.Projects)
+            {
+                var buildResults = project.Build();
+                var isTestProject = buildResults.SelectMany(x => x.Properties)
+                    .Any(x => x.Key.Equals("IsTestProject", StringComparison.OrdinalIgnoreCase) && x.Value.Equals("true", StringComparison.OrdinalIgnoreCase));
+
+                projectPaths.Add((project.ProjectFile.Path, isTestProject));
+            }
 
             if (projectPaths.Count == 0)
             {
@@ -108,12 +119,12 @@ namespace CycloneDX.Services
             }
 
             // Process first all productive projects, then test projects (scope order)
-            var projectQuery = from p in projectPaths orderby _projectFileService.IsTestProject(p) select p;
+            var projectQuery = from p in projectPaths orderby p.isTestProject select p;
             var directReferencePackages = new HashSet<DotnetDependency>();
-            foreach (var projectFilePath in projectQuery)
+            foreach (var (projectFilePath, isTest) in projectQuery)
             {
                 Console.WriteLine();
-                var projectPackages = await _projectFileService.GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
+                var projectPackages = await _projectFileService.GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, isTest).ConfigureAwait(false);
                 directReferencePackages.UnionWith(projectPackages.Where(p => p.IsDirectReference));
                 packages.UnionWith(projectPackages);
             }
