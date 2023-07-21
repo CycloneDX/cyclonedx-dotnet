@@ -127,9 +127,8 @@ namespace CycloneDX
 #endregion options
 
         internal static IFileSystem fileSystem = new FileSystem();
-        internal static readonly IJsonDocs jsonDoc = new JsonDocs();
         internal static readonly IDotnetCommandService dotnetCommandService = new DotnetCommandService();
-        internal static readonly IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, () => new AssetFileReader(), jsonDoc);
+        internal static readonly IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, () => new AssetFileReader());
         internal static readonly IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
         internal static readonly IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
         internal static readonly IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
