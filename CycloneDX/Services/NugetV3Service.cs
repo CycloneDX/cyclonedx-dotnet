@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Abstractions;
+using System.IO.Compression;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -306,23 +308,53 @@ namespace CycloneDX.Services
             return component;
         }
 
-        private async Task<NuspecModel> GetNuspec(string name, string version, string nuspecFilename,
-            FindPackageByIdResource resource)
+        private async Task<NuspecModel> GetNuspec(string name, string version, string nuspecFilename, FindPackageByIdResource resource)
         {
             var nuspecModel = new NuspecModel();
             if (nuspecFilename == null)
             {
-                var packageVersion = new NuGetVersion(version);
-                await using MemoryStream packageStream = new MemoryStream();
-                await resource.CopyNupkgToStreamAsync(name, packageVersion, packageStream, _sourceCacheContext,
-                    _logger, _cancellationToken);
-
-                using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
-                nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
-
-                if (!_disableHashComputation)
+                try
                 {
-                    nuspecModel.hashBytes = ComputeSha215Hash(packageStream);
+                    var packageVersion = new NuGetVersion(version);
+
+
+                    //using (MemoryStream ms = new MemoryStream())
+                    //{
+                    //    // Create new ZIP archive within prepared MemoryStream
+                    //    using (ZipArchive zip = new ZipArchive(ms, ZipArchiveMode.Create, true))
+                    //    {
+                    //        zip.CreateEntry(logoimage);
+                    //        // ...
+                    //    }
+                    //    ms.WriteTo(HttpContext.Current.Response.OutputStream);
+                    //}
+                    var doesPackageExist = await resource.DoesPackageExistAsync(name, packageVersion, _sourceCacheContext, _logger, _cancellationToken);
+                    if(doesPackageExist)
+                    {
+                        await using MemoryStream packageStream = new MemoryStream();
+                        await resource.CopyNupkgToStreamAsync(name, packageVersion, packageStream, _sourceCacheContext, _logger, _cancellationToken);
+                        //await resource.CopyNupkgToStreamAsync(name, packageVersion, packageStream, _sourceCacheContext,_logger, _cancellationToken);
+
+                        using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
+                        nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
+
+                        if (!_disableHashComputation)
+                        {
+                            nuspecModel.hashBytes = ComputeSha215Hash(packageStream);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Package {name} {version} does not exist on {_sourceRepository.PackageSource.Source}");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error while processing package {name} {version}");
+                    _logger.LogError($"Error while processing package {name} {version}");
+                    _logger.LogError(ex.Message);
+                    _logger.LogError(ex.StackTrace);
                 }
             }
             else
