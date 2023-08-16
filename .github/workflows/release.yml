@@ -71,20 +71,20 @@ jobs:
           json: true
           github-bearer-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish package to NuGet
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: |
-          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" ${{ steps.package_release.outputs.package_filename }}
-
-      - name: Publish Docker image to Docker Hub
-        env:
-          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-        run: |
-          REPO=cyclonedx/cyclonedx-dotnet
-          docker login --username coderpatros --password "$DOCKER_TOKEN"
-          docker push $REPO:latest
-          docker push $REPO:${{ steps.package_release.outputs.version }}
+#      - name: Publish package to NuGet
+#        env:
+#          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+#        run: |
+#          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" ${{ steps.package_release.outputs.package_filename }}
+#
+#      - name: Publish Docker image to Docker Hub
+#        env:
+#          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+#        run: |
+#          REPO=cyclonedx/cyclonedx-dotnet
+#          docker login --username coderpatros --password "$DOCKER_TOKEN"
+#          docker push $REPO:latest
+#          docker push $REPO:${{ steps.package_release.outputs.version }}
 
       - name: Create github release and git tag for release
         id: create_release
