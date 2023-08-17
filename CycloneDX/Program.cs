@@ -416,6 +416,12 @@ namespace CycloneDX
                 bom.Metadata.Component.BomRef = $"{bom.Metadata.Component.Name}@{bom.Metadata.Component.Version}";
             }
 
+            // Automatically generate a timestamp if none is provided with the metadata
+            if (bom.Metadata.Timestamp == null)
+            {
+                bom.Metadata.Timestamp = DateTime.UtcNow;
+            }
+
             AddMetadataTool(bom);
 
             if (!(noSerialNumber || noSerialNumberDeprecated)) bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
