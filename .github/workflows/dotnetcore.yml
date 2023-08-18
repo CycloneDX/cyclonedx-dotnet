@@ -57,4 +57,15 @@ jobs:
         with:
           dotnet-version: '6.x'
       - name: Tests
-        run: dotnet test --framework ${{ matrix.framework }}
+        run: dotnet test --framework ${{ matrix.framework }} --collect:"XPlat Code Coverage"
+      - name: ReportGenerator
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.1.24
+        with:
+          reports: 'coverage.cobertura.xml'
+          targetdir: 'coveragereport'
+          reporttypes: 'HtmlInline;Cobertura'
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v2.2.3
+        with:
+          name: CoverageReport
+          path: coveragereport
