@@ -26,7 +26,7 @@ namespace CycloneDX.Tests
                 { MockUnixSupport.Path(@"c:\ProjectPath\Project.csproj"), new MockFileData(CsprojContents) }
             });
 
-            var packages = new HashSet<NugetPackage>()
+            var packages = new HashSet<NugetPackage>
             {
                 new() { Name = "DotNetEnv", Version = "1.4.0" },
                 new() { Name = "HtmlAgilityPack", Version = "1.11.30" },
