@@ -131,7 +131,7 @@ namespace CycloneDX
         internal static readonly IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, dotnetCommandService, () => new AssetFileReader());
         internal static readonly IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
         internal static readonly IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
-        internal static readonly IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
+        internal static IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
         internal static ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
 
         public static async Task<int> Main(string[] args)
@@ -197,7 +197,7 @@ namespace CycloneDX
                 HttpClient httpClient = new HttpClient(new HttpClientHandler {
                     AllowAutoRedirect = false
                 });
-                
+
                 if (!string.IsNullOrEmpty(githubBearerToken))
                 {
                     githubService = new GithubService(httpClient, githubBearerToken);
