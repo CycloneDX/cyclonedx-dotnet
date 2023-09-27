@@ -84,7 +84,7 @@ namespace CycloneDX.Services
 
             foreach (var packageCachePath in _packageCachePaths)
             {
-                var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, version);
+                var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, NormalizeVersion(version));
                 var currentFilename = _fileSystem.Path.Combine(currentDirectory, lowerName + _nuspecExtension);
                 if (_fileSystem.File.Exists(currentFilename))
                 {
@@ -94,6 +94,24 @@ namespace CycloneDX.Services
             }
 
             return nuspecFilename;
+        }
+
+        /// <summary>
+        /// Normalize the version string according to
+        /// https://learn.microsoft.com/en-us/nuget/concepts/package-versioning#normalized-version-numbers
+        /// </summary>
+        private string NormalizeVersion(string version)
+        {
+            var separator = Math.Max(version.IndexOf('-'), version.IndexOf('+'));
+            var part1 = separator < 0 ? version : version.Substring(0, separator);
+            var part2 = separator < 0 ? string.Empty : version.Substring(separator);
+            if (Version.TryParse(part1, out var parsed) && parsed.Revision == 0)
+            {
+                part1 = parsed.ToString(3);
+                version = part1 + part2;
+            }
+
+            return version;
         }
 
         private SourceRepository SetupNugetRepository(NugetInputModel nugetInput)
@@ -153,9 +171,7 @@ namespace CycloneDX.Services
 
             var component = SetupComponent(name, version, scope);
             var nuspecFilename = GetCachedNuspecFilename(name, version);
-
             var nuspecModel = await GetNuspec(name, version, nuspecFilename, resource).ConfigureAwait(false);
-
             if (nuspecModel.hashBytes != null)
             {
                 var hex = BitConverter.ToString(nuspecModel.hashBytes).Replace("-", string.Empty);
@@ -170,10 +186,11 @@ namespace CycloneDX.Services
             var licenseMetadata = nuspecModel.nuspecReader.GetLicenseMetadata();
             if (licenseMetadata != null && licenseMetadata.Type == LicenseType.Expression)
             {
-                Action<NuGetLicense> licenseProcessor = delegate(NuGetLicense nugetLicense)
+                Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
                 {
                     var license = new License { Id = nugetLicense.Identifier, Name = nugetLicense.Identifier };
-                    component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
+                    component.Licenses ??= new List<LicenseChoice>();
+                    component.Licenses.Add(new LicenseChoice { License = license });
                 };
                 licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
             }
@@ -231,7 +248,8 @@ namespace CycloneDX.Services
             {
                 var externalReference = new ExternalReference
                 {
-                    Type = ExternalReference.ExternalReferenceType.Website, Url = projectUrl
+                    Type = ExternalReference.ExternalReferenceType.Website,
+                    Url = projectUrl
                 };
                 component.ExternalReferences = new List<ExternalReference> { externalReference };
             }
@@ -243,7 +261,8 @@ namespace CycloneDX.Services
             {
                 var externalReference = new ExternalReference
                 {
-                    Type = ExternalReference.ExternalReferenceType.Vcs, Url = vcsUrl
+                    Type = ExternalReference.ExternalReferenceType.Vcs,
+                    Url = vcsUrl
                 };
                 if (null == component.ExternalReferences)
                 {
@@ -260,7 +279,7 @@ namespace CycloneDX.Services
 
         private static Component SetupComponentProperties(Component component, NuspecModel nuspecModel)
         {
-            component.Publisher = nuspecModel.nuspecReader.GetAuthors();
+            component.Author = nuspecModel.nuspecReader.GetAuthors();
             component.Copyright = nuspecModel.nuspecReader.GetCopyright();
             // this prevents empty copyright values in the JSON BOM
             if (string.IsNullOrEmpty(component.Copyright))
@@ -301,7 +320,6 @@ namespace CycloneDX.Services
                 using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
                 nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
 
-
                 if (!_disableHashComputation)
                 {
                     nuspecModel.hashBytes = ComputeSha215Hash(packageStream);
@@ -322,8 +340,9 @@ namespace CycloneDX.Services
                 //    ├─<packageID>.<version>.nupkg.sha512
                 //    └─<packageID>.nuspec
 
-                string shaFilename = Path.ChangeExtension(nuspecFilename, version + _sha512Extension);
-                string nupkgFilename = Path.ChangeExtension(nuspecFilename, version + _nupkgExtension);
+                var normalizedVersion = NormalizeVersion(version);
+                string shaFilename = Path.ChangeExtension(nuspecFilename, normalizedVersion + _sha512Extension);
+                string nupkgFilename = Path.ChangeExtension(nuspecFilename, normalizedVersion + _nupkgExtension);
 
                 if (_fileSystem.File.Exists(shaFilename))
                 {
