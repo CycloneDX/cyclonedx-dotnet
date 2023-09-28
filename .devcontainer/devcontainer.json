@@ -1,7 +1,7 @@
 {
     "name": "devcontainer",
     "build": {
-        "dockerfile": "Dockerfile",
+        "dockerfile": "Ubuntu22.04/Dockerfile",
         "context": ".."
     },
     "extensions": [

@@ -22,6 +22,6 @@ namespace CycloneDX.Interfaces
 {
     public interface IProjectAssetsFileService 
     {
-        HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool IsTestProject);
+        HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool IsTestProject, bool excludeDev);
     }
 }

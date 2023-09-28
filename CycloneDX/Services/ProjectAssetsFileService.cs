@@ -22,6 +22,8 @@ using CycloneDX.Models;
 using System.Linq;
 using CycloneDX.Interfaces;
 using NuGet.Versioning;
+using NuGet.LibraryModel;
+using NuGet.ProjectModel;
 
 namespace CycloneDX.Services
 {
@@ -38,7 +40,7 @@ namespace CycloneDX.Services
             _assetFileReaderFactory = assetFileReaderFactory;
         }
 
-        public HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool isTestProject)
+        public HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool isTestProject, bool excludeDev)
         {
             var packages = new HashSet<NugetPackage>();
 
@@ -49,34 +51,27 @@ namespace CycloneDX.Services
 
                 foreach (var targetRuntime in assetsFile.Targets)
                 {
-                    var directPackageDependencies = GetDirectPackageDependencies(targetRuntime.Name, projectFilePath);
                     var runtimePackages = new HashSet<NugetPackage>();
+                    var targetFramework = assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
+                    var dependencies = targetFramework.Dependencies;
+
                     foreach (var library in targetRuntime.Libraries.Where(lib => lib.Type != "project"))
                     {
+                        var libs = dependencies.FirstOrDefault(ld => ld.Name.Equals(library.Name));
                         var package = new NugetPackage
                         {
                             Name = library.Name,
                             Version = library.Version.ToNormalizedString(),
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
+                            IsDevDependency = SetIsDevDependency(libs),
+                            IsDirectReference = SetIsDirectReference(libs)
                         };
-                        var topLevelReferenceKey = (package.Name, package.Version);
-                        if (directPackageDependencies.Contains(topLevelReferenceKey))
-                        {
-                            package.IsDirectReference = true;
-                        }
+
                         // is this a test project dependency or only a development dependency
                         if (
                             isTestProject
-                            || (
-                                library.CompileTimeAssemblies.Count == 0
-                                && library.ContentFiles.Count == 0
-                                && library.EmbedAssemblies.Count == 0
-                                && library.FrameworkAssemblies.Count == 0
-                                && library.NativeLibraries.Count == 0
-                                && library.ResourceAssemblies.Count == 0
-                                && library.ToolsAssemblies.Count == 0
-                            )
+                            || (package.IsDevDependency && excludeDev)
                         )
                         {
                             package.Scope = Component.ComponentScope.Excluded;
@@ -89,7 +84,7 @@ namespace CycloneDX.Services
                         runtimePackages.Add(package);
                     }
 
-                    ResolveDependecyVersionRanges(runtimePackages);
+                    ResolveDependencyVersionRanges(runtimePackages);
 
                     packages.UnionWith(runtimePackages);
                 }
@@ -97,58 +92,19 @@ namespace CycloneDX.Services
 
             return packages;
         }
-
-        // Future: Instead of invoking the dotnet CLI to get direct dependencies, once asset file version 3 is available through the Nuget library,
-        //         The direct dependencies could be retrieved from the asset file json path: .project.frameworks.<framework>.dependencies
-        private List<(string, string)> GetDirectPackageDependencies(string targetRuntime, string projectFilePath)
+        public bool SetIsDirectReference(LibraryDependency dependency)
         {
-            var directPackageDependencies = new List<(string, string)>();
-            var framework = TargetFrameworkToAlias(targetRuntime);
-            if (framework != null)
-            {
-                var output = _dotnetCommandService.Run($"list \"{projectFilePath}\" package --framework {framework}");
-                var result = output.Success ? output.StdOut : null;
-                if (result != null)
-                {
-                    directPackageDependencies = result.Split('\r', '\n').Select(line => line.Trim())
-                        .Where(line => line.StartsWith(">", StringComparison.InvariantCulture))
-                        .Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-                        .Where(parts => parts.Length == 4)
-                        .Select(parts => (parts[1], parts[3]))
-                        .ToList();
-                }
-            }
-            return directPackageDependencies;
+            return dependency?.ReferenceType == LibraryDependencyReferenceType.Direct;
         }
-
-        /// <summary>
-        /// Converts an asset file's target framework value into a csproj target framework value.
-        ///
-        /// Examples:
-        ///     .NetStandard,Version=V3.1 => netstandard3.1
-        ///     .NetCoreApp,Version=V3.1  => netcoreapp3.1
-        ///     netcoreapp3.1  => netcoreapp3.1
-        ///     net6.0  => net6.0
-        /// </summary>
-        private string TargetFrameworkToAlias(string target)
+        public bool SetIsDevDependency(LibraryDependency dependency)
         {
-            if (!string.IsNullOrEmpty(target))
-            {
-                target = target.ToLowerInvariant().TrimStart('.');
-                var targetParts = target.Split(",version=v");
-                if (targetParts.Length == 2)
-                {
-                    return string.Join("", targetParts);
-                }
-                return targetParts[0];
-            }
-            return null;
+            return dependency != null && dependency.SuppressParent != LibraryIncludeFlagUtils.DefaultSuppressParent;
         }
 
         /// <summary>
         /// Updates all dependencies with version ranges to the version it was resolved to.
         /// </summary>
-        private static void ResolveDependecyVersionRanges(HashSet<NugetPackage> runtimePackages)
+        private static void ResolveDependencyVersionRanges(HashSet<NugetPackage> runtimePackages)
         {
             var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
             foreach (var runtimePackage in runtimePackages)

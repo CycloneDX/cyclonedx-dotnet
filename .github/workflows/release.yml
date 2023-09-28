@@ -8,7 +8,7 @@
 #
 # For an example commit browse to
 # https://github.com/CycloneDX/cyclonedx-dotnet/commit/d110af854371374460430bb8438225a7d7a84274.
-# 
+#
 # The resulting release is here
 # https://github.com/CycloneDX/cyclonedx-dotnet/releases/tag/v1.0.0.
 #
@@ -28,19 +28,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v3.1.0
-      - name: Setup dotnet 3.1
+      - uses: actions/checkout@v3.5.2
+      - name: Setup dotnet
         uses: actions/setup-dotnet@v3.0.3
         with:
-          dotnet-version: '3.1.x'
-      - name: Setup dotnet 6
-        uses: actions/setup-dotnet@v3.0.3
-        with:
-          dotnet-version: '6.x'
-      
+          dotnet-version: |
+            7.x
+
       # The tests should have already been run during the PR workflow, so this is really just a sanity check
       - name: Tests
-        run: dotnet test --framework net6.0
+        run: dotnet test --framework net7.0
 
       # Build and package everything, including the Docker image
       - name: Package release
