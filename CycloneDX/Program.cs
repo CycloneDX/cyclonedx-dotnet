@@ -323,7 +323,7 @@ namespace CycloneDX
                                 }
                                 else
                                 {
-                                    Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value}");
+                                    Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value} referenced by (Name: {package.Name} Version: {package.Version})");
                                     return (int)ExitCode.UnableToLocateDependencyBomRef;
                                 }
                             }
