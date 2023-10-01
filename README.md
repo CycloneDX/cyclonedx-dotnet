@@ -65,7 +65,7 @@ Options:
   -o|--out <OUTPUT_DIRECTORY>                                            The directory to write the BOM
   -f|--filename <OUTPUT_FILENAME>                                        Optionally provide a filename for the BOM (default: bom.xml or bom.json)
   -j|--json                                                              Produce a JSON BOM instead of XML
-  -d|--exclude-dev                                                       Exclude development dependencies from the BOM
+  -d|--exclude-dev                                                       Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)
   -t|--exclude-test-projects                                             Exclude test projects from the BOM
   -u|--url <BASE_URL>                                                    Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json
   -us|--baseUrlUsername <BASE_URL_USER_NAME>                             Alternative NuGet repository username
