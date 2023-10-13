@@ -65,12 +65,13 @@ jobs:
           reports: 'TestResults/**/coverage.cobertura.xml'
           targetdir: 'coveragereport'
           reporttypes: 'HtmlInline;Cobertura;MarkdownSummaryGithub'
-      - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request'
-        with:
-          recreate: true
-          path: ./coveragereport/SummaryGithub.md
+     # Error: Resource not accessible by integration => permission issue
+     # - name: Add Coverage PR Comment
+      #   uses: marocchino/sticky-pull-request-comment@v2
+      #   if: github.event_name == 'pull_request'
+      #   with:
+      #     recreate: true
+      #     path: ./coveragereport/SummaryGithub.md
       - name: Write to Job Summary
         run: cat ./coveragereport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
         shell: bash
