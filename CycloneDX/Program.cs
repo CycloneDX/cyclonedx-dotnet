@@ -58,7 +58,7 @@ namespace CycloneDX
         [Option(Description = "Produce a JSON BOM instead of XML", ShortName = "j", LongName = "json")]
         bool json { get; }
 
-        [Option(Description = "Exclude development dependencies from the BOM", ShortName = "d", LongName = "exclude-dev")]
+        [Option(Description = "Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)", ShortName = "d", LongName = "exclude-dev")]
         bool excludeDev { get; }
 
         [Option(Description = "Exclude test projects from the BOM", ShortName = "t", LongName = "exclude-test-projects")]
@@ -131,7 +131,7 @@ namespace CycloneDX
         internal static readonly IProjectAssetsFileService projectAssetsFileService = new ProjectAssetsFileService(fileSystem, dotnetCommandService, () => new AssetFileReader());
         internal static readonly IDotnetUtilsService dotnetUtilsService = new DotnetUtilsService(fileSystem, dotnetCommandService);
         internal static readonly IPackagesFileService packagesFileService = new PackagesFileService(fileSystem);
-        internal static readonly IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
+        internal static IProjectFileService projectFileService = new ProjectFileService(fileSystem, dotnetUtilsService, packagesFileService, projectAssetsFileService);
         internal static ISolutionFileService solutionFileService = new SolutionFileService(fileSystem, projectFileService);
 
         public static async Task<int> Main(string[] args)
@@ -197,7 +197,7 @@ namespace CycloneDX
                 HttpClient httpClient = new HttpClient(new HttpClientHandler {
                     AllowAutoRedirect = false
                 });
-                
+
                 if (!string.IsNullOrEmpty(githubBearerToken))
                 {
                     githubService = new GithubService(httpClient, githubBearerToken);
@@ -323,7 +323,7 @@ namespace CycloneDX
                                 }
                                 else
                                 {
-                                    Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value}");
+                                    Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value} referenced by (Name: {package.Name} Version: {package.Version})");
                                     return (int)ExitCode.UnableToLocateDependencyBomRef;
                                 }
                             }
@@ -414,6 +414,12 @@ namespace CycloneDX
             if (string.IsNullOrEmpty(bom.Metadata.Component.BomRef))
             {
                 bom.Metadata.Component.BomRef = $"{bom.Metadata.Component.Name}@{bom.Metadata.Component.Version}";
+            }
+
+            // Automatically generate a timestamp if none is provided with the metadata
+            if (bom.Metadata.Timestamp == null)
+            {
+                bom.Metadata.Timestamp = DateTime.UtcNow;
             }
 
             AddMetadataTool(bom);

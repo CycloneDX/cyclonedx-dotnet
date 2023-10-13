@@ -170,7 +170,7 @@ namespace CycloneDX.Services
             // If we have a license we can map it to its return format
             return new License
             {
-                Id = githubLicense.License.SpdxId,
+                Id = githubLicense.License.SpdxId != "NOASSERTION" ? githubLicense.License.SpdxId : null,
                 Name = githubLicense.License.Name,
                 Url = githubLicense.HtmlUrl?.ToString() ?? licenseUrl
             };

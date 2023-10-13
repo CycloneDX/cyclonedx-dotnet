@@ -493,5 +493,30 @@ namespace CycloneDX.Tests
             Assert.Equal("Test License", license.Name);
             Assert.Equal("https://licenceurl.com/", license.Url);
         }
+
+        [Fact]
+        public async Task GitLicense_ReplacesNoAssertionWithNull()
+        {
+            //See also https://github.com/CycloneDX/cyclonedx-dotnet/issues/525
+
+            var mockResponseContent = @"{
+                ""license"": {                    
+                    ""name"": ""Other"",
+                    ""spdx_id"": ""NOASSERTION""                  
+                }, 
+                ""html_url"": ""https://licenceUrl.com""
+            }";
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet/license")
+                .Respond("application/json", mockResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var githubService = new GithubService(client);
+
+            var license = await githubService.GetLicenseAsync("https://raw.github.com/CycloneDX/cyclonedx-dotnet").ConfigureAwait(false);
+
+            Assert.Null(license.Id);
+            Assert.Equal("Other", license.Name);
+            Assert.Equal("https://licenceurl.com/", license.Url);
+        }
     }
 }
