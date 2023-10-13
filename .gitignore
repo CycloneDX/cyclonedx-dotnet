@@ -14,3 +14,4 @@ SBOM/
 .local/
 .nuget/
 .opencode-server/
+TestResults/

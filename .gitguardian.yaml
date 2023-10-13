@@ -1,0 +1,5 @@
+version: 2
+
+secret:
+  ignored-paths:
+    -  'CycloneDX/Program.cs'
