@@ -46,13 +46,15 @@ namespace CycloneDX
                       IProjectFileService projectFileService = null,
                       ISolutionFileService solutionFileService = null)
         {
+            var testfileSystem = new FileSystem();
+
             this.fileSystem = fileSystem ?? new FileSystem() ;
             this.dotnetCommandService = dotnetCommandService ?? new DotnetCommandService();
-            this.projectAssetsFileService = projectAssetsFileService ?? new ProjectAssetsFileService(this.fileSystem, this.dotnetCommandService, () => new AssetFileReader());
-            this.dotnetUtilsService = dotnetUtilsService ?? new DotnetUtilsService(this.fileSystem, this.dotnetCommandService);
-            this.packagesFileService = packagesFileService ?? new PackagesFileService(this.fileSystem);
-            this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, this.projectAssetsFileService);
-            this.solutionFileService = solutionFileService ?? new SolutionFileService(this.fileSystem, this.projectFileService);
+            this.projectAssetsFileService = projectAssetsFileService ?? new ProjectAssetsFileService(testfileSystem, this.dotnetCommandService, () => new AssetFileReader());
+            this.dotnetUtilsService = dotnetUtilsService ?? new DotnetUtilsService(testfileSystem, this.dotnetCommandService);
+            this.packagesFileService = packagesFileService ?? new PackagesFileService(testfileSystem);
+            this.projectFileService = projectFileService ?? new ProjectFileService(testfileSystem, this.dotnetUtilsService, this.packagesFileService, this.projectAssetsFileService);
+            this.solutionFileService = solutionFileService ?? new SolutionFileService(testfileSystem, this.projectFileService);
         }
         public async Task<int> HandleCommandAsync(string outputDirectory,
                                       string SolutionOrProjectFile = default,
