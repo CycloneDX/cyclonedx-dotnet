@@ -79,7 +79,7 @@ namespace CycloneDX
                                       string importMetadataPath = default,
                                       string setName = default,
                                       string setVersion = default,
-                                      Component.Classification setType = default
+                                      Component.Classification setType = Component.Classification.Application
          )
         {
 
