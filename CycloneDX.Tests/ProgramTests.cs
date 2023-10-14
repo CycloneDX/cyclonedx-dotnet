@@ -80,9 +80,9 @@ namespace CycloneDX.Tests
                 .ReturnsAsync(new HashSet<NugetPackage>());
             Runner runner = new Runner(fileSystem: mockFileSystem, solutionFileService: mockSolutionFileService.Object);
 
-            var exitCode = await runner.HandleCommandAsync(SolutionOrProjectFile: @"c:\SolutionPath\SolutionFile.sln",
-                                                           outputDirectory: @"c:\NewDirectory",
-                                                           outputFilename: @"my_bom.xml");            
+            var exitCode = await runner.HandleCommandAsync(SolutionOrProjectFile: XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
+                                                           outputDirectory: XFS.Path(@"c:\NewDirectory"),
+                                                           outputFilename: XFS.Path(@"my_bom.xml"));            
 
             Assert.Equal((int)ExitCode.OK, exitCode);
             Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\my_bom.xml")));
