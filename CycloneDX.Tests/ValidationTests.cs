@@ -14,7 +14,7 @@ namespace CycloneDX.Tests
     /// </summary>
     public class ValidationTests
     {
-        [Theory(Skip = "Currently failing as GitHub license API only returns the current license")]
+        [Theory(Skip = "Test is accessing internet")]
         [InlineData("xml", false)]
         [InlineData("xml", true)]
         [InlineData("json", false)]
@@ -39,26 +39,14 @@ namespace CycloneDX.Tests
             mockProjectFileService.Setup(mock =>
                 mock.GetProjectNugetPackagesAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())
             ).ReturnsAsync(packages);
-            Program.fileSystem = mockFileSystem;
-            Program.projectFileService = mockProjectFileService.Object;
 
-            var args = new List<string>
-            {
-                MockUnixSupport.Path(@"c:\ProjectPath\Project.csproj"),
-                "-o", MockUnixSupport.Path(@"c:\NewDirectory"),
-            };
+            Runner runner = new Runner(fileSystem: mockFileSystem, projectFileService: mockProjectFileService.Object);
 
-            if (fileFormat == "json")
-            {
-                args.Add("--json");
-            }
+            var exitCode = await runner.HandleCommandAsync(SolutionOrProjectFile: @"c:\ProjectPath\Project.csproj",
+                                            outputDirectory: @"c:\NewDirectory",
+                                            json: fileFormat == "json",
+                                            disableGithubLicenses: disableGitHubLicenses);
 
-            if (disableGitHubLicenses)
-            {
-                args.Add("--disable-github-licenses");
-            }
-
-            var exitCode = await Program.Main(args.ToArray()).ConfigureAwait(false);
 
             Assert.Equal((int)ExitCode.OK, exitCode);
 

@@ -57,15 +57,11 @@ namespace CycloneDX.Tests
             mockSolutionFileService
                 .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new HashSet<NugetPackage>());
-            Program.fileSystem = mockFileSystem;
-            Program.solutionFileService = mockSolutionFileService.Object;
-            var args = new string[]
-            {
-                XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
-                "-o", XFS.Path(@"c:\NewDirectory")
-            };
 
-            var exitCode = await Program.Main(args).ConfigureAwait(false);
+            Runner runner = new Runner(fileSystem: mockFileSystem, solutionFileService: mockSolutionFileService.Object);            
+
+            var exitCode = await runner.HandleCommandAsync(SolutionOrProjectFile: @"c:\SolutionPath\SolutionFile.sln",
+                                                           outputDirectory: @"c:\NewDirectory");            
 
             Assert.Equal((int)ExitCode.OK, exitCode);
             Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\bom.xml")));
@@ -82,16 +78,11 @@ namespace CycloneDX.Tests
             mockSolutionFileService
                 .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new HashSet<NugetPackage>());
-            Program.fileSystem = mockFileSystem;
-            Program.solutionFileService = mockSolutionFileService.Object;
-            var args = new string[]
-            {
-                XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
-                "-o", XFS.Path(@"c:\NewDirectory"),
-                "-f", "my_bom.xml"
-            };
+            Runner runner = new Runner(fileSystem: mockFileSystem, solutionFileService: mockSolutionFileService.Object);
 
-            var exitCode = await Program.Main(args).ConfigureAwait(false);
+            var exitCode = await runner.HandleCommandAsync(SolutionOrProjectFile: @"c:\SolutionPath\SolutionFile.sln",
+                                                           outputDirectory: @"c:\NewDirectory",
+                                                           outputFilename: @"my_bom.xml");            
 
             Assert.Equal((int)ExitCode.OK, exitCode);
             Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\my_bom.xml")));
@@ -102,7 +93,7 @@ namespace CycloneDX.Tests
         {
             var bom = new Bom();
             string resourcePath = Path.Join(AppContext.BaseDirectory, "Resources", "metadata");
-            bom = Program.ReadMetaDataFromFile(bom, Path.Join(resourcePath, "cycloneDX-metadata-template.xml"));
+            bom = Runner.ReadMetaDataFromFile(bom, Path.Join(resourcePath, "cycloneDX-metadata-template.xml"));
             Assert.NotNull(bom.Metadata);
             Assert.Matches("CycloneDX", bom.Metadata.Component.Name);
             Assert.NotEmpty(bom.Metadata.Tools);
