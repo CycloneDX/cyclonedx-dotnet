@@ -23,14 +23,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="CycloneDX.Tests" />
+    <InternalsVisibleTo Include="CycloneDX.IntegrationTests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" />
-    <PackageReference Include="NuGet.Protocol" />
-    <PackageReference Include="System.IO.Abstractions" />
     <PackageReference Include="CycloneDX.Core" />
+    <PackageReference Include="NuGet.Protocol" />
     <PackageReference Include="NuGet.ProjectModel" />
+    <PackageReference Include="System.IO.Abstractions" />
+    <PackageReference Include="System.CommandLine" />
   </ItemGroup>
 </Project>

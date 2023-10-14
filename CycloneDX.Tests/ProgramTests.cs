@@ -15,35 +15,35 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System;
 using System.Collections.Generic;
-using Xunit;
+using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using System.Threading.Tasks;
-using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
-using Moq;
-using CycloneDX.Models;
-using System.IO;
 using CycloneDX.Interfaces;
-using Microsoft.DotNet.PlatformAbstractions;
+using CycloneDX.Models;
+using Moq;
+using Xunit;
+using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 
 namespace CycloneDX.Tests
 {
     public class ProgramTests
     {
         [Fact]
-        public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsSolutionOrProjectFileParameterMissingExitCode()
+        public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsInvalidOptions()
         {
-            var exitCode = await Program.Main(new string[] {}).ConfigureAwait(false);
+            var exitCode = await Program.Main(new string[] { }).ConfigureAwait(false);
 
-            Assert.Equal((int)ExitCode.SolutionOrProjectFileParameterMissing, exitCode);
+            Assert.Equal((int)ExitCode.InvalidOptions, exitCode);
         }
 
         [Fact]
-        public async Task CallingCycloneDX_WithoutOutputDirectory_ReturnsOutputDirectoryParameterMissingExitCode()
+        public async Task CallingCycloneDX_WithoutOutputDirectory_ReturnsInvalidOptions()
         {
             var exitCode = await Program.Main(new string[] { XFS.Path(@"c:\SolutionPath\Solution.sln") }).ConfigureAwait(false);
 
-            Assert.Equal((int)ExitCode.OutputDirectoryParameterMissing, exitCode);
+            Assert.Equal((int)ExitCode.InvalidOptions, exitCode);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace CycloneDX.Tests
         public void CheckMetaDataTemplate()
         {
             var bom = new Bom();
-            string resourcePath = Path.Join(ApplicationEnvironment.ApplicationBasePath, "Resources", "metadata");
+            string resourcePath = Path.Join(AppContext.BaseDirectory, "Resources", "metadata");
             bom = Program.ReadMetaDataFromFile(bom, Path.Join(resourcePath, "cycloneDX-metadata-template.xml"));
             Assert.NotNull(bom.Metadata);
             Assert.Matches("CycloneDX", bom.Metadata.Component.Name);
