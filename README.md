@@ -15,6 +15,7 @@ The CycloneDX module for .NET creates a valid CycloneDX bill-of-material documen
 This module runs on 
 *   .NET 6.0
 *   .NET 7.0
+*   .NET 8.0
 
 This module no longer runs on
 *   .NET Core 2.1
