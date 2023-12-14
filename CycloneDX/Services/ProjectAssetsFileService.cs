@@ -84,6 +84,23 @@ namespace CycloneDX.Services
                         runtimePackages.Add(package);
                     }
 
+                    var allDependencies = runtimePackages.SelectMany(y => y.Dependencies.Keys).Distinct();
+                    var allPackages = runtimePackages.Select(p => p.Name);
+                    var packagesNotInAllPackages = allDependencies.Except(allPackages);
+
+                    // Check if there is an "unresolved" dependency on NetStandard                    
+                    if (packagesNotInAllPackages.Any(p => p == "NETStandard.Library"))
+                    {
+                        // If a project library has targets .net standard it actually doesn't resolve this dependency
+                        // instead it is expected to find the Standard-Libraries on the target system
+                        // => the libraries not being part of the resulting application and thus should not be included in
+                        // the sbom anyways
+                        foreach (var item in runtimePackages)
+                        {
+                            item.Dependencies.Remove("NETStandard.Library");
+                        }
+                    }
+
                     ResolveDependencyVersionRanges(runtimePackages);
 
                     packages.UnionWith(runtimePackages);
