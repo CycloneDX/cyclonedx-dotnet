@@ -6,6 +6,7 @@ using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using Moq;
 using Xunit;
+using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 
 namespace CycloneDX.Tests
 {
@@ -14,7 +15,7 @@ namespace CycloneDX.Tests
     /// </summary>
     public class ValidationTests
     {
-        [Theory(Skip = "Currently failing as GitHub license API only returns the current license")]
+        [Theory(Skip = "Test is accessing internet")]
         [InlineData("xml", false)]
         [InlineData("xml", true)]
         [InlineData("json", false)]
@@ -39,26 +40,20 @@ namespace CycloneDX.Tests
             mockProjectFileService.Setup(mock =>
                 mock.GetProjectNugetPackagesAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())
             ).ReturnsAsync(packages);
-            Program.fileSystem = mockFileSystem;
-            Program.projectFileService = mockProjectFileService.Object;
 
-            var args = new List<string>
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, projectFileService: mockProjectFileService.Object, solutionFileService: null);
+            
+
+            RunOptions runOptions = new RunOptions
             {
-                MockUnixSupport.Path(@"c:\ProjectPath\Project.csproj"),
-                "-o", MockUnixSupport.Path(@"c:\NewDirectory"),
+                SolutionOrProjectFile = XFS.Path(@"c:\ProjectPath\Project.csproj"),
+                outputDirectory = XFS.Path(@"c:\NewDirectory"),
+                json = fileFormat == "json",
+                disableGithubLicenses = disableGitHubLicenses,
             };
 
-            if (fileFormat == "json")
-            {
-                args.Add("--json");
-            }
+            var exitCode = await runner.HandleCommandAsync(runOptions);
 
-            if (disableGitHubLicenses)
-            {
-                args.Add("--disable-github-licenses");
-            }
-
-            var exitCode = await Program.Main(args.ToArray()).ConfigureAwait(false);
 
             Assert.Equal((int)ExitCode.OK, exitCode);
 
