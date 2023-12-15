@@ -34,7 +34,6 @@ namespace CycloneDX
     {
         readonly IFileSystem fileSystem;
         readonly IDotnetCommandService dotnetCommandService;
-        readonly IProjectAssetsFileService projectAssetsFileService;
         readonly IDotnetUtilsService dotnetUtilsService;
         readonly IPackagesFileService packagesFileService;
         readonly IProjectFileService projectFileService;
@@ -49,10 +48,10 @@ namespace CycloneDX
         {
             this.fileSystem = fileSystem ?? new FileSystem();
             this.dotnetCommandService = dotnetCommandService ?? new DotnetCommandService();
-            this.projectAssetsFileService = projectAssetsFileService ?? new ProjectAssetsFileService(this.fileSystem, this.dotnetCommandService, () => new AssetFileReader());
+            projectAssetsFileService ??= new ProjectAssetsFileService(this.fileSystem, this.dotnetCommandService, () => new AssetFileReader());
             this.dotnetUtilsService = dotnetUtilsService ?? new DotnetUtilsService(this.fileSystem, this.dotnetCommandService);
             this.packagesFileService = packagesFileService ?? new PackagesFileService(this.fileSystem);
-            this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, this.projectAssetsFileService);
+            this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, projectAssetsFileService);
             this.solutionFileService = solutionFileService ?? new SolutionFileService(this.fileSystem, this.projectFileService);
         }
         public Runner() : this(null, null, null, null, null, null, null) { }
