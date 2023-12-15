@@ -6,6 +6,7 @@ using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using Moq;
 using Xunit;
+using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 
 namespace CycloneDX.Tests
 {
@@ -42,10 +43,15 @@ namespace CycloneDX.Tests
 
             Runner runner = new Runner(fileSystem: mockFileSystem, projectFileService: mockProjectFileService.Object);
 
-            var exitCode = await runner.HandleCommandAsync(SolutionOrProjectFile: @"c:\ProjectPath\Project.csproj",
-                                            outputDirectory: @"c:\NewDirectory",
-                                            json: fileFormat == "json",
-                                            disableGithubLicenses: disableGitHubLicenses);
+            RunOptions runOptions = new RunOptions()
+            {
+                SolutionOrProjectFile = XFS.Path(@"c:\ProjectPath\Project.csproj"),
+                outputDirectory = XFS.Path(@"c:\NewDirectory"),
+                json = fileFormat == "json",
+                disableGithubLicenses = disableGitHubLicenses,
+            };
+
+            var exitCode = await runner.HandleCommandAsync(runOptions);
 
 
             Assert.Equal((int)ExitCode.OK, exitCode);

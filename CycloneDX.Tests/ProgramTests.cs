@@ -58,10 +58,14 @@ namespace CycloneDX.Tests
                 .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new HashSet<NugetPackage>());
 
-            Runner runner = new Runner(fileSystem: mockFileSystem, solutionFileService: mockSolutionFileService.Object);            
+            Runner runner = new Runner(fileSystem: mockFileSystem, solutionFileService: mockSolutionFileService.Object);
 
-            var exitCode = await runner.HandleCommandAsync(SolutionOrProjectFile: XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
-                                                           outputDirectory: XFS.Path(@"c:\NewDirectory"));            
+            RunOptions runOptions = new RunOptions()
+            {
+                SolutionOrProjectFile = XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
+                outputDirectory = XFS.Path(@"c:\NewDirectory")
+            };
+            var exitCode = await runner.HandleCommandAsync(runOptions);
 
             Assert.Equal((int)ExitCode.OK, exitCode);
             Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\bom.xml")));
@@ -80,9 +84,14 @@ namespace CycloneDX.Tests
                 .ReturnsAsync(new HashSet<NugetPackage>());
             Runner runner = new Runner(fileSystem: mockFileSystem, solutionFileService: mockSolutionFileService.Object);
 
-            var exitCode = await runner.HandleCommandAsync(SolutionOrProjectFile: XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
-                                                           outputDirectory: XFS.Path(@"c:\NewDirectory"),
-                                                           outputFilename: XFS.Path(@"my_bom.xml"));            
+            RunOptions runOptions = new RunOptions()
+            {
+                SolutionOrProjectFile = XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
+                outputDirectory = XFS.Path(@"c:\NewDirectory"),
+                outputFilename = XFS.Path(@"my_bom.xml")
+            };
+
+            var exitCode = await runner.HandleCommandAsync(runOptions);
 
             Assert.Equal((int)ExitCode.OK, exitCode);
             Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\my_bom.xml")));

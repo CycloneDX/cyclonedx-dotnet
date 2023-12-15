@@ -84,61 +84,38 @@ namespace CycloneDX
             rootCommand.Description = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.";
             rootCommand.SetHandler(async (context) =>
             {
-                string SolutionOrProjectFileValue = context.ParseResult.GetValueForArgument(SolutionOrProjectFile);
-                string runtimeValue = context.ParseResult.GetValueForOption(runtime);
-                string frameworkValue = context.ParseResult.GetValueForOption(framework);
-                string outputDirectoryValue = context.ParseResult.GetValueForOption(outputDirectory);
-                string outputFilenameValue = context.ParseResult.GetValueForOption(outputFilename);
-                bool jsonValue = context.ParseResult.GetValueForOption(json);
-                bool excludeDevValue = context.ParseResult.GetValueForOption(excludeDev);
-                bool excludeTestProjectsValue = context.ParseResult.GetValueForOption(excludetestprojects);
-                string baseUrlValue = context.ParseResult.GetValueForOption(baseUrl);
-                string baseUrlUserNameValue = context.ParseResult.GetValueForOption(baseUrlUS);
-                string baseUrlUSPValue = context.ParseResult.GetValueForOption(baseUrlUSP);
-                bool isPasswordClearTextValue = context.ParseResult.GetValueForOption(isPasswordClearText);
-                bool scanProjectReferencesValue = context.ParseResult.GetValueForOption(scanProjectReferences);
-                bool noSerialNumberValue = context.ParseResult.GetValueForOption(noSerialNumber);
-                string githubUsernameValue = context.ParseResult.GetValueForOption(githubUsername);
-                string githubTValue = context.ParseResult.GetValueForOption(githubT);
-                string githubBTValue = context.ParseResult.GetValueForOption(githubBT);
-                bool disableGithubLicensesValue = context.ParseResult.GetValueForOption(disableGithubLicenses);
-                bool disablePackageRestoreValue = context.ParseResult.GetValueForOption(disablePackageRestore);
-                bool disableHashComputationValue = context.ParseResult.GetValueForOption(disableHashComputation);
-                int dotnetCommandTimeoutValue = context.ParseResult.GetValueForOption(dotnetCommandTimeout);
-                string baseIntermediateOutputPathValue = context.ParseResult.GetValueForOption(baseIntermediateOutputPath);
-                string importMetadataPathValue = context.ParseResult.GetValueForOption(importMetadataPath);
-                string setNameValue = context.ParseResult.GetValueForOption(setName);
-                string setVersionValue = context.ParseResult.GetValueForOption(setVersion);
-                Component.Classification setTypeValue = context.ParseResult.GetValueForOption(setType);
+                RunOptions options = new RunOptions
+                {
+                    SolutionOrProjectFile = context.ParseResult.GetValueForArgument(SolutionOrProjectFile),
+                    runtime = context.ParseResult.GetValueForOption(runtime),
+                    framework = context.ParseResult.GetValueForOption(framework),
+                    outputDirectory = context.ParseResult.GetValueForOption(outputDirectory),
+                    outputFilename = context.ParseResult.GetValueForOption(outputFilename),
+                    json = context.ParseResult.GetValueForOption(json),
+                    excludeDev = context.ParseResult.GetValueForOption(excludeDev),
+                    excludeTestProjects = context.ParseResult.GetValueForOption(excludetestprojects),
+                    baseUrl = context.ParseResult.GetValueForOption(baseUrl),
+                    baseUrlUserName = context.ParseResult.GetValueForOption(baseUrlUS),
+                    baseUrlUSP = context.ParseResult.GetValueForOption(baseUrlUSP),
+                    isPasswordClearText = context.ParseResult.GetValueForOption(isPasswordClearText),
+                    scanProjectReferences = context.ParseResult.GetValueForOption(scanProjectReferences),
+                    noSerialNumber = context.ParseResult.GetValueForOption(noSerialNumber),
+                    githubUsername = context.ParseResult.GetValueForOption(githubUsername),
+                    githubT = context.ParseResult.GetValueForOption(githubT),
+                    githubBT = context.ParseResult.GetValueForOption(githubBT),
+                    disableGithubLicenses = context.ParseResult.GetValueForOption(disableGithubLicenses),
+                    disablePackageRestore = context.ParseResult.GetValueForOption(disablePackageRestore),
+                    disableHashComputation = context.ParseResult.GetValueForOption(disableHashComputation),
+                    dotnetCommandTimeout = context.ParseResult.GetValueForOption(dotnetCommandTimeout),
+                    baseIntermediateOutputPath = context.ParseResult.GetValueForOption(baseIntermediateOutputPath),
+                    importMetadataPath = context.ParseResult.GetValueForOption(importMetadataPath),
+                    setName = context.ParseResult.GetValueForOption(setName),
+                    setVersion = context.ParseResult.GetValueForOption(setVersion),
+                    setType = context.ParseResult.GetValueForOption(setType)
+                };                
 
                 Runner runner = new Runner();
-                var taskStatus = await runner.HandleCommandAsync(
-                    SolutionOrProjectFileValue,
-                    runtimeValue,
-                    frameworkValue,
-                    outputDirectoryValue,
-                    outputFilenameValue,
-                    jsonValue,
-                    excludeDevValue,
-                    excludeTestProjectsValue,
-                    baseUrlValue,
-                    baseUrlUserNameValue,
-                    baseUrlUSPValue,
-                    isPasswordClearTextValue,
-                    scanProjectReferencesValue,
-                    noSerialNumberValue,
-                    githubUsernameValue,
-                    githubTValue,
-                    githubBTValue,
-                    disableGithubLicensesValue,
-                    disablePackageRestoreValue,
-                    disableHashComputationValue,
-                    dotnetCommandTimeoutValue,
-                    baseIntermediateOutputPathValue,
-                    importMetadataPathValue,
-                    setNameValue,
-                    setVersionValue,
-                    setTypeValue);
+                var taskStatus = await runner.HandleCommandAsync(options);
                 context.ExitCode = taskStatus;
 
             });

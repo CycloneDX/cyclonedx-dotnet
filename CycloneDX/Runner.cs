@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using CycloneDX.Models;
 using CycloneDX.Interfaces;
 using CycloneDX.Services;
+using static CycloneDX.Models.Component;
 
 namespace CycloneDX
 {
@@ -46,7 +47,7 @@ namespace CycloneDX
                       IProjectFileService projectFileService = null,
                       ISolutionFileService solutionFileService = null)
         {
-            this.fileSystem = fileSystem ?? new FileSystem() ;
+            this.fileSystem = fileSystem ?? new FileSystem();
             this.dotnetCommandService = dotnetCommandService ?? new DotnetCommandService();
             this.projectAssetsFileService = projectAssetsFileService ?? new ProjectAssetsFileService(this.fileSystem, this.dotnetCommandService, () => new AssetFileReader());
             this.dotnetUtilsService = dotnetUtilsService ?? new DotnetUtilsService(this.fileSystem, this.dotnetCommandService);
@@ -54,34 +55,35 @@ namespace CycloneDX
             this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, this.projectAssetsFileService);
             this.solutionFileService = solutionFileService ?? new SolutionFileService(this.fileSystem, this.projectFileService);
         }
-        public async Task<int> HandleCommandAsync(string outputDirectory,
-                                      string SolutionOrProjectFile = default,
-                                      string framework = default,
-                                      string runtime = default,                                      
-                                      string outputFilename = default,
-                                      bool json = default,
-                                      bool excludeDev = default,
-                                      bool excludetestprojects = default,
-                                      string baseUrl = default,
-                                      string baseUrlUserName = default,
-                                      string baseUrlUP = default,
-                                      bool isPasswordClearText = default,
-                                      bool scanProjectReferences = default,
-                                      bool noSerialNumber = default,
-                                      string githubUsername = default,
-                                      string githubT = default,
-                                      string githubBT = default,
-                                      bool disableGithubLicenses = default,
-                                      bool disablePackageRestore = default,
-                                      bool disableHashComputation = default,
-                                      int dotnetCommandTimeout = 30000,
-                                      string baseIntermediateOutputPath = default,
-                                      string importMetadataPath = default,
-                                      string setName = default,
-                                      string setVersion = default,
-                                      Component.Classification setType = Component.Classification.Application
-         )
+        public async Task<int> HandleCommandAsync(RunOptions options)
         {
+            string outputDirectory = options.outputDirectory;
+            string SolutionOrProjectFile = options.SolutionOrProjectFile;
+            string framework = options.framework;
+            string runtime = options.runtime;
+            string outputFilename = options.outputFilename;
+            bool json = options.json;
+            bool excludeDev = options.excludeDev;
+            bool excludetestprojects = options.excludeTestProjects;
+            string baseUrl = options.baseUrl;
+            string baseUrlUserName = options.baseUrlUserName;
+            string baseUrlUP = options.baseUrlUSP;
+            bool isPasswordClearText = options.isPasswordClearText;
+            bool scanProjectReferences = options.scanProjectReferences;
+            bool noSerialNumber = options.noSerialNumber;
+            string githubUsername = options.githubUsername;
+            string githubT = options.githubT;
+            string githubBT = options.githubBT;
+            bool disableGithubLicenses = options.disableGithubLicenses;
+            bool disablePackageRestore = options.disablePackageRestore;
+            bool disableHashComputation = options.disableHashComputation;
+            int dotnetCommandTimeout = options.dotnetCommandTimeout;
+            string baseIntermediateOutputPath = options.baseIntermediateOutputPath;
+            string importMetadataPath = options.importMetadataPath;
+            string setName = options.setName;
+            string setVersion = options.setVersion;
+            Component.Classification setType = options.setType;
+
 
             Console.WriteLine();
 
@@ -103,9 +105,7 @@ namespace CycloneDX
                 Console.WriteLine($"    {cachePath}");
             }
 
-            // instantiate services
-
-            var fileDiscoveryService = new FileDiscoveryService(this.fileSystem);
+            // instantiate services            
             GithubService githubService = null;
             if (!(disableGithubLicenses))
             {
@@ -336,7 +336,9 @@ namespace CycloneDX
             bom.Components.Sort((x, y) =>
             {
                 if (x.Name == y.Name)
+                {
                     return string.Compare(x.Version, y.Version, StringComparison.InvariantCultureIgnoreCase);
+                }
                 return string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase);
             });
             bom.Dependencies = dependencies;
