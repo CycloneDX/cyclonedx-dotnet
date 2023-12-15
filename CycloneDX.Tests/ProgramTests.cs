@@ -58,9 +58,9 @@ namespace CycloneDX.Tests
                 .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new HashSet<NugetPackage>());
 
-            Runner runner = new Runner(fileSystem: mockFileSystem, solutionFileService: mockSolutionFileService.Object);
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object);
 
-            RunOptions runOptions = new RunOptions()
+            RunOptions runOptions = new RunOptions
             {
                 SolutionOrProjectFile = XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
                 outputDirectory = XFS.Path(@"c:\NewDirectory")
@@ -82,9 +82,10 @@ namespace CycloneDX.Tests
             mockSolutionFileService
                 .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new HashSet<NugetPackage>());
-            Runner runner = new Runner(fileSystem: mockFileSystem, solutionFileService: mockSolutionFileService.Object);
 
-            RunOptions runOptions = new RunOptions()
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object);            
+
+            RunOptions runOptions = new RunOptions
             {
                 SolutionOrProjectFile = XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
                 outputDirectory = XFS.Path(@"c:\NewDirectory"),

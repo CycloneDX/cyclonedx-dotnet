@@ -41,9 +41,10 @@ namespace CycloneDX.Tests
                 mock.GetProjectNugetPackagesAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())
             ).ReturnsAsync(packages);
 
-            Runner runner = new Runner(fileSystem: mockFileSystem, projectFileService: mockProjectFileService.Object);
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, projectFileService: mockProjectFileService.Object, solutionFileService: null);
+            
 
-            RunOptions runOptions = new RunOptions()
+            RunOptions runOptions = new RunOptions
             {
                 SolutionOrProjectFile = XFS.Path(@"c:\ProjectPath\Project.csproj"),
                 outputDirectory = XFS.Path(@"c:\NewDirectory"),

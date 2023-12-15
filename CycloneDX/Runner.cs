@@ -39,13 +39,13 @@ namespace CycloneDX
         readonly IPackagesFileService packagesFileService;
         readonly IProjectFileService projectFileService;
         readonly ISolutionFileService solutionFileService;
-        public Runner(IFileSystem fileSystem = null,
-                      IDotnetCommandService dotnetCommandService = null,
-                      IProjectAssetsFileService projectAssetsFileService = null,
-                      IDotnetUtilsService dotnetUtilsService = null,
-                      IPackagesFileService packagesFileService = null,
-                      IProjectFileService projectFileService = null,
-                      ISolutionFileService solutionFileService = null)
+        public Runner(IFileSystem fileSystem,
+                      IDotnetCommandService dotnetCommandService,
+                      IProjectAssetsFileService projectAssetsFileService,
+                      IDotnetUtilsService dotnetUtilsService,
+                      IPackagesFileService packagesFileService,
+                      IProjectFileService projectFileService,
+                      ISolutionFileService solutionFileService)
         {
             this.fileSystem = fileSystem ?? new FileSystem();
             this.dotnetCommandService = dotnetCommandService ?? new DotnetCommandService();
@@ -55,6 +55,8 @@ namespace CycloneDX
             this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, this.projectAssetsFileService);
             this.solutionFileService = solutionFileService ?? new SolutionFileService(this.fileSystem, this.projectFileService);
         }
+        public Runner() : this(null, null, null, null, null, null, null) { }
+
         public async Task<int> HandleCommandAsync(RunOptions options)
         {
             string outputDirectory = options.outputDirectory;
@@ -82,7 +84,7 @@ namespace CycloneDX
             string importMetadataPath = options.importMetadataPath;
             string setName = options.setName;
             string setVersion = options.setVersion;
-            Component.Classification setType = options.setType;
+            Classification setType = options.setType;
 
 
             Console.WriteLine();
