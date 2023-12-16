@@ -361,10 +361,10 @@ namespace CycloneDX.Services
             return nuspecModel;
         }
 
-        public async Task<Component> GetComponentAsync(NugetPackage nugetPackage)
+        public async Task<Component> GetComponentAsync(DotnetDependency DotnetDependency)
         {
-            Contract.Requires(nugetPackage != null);
-            return await GetComponentAsync(nugetPackage.Name, nugetPackage.Version, nugetPackage.Scope)
+            Contract.Requires(DotnetDependency != null);
+            return await GetComponentAsync(DotnetDependency.Name, DotnetDependency.Version, DotnetDependency.Scope)
                 .ConfigureAwait(false);
         }
     }

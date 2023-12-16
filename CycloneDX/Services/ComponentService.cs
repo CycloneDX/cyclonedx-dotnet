@@ -36,14 +36,14 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<Component>> RecursivelyGetComponentsAsync(IEnumerable<NugetPackage> nugetPackges)
+        public async Task<HashSet<Component>> RecursivelyGetComponentsAsync(IEnumerable<DotnetDependency> nugetPackges)
         {
             var components = new HashSet<Component>();
 
             // Initialize the queue with the current packages
-            var packages = new Queue<NugetPackage>(nugetPackges);
+            var packages = new Queue<DotnetDependency>(nugetPackges);
 
-            var visitedNugetPackages = new HashSet<NugetPackage>();
+            var visitedDotnetDependencys = new HashSet<DotnetDependency>();
 
             while (packages.Count > 0)
             {
@@ -55,7 +55,7 @@ namespace CycloneDX.Services
                 components.Add(component);
 
                 // Add the current NuGet package to list of visited packages
-                visitedNugetPackages.Add(currentPackage);
+                visitedDotnetDependencys.Add(currentPackage);
             }
 
             return components;

@@ -102,12 +102,12 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> GetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
+        public async Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
                 Console.Error.WriteLine($"Project file \"{projectFilePath}\" does not exist");
-                return new HashSet<NugetPackage>();
+                return new HashSet<DotnetDependency>();
             }
 
             var isTestProject = IsTestProject(projectFilePath);
@@ -118,7 +118,7 @@ namespace CycloneDX.Services
             if (excludeTestProjects && isTestProject)
             {
                 Console.WriteLine($"Skipping: {projectFilePath}");
-                return new HashSet<NugetPackage>();
+                return new HashSet<DotnetDependency>();
             }
 
             if (!DisablePackageRestore) {
@@ -142,7 +142,7 @@ namespace CycloneDX.Services
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
             }
-            var packages = _projectAssetsFileService.GetNugetPackages(projectFilePath, assetsFilename, isTestProject, excludeDev);
+            var packages = _projectAssetsFileService.GetDotnetDependencys(projectFilePath, assetsFilename, isTestProject, excludeDev);
 
 
             // if there are no project file package references look for a packages.config
@@ -154,7 +154,7 @@ namespace CycloneDX.Services
                 if (_fileSystem.File.Exists(packagesPath))
                 {
                     Console.WriteLine("  Found packages.config. Will attempt to process");
-                    packages = await _packagesFileService.GetNugetPackagesAsync(packagesPath).ConfigureAwait(false);
+                    packages = await _packagesFileService.GetDotnetDependencysAsync(packagesPath).ConfigureAwait(false);
                 }
             }
             return packages;
@@ -165,16 +165,16 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> RecursivelyGetProjectNugetPackagesAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
+        public async Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
         {
-            var nugetPackages = await GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
+            var DotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
             var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
             foreach (var project in projectReferences)
             {
-                var projectNugetPackages = await GetProjectNugetPackagesAsync(project, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
-                nugetPackages.UnionWith(projectNugetPackages);
+                var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
+                DotnetDependencys.UnionWith(projectDotnetDependencys);
             }
-            return nugetPackages;
+            return DotnetDependencys;
         }
 
         /// <summary>

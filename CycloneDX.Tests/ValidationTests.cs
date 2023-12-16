@@ -27,7 +27,7 @@ namespace CycloneDX.Tests
                 { MockUnixSupport.Path(@"c:\ProjectPath\Project.csproj"), new MockFileData(CsprojContents) }
             });
 
-            var packages = new HashSet<NugetPackage>
+            var packages = new HashSet<DotnetDependency>
             {
                 new() { Name = "DotNetEnv", Version = "1.4.0" },
                 new() { Name = "HtmlAgilityPack", Version = "1.11.30" },
@@ -38,7 +38,7 @@ namespace CycloneDX.Tests
 
             var mockProjectFileService = new Mock<IProjectFileService>();
             mockProjectFileService.Setup(mock =>
-                mock.GetProjectNugetPackagesAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())
+                mock.GetProjectDotnetDependencysAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())
             ).ReturnsAsync(packages);
 
             Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, projectFileService: mockProjectFileService.Object, solutionFileService: null);

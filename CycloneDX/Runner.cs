@@ -134,7 +134,7 @@ namespace CycloneDX
                 NugetInputFactory.Create(baseUrl, baseUrlUserName, baseUrlUP, isPasswordClearText);
             var nugetService = new NugetV3Service(nugetInput, fileSystem, packageCachePathsResult.Result, githubService, nugetLogger, disableHashComputation);
 
-            var packages = new HashSet<NugetPackage>();
+            var packages = new HashSet<DotnetDependency>();
 
             // determine what we are analyzing and do the analysis
             var fullSolutionOrProjectFilePath = this.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
@@ -151,27 +151,27 @@ namespace CycloneDX
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
-                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await solutionFileService.GetSolutionDotnetDependencys(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
-                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
-                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (this.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {
-                    packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
+                    packages = await packagesFileService.GetDotnetDependencysAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
                 }
                 else if (fileSystem.Directory.Exists(fullSolutionOrProjectFilePath))
                 {
-                    packages = await packagesFileService.RecursivelyGetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
+                    packages = await packagesFileService.RecursivelyGetDotnetDependencysAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
                 }
                 else
@@ -195,7 +195,7 @@ namespace CycloneDX
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
             var transitiveDependencies = new HashSet<string>();
-            var packageToComponent = new Dictionary<NugetPackage, Component>();
+            var packageToComponent = new Dictionary<DotnetDependency, Component>();
             try
             {
                 var bomRefLookup = new Dictionary<(string, string), string>();

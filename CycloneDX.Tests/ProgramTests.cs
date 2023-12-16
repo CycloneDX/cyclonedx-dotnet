@@ -55,8 +55,8 @@ namespace CycloneDX.Tests
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
-                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<NugetPackage>());
+                .Setup(s => s.GetSolutionDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>());
 
             Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object);
 
@@ -80,8 +80,8 @@ namespace CycloneDX.Tests
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
-                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<NugetPackage>());
+                .Setup(s => s.GetSolutionDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>());
 
             Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object);            
 

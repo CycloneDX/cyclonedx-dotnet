@@ -40,9 +40,9 @@ namespace CycloneDX.Services
             _assetFileReaderFactory = assetFileReaderFactory;
         }
 
-        public HashSet<NugetPackage> GetNugetPackages(string projectFilePath, string projectAssetsFilePath, bool isTestProject, bool excludeDev)
+        public HashSet<DotnetDependency> GetDotnetDependencys(string projectFilePath, string projectAssetsFilePath, bool isTestProject, bool excludeDev)
         {
-            var packages = new HashSet<NugetPackage>();
+            var packages = new HashSet<DotnetDependency>();
 
             if (_fileSystem.File.Exists(projectAssetsFilePath))
             {
@@ -51,14 +51,14 @@ namespace CycloneDX.Services
 
                 foreach (var targetRuntime in assetsFile.Targets)
                 {
-                    var runtimePackages = new HashSet<NugetPackage>();
+                    var runtimePackages = new HashSet<DotnetDependency>();
                     var targetFramework = assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
                     var dependencies = targetFramework.Dependencies;
 
                     foreach (var library in targetRuntime.Libraries.Where(lib => lib.Type != "project"))
                     {
                         var libs = dependencies.FirstOrDefault(ld => ld.Name.Equals(library.Name));
-                        var package = new NugetPackage
+                        var package = new DotnetDependency
                         {
                             Name = library.Name,
                             Version = library.Version.ToNormalizedString(),
@@ -121,7 +121,7 @@ namespace CycloneDX.Services
         /// <summary>
         /// Updates all dependencies with version ranges to the version it was resolved to.
         /// </summary>
-        private static void ResolveDependencyVersionRanges(HashSet<NugetPackage> runtimePackages)
+        private static void ResolveDependencyVersionRanges(HashSet<DotnetDependency> runtimePackages)
         {
             var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
             foreach (var runtimePackage in runtimePackages)
