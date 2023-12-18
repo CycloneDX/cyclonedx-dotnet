@@ -58,7 +58,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\Project.csproj"), "" },
+                    { XFS.Path(@"c:\Project\Project.csproj"), "<Project Sdk=\"Microsoft.NET.Sdk\" />" },
                     { XFS.Path(@"c:\Project\obj\project.assets.json"), "" },
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
@@ -93,7 +93,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\Project.csproj"), "" },
+                    { XFS.Path(@"c:\Project\Project.csproj"), "<Project Sdk=\"Microsoft.NET.Sdk\" />" },
                     { XFS.Path(@"c:\Project\obj\project.assets.json"), "" },
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
@@ -129,7 +129,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\Project.csproj"), "" },
+                    { XFS.Path(@"c:\Project\Project.csproj"), "<Project Sdk=\"Microsoft.NET.Sdk\" />" },
                     { XFS.Path(@"c:\Project\obj\project.assets.json"), "" },
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
@@ -167,7 +167,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\Project.csproj"), "" },
+                    { XFS.Path(@"c:\Project\Project.csproj"), "<Project Sdk=\"Microsoft.NET.Sdk\" />" },
                     { XFS.Path(@"c:\Project\packages.config"), "" },
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
@@ -207,7 +207,7 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\Project\Project.csproj"), "" },
+                    { XFS.Path(@"c:\Project\Project.csproj"), "<Project Sdk=\"Microsoft.NET.Sdk\" />" },
                     { XFS.Path(@"c:\Project\packages.config"), "" },
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();

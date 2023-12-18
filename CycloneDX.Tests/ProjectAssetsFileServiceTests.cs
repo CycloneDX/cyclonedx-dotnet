@@ -28,6 +28,7 @@ using NuGet.LibraryModel;
 using NuGet.ProjectModel;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
+using System.IO;
 
 namespace CycloneDX.Tests
 {
@@ -81,7 +82,7 @@ namespace CycloneDX.Tests
                         }));
             var mockAssetReader = new Mock<IAssetFileReader>();
             mockAssetReader
-                .Setup(m => m.Read(It.IsAny<string>()))
+                .Setup(m => m.Read(It.IsAny<Stream>(), It.IsAny<string>()))
                 .Returns(() =>
                 {
                     var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
@@ -310,7 +311,7 @@ namespace CycloneDX.Tests
                         }));
             var mockAssetReader = new Mock<IAssetFileReader>(MockBehavior.Strict);
             mockAssetReader
-                .Setup(m => m.Read(It.IsAny<string>()))
+                .Setup(m => m.Read(It.IsAny<Stream>(), It.IsAny<string>()))
                 .Returns(() =>
                 {
                     var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
@@ -455,7 +456,7 @@ namespace CycloneDX.Tests
                         }));
             var mockAssetReader = new Mock<IAssetFileReader>(MockBehavior.Strict);
             mockAssetReader
-                .Setup(m => m.Read(It.IsAny<string>()))
+                .Setup(m => m.Read(It.IsAny<Stream>(), It.IsAny<string>()))
                 .Returns(() =>
                 {
                     var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor));
