@@ -23,14 +23,14 @@ namespace CycloneDX.Tests.FunctionalTests
             options.disableGithubLicenses = true;
             options.outputDirectory ??= "/bom/";
             options.outputFilename ??= options.json ? "bom.json" : "bom.xml";
-            options.SolutionOrProjectFile ??= "c:\\ProjectPath\\Project.csproj";
+            options.SolutionOrProjectFile ??= MockUnixSupport.Path("c:/ProjectPath/Project.csproj");
             options.disablePackageRestore = true;
 
 
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
             {
                 { MockUnixSupport.Path(options.SolutionOrProjectFile), new MockFileData(CsprojContents) },
-                { MockUnixSupport.Path(@"c:\ProjectPath\obj\project.assets.json"), new MockFileData(assetsJson) }
+                { MockUnixSupport.Path("c:/ProjectPath/obj/project.assets.json"), new MockFileData(assetsJson) }
             });
 
 

@@ -24,11 +24,6 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
-using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
-using Microsoft.Build.Evaluation;
-using Microsoft.Build.Construction;
-
 
 namespace CycloneDX.Services
 {
@@ -284,7 +279,7 @@ namespace CycloneDX.Services
 
             try
             {
-                var projectRootElement = ProjectRootElement.Open(dotnetDependency.Path);
+                //Read Information from CSPROJ
             }
             catch(Exception ex)
             {

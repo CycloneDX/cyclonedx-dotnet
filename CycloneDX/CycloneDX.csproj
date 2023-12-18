@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <PackageReference Include="CycloneDX.Core" />
-    <PackageReference Include="Microsoft.Build" />
     <PackageReference Include="NuGet.Protocol" />
     <PackageReference Include="NuGet.ProjectModel" />
     <PackageReference Include="System.IO.Abstractions" />
