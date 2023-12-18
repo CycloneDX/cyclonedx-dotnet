@@ -108,7 +108,7 @@ namespace CycloneDX.Services
             }
 
             // Process first all productive projects, then test projects (scope order)
-            var projectQuery = from p in projectPaths orderby ProjectFileService.IsTestProject(p) select p;
+            var projectQuery = from p in projectPaths orderby _projectFileService.IsTestProject(p) select p;
             var directReferencePackages = new HashSet<DotnetDependency>();
             foreach (var projectFilePath in projectQuery)
             {

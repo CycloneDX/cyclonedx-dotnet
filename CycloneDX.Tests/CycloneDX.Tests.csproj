@@ -33,6 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="FunctionalTests\TestcaseFiles\SimpleNETStandardLibrary.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\metadata\cycloneDX-metadata-template.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

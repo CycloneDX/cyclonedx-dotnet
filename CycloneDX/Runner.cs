@@ -33,6 +33,7 @@ namespace CycloneDX
 {
     public class Runner
     {
+        public Bom LastGeneratedBom { get; set; }
         readonly IFileSystem fileSystem;
         readonly IDotnetCommandService dotnetCommandService;
         readonly IDotnetUtilsService dotnetUtilsService;
@@ -139,7 +140,7 @@ namespace CycloneDX
 
             // determine what we are analyzing and do the analysis
             var fullSolutionOrProjectFilePath = this.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
-            string basePath = Path.GetDirectoryName(fullSolutionOrProjectFilePath);
+            string basePath = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
 
             var topLevelComponent = new Component
             {
@@ -352,6 +353,8 @@ namespace CycloneDX
             directDependencies.Ref = bom.Metadata.Component.BomRef;
             bom.Dependencies.Add(directDependencies);
             bom.Dependencies.Sort((x, y) => string.Compare(x.Ref, y.Ref, StringComparison.InvariantCultureIgnoreCase));
+
+            LastGeneratedBom = bom;
 
             var bomContents = BomService.CreateDocument(bom, json);
 

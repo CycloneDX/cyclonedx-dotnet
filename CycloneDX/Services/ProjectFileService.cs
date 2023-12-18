@@ -64,12 +64,13 @@ namespace CycloneDX.Services
         }
 
 
-        public static bool IsTestProject(string projectFilePath)
+        public bool IsTestProject(string projectFilePath)
         {
             XmlDocument xmldoc = new XmlDocument();
             try
             {
-                xmldoc.Load(projectFilePath);
+                var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
+                xmldoc.Load(fileStream);
             }
             catch(DirectoryNotFoundException /*ex*/)
             {

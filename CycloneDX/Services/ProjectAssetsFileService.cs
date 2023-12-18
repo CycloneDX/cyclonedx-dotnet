@@ -49,6 +49,7 @@ namespace CycloneDX.Services
             {
                 var assetFileReader = _assetFileReaderFactory();
                 var assetsFile = assetFileReader.Read(projectAssetsFilePath);
+                
 
                 foreach (var targetRuntime in assetsFile.Targets)
                 {
