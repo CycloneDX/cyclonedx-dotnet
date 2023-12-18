@@ -16,6 +16,7 @@ namespace CycloneDX.Tests.FunctionalTests
         public async Task TestSimpleNETStandardLibrary()
         {            
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "SimpleNETStandardLibrary.json"));
+            await Console.Out.WriteLineAsync($"assetsJson Length: {assetsJson.Length}" );
             var options = new RunOptions
             {
             };
