@@ -10,7 +10,7 @@ using Xunit;
 
 namespace CycloneDX.Tests.FunctionalTests
 {
-    public class FunctionalTestHelper
+    public static class FunctionalTestHelper
     {
         /// <summary>
         /// Trying to build SBOM from provided parameters and validated the result file

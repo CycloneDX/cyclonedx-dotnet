@@ -139,8 +139,7 @@ namespace CycloneDX
             var packages = new HashSet<DotnetDependency>();
 
             // determine what we are analyzing and do the analysis
-            var fullSolutionOrProjectFilePath = this.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
-            string basePath = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
+            var fullSolutionOrProjectFilePath = this.fileSystem.Path.GetFullPath(SolutionOrProjectFile);            
 
             var topLevelComponent = new Component
             {
@@ -231,7 +230,7 @@ namespace CycloneDX
                     var projectReferences = packages.Where(p => p.DependencyType == DependencyType.Project);
                     // Change all packages that are refered to by a project to direct dependency
                     var dependenciesOfProjects = projectReferences.SelectMany(p => p.Dependencies);
-                    var newDirectDependencies = packages.Join(dependenciesOfProjects, p => p.Name + '@' + p.Version, d => d.Key + '@' + d.Value, (p, d) => p);
+                    var newDirectDependencies = packages.Join(dependenciesOfProjects, p => p.Name + '@' + p.Version, d => d.Key + '@' + d.Value, (p, _) => p);
                     newDirectDependencies.ToList().ForEach(p => p.IsDirectReference = true);
                     //remove all dependencies of packages to project references (https://github.com/CycloneDX/cyclonedx-dotnet/issues/758)
                     var projectReferencesNames = projectReferences.Select(p => p.Name);
