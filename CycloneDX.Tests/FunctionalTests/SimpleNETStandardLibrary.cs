@@ -24,7 +24,7 @@ namespace CycloneDX.Tests.FunctionalTests
             var bom = await FunctionalTestHelper.Test(assetsJson, options);
 
 
-            Assert.Contains(bom.Components, c => c.Name == "newtonsoft.json" && c.Version == "13.0.3");
+            Assert.Contains(bom.Components, c => string.Compare(c.Name, "newtonsoft.json", true) == 0 && c.Version == "13.0.3");
         }
     }
 }
