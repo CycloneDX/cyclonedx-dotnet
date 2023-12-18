@@ -24,6 +24,7 @@ using CycloneDX.Interfaces;
 using NuGet.Versioning;
 using NuGet.LibraryModel;
 using NuGet.ProjectModel;
+using System.IO;
 
 namespace CycloneDX.Services
 {
@@ -54,30 +55,39 @@ namespace CycloneDX.Services
                     var runtimePackages = new HashSet<DotnetDependency>();
                     var targetFramework = assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
                     var dependencies = targetFramework.Dependencies;
+                    var directDependencies = assetsFile.ProjectFileDependencyGroups
+                        .Where(f => f.FrameworkName == targetRuntime.Name)?.SelectMany(p => p.Dependencies)
+                        .Select(d =>
+                        {
+                            var x = d.Split(" ");
+                            return new { Name = x.First(), Version = new NuGetVersion(x.Last()) };
+                        });
 
-                    foreach (var library in targetRuntime.Libraries.Where(lib => lib.Type != "project"))
+                    foreach (var lockFileLibrary in targetRuntime.Libraries)
                     {
-                        var libs = dependencies.FirstOrDefault(ld => ld.Name.Equals(library.Name));
+                        var libs = dependencies.FirstOrDefault(ld => ld.Name.Equals(lockFileLibrary.Name));
+                        //try to find dependency in the library section, to get its path
+                        var library = assetsFile.Libraries.FirstOrDefault(lib => lib.Name == lockFileLibrary.Name && lib.Version == lockFileLibrary.Version);
+
                         var package = new DotnetDependency
                         {
-                            Name = library.Name,
-                            Version = library.Version.ToNormalizedString(),
+                            Name = lockFileLibrary.Name,
+                            Version = lockFileLibrary.Version.ToNormalizedString(),
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
                             IsDevDependency = SetIsDevDependency(libs),
-                            IsDirectReference = SetIsDirectReference(libs)
+                            IsDirectReference = directDependencies?.Any(d => string.Compare(d.Name, lockFileLibrary.Name, true) == 0 && d.Version <= lockFileLibrary.Version) ?? false,                            
+                            DependencyType = (lockFileLibrary.Type != "project") ? DependencyType.Package : DependencyType.Project,
+                            Path = Path.Combine(Path.GetDirectoryName(projectFilePath), library?.Path ?? "")
                         };
 
                         // is this a test project dependency or only a development dependency
-                        if (
-                            isTestProject
-                            || (package.IsDevDependency && excludeDev)
-                        )
+                        if ( isTestProject || (package.IsDevDependency && excludeDev))
                         {
                             package.Scope = Component.ComponentScope.Excluded;
                         }
                         // include direct dependencies
-                        foreach (var dep in library.Dependencies)
+                        foreach (var dep in lockFileLibrary.Dependencies)
                         {
                             package.Dependencies.Add(dep.Id, dep.VersionRange?.ToNormalizedString());
                         }

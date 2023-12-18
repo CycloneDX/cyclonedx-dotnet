@@ -24,6 +24,11 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
+using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Construction;
+
 
 namespace CycloneDX.Services
 {
@@ -266,6 +271,39 @@ namespace CycloneDX.Services
             }
 
             return projectReferences;
+        }
+
+        public Component GetComponent(DotnetDependency dotnetDependency)
+        {
+            if (dotnetDependency?.DependencyType != DependencyType.Project)
+            {
+                return null;
+            }
+            var component = SetupComponent(dotnetDependency.Name, dotnetDependency.Version, Component.ComponentScope.Required);
+
+            try
+            {
+                var projectRootElement = ProjectRootElement.Open(dotnetDependency.Path);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error when reading project file: {dotnetDependency.Path}\r\n{ex}");
+            }
+            return component;
+        }
+
+
+        private Component SetupComponent(string name, string version, Component.ComponentScope? scope)
+        {
+            var component = new Component
+            {
+                Name = name,
+                Version = version,
+                Scope = scope,            
+                Type = Component.Classification.Library,
+                BomRef = $"{name}@{version}"
+            };            
+            return component;
         }
     }
 }

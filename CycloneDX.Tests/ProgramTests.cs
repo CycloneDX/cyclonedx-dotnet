@@ -106,9 +106,9 @@ namespace CycloneDX.Tests
             bom = Runner.ReadMetaDataFromFile(bom, Path.Join(resourcePath, "cycloneDX-metadata-template.xml"));
             Assert.NotNull(bom.Metadata);
             Assert.Matches("CycloneDX", bom.Metadata.Component.Name);
-            Assert.NotEmpty(bom.Metadata.Tools);
-            Assert.Matches("CycloneDX", bom.Metadata.Tools[0].Vendor);
-            Assert.Matches("1.2.0", bom.Metadata.Tools[0].Version);
+            Assert.NotEmpty(bom.Metadata.Tools.Tools);
+            Assert.Matches("CycloneDX", bom.Metadata.Tools.Tools[0].Vendor);
+            Assert.Matches("1.2.0", bom.Metadata.Tools.Tools[0].Version);
         }
     }
 }

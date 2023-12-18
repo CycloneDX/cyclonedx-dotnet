@@ -28,5 +28,6 @@ namespace CycloneDX.Interfaces
         Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime);
         Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);
         Task<HashSet<string>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
+        Component GetComponent(DotnetDependency dotnetDependency);
     }
 }

@@ -36,6 +36,7 @@ namespace CycloneDX.Models
         public bool IsDevDependency { get; set; }
         public DependencyType DependencyType { get; set; }
         public Component.ComponentScope? Scope { get; set; }
+        public string Path { get; set; }
 
 
         public Dictionary<string, string> Dependencies { get; set; } //key: name ~ value: version

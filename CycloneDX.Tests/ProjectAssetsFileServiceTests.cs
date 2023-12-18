@@ -33,10 +33,11 @@ namespace CycloneDX.Tests
 {
     public class ProjectAssetsFileServiceTests
     {
+
         [Theory]
-        [InlineData(".NetStandard", 2, 1)]
-        [InlineData("net", 6, 0)]
-        public void GetDotnetDependencys_PackageAsTopLevelAndTransitive(string framework, int frameworkMajor, int frameworkMinor)
+        [InlineData(".NETStandard", 2, 1, ".NETStandard,Version=v2.1")]
+        [InlineData(".NETCoreApp", 6, 0, "net6.0")]
+        public void GetDotnetDependencys_PackageAsTopLevelAndTransitive(string framework, int frameworkMajor, int frameworkMinor, string projectFileDependencyGroupsName)
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
@@ -217,6 +218,22 @@ namespace CycloneDX.Tests
                                     }
                                 }
                             }
+                        },
+                        Libraries = new[]
+                        {
+                            new LockFileLibrary()
+                            {
+                                Name = "Package1",
+                                Version = new NuGetVersion("1.5.0"),
+                                Type = "package"
+                            }
+                        },
+                        ProjectFileDependencyGroups = new[]
+                        {
+
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" }),
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package2 >= 4.5.1" }),
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package3 >= 1.0.0" })
                         }
                     };
                 });
@@ -262,9 +279,9 @@ namespace CycloneDX.Tests
         }
 
         [Theory]
-        [InlineData(".NetStandard", 2, 1)]
-        [InlineData("net", 6, 0)]
-        public void GetDotnetDependencys_MissingResolvedPackageVersion(string framework, int frameworkMajor, int frameworkMinor)
+        [InlineData(".NETStandard", 2, 1, ".NETStandard,Version=v2.1")]
+        [InlineData(".NETCoreApp", 6, 0, "net6.0")]
+        public void GetDotnetDependencys_MissingResolvedPackageVersion(string framework, int frameworkMajor, int frameworkMinor, string projectFileDependencyGroupsName)
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
@@ -368,6 +385,20 @@ namespace CycloneDX.Tests
                                     }
                                 }
                             }
+                        },
+                        Libraries = new[]
+                        {
+                            new LockFileLibrary()
+                            {
+                                Name = "Package1",
+                                Version = new NuGetVersion("1.5.0"),
+                                Type = "package"
+                            }
+                        },
+                        ProjectFileDependencyGroups = new[]
+                        {
+
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" })
                         }
                     };
                 });
@@ -397,9 +428,9 @@ namespace CycloneDX.Tests
         }
 
         [Theory]
-        [InlineData(".NetStandard", 2, 1)]
-        [InlineData("net", 6, 0)]
-        public void GetDotnetDependencys_MissingDependencies(string framework, int frameworkMajor, int frameworkMinor)
+        [InlineData(".NETStandard", 2, 1, ".NETStandard,Version=v2.1")]
+        [InlineData(".NETCoreApp", 6, 0, "net6.0")]
+        public void GetDotnetDependencys_MissingDependencies(string framework, int frameworkMajor, int frameworkMinor, string projectFileDependencyGroupsName)
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
@@ -427,13 +458,16 @@ namespace CycloneDX.Tests
                 .Setup(m => m.Read(It.IsAny<string>()))
                 .Returns(() =>
                 {
-                    var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
+                    var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor));
+                        
+
+
                     return new LockFile
                     {
                         Targets = new[]
                         {
                             new LockFileTarget
-                            {
+                            {                               
                                 TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "",
                                 Libraries = new[]
@@ -491,6 +525,20 @@ namespace CycloneDX.Tests
                                     }
                                 }
                             }
+                        },
+                        Libraries = new[]
+                        {
+                            new LockFileLibrary()
+                            {
+                                Name = "Package1",
+                                Version = new NuGetVersion("1.5.0"),
+                                Type = "package"
+                            }
+                        },
+                        ProjectFileDependencyGroups = new[]
+                        {
+
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" })
                         }
                     };
                 });
