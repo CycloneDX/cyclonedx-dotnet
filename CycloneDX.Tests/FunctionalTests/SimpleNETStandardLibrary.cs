@@ -14,8 +14,8 @@ namespace CycloneDX.Tests.FunctionalTests
     {
         [Fact]
         public async Task TestSimpleNETStandardLibrary()
-        {
-            var assetsJson = File.ReadAllText("FunctionalTests\\TestcaseFiles\\SimpleNETStandardLibrary.json");
+        {            
+            var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "SimpleNETStandardLibrary.json"));
             var options = new RunOptions
             {
             };
