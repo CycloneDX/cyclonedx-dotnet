@@ -5,6 +5,7 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using Xunit;
 
@@ -12,13 +13,16 @@ namespace CycloneDX.Tests.FunctionalTests
 {
     public static class FunctionalTestHelper
     {
+
+        public static async Task<Bom> Test(string assetsJson, RunOptions options) => await Test(assetsJson, options, null);
+
         /// <summary>
         /// Trying to build SBOM from provided parameters and validated the result file
         /// </summary>
         /// <param name="assetsJson"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static async Task<Bom> Test(string assetsJson, RunOptions options)
+        public static async Task<Bom> Test(string assetsJson, RunOptions options, INugetServiceFactory nugetService)
         {
             options.disableGithubLicenses = true;
             options.outputDirectory ??= "/bom/";
@@ -34,7 +38,7 @@ namespace CycloneDX.Tests.FunctionalTests
             });
 
 
-            Runner runner = new Runner(mockFileSystem, null, null, null, null, null, null);
+            Runner runner = new Runner(mockFileSystem, null, null, null, null, null, null, nugetService);
             int exitCode = await runner.HandleCommandAsync(options);
 
             Assert.Equal((int)ExitCode.OK, exitCode);

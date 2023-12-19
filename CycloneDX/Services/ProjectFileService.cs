@@ -139,7 +139,7 @@ namespace CycloneDX.Services
             }
 
             var assetsFilename = _fileSystem.Path.Combine(GetProjectProperty(projectFilePath, baseIntermediateOutputPath), "project.assets.json");
-            if (!File.Exists(assetsFilename))
+            if (!_fileSystem.File.Exists(assetsFilename))
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
             }

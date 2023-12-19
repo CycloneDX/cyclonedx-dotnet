@@ -40,13 +40,16 @@ namespace CycloneDX
         readonly IPackagesFileService packagesFileService;
         readonly IProjectFileService projectFileService;
         readonly ISolutionFileService solutionFileService;
+        readonly INugetServiceFactory nugetServiceFactory;
+
         public Runner(IFileSystem fileSystem,
                       IDotnetCommandService dotnetCommandService,
                       IProjectAssetsFileService projectAssetsFileService,
                       IDotnetUtilsService dotnetUtilsService,
                       IPackagesFileService packagesFileService,
                       IProjectFileService projectFileService,
-                      ISolutionFileService solutionFileService)
+                      ISolutionFileService solutionFileService,
+                      INugetServiceFactory nugetServiceFactory)
         {
             this.fileSystem = fileSystem ?? new FileSystem();
             this.dotnetCommandService = dotnetCommandService ?? new DotnetCommandService();
@@ -55,8 +58,9 @@ namespace CycloneDX
             this.packagesFileService = packagesFileService ?? new PackagesFileService(this.fileSystem);
             this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, projectAssetsFileService);
             this.solutionFileService = solutionFileService ?? new SolutionFileService(this.fileSystem, this.projectFileService);
+            this.nugetServiceFactory = nugetServiceFactory ?? new NugetV3ServiceFactory();
         }
-        public Runner() : this(null, null, null, null, null, null, null) { }
+        public Runner() : this(null, null, null, null, null, null, null, null) { }
 
         public async Task<int> HandleCommandAsync(RunOptions options)
         {
@@ -131,10 +135,8 @@ namespace CycloneDX
                     githubService = new GithubService(new HttpClient());
                 }
             }
-            var nugetLogger = new NuGet.Common.NullLogger();
-            var nugetInput =
-                NugetInputFactory.Create(baseUrl, baseUrlUserName, baseUrlUP, isPasswordClearText);
-            var nugetService = new NugetV3Service(nugetInput, fileSystem, packageCachePathsResult.Result, githubService, nugetLogger, disableHashComputation);
+
+            var nugetService = nugetServiceFactory.Create(options, fileSystem, githubService, packageCachePathsResult.Result);
 
             var packages = new HashSet<DotnetDependency>();
 

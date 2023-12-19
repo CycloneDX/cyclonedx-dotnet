@@ -1,0 +1,136 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "Tsfoni.Dependent/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Tsfoni.Dependency": "1.0.0"
+        },
+        "compile": {
+          "lib/net8.0/Tsfoni.Dependent.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/Tsfoni.Dependent.dll": {}
+        }
+      },
+      "Tsfoni.Dependency/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Tsfoni.Dependency.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Tsfoni.Dependency.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Tsfoni.Dependent/1.0.0": {
+      "sha512": "IZpfcHuN7+sIPhQ246ihcFdBALnnEIRDqXeVF0H3lXbkc7KbJTUxbZVwgS9ds1p7hrKYTMUauQl9I+oAR5cVPQ==",
+      "type": "package",
+      "path": "tsfoni.dependent/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net8.0/Tsfoni.Dependent.dll",
+        "tsfoni.dependent.1.0.0.nupkg.sha512",
+        "tsfoni.dependent.nuspec"
+      ]
+    },
+    "Tsfoni.Dependency/1.0.0": {
+      "type": "project",
+      "path": "../Dependency/Tsfoni.Dependency.csproj",
+      "msbuildProject": "../Dependency/Tsfoni.Dependency.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "Tsfoni.Dependency >= 1.0.0",
+      "Tsfoni.Dependent >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\mibau\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "E:\\src\\CycloneDX-758\\ConsoleApp1\\ConsoleApp1\\ConsoleApp1.csproj",
+      "projectName": "ConsoleApp1",
+      "projectPath": "E:\\src\\CycloneDX-758\\ConsoleApp1\\ConsoleApp1\\ConsoleApp1.csproj",
+      "packagesPath": "C:\\Users\\mibau\\.nuget\\packages\\",
+      "outputPath": "E:\\src\\CycloneDX-758\\ConsoleApp1\\ConsoleApp1\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\mibau\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
+        "http://localhost:8081/repository/nuget-group/index.json": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "E:\\src\\CycloneDX-758\\ConsoleApp1\\Dependency\\Tsfoni.Dependency.csproj": {
+              "projectPath": "E:\\src\\CycloneDX-758\\ConsoleApp1\\Dependency\\Tsfoni.Dependency.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "dependencies": {
+          "Tsfoni.Dependent": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "NU1803",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://localhost:8081/repository/nuget-group/index.json'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
+    }
+  ]
+}

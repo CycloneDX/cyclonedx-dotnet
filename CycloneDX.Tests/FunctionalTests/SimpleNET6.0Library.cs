@@ -1,21 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CycloneDX.Models;
 using Xunit;
 
-
 namespace CycloneDX.Tests.FunctionalTests
 {
-    public class SimpleNETStandardLibrary
+    public class SimpleNET6_0Library
     {
         [Fact]
-        public async Task TestSimpleNETStandardLibrary()
-        {            
-            var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "SimpleNETStandardLibrary.json"));
+        public async Task TestSimpleNET6_0Library()
+        {
+            var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "SimpleNET6.0Library.json"));            
             var options = new RunOptions
             {
             };
