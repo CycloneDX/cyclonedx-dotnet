@@ -44,7 +44,7 @@ namespace CycloneDX.Tests.FunctionalTests
         }
 
 
-        [Fact]
+        [Fact(Timeout = 15000)]
         public async Task Issue758_BaseCase()
         {
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "Issue-758.json"));
@@ -59,7 +59,7 @@ namespace CycloneDX.Tests.FunctionalTests
             Assert.DoesNotContain(bom.Components, c => string.Compare(c.Name, "Tsfoni.Dependency", true) == 0 );
         }
 
-        [Fact]
+        [Fact(Timeout = 15000)]
         public async Task Issue758_IPR()
         {
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "Issue-758.json"));

@@ -16,7 +16,7 @@ namespace CycloneDX.Tests.FunctionalTests
         RunOptions options = new RunOptions
         {};
 
-        [Fact]
+        [Fact(Timeout = 15000)]
         public async Task ProjectReferenceWithPackageReferenceWithTransistivePackage_BaseCase()
         {
             var bom = await FunctionalTestHelper.Test(assetsJson, options);
@@ -25,7 +25,7 @@ namespace CycloneDX.Tests.FunctionalTests
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "Castle.Core", true) == 0 && c.Version == "5.1.1");
         }
 
-        [Fact]
+        [Fact(Timeout = 15000)]
         public async Task ProjectReferenceWithPackageReferenceWithTransistivePackage_Basecase()
         {
             options.includeProjectReferences = true;

@@ -12,7 +12,7 @@ namespace CycloneDX.Tests.FunctionalTests
 {
     public class SimpleNETStandardLibrary
     {
-        [Fact]
+        [Fact(Timeout = 15000)]
         public async Task TestSimpleNETStandardLibrary()
         {            
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "SimpleNETStandardLibrary.json"));
