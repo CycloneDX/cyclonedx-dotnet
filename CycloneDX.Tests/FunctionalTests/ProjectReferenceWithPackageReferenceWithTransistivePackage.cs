@@ -12,8 +12,8 @@ namespace CycloneDX.Tests.FunctionalTests
 {
     public class ProjectReferenceWithPackageReferenceWithTransistivePackage
     {
-        string assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "ProjectReferenceWithPackageReferenceWithTransistivePackage.json"));
-        RunOptions options = new RunOptions
+        readonly string assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "ProjectReferenceWithPackageReferenceWithTransistivePackage.json"));
+        readonly RunOptions options = new RunOptions
         {};
 
         [Fact(Timeout = 15000)]

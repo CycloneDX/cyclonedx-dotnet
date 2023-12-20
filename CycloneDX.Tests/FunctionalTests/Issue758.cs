@@ -13,7 +13,7 @@ namespace CycloneDX.Tests.FunctionalTests
 {
     public class Issue758
     {
-        INugetServiceFactory nugetServiceFactory;
+        readonly INugetServiceFactory nugetServiceFactory;
 
         public Issue758()
         {
