@@ -1,18 +1,49 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
+using CycloneDX.Services;
+using Moq;
 using Xunit;
+using static CycloneDX.Models.Component;
 
 namespace CycloneDX.Tests.FunctionalTests
 {
     public static class FunctionalTestHelper
     {
+        private static INugetServiceFactory CreateMockNugetServiceFactory()
+        {
+            var mockNugetService = new Mock<INugetService>();
+            mockNugetService.Setup(s => s.GetComponentAsync(
+                    It.IsAny<DotnetDependency>()))
+                .Returns((DotnetDependency dep) => Task.FromResult
+                    (new Component
+                    {
+                        Name = dep.Name,
+                        Version = dep.Version,
+                        Type = Classification.Library,
+                        BomRef = $"pkg:nuget/{dep.Name}@{dep.Version}"
+                    }));
+
+            var nugetService = mockNugetService.Object;
+
+            var mockNugetServiceFactory = new Mock<INugetServiceFactory>();
+            mockNugetServiceFactory.Setup(s => s.Create(
+                It.IsAny<RunOptions>(),
+                It.IsAny<IFileSystem>(),
+                It.IsAny<IGithubService>(),
+                It.IsAny<List<string>>()))
+                .Returns(nugetService);
+
+            return mockNugetServiceFactory.Object;
+        }
+
 
         public static async Task<Bom> Test(string assetsJson, RunOptions options) => await Test(assetsJson, options, null);
 
@@ -29,6 +60,8 @@ namespace CycloneDX.Tests.FunctionalTests
             options.outputFilename ??= options.json ? "bom.json" : "bom.xml";
             options.SolutionOrProjectFile ??= MockUnixSupport.Path("c:/ProjectPath/Project.csproj");
             options.disablePackageRestore = true;
+
+            nugetService ??= CreateMockNugetServiceFactory();
 
 
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
