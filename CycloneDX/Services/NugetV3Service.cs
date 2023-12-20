@@ -188,7 +188,9 @@ namespace CycloneDX.Services
             {
                 Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
                 {
-                    var license = new License { Id = nugetLicense.Identifier, Name = nugetLicense.Identifier };
+                    var license = new License();
+                    license.Id = nugetLicense.Identifier;
+                    license.Name = license.Id == null ? nugetLicense.Identifier : null;
                     component.Licenses ??= new List<LicenseChoice>();
                     component.Licenses.Add(new LicenseChoice { License = license });
                 };
@@ -220,10 +222,7 @@ namespace CycloneDX.Services
                             license = await _githubService.GetLicenseAsync($"{repository.Url}/blob/{repository.Commit}/licence").ConfigureAwait(false);
                         }
 
-                        if (license == null)
-                        {
-                            license = await _githubService.GetLicenseAsync(repository.Url).ConfigureAwait(false);
-                        }
+                        license ??= await _githubService.GetLicenseAsync(repository.Url).ConfigureAwait(false);
                     }
                 }
 

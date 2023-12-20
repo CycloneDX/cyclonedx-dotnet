@@ -15,7 +15,7 @@ namespace CycloneDX.Tests
     /// </summary>
     public class ValidationTests
     {
-        [Theory(Skip = "Test is accessing internet")]
+        [Theory]
         [InlineData("xml", false)]
         [InlineData("xml", true)]
         [InlineData("json", false)]
@@ -69,11 +69,11 @@ namespace CycloneDX.Tests
             ValidationResult validationResult;
             if (fileFormat == "json")
             {
-                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_4).ConfigureAwait(false);
+                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_5).ConfigureAwait(false);
             }
             else
             {
-                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_4);
+                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_5);
             }
 
             Assert.True(validationResult.Valid);
