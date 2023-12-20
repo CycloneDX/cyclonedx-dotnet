@@ -234,7 +234,7 @@ namespace CycloneDX
                     var dependenciesOfProjects = projectReferences.SelectMany(p => p.Dependencies);
                     var newDirectDependencies = packages.Join(dependenciesOfProjects, p => p.Name + '@' + p.Version, d => d.Key + '@' + d.Value, (p, _) => p);
                     newDirectDependencies.ToList().ForEach(p => p.IsDirectReference = true);
-                    //remove all dependencies of packages to project references (https://github.com/CycloneDX/cyclonedx-dotnet/issues/758)
+                    //remove all dependencies of packages to project references (https://github.com/CycloneDX/cyclonedx-dotnet/issues/785)
                     var projectReferencesNames = projectReferences.Select(p => p.Name);
                     foreach (var package in packages)
                     {
