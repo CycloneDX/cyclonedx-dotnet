@@ -109,5 +109,11 @@ namespace CycloneDX.Tests.FunctionalTests
             "</ItemGroup>\n" +
         "</Project>\n";
 
+        public static void AssertHasDependencyWithChild(Bom bom, string dependencyBomRef, string childBomRef)
+            => AssertHasDependencyWithChild(bom, dependencyBomRef, childBomRef, null);
+        public static void AssertHasDependencyWithChild(Bom bom, string dependencyBomRef, string childBomRef, string message)
+        {
+            Assert.True(bom.Dependencies.Any(dep => dep.Ref == dependencyBomRef && dep.Dependencies.Any(child => child.Ref == childBomRef)), message);
+        }
     }
 }

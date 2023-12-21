@@ -35,6 +35,8 @@ namespace CycloneDX.Tests.FunctionalTests
             Assert.True(bom.Components.Count == 4, "Unexpected amount of components");
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "ClassLibrary1", true) == 0 && c.Version == "1.0.0");
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "Castle.Core", true) == 0 && c.Version == "5.1.1");
+
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "ClassLibrary1@1.0.0", "pkg:nuget/Castle.Core@5.1.1", "expected dependency not found");
         }
     }
 }

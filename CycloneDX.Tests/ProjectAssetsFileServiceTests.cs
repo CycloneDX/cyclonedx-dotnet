@@ -389,7 +389,7 @@ namespace CycloneDX.Tests
                         },
                         Libraries = new[]
                         {
-                            new LockFileLibrary()
+                            new LockFileLibrary
                             {
                                 Name = "Package1",
                                 Version = new NuGetVersion("1.5.0"),

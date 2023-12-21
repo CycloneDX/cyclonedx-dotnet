@@ -25,11 +25,24 @@ using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using Moq;
 using CycloneDX.Models;
 using CycloneDX.Services;
+using System.IO.Abstractions;
 
 namespace CycloneDX.Tests
 {
     public class ProjectFileServiceTests
     {
+        private ProjectFileService GetInstanceOfProjectFileService()
+        {
+            var fileSystem = new FileSystem();
+            var dotnetCommandService = new DotnetCommandService();
+            return new ProjectFileService(
+                fileSystem,
+                new DotnetUtilsService(fileSystem, dotnetCommandService),
+                new PackagesFileService(fileSystem),
+                new ProjectAssetsFileService(fileSystem, dotnetCommandService, () => new AssetFileReader()));
+
+        }
+
         [Theory]
         [InlineData(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.csproj", "", @"C:\github\cyclonedx-dotnet\Core\obj")]
         [InlineData(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.csproj", @"C:\github\cyclonedx-dotnet\artifacts", @"C:\github\cyclonedx-dotnet\artifacts\obj\CycloneDX")]
@@ -39,18 +52,18 @@ namespace CycloneDX.Tests
           Assert.Equal(XFS.Path(expected), outputPath);
         }
 
-        [Fact(Skip = "ProjectFileService needs instance")]        
+        [Fact]        
         public void IsTestProjectTrue()
         {
             string szProjectPath = System.Environment.CurrentDirectory + XFS.Path(@"\..\..\..\..\CycloneDX.Tests\CycloneDX.Tests.csproj");
-            //Assert.True(new ProjectFileService().IsTestProject(szProjectPath));
+            Assert.True(GetInstanceOfProjectFileService().IsTestProject(szProjectPath));
         }
 
-        [Fact(Skip = "ProjectFileService needs instance")]        
+        [Fact]        
         public void IsTestProjectFalse()
         {
             string szProjectPath = System.Environment.CurrentDirectory + XFS.Path(@"\..\..\..\..\CycloneDX\CycloneDX.csproj");
-            //Assert.False(ProjectFileService.IsTestProject(szProjectPath));
+            Assert.False(GetInstanceOfProjectFileService().IsTestProject(szProjectPath));
         }
 
         [Fact]
