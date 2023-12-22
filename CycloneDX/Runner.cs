@@ -155,6 +155,11 @@ namespace CycloneDX
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
+                    if(options.includeProjectReferences)
+                    {
+                        Console.Error.WriteLine("Option -ipr can only be used with a project file");
+                        return (int)ExitCode.InvalidOptions;
+                    }
                     packages = await solutionFileService.GetSolutionDotnetDependencys(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }

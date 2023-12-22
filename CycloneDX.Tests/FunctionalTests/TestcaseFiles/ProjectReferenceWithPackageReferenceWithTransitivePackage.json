@@ -170,11 +170,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\src\\CycloneDX-785\\TransistiveDeps\\TransistiveDeps\\TransistiveDeps.csproj",
-      "projectName": "TransistiveDeps",
-      "projectPath": "E:\\src\\CycloneDX-785\\TransistiveDeps\\TransistiveDeps\\TransistiveDeps.csproj",
+      "projectUniqueName": "E:\\src\\CycloneDX-785\\TransitiveDeps\\TransitiveDeps\\TransitiveDeps.csproj",
+      "projectName": "TransitiveDeps",
+      "projectPath": "E:\\src\\CycloneDX-785\\TransitiveDeps\\TransitiveDeps\\TransitiveDeps.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "E:\\src\\CycloneDX-785\\TransistiveDeps\\TransistiveDeps\\obj\\",
+      "outputPath": "E:\\src\\CycloneDX-785\\TransitiveDeps\\TransitiveDeps\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -197,8 +197,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "E:\\src\\CycloneDX-785\\TransistiveDeps\\ClassLibrary1\\ClassLibrary1.csproj": {
-              "projectPath": "E:\\src\\CycloneDX-785\\TransistiveDeps\\ClassLibrary1\\ClassLibrary1.csproj"
+            "E:\\src\\CycloneDX-785\\TransitiveDeps\\ClassLibrary1\\ClassLibrary1.csproj": {
+              "projectPath": "E:\\src\\CycloneDX-785\\TransitiveDeps\\ClassLibrary1\\ClassLibrary1.csproj"
             }
           }
         }

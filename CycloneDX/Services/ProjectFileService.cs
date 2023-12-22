@@ -64,7 +64,7 @@ namespace CycloneDX.Services
             XmlDocument xmldoc = new XmlDocument();
             try
             {
-                var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
+                using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
                 xmldoc.Load(fileStream);
             }
             catch(DirectoryNotFoundException /*ex*/)

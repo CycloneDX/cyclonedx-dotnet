@@ -10,14 +10,14 @@ using Xunit;
 
 namespace CycloneDX.Tests.FunctionalTests
 {
-    public class ProjectReferenceWithPackageReferenceWithTransistivePackage
+    public class ProjectReferenceWithPackageReferenceWithTransitivePackage
     {
-        readonly string assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "ProjectReferenceWithPackageReferenceWithTransistivePackage.json"));
+        readonly string assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "ProjectReferenceWithPackageReferenceWithTransitivePackage.json"));
         readonly RunOptions options = new RunOptions
         {};
 
         [Fact(Timeout = 15000)]
-        public async Task ProjectReferenceWithPackageReferenceWithTransistivePackage_BaseCase()
+        public async Task ProjectReferenceWithPackageReferenceWithTransitivePackage_BaseCase()
         {
             var bom = await FunctionalTestHelper.Test(assetsJson, options);
 
@@ -26,7 +26,7 @@ namespace CycloneDX.Tests.FunctionalTests
         }
 
         [Fact(Timeout = 15000)]
-        public async Task ProjectReferenceWithPackageReferenceWithTransistivePackage_Basecase()
+        public async Task ProjectReferenceWithPackageReferenceWithTransitivePackage_includeProjectReferences()
         {
             options.includeProjectReferences = true;
 
