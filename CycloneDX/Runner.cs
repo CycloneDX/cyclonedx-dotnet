@@ -141,7 +141,7 @@ namespace CycloneDX
             var packages = new HashSet<DotnetDependency>();
 
             // determine what we are analyzing and do the analysis
-            var fullSolutionOrProjectFilePath = this.fileSystem.Path.GetFullPath(SolutionOrProjectFile);            
+            var fullSolutionOrProjectFilePath = this.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
 
             var topLevelComponent = new Component
             {
@@ -151,15 +151,24 @@ namespace CycloneDX
 
             };
 
+
+            if (options.includeProjectReferences
+                &&
+                    (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)
+                    ||
+                    fileSystem.Directory.Exists(fullSolutionOrProjectFilePath)
+                    ||
+                    this.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase)))
+            {
+                Console.Error.WriteLine("Option -ipr can only be used with a project file");
+                return (int)ExitCode.InvalidOptions;
+            }
+
+
             try
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
-                    if(options.includeProjectReferences)
-                    {
-                        Console.Error.WriteLine("Option -ipr can only be used with a project file");
-                        return (int)ExitCode.InvalidOptions;
-                    }
                     packages = await solutionFileService.GetSolutionDotnetDependencys(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
@@ -232,7 +241,7 @@ namespace CycloneDX
                         bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture), (component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
                     }
                 }
-                if(!options.includeProjectReferences)
+                if (!options.includeProjectReferences)
                 {
                     var projectReferences = packages.Where(p => p.DependencyType == DependencyType.Project);
                     // Change all packages that are refered to by a project to direct dependency
@@ -384,7 +393,7 @@ namespace CycloneDX
             return 0;
         }
 
-  
+
 
         private static void SetMetadataComponentIfNecessary(Bom bom, Component topLevelComponent)
         {
