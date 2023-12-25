@@ -254,7 +254,7 @@ namespace CycloneDX
                     {
                         foreach (var refName in projectReferencesNames)
                         {
-                            package.Dependencies.Remove(refName);
+                            package.Dependencies?.Remove(refName);
                         }
                     }
 

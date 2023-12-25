@@ -24,14 +24,18 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
+using NuGet.ContentModel;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using NuGet.Packaging;
 
 namespace CycloneDX.Services
 {
     public class DotnetRestoreException : Exception
     {
-        public DotnetRestoreException(string message) : base(message) {}
+        public DotnetRestoreException(string message) : base(message) { }
 
-        public DotnetRestoreException(string message, Exception innerException) : base(message, innerException) {}
+        public DotnetRestoreException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class ProjectFileService : IProjectFileService
@@ -62,28 +66,67 @@ namespace CycloneDX.Services
         public bool IsTestProject(string projectFilePath)
         {
             XmlDocument xmldoc = new XmlDocument();
-            try
-            {
-                using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
-                xmldoc.Load(fileStream);
-            }
-            catch(DirectoryNotFoundException /*ex*/)
-            {
-                // can only happen while testing (because it will be checked before this method is called)
-                return false;
-            }
+            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
+            xmldoc.Load(fileStream);
 
             XmlElement testSdkReference = xmldoc.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.NET.Test.Sdk']") as XmlElement;
             if (testSdkReference != null)
             {
                 return true;
             }
-            
+
             XmlElement testProjectPropertyGroup = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
             return testProjectPropertyGroup != null;
         }
 
-        static internal String GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
+        private (string name, string version) GetProjectNameAndVersion(string projectFilePath)
+        {
+            string name = null;
+            string version = null;
+
+
+
+            XmlDocument xmldoc = new XmlDocument();
+            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
+            xmldoc.Load(fileStream);
+
+            XmlNamespaceManager namespaces = new XmlNamespaceManager(xmldoc.NameTable);
+            namespaces.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+            name = (xmldoc.SelectSingleNode("/Project/PropertyGroup/AssemblyName") as XmlElement)?.Value
+                ?? (xmldoc.SelectSingleNode("/Project/PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.Value
+                ?? _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
+
+            // Extract Version
+            XmlElement versionElement = xmldoc.SelectSingleNode("/Project/PropertyGroup/Version") as XmlElement;
+            version = versionElement?.Value;
+
+            if (version == null)
+            {                
+                string assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "Properties", "AssemblyInfo.cs");
+                if (_fileSystem.File.Exists(assemblyInfoPath))
+                {
+                    
+                    string[] lines = _fileSystem.File.ReadAllLines(assemblyInfoPath);
+                    string pattern = @"^\[assembly: AssemblyVersion\(""(?<Version>.*?)""\)\]$";
+
+                    foreach (var line in lines)
+                    {                        
+                        Match match = Regex.Match(line, pattern);
+                        
+                        if (match.Success)
+                        {                            
+                            version = match.Groups["Version"].Value;                                                        
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return (name, version);
+        }
+
+        static internal string GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
         {
             if (string.IsNullOrEmpty(baseIntermediateOutputPath))
             {
@@ -122,7 +165,8 @@ namespace CycloneDX.Services
                 return new HashSet<DotnetDependency>();
             }
 
-            if (!DisablePackageRestore) {
+            if (!DisablePackageRestore)
+            {
                 Console.WriteLine("  Attempting to restore packages");
                 var restoreResult = _dotnetUtilsService.Restore(projectFilePath, framework, runtime);
 
@@ -170,11 +214,29 @@ namespace CycloneDX.Services
         {
             var DotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
             var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
+
+            //Remove root-project, it will be added to the metadata
+            var rootProject = projectReferences.FirstOrDefault(p => p.Path == projectFilePath);
+            projectReferences.Where(p => rootProject.Dependencies.ContainsKey(p.Path)).ToList().ForEach(p => p.IsDirectReference = true);
+            projectReferences.Remove(rootProject);
+
+
             foreach (var project in projectReferences)
             {
-                var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
+                var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project.Path, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
+
+                foreach (var dependency in projectDotnetDependencys)
+                {
+                    project.Dependencies.Add(dependency.Name, dependency.Version);
+                }
+
                 DotnetDependencys.UnionWith(projectDotnetDependencys);
             }
+
+            //When there is a project.assets.json, the project references are already added, so check before adding
+            var allAddedDepedencyNames = DotnetDependencys.Select(dep => dep.Name);
+            DotnetDependencys.UnionWith(projectReferences.Where(pr => !allAddedDepedencyNames.Contains(pr.Name)));
+
             return DotnetDependencys;
         }
 
@@ -235,9 +297,9 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<string>> RecursivelyGetProjectReferencesAsync(string projectFilePath)
+        public async Task<HashSet<DotnetDependency>> RecursivelyGetProjectReferencesAsync(string projectFilePath)
         {
-            var projectReferences = new HashSet<string>();
+            var projectReferences = new HashSet<DotnetDependency>();
 
             // Initialize the queue with the current project file
             var files = new Queue<string>();
@@ -250,6 +312,18 @@ namespace CycloneDX.Services
                 var currentFile = files.Dequeue();
                 // Find all project references inside of currentFile
                 var foundProjectReferences = await GetProjectReferencesAsync(currentFile).ConfigureAwait(false);
+                
+                var nameAndVersion = GetProjectNameAndVersion(currentFile);
+
+                DotnetDependency dependency = new();
+                dependency.Name = nameAndVersion.name;
+                dependency.Version = nameAndVersion.version ?? "undefined";
+                dependency.Path = currentFile;
+                dependency.Dependencies = foundProjectReferences.ToDictionary(key => key, value => (string)null);
+                dependency.Scope = Component.ComponentScope.Required;
+                dependency.DependencyType = DependencyType.Project;
+                dependency.Dependencies = new Dictionary<string, string>();
+                projectReferences.Add(dependency);
 
                 // Add unvisited project files to the queue
                 // Loop through found project references
@@ -258,7 +332,6 @@ namespace CycloneDX.Services
                     if (!visitedProjectFiles.Contains(projectReferencePath))
                     {
                         files.Enqueue(projectReferencePath);
-                        projectReferences.Add(projectReferencePath);
                     }
                 }
 
@@ -269,6 +342,8 @@ namespace CycloneDX.Services
             return projectReferences;
         }
 
+
+
         public Component GetComponent(DotnetDependency dotnetDependency)
         {
             if (dotnetDependency?.DependencyType != DependencyType.Project)
@@ -277,14 +352,6 @@ namespace CycloneDX.Services
             }
             var component = SetupComponent(dotnetDependency.Name, dotnetDependency.Version, Component.ComponentScope.Required);
 
-            try
-            {
-                //Read Information from CSPROJ
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine($"Error when reading project file: {dotnetDependency.Path}\r\n{ex}");
-            }
             return component;
         }
 
@@ -295,10 +362,10 @@ namespace CycloneDX.Services
             {
                 Name = name,
                 Version = version,
-                Scope = scope,            
+                Scope = scope,
                 Type = Component.Classification.Library,
                 BomRef = $"{name}@{version}"
-            };            
+            };
             return component;
         }
     }

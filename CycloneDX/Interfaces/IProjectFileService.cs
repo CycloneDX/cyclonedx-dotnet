@@ -25,9 +25,9 @@ namespace CycloneDX.Interfaces
     {
         bool DisablePackageRestore { get; set; }
         Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime);
-        Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime);
         Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);
-        Task<HashSet<string>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
+        Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime);
+        Task<HashSet<DotnetDependency>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
         Component GetComponent(DotnetDependency dotnetDependency);
         bool IsTestProject(string projectFilePath);
     }

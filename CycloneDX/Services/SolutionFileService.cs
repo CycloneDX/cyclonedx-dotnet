@@ -71,7 +71,7 @@ namespace CycloneDX.Services
             foreach (var project in projectList)
             {
                 var projectReferences = await _projectFileService.RecursivelyGetProjectReferencesAsync(project).ConfigureAwait(false);
-                projects.UnionWith(projectReferences);
+                projects.UnionWith(projectReferences.Select(dep => dep.Path));
             }
 
             return projects;

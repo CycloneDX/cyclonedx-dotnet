@@ -26,6 +26,7 @@ using Moq;
 using CycloneDX.Models;
 using CycloneDX.Services;
 using System.IO.Abstractions;
+using System.Linq;
 
 namespace CycloneDX.Tests
 {
@@ -317,10 +318,11 @@ namespace CycloneDX.Tests
                 mockProjectAssetsFileService.Object);
 
             var projects = await projectFileService.RecursivelyGetProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj")).ConfigureAwait(false);
-            var sortedProjects = new List<string>(projects);
+            var sortedProjects = new List<string>(projects.Select(d => d.Path));
             sortedProjects.Sort();
 
             Assert.Collection(sortedProjects,
+                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), item),
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), item),
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), item));
         }
