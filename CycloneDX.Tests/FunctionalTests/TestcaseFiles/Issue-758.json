@@ -2,52 +2,52 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "Tsfoni.Dependent/1.0.0": {
+      "User.Dependent/1.0.0": {
         "type": "package",
         "dependencies": {
-          "Tsfoni.Dependency": "1.0.0"
+          "User.Dependency": "1.0.0"
         },
         "compile": {
-          "lib/net8.0/Tsfoni.Dependent.dll": {}
+          "lib/net8.0/User.Dependent.dll": {}
         },
         "runtime": {
-          "lib/net8.0/Tsfoni.Dependent.dll": {}
+          "lib/net8.0/User.Dependent.dll": {}
         }
       },
-      "Tsfoni.Dependency/1.0.0": {
+      "User.Dependency/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "compile": {
-          "bin/placeholder/Tsfoni.Dependency.dll": {}
+          "bin/placeholder/User.Dependency.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Tsfoni.Dependency.dll": {}
+          "bin/placeholder/User.Dependency.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Tsfoni.Dependent/1.0.0": {
+    "User.Dependent/1.0.0": {
       "sha512": "IZpfcHuN7+sIPhQ246ihcFdBALnnEIRDqXeVF0H3lXbkc7KbJTUxbZVwgS9ds1p7hrKYTMUauQl9I+oAR5cVPQ==",
       "type": "package",
-      "path": "tsfoni.dependent/1.0.0",
+      "path": "User.dependent/1.0.0",
       "files": [
         ".nupkg.metadata",
-        "lib/net8.0/Tsfoni.Dependent.dll",
-        "tsfoni.dependent.1.0.0.nupkg.sha512",
-        "tsfoni.dependent.nuspec"
+        "lib/net8.0/User.Dependent.dll",
+        "User.dependent.1.0.0.nupkg.sha512",
+        "User.dependent.nuspec"
       ]
     },
-    "Tsfoni.Dependency/1.0.0": {
+    "User.Dependency/1.0.0": {
       "type": "project",
-      "path": "../Dependency/Tsfoni.Dependency.csproj",
-      "msbuildProject": "../Dependency/Tsfoni.Dependency.csproj"
+      "path": "../Dependency/User.Dependency.csproj",
+      "msbuildProject": "../Dependency/User.Dependency.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Tsfoni.Dependency >= 1.0.0",
-      "Tsfoni.Dependent >= 1.0.0"
+      "User.Dependency >= 1.0.0",
+      "User.Dependent >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -84,8 +84,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\src\\CycloneDX-758\\ConsoleApp1\\Dependency\\Tsfoni.Dependency.csproj": {
-              "projectPath": "E:\\src\\CycloneDX-758\\ConsoleApp1\\Dependency\\Tsfoni.Dependency.csproj"
+            "E:\\src\\CycloneDX-758\\ConsoleApp1\\Dependency\\User.Dependency.csproj": {
+              "projectPath": "E:\\src\\CycloneDX-758\\ConsoleApp1\\Dependency\\User.Dependency.csproj"
             }
           }
         }
@@ -100,7 +100,7 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
-          "Tsfoni.Dependent": {
+          "User.Dependent": {
             "target": "Package",
             "version": "[1.0.0, )"
           }

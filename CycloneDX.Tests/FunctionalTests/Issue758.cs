@@ -20,14 +20,14 @@ namespace CycloneDX.Tests.FunctionalTests
             var mockNugetService = new Mock<INugetService>();
             mockNugetService.Setup(s => s.GetComponentAsync(
                     It.Is<DotnetDependency>(dep =>
-                        dep.Name == "Tsfoni.Dependent" &&
+                        dep.Name == "User.Dependent" &&
                         dep.Version == "1.0.0")))
                 .Returns(Task.FromResult
                     (new Component {
-                        Name = "Tsfoni.Dependent",
+                        Name = "User.Dependent",
                         Version = "1.0.0",
                         Type = Classification.Library,
-                        BomRef = "pkg:nuget/Tsfoni.Dependent@1.0.0"
+                        BomRef = "pkg:nuget/User.Dependent@1.0.0"
                     }));
 
             var nugetService = mockNugetService.Object;
@@ -55,8 +55,8 @@ namespace CycloneDX.Tests.FunctionalTests
             var bom = await FunctionalTestHelper.Test(assetsJson, options, nugetServiceFactory);
 
             Assert.True(bom.Components.Count == 1);
-            Assert.Contains(bom.Components, c => string.Compare(c.Name, "Tsfoni.Dependent", true) == 0 && c.Version == "1.0.0");
-            Assert.DoesNotContain(bom.Components, c => string.Compare(c.Name, "Tsfoni.Dependency", true) == 0 );
+            Assert.Contains(bom.Components, c => string.Compare(c.Name, "User.Dependent", true) == 0 && c.Version == "1.0.0");
+            Assert.DoesNotContain(bom.Components, c => string.Compare(c.Name, "User.Dependency", true) == 0 );
         }
 
         [Fact(Timeout = 15000)]
@@ -71,8 +71,8 @@ namespace CycloneDX.Tests.FunctionalTests
             var bom = await FunctionalTestHelper.Test(assetsJson, options, nugetServiceFactory);
 
             Assert.True(bom.Components.Count == 2);
-            Assert.Contains(bom.Components, c => string.Compare(c.Name, "Tsfoni.Dependent", true) == 0 && c.Version == "1.0.0");
-            Assert.Contains(bom.Components, c => string.Compare(c.Name, "Tsfoni.Dependency", true) == 0 && c.Version == "1.0.0");
+            Assert.Contains(bom.Components, c => string.Compare(c.Name, "User.Dependent", true) == 0 && c.Version == "1.0.0");
+            Assert.Contains(bom.Components, c => string.Compare(c.Name, "User.Dependency", true) == 0 && c.Version == "1.0.0");
         }
     }
 }
