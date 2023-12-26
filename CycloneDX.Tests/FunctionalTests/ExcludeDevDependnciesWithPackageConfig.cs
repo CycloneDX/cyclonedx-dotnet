@@ -30,7 +30,8 @@ namespace CycloneDX.Tests.FunctionalTests
         [Fact]
         public async Task DevDependenciesNormalyGoIntoTheBom()
         {
-            await Console.Out.WriteLineAsync($"Run test: DevDependenciesNormalyGoIntoTheBom");
+            await Console.Out.WriteLineAsync($"Run test: DevDependenciesNormalyGoIntoTheBom");            
+            Console.SetError(Console.Out);            
 
             var options = new RunOptions
             {

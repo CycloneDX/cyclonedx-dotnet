@@ -203,7 +203,7 @@ namespace CycloneDX
                 return (int)ExitCode.DotnetRestoreFailed;
             }
 
-            await Console.Out.WriteLineAsync($"Found {packages.Count()} packages so far");
+            await Console.Out.WriteLineAsync($"Found {packages.Count()} packages");
 
 
             if (!string.IsNullOrEmpty(setName))
