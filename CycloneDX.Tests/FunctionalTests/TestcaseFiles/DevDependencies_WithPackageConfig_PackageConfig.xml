@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packages>
+  <package id="SonarAnalyzer.CSharp" version="9.16.0.82469" targetFramework="net48" developmentDependency="true" />
+</packages>

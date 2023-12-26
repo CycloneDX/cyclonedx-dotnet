@@ -22,6 +22,7 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
+using System.Linq;
 
 namespace CycloneDX.Services
 {
@@ -57,11 +58,15 @@ namespace CycloneDX.Services
                     {
                         if (reader.IsStartElement() && reader.Name == "package")
                         {
-                            packages.Add(new DotnetDependency
+                            var newPackage = new DotnetDependency
                             {
                                 Name = reader["id"],
                                 Version = reader["version"],
-                            });
+                                IsDevDependency = reader["developmentDependency"] == "true",
+                                Scope = Component.ComponentScope.Required
+                            };
+
+                            packages.Add(newPackage);                            
                         }
                     }
                 }

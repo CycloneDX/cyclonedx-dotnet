@@ -41,7 +41,7 @@ namespace CycloneDX.Services
             _assetFileReaderFactory = assetFileReaderFactory;
         }
 
-        public HashSet<DotnetDependency> GetDotnetDependencys(string projectFilePath, string projectAssetsFilePath, bool isTestProject, bool excludeDev)
+        public HashSet<DotnetDependency> GetDotnetDependencys(string projectFilePath, string projectAssetsFilePath, bool isTestProject)
         {
             var packages = new HashSet<DotnetDependency>();
 
@@ -84,7 +84,7 @@ namespace CycloneDX.Services
                         };
 
                         // is this a test project dependency or only a development dependency
-                        if ( isTestProject || (package.IsDevDependency && excludeDev))
+                        if ( isTestProject)
                         {
                             package.Scope = Component.ComponentScope.Excluded;
                         }
