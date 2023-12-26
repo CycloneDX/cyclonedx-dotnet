@@ -46,9 +46,9 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="packagesFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> GetNugetPackagesAsync(string packagesFilePath)
+        public async Task<HashSet<DotnetDependency>> GetDotnetDependencysAsync(string packagesFilePath)
         {
-            var packages = new HashSet<NugetPackage>();
+            var packages = new HashSet<DotnetDependency>();
             using (StreamReader fileReader = _fileSystem.File.OpenText(packagesFilePath))
             {
                 using (XmlReader reader = XmlReader.Create(fileReader, _xmlReaderSettings))
@@ -57,7 +57,7 @@ namespace CycloneDX.Services
                     {
                         if (reader.IsStartElement() && reader.Name == "package")
                         {
-                            packages.Add(new NugetPackage
+                            packages.Add(new DotnetDependency
                             {
                                 Name = reader["id"],
                                 Version = reader["version"],
@@ -74,14 +74,14 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="directoryPath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> RecursivelyGetNugetPackagesAsync(string directoryPath)
+        public async Task<HashSet<DotnetDependency>> RecursivelyGetDotnetDependencysAsync(string directoryPath)
         {
-            var packages = new HashSet<NugetPackage>();
+            var packages = new HashSet<DotnetDependency>();
             var packageFiles = _fileDiscoveryService.GetPackagesConfigFiles(directoryPath);
 
             foreach (var packageFile in packageFiles)
             {
-                var newPackages = await GetNugetPackagesAsync(packageFile).ConfigureAwait(false);
+                var newPackages = await GetDotnetDependencysAsync(packageFile).ConfigureAwait(false);
                 packages.UnionWith(newPackages);
             }
 

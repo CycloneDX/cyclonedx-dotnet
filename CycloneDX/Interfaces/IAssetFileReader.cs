@@ -23,6 +23,7 @@ namespace CycloneDX.Interfaces
     public interface IAssetFileReader
     {
         LockFile Read(string filePath);
+        LockFile Read(Stream stream, string path);
         string ReadAllText(string filePath)
         {
             return File.ReadAllText(filePath);

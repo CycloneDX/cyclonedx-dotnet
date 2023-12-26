@@ -20,117 +20,117 @@ using CycloneDX.Models;
 
 namespace CycloneDX.Tests
 {
-    public class NugetPackageTests
+    public class DotnetDependencyTests
     {
         [Fact]
-        public void SameNugetPackageVersions_AreEqual()
+        public void SameDotnetDependencyVersions_AreEqual()
         {
-            var nugetPackage1 = new NugetPackage
+            var DotnetDependency1 = new DotnetDependency
             {
                 Name = "Package",
                 Version = "1.2.3",
             };
-            var nugetPackage2 = new NugetPackage
+            var DotnetDependency2 = new DotnetDependency
             {
                 Name = "Package",
                 Version = "1.2.3",
             };
 
-            Assert.True(nugetPackage1.Equals((object)nugetPackage2));
+            Assert.True(DotnetDependency1.Equals((object)DotnetDependency2));
         }
 
         [Fact]
-        public void SameNugetPackages_WithDifferentVersions_AreNotEqual()
+        public void SameDotnetDependencys_WithDifferentVersions_AreNotEqual()
         {
-            var nugetPackage1 = new NugetPackage
+            var DotnetDependency1 = new DotnetDependency
             {
                 Name = "Package",
                 Version = "1.2.3",
             };
-            var nugetPackage2 = new NugetPackage
+            var DotnetDependency2 = new DotnetDependency
             {
                 Name = "Package",
                 Version = "1.2.4",
             };
 
-            Assert.False(nugetPackage1.Equals((object)nugetPackage2));
+            Assert.False(DotnetDependency1.Equals((object)DotnetDependency2));
         }
 
         [Fact]
-        public void DifferentNugetPackages_WithSameVersions_AreNotEqual()
+        public void DifferentDotnetDependencys_WithSameVersions_AreNotEqual()
         {
-            var nugetPackage1 = new NugetPackage
+            var DotnetDependency1 = new DotnetDependency
             {
                 Name = "Package1",
                 Version = "1.2.3",
             };
-            var nugetPackage2 = new NugetPackage
+            var DotnetDependency2 = new DotnetDependency
             {
                 Name = "Package2",
                 Version = "1.2.3",
             };
 
-            Assert.False(nugetPackage1.Equals((object)nugetPackage2));
+            Assert.False(DotnetDependency1.Equals((object)DotnetDependency2));
         }
 
         [Fact]
-        public void NullNugetPackage_IsNotEqual()
+        public void NullDotnetDependency_IsNotEqual()
         {
-            var nugetPackage1 = new NugetPackage
+            var DotnetDependency1 = new DotnetDependency
             {
                 Name = "Package",
                 Version = "1.2.3",
             };
 
-            // cast null as string to flex Equals(object obj) and Equals(NugetPackage other)
-            Assert.False(nugetPackage1.Equals((string)null));
+            // cast null as string to flex Equals(object obj) and Equals(DotnetDependency other)
+            Assert.False(DotnetDependency1.Equals((string)null));
         }
 
         [Fact]
-        public void NugetPackages_AreSortedByName()
+        public void DotnetDependencys_AreSortedByName()
         {
-            var nugetPackage1 = new NugetPackage
+            var DotnetDependency1 = new DotnetDependency
             {
                 Name = "Package1",
                 Version = "1.2.3",
             };
-            var nugetPackage2 = new NugetPackage
+            var DotnetDependency2 = new DotnetDependency
             {
                 Name = "Package2",
                 Version = "1.2.3",
             };
 
-            Assert.Equal(-1, nugetPackage1.CompareTo(nugetPackage2));
+            Assert.Equal(-1, DotnetDependency1.CompareTo(DotnetDependency2));
         }
 
         [Fact]
-        public void TheSameNugetPackages_AreSortedByVersion()
+        public void TheSameDotnetDependencys_AreSortedByVersion()
         {
-            var nugetPackage1 = new NugetPackage
+            var DotnetDependency1 = new DotnetDependency
             {
                 Name = "Package",
                 Version = "1.2.3",
             };
-            var nugetPackage2 = new NugetPackage
+            var DotnetDependency2 = new DotnetDependency
             {
                 Name = "Package",
                 Version = "1.2.4",
             };
 
-            Assert.Equal(-1, nugetPackage1.CompareTo(nugetPackage2));
+            Assert.Equal(-1, DotnetDependency1.CompareTo(DotnetDependency2));
         }
 
         [Fact]
-        public void NullNugetPackages_AreSortedFirst()
+        public void NullDotnetDependencys_AreSortedFirst()
         {
-            var nugetPackage = new NugetPackage
+            var DotnetDependency = new DotnetDependency
             {
                 Name = "Package1",
                 Version = "1.2.3",
             };
 
-            // cast null as string to flex CompareTo(object obj) and CompareTo(NugetPackage other)
-            Assert.Equal(1, nugetPackage.CompareTo((string)null));
+            // cast null as string to flex CompareTo(object obj) and CompareTo(DotnetDependency other)
+            Assert.Equal(1, DotnetDependency.CompareTo((string)null));
         }
     }
 }

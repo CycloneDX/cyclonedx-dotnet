@@ -55,10 +55,10 @@ namespace CycloneDX.Tests
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
-                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<NugetPackage>());
+                .Setup(s => s.GetSolutionDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>());
 
-            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object);
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object, null);
 
             RunOptions runOptions = new RunOptions
             {
@@ -80,10 +80,10 @@ namespace CycloneDX.Tests
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
-                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<NugetPackage>());
+                .Setup(s => s.GetSolutionDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>());
 
-            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object);            
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object, null);            
 
             RunOptions runOptions = new RunOptions
             {
@@ -106,9 +106,9 @@ namespace CycloneDX.Tests
             bom = Runner.ReadMetaDataFromFile(bom, Path.Join(resourcePath, "cycloneDX-metadata-template.xml"));
             Assert.NotNull(bom.Metadata);
             Assert.Matches("CycloneDX", bom.Metadata.Component.Name);
-            Assert.NotEmpty(bom.Metadata.Tools);
-            Assert.Matches("CycloneDX", bom.Metadata.Tools[0].Vendor);
-            Assert.Matches("1.2.0", bom.Metadata.Tools[0].Version);
+            Assert.NotEmpty(bom.Metadata.Tools.Tools);
+            Assert.Matches("CycloneDX", bom.Metadata.Tools.Tools[0].Vendor);
+            Assert.Matches("1.2.0", bom.Metadata.Tools.Tools[0].Version);
         }
     }
 }
