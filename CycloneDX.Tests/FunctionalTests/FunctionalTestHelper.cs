@@ -56,12 +56,11 @@ namespace CycloneDX.Tests.FunctionalTests
         /// <returns></returns>
         public static async Task<Bom> Test(string assetsJson, RunOptions options, INugetServiceFactory nugetService)
         {
-            options.SolutionOrProjectFile ??= MockUnixSupport.Path("c:/ProjectPath/Project.csproj");
             nugetService ??= CreateMockNugetServiceFactory();
 
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
             {
-                { MockUnixSupport.Path( options.SolutionOrProjectFile), new MockFileData(CsprojContents) },
+                { MockUnixSupport.Path("c:/ProjectPath/Project.csproj"), new MockFileData(CsprojContents) },
                 { MockUnixSupport.Path("c:/ProjectPath/obj/project.assets.json"), new MockFileData(assetsJson) }
             });
 
