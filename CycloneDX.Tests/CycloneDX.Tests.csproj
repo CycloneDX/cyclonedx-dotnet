@@ -37,10 +37,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\TestcaseFiles\DevDependencies_WithPackageConfig_CsProj.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\TestcaseFiles\DevDependencies_WithPackageConfig_PackageConfig.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\TestcaseFiles\Issue-758.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -52,7 +52,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\TestcaseFiles\SimpleNETStandardLibrary.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\metadata\cycloneDX-metadata-template.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
