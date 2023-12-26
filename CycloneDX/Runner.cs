@@ -203,6 +203,9 @@ namespace CycloneDX
                 return (int)ExitCode.DotnetRestoreFailed;
             }
 
+            await Console.Out.WriteLineAsync($"Found {packages.Count()} packages so far");
+
+
             if (!string.IsNullOrEmpty(setName))
             {
                 topLevelComponent.Name = setName;
@@ -215,7 +218,13 @@ namespace CycloneDX
                 {
                     item.Scope = ComponentScope.Excluded;
                 }
+
+
+                await Console.Out.WriteLineAsync($"{packages.Where(p => p.IsDevDependency).Count()} packages being excluded as DevDependencies");
             }
+
+
+            
 
             // get all the components and dependency graph from the NuGet packages
             var components = new HashSet<Component>();

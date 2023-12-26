@@ -18,10 +18,10 @@ namespace CycloneDX.Tests.FunctionalTests
         {
             return new MockFileSystem(new Dictionary<string, MockFileData>
             {
-                { "c:/ProjectPath/project.csproj",
+                { MockUnixSupport.Path("c:/ProjectPath/project.csproj"),
                         new MockFileData(
                             File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies_WithPackageConfig_CsProj.xml"))) },
-                { "c:/ProjectPath/packages.config",
+                { MockUnixSupport.Path("c:/ProjectPath/packages.config"),
                      new MockFileData(
                             File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies_WithPackageConfig_PackageConfig.xml"))) }
             });
