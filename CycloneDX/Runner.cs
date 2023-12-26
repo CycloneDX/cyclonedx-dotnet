@@ -142,6 +142,7 @@ namespace CycloneDX
 
             // determine what we are analyzing and do the analysis
             var fullSolutionOrProjectFilePath = this.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
+            await Console.Out.WriteLineAsync($"Scan at {fullSolutionOrProjectFilePath}");
 
             var topLevelComponent = new Component
             {
