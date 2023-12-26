@@ -30,17 +30,13 @@ namespace CycloneDX.Tests.FunctionalTests
         [Fact]
         public async Task DevDependenciesNormalyGoIntoTheBom()
         {
-            await Console.Out.WriteLineAsync($"Run test: DevDependenciesNormalyGoIntoTheBom");            
-            Console.SetError(Console.Out);            
-
             var options = new RunOptions
             {
             };
 
-
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
-            Assert.True(bom.Components.Count == 1, $"Unexpected number of components. Expected 1 was {bom.Components.Count}");
+            Assert.True(bom.Components.Count == 1, $"Unexpected number of components. Expected 1, got {bom.Components.Count}");
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "SonarAnalyzer.CSharp", true) == 0 && c.Version == "9.16.0.82469");
 
         }
