@@ -33,6 +33,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="FunctionalTests\TestcaseFiles\Issue-758.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\ProjectReferenceWithPackageReferenceWithTransitivePackage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\SimpleNET6.0Library.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\SimpleNETStandardLibrary.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\metadata\cycloneDX-metadata-template.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

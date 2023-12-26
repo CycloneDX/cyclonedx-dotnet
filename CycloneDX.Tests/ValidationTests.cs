@@ -15,10 +15,10 @@ namespace CycloneDX.Tests
     /// </summary>
     public class ValidationTests
     {
-        [Theory(Skip = "Test is accessing internet")]
-        [InlineData("xml", false)]
+        [Theory]
+        //[InlineData("xml", false)]
         [InlineData("xml", true)]
-        [InlineData("json", false)]
+        //[InlineData("json", false)]
         [InlineData("json", true)]
         public async Task Validation(string fileFormat, bool disableGitHubLicenses)
         {
@@ -27,7 +27,7 @@ namespace CycloneDX.Tests
                 { MockUnixSupport.Path(@"c:\ProjectPath\Project.csproj"), new MockFileData(CsprojContents) }
             });
 
-            var packages = new HashSet<NugetPackage>
+            var packages = new HashSet<DotnetDependency>
             {
                 new() { Name = "DotNetEnv", Version = "1.4.0" },
                 new() { Name = "HtmlAgilityPack", Version = "1.11.30" },
@@ -38,10 +38,10 @@ namespace CycloneDX.Tests
 
             var mockProjectFileService = new Mock<IProjectFileService>();
             mockProjectFileService.Setup(mock =>
-                mock.GetProjectNugetPackagesAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())
+                mock.GetProjectDotnetDependencysAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())
             ).ReturnsAsync(packages);
 
-            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, projectFileService: mockProjectFileService.Object, solutionFileService: null);
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, projectFileService: mockProjectFileService.Object, solutionFileService: null, null);
             
 
             RunOptions runOptions = new RunOptions
@@ -69,11 +69,11 @@ namespace CycloneDX.Tests
             ValidationResult validationResult;
             if (fileFormat == "json")
             {
-                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_4).ConfigureAwait(false);
+                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_5).ConfigureAwait(false);
             }
             else
             {
-                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_4);
+                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_5);
             }
 
             Assert.True(validationResult.Valid);

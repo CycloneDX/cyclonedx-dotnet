@@ -27,24 +27,29 @@ using CycloneDX.Models;
 using CycloneDX.Interfaces;
 using CycloneDX.Services;
 using static CycloneDX.Models.Component;
+using NuGet.ProjectModel;
 
 namespace CycloneDX
 {
     public class Runner
     {
+        public Bom LastGeneratedBom { get; set; }
         readonly IFileSystem fileSystem;
         readonly IDotnetCommandService dotnetCommandService;
         readonly IDotnetUtilsService dotnetUtilsService;
         readonly IPackagesFileService packagesFileService;
         readonly IProjectFileService projectFileService;
         readonly ISolutionFileService solutionFileService;
+        readonly INugetServiceFactory nugetServiceFactory;
+
         public Runner(IFileSystem fileSystem,
                       IDotnetCommandService dotnetCommandService,
                       IProjectAssetsFileService projectAssetsFileService,
                       IDotnetUtilsService dotnetUtilsService,
                       IPackagesFileService packagesFileService,
                       IProjectFileService projectFileService,
-                      ISolutionFileService solutionFileService)
+                      ISolutionFileService solutionFileService,
+                      INugetServiceFactory nugetServiceFactory)
         {
             this.fileSystem = fileSystem ?? new FileSystem();
             this.dotnetCommandService = dotnetCommandService ?? new DotnetCommandService();
@@ -53,8 +58,9 @@ namespace CycloneDX
             this.packagesFileService = packagesFileService ?? new PackagesFileService(this.fileSystem);
             this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, projectAssetsFileService);
             this.solutionFileService = solutionFileService ?? new SolutionFileService(this.fileSystem, this.projectFileService);
+            this.nugetServiceFactory = nugetServiceFactory ?? new NugetV3ServiceFactory();
         }
-        public Runner() : this(null, null, null, null, null, null, null) { }
+        public Runner() : this(null, null, null, null, null, null, null, null) { }
 
         public async Task<int> HandleCommandAsync(RunOptions options)
         {
@@ -129,12 +135,10 @@ namespace CycloneDX
                     githubService = new GithubService(new HttpClient());
                 }
             }
-            var nugetLogger = new NuGet.Common.NullLogger();
-            var nugetInput =
-                NugetInputFactory.Create(baseUrl, baseUrlUserName, baseUrlUP, isPasswordClearText);
-            var nugetService = new NugetV3Service(nugetInput, fileSystem, packageCachePathsResult.Result, githubService, nugetLogger, disableHashComputation);
 
-            var packages = new HashSet<NugetPackage>();
+            var nugetService = nugetServiceFactory.Create(options, fileSystem, githubService, packageCachePathsResult.Result);
+
+            var packages = new HashSet<DotnetDependency>();
 
             // determine what we are analyzing and do the analysis
             var fullSolutionOrProjectFilePath = this.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
@@ -147,31 +151,45 @@ namespace CycloneDX
 
             };
 
+
+            if (options.includeProjectReferences
+                &&
+                    (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)
+                    ||
+                    fileSystem.Directory.Exists(fullSolutionOrProjectFilePath)
+                    ||
+                    this.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase)))
+            {
+                Console.Error.WriteLine("Option -ipr can only be used with a project file");
+                return (int)ExitCode.InvalidOptions;
+            }
+
+
             try
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
-                    packages = await solutionFileService.GetSolutionNugetPackages(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await solutionFileService.GetSolutionDotnetDependencys(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
-                    packages = await projectFileService.RecursivelyGetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
-                    packages = await projectFileService.GetProjectNugetPackagesAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
+                    packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, excludeDev, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (this.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {
-                    packages = await packagesFileService.GetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
+                    packages = await packagesFileService.GetDotnetDependencysAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
                 }
                 else if (fileSystem.Directory.Exists(fullSolutionOrProjectFilePath))
                 {
-                    packages = await packagesFileService.RecursivelyGetNugetPackagesAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
+                    packages = await packagesFileService.RecursivelyGetDotnetDependencysAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
                 }
                 else
@@ -195,16 +213,27 @@ namespace CycloneDX
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
             var transitiveDependencies = new HashSet<string>();
-            var packageToComponent = new Dictionary<NugetPackage, Component>();
+            var packageToComponent = new Dictionary<DotnetDependency, Component>();
             try
             {
                 var bomRefLookup = new Dictionary<(string, string), string>();
                 foreach (var package in packages)
                 {
-                    var component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
+                    Component component = null;
+                    if (package.DependencyType == DependencyType.Package)
+                    {
+                        component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
+                    }
+                    else if (package.DependencyType == DependencyType.Project)
+                    {
+                        component = projectFileService.GetComponent(package);
+                    }
+
                     if (component != null)
                     {
-                        if (component.Scope != Component.ComponentScope.Excluded || !excludeDev)
+                        if ((component.Scope != Component.ComponentScope.Excluded || !excludeDev)
+                            &&
+                            (options.includeProjectReferences || package.DependencyType == DependencyType.Package))
                         {
                             components.Add(component);
                         }
@@ -212,6 +241,28 @@ namespace CycloneDX
                         bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture), (component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
                     }
                 }
+                if (!options.includeProjectReferences)
+                {
+                    var projectReferences = packages.Where(p => p.DependencyType == DependencyType.Project);
+                    // Change all packages that are refered to by a project to direct dependency
+                    var dependenciesOfProjects = projectReferences.SelectMany(p => p.Dependencies);
+                    var newDirectDependencies = packages.Join(dependenciesOfProjects, p => p.Name + '@' + p.Version, d => d.Key + '@' + d.Value, (p, _) => p);
+                    newDirectDependencies.ToList().ForEach(p => p.IsDirectReference = true);
+                    //remove all dependencies of packages to project references (https://github.com/CycloneDX/cyclonedx-dotnet/issues/785)
+                    var projectReferencesNames = projectReferences.Select(p => p.Name);
+                    foreach (var package in packages)
+                    {
+                        foreach (var refName in projectReferencesNames)
+                        {
+                            package.Dependencies?.Remove(refName);
+                        }
+                    }
+
+                    //remove project references from list
+                    packages = packages.Where(p => p.DependencyType != DependencyType.Project).ToHashSet();
+                }
+
+
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
                 foreach (var package in packages)
                 {
@@ -274,6 +325,7 @@ namespace CycloneDX
                 }
             }
 
+
             // create the BOM
             Console.WriteLine();
             Console.WriteLine("Creating CycloneDX BOM");
@@ -281,6 +333,7 @@ namespace CycloneDX
             {
                 Version = 1,
             };
+
 
             if (!string.IsNullOrEmpty(importMetadataPath))
             {
@@ -294,7 +347,56 @@ namespace CycloneDX
                     bom = ReadMetaDataFromFile(bom, importMetadataPath);
                 }
             }
+            SetMetadataComponentIfNecessary(bom, topLevelComponent);
+            Runner.AddMetadataTool(bom);
 
+            if (!(noSerialNumber))
+            {
+                bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
+            }
+
+            bom.Components = new List<Component>(components);
+            bom.Components.Sort((x, y) =>
+            {
+                if (x.Name == y.Name)
+                {
+                    return string.Compare(x.Version, y.Version, StringComparison.InvariantCultureIgnoreCase);
+                }
+                return string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase);
+            });
+            bom.Dependencies = dependencies;
+            directDependencies.Ref = bom.Metadata.Component.BomRef;
+            bom.Dependencies.Add(directDependencies);
+            bom.Dependencies.Sort((x, y) => string.Compare(x.Ref, y.Ref, StringComparison.InvariantCultureIgnoreCase));
+
+            LastGeneratedBom = bom;
+
+            var bomContents = BomService.CreateDocument(bom, json);
+
+            // check if the output directory exists and create it if needed
+            var bomPath = this.fileSystem.Path.GetFullPath(outputDirectory);
+            if (!this.fileSystem.Directory.Exists(bomPath))
+            {
+                this.fileSystem.Directory.CreateDirectory(bomPath);
+            }
+
+            // write the BOM to disk
+            var bomFilename = outputFilename;
+            if (string.IsNullOrEmpty(bomFilename))
+            {
+                bomFilename = json ? "bom.json" : "bom.xml";
+            }
+            var bomFilePath = this.fileSystem.Path.Combine(bomPath, bomFilename);
+            Console.WriteLine("Writing to: " + bomFilePath);
+            this.fileSystem.File.WriteAllText(bomFilePath, bomContents);
+
+            return 0;
+        }
+
+
+
+        private static void SetMetadataComponentIfNecessary(Bom bom, Component topLevelComponent)
+        {
             if (bom.Metadata is null)
             {
                 bom.Metadata = new Metadata
@@ -321,52 +423,10 @@ namespace CycloneDX
                     bom.Metadata.Component.Type = Component.Classification.Application;
                 }
             }
-
             if (string.IsNullOrEmpty(bom.Metadata.Component.BomRef))
             {
                 bom.Metadata.Component.BomRef = $"{bom.Metadata.Component.Name}@{bom.Metadata.Component.Version}";
             }
-
-            Runner.AddMetadataTool(bom);
-
-            if (!(noSerialNumber))
-            {
-                bom.SerialNumber = "urn:uuid:" + System.Guid.NewGuid().ToString();
-            }
-            bom.Components = new List<Component>(components);
-            bom.Components.Sort((x, y) =>
-            {
-                if (x.Name == y.Name)
-                {
-                    return string.Compare(x.Version, y.Version, StringComparison.InvariantCultureIgnoreCase);
-                }
-                return string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase);
-            });
-            bom.Dependencies = dependencies;
-            directDependencies.Ref = bom.Metadata.Component.BomRef;
-            bom.Dependencies.Add(directDependencies);
-            bom.Dependencies.Sort((x, y) => string.Compare(x.Ref, y.Ref, StringComparison.InvariantCultureIgnoreCase));
-
-            var bomContents = BomService.CreateDocument(bom, json);
-
-            // check if the output directory exists and create it if needed
-            var bomPath = this.fileSystem.Path.GetFullPath(outputDirectory);
-            if (!this.fileSystem.Directory.Exists(bomPath))
-            {
-                this.fileSystem.Directory.CreateDirectory(bomPath);
-            }
-
-            // write the BOM to disk
-            var bomFilename = outputFilename;
-            if (string.IsNullOrEmpty(bomFilename))
-            {
-                bomFilename = json ? "bom.json" : "bom.xml";
-            }
-            var bomFilePath = this.fileSystem.Path.Combine(bomPath, bomFilename);
-            Console.WriteLine("Writing to: " + bomFilePath);
-            this.fileSystem.File.WriteAllText(bomFilePath, bomContents);
-
-            return 0;
         }
 
         internal static Bom ReadMetaDataFromFile(Bom bom, string templatePath)
@@ -387,28 +447,28 @@ namespace CycloneDX
         {
             string toolname = "CycloneDX module for .NET";
 
-            if (bom.Metadata == null)
-            {
-                bom.Metadata = new Metadata();
-            }
-            if (bom.Metadata.Tools == null)
-            {
-                bom.Metadata.Tools = new List<Tool>();
-            }
-            var index = bom.Metadata.Tools.FindIndex(p => p.Name == toolname);
+            bom.Metadata ??= new Metadata();
+            bom.Metadata.Tools ??= new ToolChoices();
+#pragma warning disable CS0618 // Type or member is obsolete
+            bom.Metadata.Tools.Tools ??= new List<Tool>();
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            var index = bom.Metadata.Tools.Tools.FindIndex(p => p.Name == toolname);
             if (index == -1)
             {
-                bom.Metadata.Tools.Add(new Tool
+#pragma warning disable CS0618 // Type or member is obsolete
+                bom.Metadata.Tools.Tools.Add(new Tool
                 {
                     Name = toolname,
                     Vendor = "CycloneDX",
                     Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
                 }
                 );
+#pragma warning restore CS0618 // Type or member is obsolete
             }
             else
             {
-                bom.Metadata.Tools[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                bom.Metadata.Tools.Tools[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
 

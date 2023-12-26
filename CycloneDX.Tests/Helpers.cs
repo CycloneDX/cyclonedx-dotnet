@@ -27,7 +27,7 @@ namespace CycloneDX.Tests
 {
     static class Helpers
     {
-        static string NugetResponse(NugetPackage package)
+        static string NugetResponse(DotnetDependency package)
         {
             return @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
@@ -38,13 +38,13 @@ namespace CycloneDX.Tests
                 </package>";
         }
 
-        static void AddNugetResponse(this MockHttpMessageHandler mockHttp, NugetPackage package)
+        static void AddNugetResponse(this MockHttpMessageHandler mockHttp, DotnetDependency package)
         {
             mockHttp.When("https://api.nuget.org/v3-flatcontainer/" + package.Name + "/" + package.Version + "/" + package.Name + ".nuspec")
                 .Respond("application/xml", NugetResponse(package));
         }
 
-        public static HttpClient GetNugetMockHttpClient(IEnumerable<NugetPackage> packages)
+        public static HttpClient GetNugetMockHttpClient(IEnumerable<DotnetDependency> packages)
         {
             var mockHttp = new MockHttpMessageHandler();
             foreach (var package in packages)
@@ -55,7 +55,7 @@ namespace CycloneDX.Tests
             return client;
         }
 
-        public static MockFileData GetProjectFileWithReferences(IEnumerable<string> projects, IEnumerable<NugetPackage> packages)
+        public static MockFileData GetProjectFileWithReferences(IEnumerable<string> projects, IEnumerable<DotnetDependency> packages)
         {
             var stringBuilder = new StringBuilder();
            stringBuilder.Append("<Project>");
@@ -81,17 +81,17 @@ namespace CycloneDX.Tests
             return new MockFileData(fileData);
         }
 
-        public static MockFileData GetProjectFileWithPackageReferences(IEnumerable<NugetPackage> packages)
+        public static MockFileData GetProjectFileWithPackageReferences(IEnumerable<DotnetDependency> packages)
         {
             return GetProjectFileWithReferences(null, packages);
         }
 
         public static MockFileData GetProjectFileWithPackageReference(string packageName, string packageVersion)
         {
-            return GetProjectFileWithPackageReferences(new List<NugetPackage> { new NugetPackage { Name = packageName, Version = packageVersion } });
+            return GetProjectFileWithPackageReferences(new List<DotnetDependency> { new DotnetDependency { Name = packageName, Version = packageVersion } });
         }
 
-        public static MockFileData GetPackagesFileWithPackageReferences(IEnumerable<NugetPackage> packages)
+        public static MockFileData GetPackagesFileWithPackageReferences(IEnumerable<DotnetDependency> packages)
         {
             var fileData = "<packages>";
             foreach (var package in packages)
@@ -123,7 +123,7 @@ namespace CycloneDX.Tests
 
         public static MockFileData GetPackagesFileWithPackageReference(string packageName, string packageVersion)
         {
-            return GetPackagesFileWithPackageReferences(new List<NugetPackage> { new NugetPackage { Name = packageName, Version = packageVersion}});
+            return GetPackagesFileWithPackageReferences(new List<DotnetDependency> { new DotnetDependency { Name = packageName, Version = packageVersion}});
         }
 
         public static MockFileData GetProjectFileWithProjectReferences(IEnumerable<string> projects)

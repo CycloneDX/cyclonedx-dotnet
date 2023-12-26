@@ -71,7 +71,7 @@ namespace CycloneDX.Services
             foreach (var project in projectList)
             {
                 var projectReferences = await _projectFileService.RecursivelyGetProjectReferencesAsync(project).ConfigureAwait(false);
-                projects.UnionWith(projectReferences);
+                projects.UnionWith(projectReferences.Select(dep => dep.Path));
             }
 
             return projects;
@@ -82,19 +82,19 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="solutionFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<NugetPackage>> GetSolutionNugetPackages(string solutionFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
+        public async Task<HashSet<DotnetDependency>> GetSolutionDotnetDependencys(string solutionFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, bool excludeDev, string framework, string runtime)
         {
             if (!_fileSystem.File.Exists(solutionFilePath))
             {
                 Console.Error.WriteLine($"Solution file \"{solutionFilePath}\" does not exist");
-                return new HashSet<NugetPackage>();
+                return new HashSet<DotnetDependency>();
             }
 
             Console.WriteLine();
             Console.WriteLine($"» Solution: {solutionFilePath}");
             Console.WriteLine("  Getting projects");
 
-            var packages = new HashSet<NugetPackage>();
+            var packages = new HashSet<DotnetDependency>();
 
             var projectPaths = await GetSolutionProjectReferencesAsync(solutionFilePath).ConfigureAwait(false);
 
@@ -108,12 +108,12 @@ namespace CycloneDX.Services
             }
 
             // Process first all productive projects, then test projects (scope order)
-            var projectQuery = from p in projectPaths orderby ProjectFileService.IsTestProject(p) select p;
-            var directReferencePackages = new HashSet<NugetPackage>();
+            var projectQuery = from p in projectPaths orderby _projectFileService.IsTestProject(p) select p;
+            var directReferencePackages = new HashSet<DotnetDependency>();
             foreach (var projectFilePath in projectQuery)
             {
                 Console.WriteLine();
-                var projectPackages = await _projectFileService.GetProjectNugetPackagesAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
+                var projectPackages = await _projectFileService.GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, excludeDev, framework, runtime).ConfigureAwait(false);
                 directReferencePackages.UnionWith(projectPackages.Where(p => p.IsDirectReference));
                 packages.UnionWith(projectPackages);
             }

@@ -121,7 +121,8 @@ namespace CycloneDX
                     importMetadataPath = context.ParseResult.GetValueForOption(importMetadataPath),
                     setName = context.ParseResult.GetValueForOption(setName),
                     setVersion = context.ParseResult.GetValueForOption(setVersion),
-                    setType = context.ParseResult.GetValueForOption(setType)
+                    setType = context.ParseResult.GetValueForOption(setType),
+                    includeProjectReferences = context.ParseResult.GetValueForOption(includeProjectReferences)
                 };                
 
                 Runner runner = new Runner();
