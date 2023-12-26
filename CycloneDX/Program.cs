@@ -29,7 +29,7 @@ namespace CycloneDX
             var framework = new Option<string>(new[] { "--framework", "-tfm" }, "The target framework to use. If not defined, all will be aggregated.");
             var runtime = new Option<string>(new[] { "--runtime", "-rt" }, "The runtime to use. If not defined, all will be aggregated.");
             var outputDirectory = new Option<string>(new[] { "--output", "-o" }, description: "The directory to write the BOM") { IsRequired = true };
-            var outputFilename = new Option<string>(new[] { "--filename", "-fn" }, "Optionally provide a filename for the BOM (default: bom.xml or bom.json");
+            var outputFilename = new Option<string>(new[] { "--filename", "-fn" }, "Optionally provide a filename for the BOM (default: bom.xml or bom.json)");
             var json = new Option<bool>(new[] { "--json", "-j" }, "Produce a JSON BOM instead of XML");
             var excludeDev = new Option<bool>(new[] { "--exclude-dev", "-ed" }, "Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)");
             var excludetestprojects = new Option<bool>(new[] { "--exclude-test-projects", "-t" }, "Exclude test projects from the BOM");
@@ -53,9 +53,9 @@ namespace CycloneDX
             var includeProjectReferences = new Option<bool>(new[] { "--include-project-references", "-ipr" }, "Include project references as components (can only be used with project files).");
             var setType = new Option<Component.Classification>(new[] { "--set-type", "-st" }, getDefaultValue: () => Component.Classification.Application, "Override the default BOM metadata component type (defaults to application).");
             //Deprecated args
-            var outputFilenameDeprecated = new Option<string>(new[] { "-f" }, "(Deprecated use -ed instead) Optionally provide a filename for the BOM (default: bom.xml or bom.json");
-            var excludeDevDeprecated = new Option<bool>(new[] {"-d" }, "(Deprecated use -ed instead) Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)");
-            var scanProjectDeprecated = new Option<bool>(new[] {"-r" }, "(Deprecated use -rs instead) To be used with a single project file, it will recursively scan project references of the supplied project file");
+            var outputFilenameDeprecated = new Option<string>(new[] { "-f" }, "(Deprecated use -fn instead) Optionally provide a filename for the BOM (default: bom.xml or bom.json).");
+            var excludeDevDeprecated = new Option<bool>(new[] {"-d" }, "(Deprecated use -ed instead) Exclude development dependencies from the BOM.");
+            var scanProjectDeprecated = new Option<bool>(new[] {"-r" }, "(Deprecated use -rs instead) To be used with a single project file, it will recursively scan project references of the supplied project file.");
 
 
             RootCommand rootCommand = new RootCommand
