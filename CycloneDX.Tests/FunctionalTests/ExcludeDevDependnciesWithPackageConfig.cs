@@ -18,10 +18,10 @@ namespace CycloneDX.Tests.FunctionalTests
         {
             return new MockFileSystem(new Dictionary<string, MockFileData>
             {
-                { MockUnixSupport.Path("c:/ProjectPath/project.csproj"),
+                { "c:/ProjectPath/project.csproj",
                         new MockFileData(
                             File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies_WithPackageConfig_CsProj.xml"))) },
-                { MockUnixSupport.Path("c:/ProjectPath/packages.config"),
+                { "c:/ProjectPath/packages.config",
                      new MockFileData(
                             File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies_WithPackageConfig_PackageConfig.xml"))) }
             });
@@ -29,7 +29,9 @@ namespace CycloneDX.Tests.FunctionalTests
 
         [Fact]
         public async Task DevDependenciesNormalyGoIntoTheBom()
-        {            
+        {
+            await Console.Out.WriteLineAsync($"Run test: DevDependenciesNormalyGoIntoTheBom");
+
             var options = new RunOptions
             {
             };
