@@ -12,7 +12,7 @@ trim_trailing_whitespace = true
 
 # Visual Studio XML Project Files
 [*.{csproj,vbproj,vcxproj.filters,proj,projitems,shproj}]
-indent_size = 2
+indent_size = 4
 
 # XML Configuration Files
 [*.{xml,config,props,targets,nuspec,resx,ruleset,vsixmanifest,vsct}]
@@ -85,7 +85,7 @@ dotnet_naming_style.pascal_case_style.capitalization             = pascal_case
 # Use PascalCase for constant fields  
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols  = constant_fields
-dotnet_naming_rule.constant_fields_should_be_pascal_case.style    = pascal_case_style
+dotnet_naming_rule.constant_fields_should_be_pascal_case.style = pascal_case_style
 dotnet_naming_symbols.constant_fields.applicable_kinds            = field
 dotnet_naming_symbols.constant_fields.applicable_accessibilities  = *
 dotnet_naming_symbols.constant_fields.required_modifiers          = const
@@ -148,6 +148,16 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false
 # Wrapping preferences
 csharp_preserve_single_line_statements = true
 csharp_preserve_single_line_blocks = true
+csharp_using_directive_placement = outside_namespace:silent
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_namespace_declarations = block_scoped:silent
+csharp_style_prefer_method_group_conversion = true:silent
+csharp_style_prefer_top_level_statements = true:silent
+csharp_style_prefer_primary_constructors = true:suggestion
+csharp_style_expression_bodied_lambdas = true:silent
+csharp_style_expression_bodied_local_functions = false:silent
+csharp_style_prefer_local_over_anonymous_function = true:suggestion
+csharp_prefer_static_local_function = true:suggestion
 ###############################
 # VB Coding Conventions       #
 ###############################
@@ -162,7 +172,7 @@ dotnet_analyzer_diagnostic.severity = unset
 dotnet_analyzer_diagnostic.category-<category>.severity = unset
 
 # CA1303: Do not pass literals as localized parameters
-dotnet_diagnostic.CA1303.severity = suggestion
+dotnet_diagnostic.CA1303.severity = silent
 
 # CA1308: Normalize strings to uppercase
 dotnet_diagnostic.CA1308.severity = suggestion
@@ -190,4 +200,7 @@ dotnet_diagnostic.CA2007.severity = suggestion
 
 # CA2000: Dispose objects before losing scope
 dotnet_diagnostic.CA2000.severity = suggestion
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+tab_width = 2
+end_of_line = crlf
 

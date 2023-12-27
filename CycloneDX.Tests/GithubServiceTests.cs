@@ -43,7 +43,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -64,7 +63,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/raw/master/LICENSE").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -85,7 +83,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/main/LICENSE").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -106,7 +103,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENCE").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact(Skip = "Currently failing as GitHub license API only returns the current license")]
@@ -127,7 +123,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/v1.2.3/LICENSE").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -148,7 +143,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE.md").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -169,7 +163,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE.txt").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -190,7 +183,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE.TXT").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -211,7 +203,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE.bsd").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -232,7 +223,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE.BSD").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -253,7 +243,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE.mit").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -274,7 +263,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE.MIT").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -295,7 +283,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/LICENSE-MIT").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -316,7 +303,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/License.txt").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -337,7 +323,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet/blob/master/license.txt").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -358,7 +343,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/master/LICENSE").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -379,7 +363,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://raw.github.com/CycloneDX/cyclonedx-dotnet/master/LICENSE").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -400,7 +383,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("git@github.com:CycloneDX/cyclonedx-dotnet.git").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -423,7 +405,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet.git").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
         }
 
         [Fact]
@@ -467,7 +448,6 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://raw.github.com/CycloneDX/cyclonedx-dotnet/master/LICENSE").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
             Assert.Equal("https://licenceurl.com/", license.Url);
         }
 
@@ -490,7 +470,30 @@ namespace CycloneDX.Tests
             var license = await githubService.GetLicenseAsync("https://raw.github.com/CycloneDX/cyclonedx-dotnet").ConfigureAwait(false);
 
             Assert.Equal("LicenseSpdxId", license.Id);
-            Assert.Equal("Test License", license.Name);
+            Assert.Equal("https://licenceurl.com/", license.Url);
+        }
+
+        [Fact]
+        public async Task GitLicense_ReplacesNoAssertionWithNull()
+        {
+            //See also https://github.com/CycloneDX/cyclonedx-dotnet/issues/525
+
+            var mockResponseContent = @"{
+                ""license"": {                    
+                    ""name"": ""Other"",
+                    ""spdx_id"": ""NOASSERTION""                  
+                }, 
+                ""html_url"": ""https://licenceUrl.com""
+            }";
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet/license")
+                .Respond("application/json", mockResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var githubService = new GithubService(client);
+
+            var license = await githubService.GetLicenseAsync("https://raw.github.com/CycloneDX/cyclonedx-dotnet").ConfigureAwait(false);
+
+            Assert.Null(license.Id);
             Assert.Equal("https://licenceurl.com/", license.Url);
         }
     }

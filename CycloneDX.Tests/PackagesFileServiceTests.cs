@@ -28,7 +28,7 @@ namespace CycloneDX.Tests
     public class PackagesFileServiceTests
     {
         [Fact]
-        public async Task GetNugetPackages_ReturnsNugetPackage()
+        public async Task GetDotnetDependencys_ReturnsDotnetDependency()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
@@ -36,7 +36,7 @@ namespace CycloneDX.Tests
                 });
             var packagesFileService = new PackagesFileService(mockFileSystem);
 
-            var packages = await packagesFileService.GetNugetPackagesAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(false);
+            var packages = await packagesFileService.GetDotnetDependencysAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(false);
             
             Assert.Collection(packages,
                 item => {
@@ -46,22 +46,22 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GetNugetPackages_ReturnsMultipleNugetPackages()
+        public async Task GetDotnetDependencys_ReturnsMultipleDotnetDependencys()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\Project\packages.config"), Helpers.GetPackagesFileWithPackageReferences(
-                        new List<NugetPackage> {
-                            new NugetPackage { Name = "Package1", Version = "1.2.3"},
-                            new NugetPackage { Name = "Package2", Version = "1.2.3"},
-                            new NugetPackage { Name = "Package3", Version = "1.2.3"},
+                        new List<DotnetDependency> {
+                            new DotnetDependency { Name = "Package1", Version = "1.2.3"},
+                            new DotnetDependency { Name = "Package2", Version = "1.2.3"},
+                            new DotnetDependency { Name = "Package3", Version = "1.2.3"},
                         })
                     },
                 });
             var packagesFileService = new PackagesFileService(mockFileSystem);
 
-            var packages = await packagesFileService.GetNugetPackagesAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(false);
-            var sortedPackages = new List<NugetPackage>(packages);
+            var packages = await packagesFileService.GetDotnetDependencysAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(false);
+            var sortedPackages = new List<DotnetDependency>(packages);
             sortedPackages.Sort();
 
             Assert.Collection(sortedPackages,

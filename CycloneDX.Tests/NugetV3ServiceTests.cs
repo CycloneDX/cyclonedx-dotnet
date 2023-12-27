@@ -440,5 +440,34 @@ namespace CycloneDX.Tests
             Assert.Contains(component.Licenses, choice => choice.License.Id.Equals("Apache-2.0"));
             Assert.Contains(component.Licenses, choice => choice.License.Id.Equals("MPL-2.0"));
         }
+
+        [Fact]
+        public async Task GetComponent_WhenGitHubServiceIsNull_UsesLicenseUrl()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <licenseUrl>https://not-licence.url</licenseUrl>
+                    <repository url=""https://licence.url"" />
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+
+            Assert.Single(component.Licenses);
+            Assert.Equal("https://not-licence.url", component.Licenses.First().License.Url);
+            Assert.Equal("Unknown - See URL", component.Licenses.First().License.Name);
+        }
     }
 }

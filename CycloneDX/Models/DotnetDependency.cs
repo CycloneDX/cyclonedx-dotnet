@@ -21,23 +21,33 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CycloneDX.Models
 {
+    public enum DependencyType
+    {
+        Package,
+        Project
+    }
+
     [SuppressMessage("Microsoft.Design", "CA1036:OverrideMethodsOnComparableTypes")]
-    public class NugetPackage : IComparable
+    public class DotnetDependency : IComparable
     {
         public string Name { get; set; }
         public string Version { get; set; }
         public bool IsDirectReference { get; set; }
         public bool IsDevDependency { get; set; }
+        public DependencyType DependencyType { get; set; }
         public Component.ComponentScope? Scope { get; set; }
+        public string Path { get; set; }
+
+
         public Dictionary<string, string> Dependencies { get; set; } //key: name ~ value: version
 
         public override bool Equals(object obj)
         {
-            var other = obj as NugetPackage;
+            var other = obj as DotnetDependency;
             return this.Equals(other);
         }
 
-        public bool Equals(NugetPackage other)
+        public bool Equals(DotnetDependency other)
         {
             if (other == null)
             {
@@ -54,7 +64,7 @@ namespace CycloneDX.Models
             return Utils.GeneratePackageUrl(Name, Version).GetHashCode();
         }
 
-        public int CompareTo(NugetPackage other)
+        public int CompareTo(DotnetDependency other)
         {
             if (other == null)
             {
@@ -71,7 +81,7 @@ namespace CycloneDX.Models
 
         public int CompareTo(object obj)
         {
-            var other = obj as NugetPackage;
+            var other = obj as DotnetDependency;
             return CompareTo(other);
         }
     }

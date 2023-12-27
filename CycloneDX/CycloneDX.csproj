@@ -9,7 +9,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ToolCommandName>dotnet-CycloneDX</ToolCommandName>
     <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
-    <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(OsEnvironment )'=='windows'">
@@ -23,14 +23,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="CycloneDX.Tests" />
+    <InternalsVisibleTo Include="CycloneDX.IntegrationTests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" />
-    <PackageReference Include="NuGet.Protocol" />
-    <PackageReference Include="System.IO.Abstractions" />
     <PackageReference Include="CycloneDX.Core" />
+    <PackageReference Include="NuGet.Protocol" />
     <PackageReference Include="NuGet.ProjectModel" />
+    <PackageReference Include="System.IO.Abstractions" />
+    <PackageReference Include="System.CommandLine" />
   </ItemGroup>
 </Project>

@@ -23,7 +23,7 @@ namespace CycloneDX.Interfaces
 {
     public interface IPackagesFileService 
     {
-        Task<HashSet<NugetPackage>> GetNugetPackagesAsync(string packagesFilePath);
-        Task<HashSet<NugetPackage>> RecursivelyGetNugetPackagesAsync(string directoryPath);
+        Task<HashSet<DotnetDependency>> GetDotnetDependencysAsync(string packagesFilePath);
+        Task<HashSet<DotnetDependency>> RecursivelyGetDotnetDependencysAsync(string directoryPath);
     }
 }
