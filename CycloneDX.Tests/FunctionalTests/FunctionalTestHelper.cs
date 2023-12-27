@@ -28,8 +28,9 @@ namespace CycloneDX.Tests.FunctionalTests
                         Name = dep.Name,
                         Version = dep.Version,
                         Type = Classification.Library,
-                        BomRef = $"pkg:nuget/{dep.Name}@{dep.Version}"
-                    }));
+                        BomRef = $"pkg:nuget/{dep.Name}@{dep.Version}",
+                        Scope = dep.Scope
+                    })) ;
 
             var nugetService = mockNugetService.Object;
 
@@ -55,21 +56,28 @@ namespace CycloneDX.Tests.FunctionalTests
         /// <returns></returns>
         public static async Task<Bom> Test(string assetsJson, RunOptions options, INugetServiceFactory nugetService)
         {
+            nugetService ??= CreateMockNugetServiceFactory();
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { MockUnixSupport.Path("c:/ProjectPath/Project.csproj"), new MockFileData(CsprojContents) },
+                { MockUnixSupport.Path("c:/ProjectPath/obj/project.assets.json"), new MockFileData(assetsJson) }
+            });
+
+            return await Test(options, nugetService, mockFileSystem).ConfigureAwait(false);
+        }
+
+
+        public static async Task<Bom> Test(RunOptions options, MockFileSystem mockFileSystem) => await Test(options, CreateMockNugetServiceFactory(), mockFileSystem);
+ 
+
+        public static async Task<Bom> Test(RunOptions options, INugetServiceFactory nugetService, MockFileSystem mockFileSystem)
+        {
             options.disableGithubLicenses = true;
             options.outputDirectory ??= "/bom/";
             options.outputFilename ??= options.json ? "bom.json" : "bom.xml";
             options.SolutionOrProjectFile ??= MockUnixSupport.Path("c:/ProjectPath/Project.csproj");
             options.disablePackageRestore = true;
-
-            nugetService ??= CreateMockNugetServiceFactory();
-
-
-            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-            {
-                { MockUnixSupport.Path(options.SolutionOrProjectFile), new MockFileData(CsprojContents) },
-                { MockUnixSupport.Path("c:/ProjectPath/obj/project.assets.json"), new MockFileData(assetsJson) }
-            });
-
 
             Runner runner = new Runner(mockFileSystem, null, null, null, null, null, null, nugetService);
             int exitCode = await runner.HandleCommandAsync(options);
@@ -78,7 +86,7 @@ namespace CycloneDX.Tests.FunctionalTests
 
             var expectedFileName = mockFileSystem.Path.Combine(options.outputDirectory, options.outputFilename);
 
-    
+
 
             Assert.True(mockFileSystem.FileExists(MockUnixSupport.Path(expectedFileName)), "Bom file not generated");
 
@@ -97,7 +105,6 @@ namespace CycloneDX.Tests.FunctionalTests
 
             return runner.LastGeneratedBom;
         }
-
 
         private const string CsprojContents =
         "<Project Sdk=\"Microsoft.NET.Sdk\">\n\n  " +
