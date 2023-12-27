@@ -14,3 +14,5 @@ SBOM/
 .local/
 .nuget/
 .opencode-server/
+TestResults/
+CycloneDX/Properties/launchSettings.json

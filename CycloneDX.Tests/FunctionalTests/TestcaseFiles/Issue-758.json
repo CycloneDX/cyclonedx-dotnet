@@ -1,0 +1,128 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "User.Dependent/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "User.Dependency": "1.0.0"
+        },
+        "compile": {
+          "lib/net8.0/User.Dependent.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/User.Dependent.dll": {}
+        }
+      },
+      "User.Dependency/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/User.Dependency.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/User.Dependency.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "User.Dependent/1.0.0": {
+      "sha512": "IZpfcHuN7+sIPhQ246ihcFdBALnnEIRDqXeVF0H3lXbkc7KbJTUxbZVwgS9ds1p7hrKYTMUauQl9I+oAR5cVPQ==",
+      "type": "package",
+      "path": "User.dependent/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net8.0/User.Dependent.dll",
+        "User.dependent.1.0.0.nupkg.sha512",
+        "User.dependent.nuspec"
+      ]
+    },
+    "User.Dependency/1.0.0": {
+      "type": "project",
+      "path": "../Dependency/User.Dependency.csproj",
+      "msbuildProject": "../Dependency/User.Dependency.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "User.Dependency >= 1.0.0",
+      "User.Dependent >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\user\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "E:\\src\\CycloneDX-758\\ConsoleApp1\\ConsoleApp1\\ConsoleApp1.csproj",
+      "projectName": "ConsoleApp1",
+      "projectPath": "E:\\src\\CycloneDX-758\\ConsoleApp1\\ConsoleApp1\\ConsoleApp1.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "E:\\src\\CycloneDX-758\\ConsoleApp1\\ConsoleApp1\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
+        "http://localhost:8081/repository/nuget-group/index.json": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "E:\\src\\CycloneDX-758\\ConsoleApp1\\Dependency\\User.Dependency.csproj": {
+              "projectPath": "E:\\src\\CycloneDX-758\\ConsoleApp1\\Dependency\\User.Dependency.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "dependencies": {
+          "User.Dependent": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

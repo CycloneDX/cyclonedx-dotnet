@@ -15,13 +15,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
-using McMaster.Extensions.CommandLineUtils;
 using CycloneDX.Models;
 
 namespace CycloneDX.Services
@@ -38,7 +39,8 @@ namespace CycloneDX.Services
         public DotnetCommandResult Run(string workingDirectory, string arguments)
         {
             Contract.Requires(arguments != null);
-            var psi = new ProcessStartInfo(DotNetExe.FullPathOrDefault(), arguments)
+
+            var psi = new ProcessStartInfo(GetDotnetPathOrDefault(), arguments)
             {
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
@@ -46,7 +48,7 @@ namespace CycloneDX.Services
                 UseShellExecute = false,
                 WorkingDirectory = workingDirectory
             };
-            
+
             using (var p = Process.Start(psi))
             {
                 var output = new StringBuilder();
@@ -80,8 +82,36 @@ namespace CycloneDX.Services
                 }
             }
         }
-        
-        private static async Task ConsumeStreamReaderAsync(StreamReader reader, StringBuilder lines)
+
+        // origin: https://github.com/natemcmaster/CommandLineUtils/blob/main/src/CommandLineUtils/Utilities/DotNetExe.cs
+        // extracted and modified TryFindDotNetExePath (Apache License 2.0)
+        private static string GetDotnetPathOrDefault()
+        {
+            var fileName = "dotnet";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                fileName += ".exe";
+            }
+            var mainModule = Process.GetCurrentProcess().MainModule;
+            if (!string.IsNullOrEmpty(mainModule.FileName)
+                && Path.GetFileName(mainModule.FileName).Equals(fileName, StringComparison.OrdinalIgnoreCase))
+            {
+                return mainModule.FileName;
+            }
+            // DOTNET_ROOT specifies the location of the .NET runtimes, if they are not installed in the default location.
+            var dotnetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT");
+
+            if (string.IsNullOrEmpty(dotnetRoot))
+            {
+                // fall back to default location
+                // https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-environment-variables#dotnet_root-dotnet_rootx86
+                dotnetRoot = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "C:\\Program Files\\dotnet" : "/usr/local/share/dotnet";
+            }
+
+            return Path.Combine(dotnetRoot, fileName);
+        }
+
+    private static async Task ConsumeStreamReaderAsync(StreamReader reader, StringBuilder lines)
         {
             await Task.Yield();
 

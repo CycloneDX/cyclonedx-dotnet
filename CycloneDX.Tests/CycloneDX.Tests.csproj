@@ -9,11 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Moq" />
     <PackageReference Include="RichardSzalay.MockHttp" />
@@ -38,6 +33,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="FunctionalTests\TestcaseFiles\DevDependencies.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\DevDependencies_WithPackageConfig_CsProj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\DevDependencies_WithPackageConfig_PackageConfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\Issue-758.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\ProjectReferenceWithPackageReferenceWithTransitivePackage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\SimpleNET6.0Library.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\SimpleNETStandardLibrary.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\metadata\cycloneDX-metadata-template.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
