@@ -40,7 +40,7 @@ namespace CycloneDX.Tests
                 fileSystem,
                 new DotnetUtilsService(fileSystem, dotnetCommandService),
                 new PackagesFileService(fileSystem),
-                new ProjectAssetsFileService(fileSystem, dotnetCommandService, () => new AssetFileReader()));
+                new ProjectAssetsFileService(fileSystem, () => new AssetFileReader()));
 
         }
 

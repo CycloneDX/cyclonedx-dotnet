@@ -29,6 +29,7 @@ using NuGet.ProjectModel;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
 using System.IO;
+using NuGet.Packaging.Signing;
 
 namespace CycloneDX.Tests
 {
@@ -236,8 +237,8 @@ namespace CycloneDX.Tests
             });
 
             var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, () => mockAssetReader.Object);
-            var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"),  false);
-            var sortedPackages = new List<NugetPackage>(packages);
+            var packages = projectAssetsFileService.GetDotnetDependencys(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"),  false);
+            var sortedPackages = new List<DotnetDependency>(packages);
 
             sortedPackages.Sort();
 
@@ -396,8 +397,8 @@ namespace CycloneDX.Tests
             });
 
             var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, () => mockAssetReader.Object);
-            var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false);
-            var sortedPackages = new List<NugetPackage>(packages);
+            var packages = projectAssetsFileService.GetDotnetDependencys(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false);
+            var sortedPackages = new List<DotnetDependency>(packages);
 
             sortedPackages.Sort();
 
@@ -530,8 +531,8 @@ namespace CycloneDX.Tests
             });
 
             var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, () => mockAssetReader.Object);
-            var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false);
-            var sortedPackages = new List<NugetPackage>(packages);
+            var packages = projectAssetsFileService.GetDotnetDependencys(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false);
+            var sortedPackages = new List<DotnetDependency>(packages);
 
             sortedPackages.Sort();
 
