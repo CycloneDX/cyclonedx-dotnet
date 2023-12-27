@@ -21,7 +21,6 @@ using CycloneDX.Models;
 
 namespace CycloneDX
 {
-
     public static class Program
     {
         public static Task<int> Main(string[] args)
