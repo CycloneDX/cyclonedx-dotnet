@@ -27,7 +27,6 @@ using CycloneDX.Models;
 using CycloneDX.Interfaces;
 using CycloneDX.Services;
 using static CycloneDX.Models.Component;
-using NuGet.ProjectModel;
 
 namespace CycloneDX
 {
@@ -71,19 +70,14 @@ namespace CycloneDX
             string outputFilename = options.outputFilename;
             bool json = options.json;
             bool excludeDev = options.excludeDev;
-            bool excludetestprojects = options.excludeTestProjects;
-            string baseUrl = options.baseUrl;
-            string baseUrlUserName = options.baseUrlUserName;
-            string baseUrlUP = options.baseUrlUSP;
-            bool isPasswordClearText = options.isPasswordClearText;
+            bool excludetestprojects = options.excludeTestProjects;            
             bool scanProjectReferences = options.scanProjectReferences;
             bool noSerialNumber = options.noSerialNumber;
             string githubUsername = options.githubUsername;
             string githubT = options.githubT;
             string githubBT = options.githubBT;
             bool disableGithubLicenses = options.disableGithubLicenses;
-            bool disablePackageRestore = options.disablePackageRestore;
-            bool disableHashComputation = options.disableHashComputation;
+            bool disablePackageRestore = options.disablePackageRestore;            
             int dotnetCommandTimeout = options.dotnetCommandTimeout;
             string baseIntermediateOutputPath = options.baseIntermediateOutputPath;
             string importMetadataPath = options.importMetadataPath;

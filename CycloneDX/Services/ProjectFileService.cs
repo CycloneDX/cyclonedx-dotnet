@@ -24,10 +24,7 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
-using NuGet.ContentModel;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using NuGet.Packaging;
 
 namespace CycloneDX.Services
 {
@@ -62,7 +59,6 @@ namespace CycloneDX.Services
             _projectAssetsFileService = projectAssetsFileService;
         }
 
-
         public bool IsTestProject(string projectFilePath)
         {
             XmlDocument xmldoc = new XmlDocument();
@@ -74,7 +70,7 @@ namespace CycloneDX.Services
             {
                 return true;
             }
-
+            // if this is meant for old csproj file format, then it's probably not working because there is no namespace given
             XmlElement testProjectPropertyGroup = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
             return testProjectPropertyGroup != null;
         }
