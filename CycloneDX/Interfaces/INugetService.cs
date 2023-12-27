@@ -23,6 +23,6 @@ namespace CycloneDX.Interfaces
     public interface INugetService
     {
         Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope? scope);
-        Task<Component> GetComponentAsync(NugetPackage nugetPackage);
+        Task<Component> GetComponentAsync(DotnetDependency DotnetDependency);
     }
 }

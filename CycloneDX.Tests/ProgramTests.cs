@@ -15,35 +15,35 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System;
 using System.Collections.Generic;
-using Xunit;
+using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using System.Threading.Tasks;
-using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
-using Moq;
-using CycloneDX.Models;
-using System.IO;
 using CycloneDX.Interfaces;
-using Microsoft.DotNet.PlatformAbstractions;
+using CycloneDX.Models;
+using Moq;
+using Xunit;
+using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 
 namespace CycloneDX.Tests
 {
     public class ProgramTests
     {
         [Fact]
-        public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsSolutionOrProjectFileParameterMissingExitCode()
+        public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsInvalidOptions()
         {
-            var exitCode = await Program.Main(new string[] {}).ConfigureAwait(false);
+            var exitCode = await Program.Main(new string[] { }).ConfigureAwait(false);
 
-            Assert.Equal((int)ExitCode.SolutionOrProjectFileParameterMissing, exitCode);
+            Assert.Equal((int)ExitCode.InvalidOptions, exitCode);
         }
 
         [Fact]
-        public async Task CallingCycloneDX_WithoutOutputDirectory_ReturnsOutputDirectoryParameterMissingExitCode()
+        public async Task CallingCycloneDX_WithoutOutputDirectory_ReturnsInvalidOptions()
         {
             var exitCode = await Program.Main(new string[] { XFS.Path(@"c:\SolutionPath\Solution.sln") }).ConfigureAwait(false);
 
-            Assert.Equal((int)ExitCode.OutputDirectoryParameterMissing, exitCode);
+            Assert.Equal((int)ExitCode.InvalidOptions, exitCode);
         }
 
         [Fact]
@@ -55,17 +55,17 @@ namespace CycloneDX.Tests
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
-                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<NugetPackage>());
-            Program.fileSystem = mockFileSystem;
-            Program.solutionFileService = mockSolutionFileService.Object;
-            var args = new string[]
-            {
-                XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
-                "-o", XFS.Path(@"c:\NewDirectory")
-            };
+                .Setup(s => s.GetSolutionDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>());
 
-            var exitCode = await Program.Main(args).ConfigureAwait(false);
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object, null);
+
+            RunOptions runOptions = new RunOptions
+            {
+                SolutionOrProjectFile = XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
+                outputDirectory = XFS.Path(@"c:\NewDirectory")
+            };
+            var exitCode = await runner.HandleCommandAsync(runOptions);
 
             Assert.Equal((int)ExitCode.OK, exitCode);
             Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\bom.xml")));
@@ -80,18 +80,19 @@ namespace CycloneDX.Tests
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
-                .Setup(s => s.GetSolutionNugetPackages(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<NugetPackage>());
-            Program.fileSystem = mockFileSystem;
-            Program.solutionFileService = mockSolutionFileService.Object;
-            var args = new string[]
+                .Setup(s => s.GetSolutionDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>());
+
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object, null);            
+
+            RunOptions runOptions = new RunOptions
             {
-                XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
-                "-o", XFS.Path(@"c:\NewDirectory"),
-                "-f", "my_bom.xml"
+                SolutionOrProjectFile = XFS.Path(@"c:\SolutionPath\SolutionFile.sln"),
+                outputDirectory = XFS.Path(@"c:\NewDirectory"),
+                outputFilename = XFS.Path(@"my_bom.xml")
             };
 
-            var exitCode = await Program.Main(args).ConfigureAwait(false);
+            var exitCode = await runner.HandleCommandAsync(runOptions);
 
             Assert.Equal((int)ExitCode.OK, exitCode);
             Assert.True(mockFileSystem.FileExists(XFS.Path(@"c:\NewDirectory\my_bom.xml")));
@@ -101,13 +102,13 @@ namespace CycloneDX.Tests
         public void CheckMetaDataTemplate()
         {
             var bom = new Bom();
-            string resourcePath = Path.Join(ApplicationEnvironment.ApplicationBasePath, "Resources", "metadata");
-            bom = Program.ReadMetaDataFromFile(bom, Path.Join(resourcePath, "cycloneDX-metadata-template.xml"));
+            string resourcePath = Path.Join(AppContext.BaseDirectory, "Resources", "metadata");
+            bom = Runner.ReadMetaDataFromFile(bom, Path.Join(resourcePath, "cycloneDX-metadata-template.xml"));
             Assert.NotNull(bom.Metadata);
             Assert.Matches("CycloneDX", bom.Metadata.Component.Name);
-            Assert.NotEmpty(bom.Metadata.Tools);
-            Assert.Matches("CycloneDX", bom.Metadata.Tools[0].Vendor);
-            Assert.Matches("1.2.0", bom.Metadata.Tools[0].Version);
+            Assert.NotEmpty(bom.Metadata.Tools.Tools);
+            Assert.Matches("CycloneDX", bom.Metadata.Tools.Tools[0].Vendor);
+            Assert.Matches("1.2.0", bom.Metadata.Tools.Tools[0].Version);
         }
     }
 }

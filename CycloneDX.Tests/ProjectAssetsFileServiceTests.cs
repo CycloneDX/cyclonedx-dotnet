@@ -28,21 +28,24 @@ using NuGet.LibraryModel;
 using NuGet.ProjectModel;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
+using System.IO;
+using NuGet.Packaging.Signing;
 
 namespace CycloneDX.Tests
 {
     public class ProjectAssetsFileServiceTests
     {
+
         [Theory]
-        [InlineData(".NetStandard", 2, 1)]
-        [InlineData("net", 6, 0)]
-        public void GetNugetPackages_PackageAsTopLevelAndTransitive(string framework, int frameworkMajor, int frameworkMinor)
+        [InlineData(".NETStandard", 2, 1, ".NETStandard,Version=v2.1")]
+        [InlineData(".NETCoreApp", 6, 0, "net6.0")]
+        public void GetDotnetDependencys_PackageAsTopLevelAndTransitive(string framework, int frameworkMajor, int frameworkMinor, string projectFileDependencyGroupsName)
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
                         new[] {
-                            new NugetPackage
+                            new DotnetDependency
                             {
                                 Name = "Package1",
                                 Version = "1.5.0",
@@ -51,13 +54,13 @@ namespace CycloneDX.Tests
                                     { "Package2", "[4.5, )" },
                                 },
                             },
-                            new NugetPackage
+                            new DotnetDependency
                             {
                                 Name = "Package2",
                                 Version = "4.5.1",
                                 Dependencies = new Dictionary<string, string>(),
                             },
-                            new NugetPackage
+                            new DotnetDependency
                             {
                                 Name = "Package3",
                                 Version = "1.0.0",
@@ -69,18 +72,10 @@ namespace CycloneDX.Tests
                     { XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), new MockFileData("")
                     }
                 });
-            var mockDotnetCommandsService = new Mock<IDotnetCommandService>();
-            mockDotnetCommandsService.Setup(m => m.Run(It.IsAny<string>()))
-                .Returns(() => Helpers.GetDotnetListPackagesResult(
-                        new[]
-                        {
-                            ("Package1", new[]{ ("Package1", "1.5.0") }),
-                            ("Package2", new[]{ ("Package2", "4.5.1") }),
-                            ("Package3", new[]{ ("Package3", "1.0.0") }),
-                        }));
+
             var mockAssetReader = new Mock<IAssetFileReader>();
             mockAssetReader
-                .Setup(m => m.Read(It.IsAny<string>()))
+                .Setup(m => m.Read(It.IsAny<Stream>(), It.IsAny<string>()))
                 .Returns(() =>
                 {
                     var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
@@ -217,6 +212,22 @@ namespace CycloneDX.Tests
                                     }
                                 }
                             }
+                        },
+                        Libraries = new[]
+                        {
+                            new LockFileLibrary
+                            {
+                                Name = "Package1",
+                                Version = new NuGetVersion("1.5.0"),
+                                Type = "package"
+                            }
+                        },
+                        ProjectFileDependencyGroups = new[]
+                        {
+
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" }),
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package2 >= 4.5.1" }),
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package3 >= 1.0.0" })
                         }
                     };
                 });
@@ -225,9 +236,10 @@ namespace CycloneDX.Tests
                 return "empty";
             });
 
-            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () => mockAssetReader.Object);
-            var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false, false);
-            var sortedPackages = new List<NugetPackage>(packages);
+            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, () => mockAssetReader.Object);
+            var packages = projectAssetsFileService.GetDotnetDependencys(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"),  false);
+            var sortedPackages = new List<DotnetDependency>(packages);
+
             sortedPackages.Sort();
 
             Assert.Collection(sortedPackages,
@@ -262,15 +274,15 @@ namespace CycloneDX.Tests
         }
 
         [Theory]
-        [InlineData(".NetStandard", 2, 1)]
-        [InlineData("net", 6, 0)]
-        public void GetNugetPackages_MissingResolvedPackageVersion(string framework, int frameworkMajor, int frameworkMinor)
+        [InlineData(".NETStandard", 2, 1, ".NETStandard,Version=v2.1")]
+        [InlineData(".NETCoreApp", 6, 0, "net6.0")]
+        public void GetDotnetDependencys_MissingResolvedPackageVersion(string framework, int frameworkMajor, int frameworkMinor, string projectFileDependencyGroupsName)
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
                         new[] {
-                            new NugetPackage
+                            new DotnetDependency
                             {
                                 Name = "Package1",
                                 Version = "1.5.0",
@@ -284,16 +296,10 @@ namespace CycloneDX.Tests
                     { XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), new MockFileData("")
                     }
                 });
-            var mockDotnetCommandsService = new Mock<IDotnetCommandService>();
-            mockDotnetCommandsService.Setup(m => m.Run(It.IsAny<string>()))
-                .Returns(() => Helpers.GetDotnetListPackagesResult(
-                        new[]
-                        {
-                            ("Package1", new[]{ ("Package1", "1.5.0") }),
-                        }));
+
             var mockAssetReader = new Mock<IAssetFileReader>(MockBehavior.Strict);
             mockAssetReader
-                .Setup(m => m.Read(It.IsAny<string>()))
+                .Setup(m => m.Read(It.IsAny<Stream>(), It.IsAny<string>()))
                 .Returns(() =>
                 {
                     var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
@@ -368,6 +374,20 @@ namespace CycloneDX.Tests
                                     }
                                 }
                             }
+                        },
+                        Libraries = new[]
+                        {
+                            new LockFileLibrary
+                            {
+                                Name = "Package1",
+                                Version = new NuGetVersion("1.5.0"),
+                                Type = "package"
+                            }
+                        },
+                        ProjectFileDependencyGroups = new[]
+                        {
+
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" })
                         }
                     };
                 });
@@ -376,9 +396,10 @@ namespace CycloneDX.Tests
                 return "empty";
             });
 
-            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () => mockAssetReader.Object);
-            var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false, false);
-            var sortedPackages = new List<NugetPackage>(packages);
+            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, () => mockAssetReader.Object);
+            var packages = projectAssetsFileService.GetDotnetDependencys(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false);
+            var sortedPackages = new List<DotnetDependency>(packages);
+
             sortedPackages.Sort();
 
             Assert.Collection(sortedPackages,
@@ -397,15 +418,15 @@ namespace CycloneDX.Tests
         }
 
         [Theory]
-        [InlineData(".NetStandard", 2, 1)]
-        [InlineData("net", 6, 0)]
-        public void GetNugetPackages_MissingDependencies(string framework, int frameworkMajor, int frameworkMinor)
+        [InlineData(".NETStandard", 2, 1, ".NETStandard,Version=v2.1")]
+        [InlineData(".NETCoreApp", 6, 0, "net6.0")]
+        public void GetDotnetDependencys_MissingDependencies(string framework, int frameworkMajor, int frameworkMinor, string projectFileDependencyGroupsName)
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
                         new[] {
-                            new NugetPackage
+                            new DotnetDependency
                             {
                                 Name = "Package1",
                                 Version = "1.5.0",
@@ -415,25 +436,21 @@ namespace CycloneDX.Tests
                     { XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), new MockFileData("")
                     }
                 });
-            var mockDotnetCommandsService = new Mock<IDotnetCommandService>();
-            mockDotnetCommandsService.Setup(m => m.Run(It.IsAny<string>()))
-                .Returns(() => Helpers.GetDotnetListPackagesResult(
-                        new[]
-                        {
-                            ("Package1", new[]{ ("Package1", "1.5.0") }),
-                        }));
             var mockAssetReader = new Mock<IAssetFileReader>(MockBehavior.Strict);
             mockAssetReader
-                .Setup(m => m.Read(It.IsAny<string>()))
+                .Setup(m => m.Read(It.IsAny<Stream>(), It.IsAny<string>()))
                 .Returns(() =>
                 {
-                    var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
+                    var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor));
+                        
+
+
                     return new LockFile
                     {
                         Targets = new[]
                         {
                             new LockFileTarget
-                            {
+                            {                               
                                 TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "",
                                 Libraries = new[]
@@ -491,6 +508,20 @@ namespace CycloneDX.Tests
                                     }
                                 }
                             }
+                        },
+                        Libraries = new[]
+                        {
+                            new LockFileLibrary()
+                            {
+                                Name = "Package1",
+                                Version = new NuGetVersion("1.5.0"),
+                                Type = "package"
+                            }
+                        },
+                        ProjectFileDependencyGroups = new[]
+                        {
+
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" })
                         }
                     };
                 });
@@ -499,9 +530,10 @@ namespace CycloneDX.Tests
                 return "empty";
             });
 
-            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, mockDotnetCommandsService.Object, () => mockAssetReader.Object);
-            var packages = projectAssetsFileService.GetNugetPackages(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false, false);
-            var sortedPackages = new List<NugetPackage>(packages);
+            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, () => mockAssetReader.Object);
+            var packages = projectAssetsFileService.GetDotnetDependencys(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false);
+            var sortedPackages = new List<DotnetDependency>(packages);
+
             sortedPackages.Sort();
 
             Assert.Collection(sortedPackages,

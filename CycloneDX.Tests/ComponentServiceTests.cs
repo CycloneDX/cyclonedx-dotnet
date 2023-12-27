@@ -33,20 +33,20 @@ namespace CycloneDX.Tests
         {
             var mockNugetService = new Mock<INugetService>();
             mockNugetService
-                .SetupSequence(service => service.GetComponentAsync(It.IsAny<NugetPackage>()))
+                .SetupSequence(service => service.GetComponentAsync(It.IsAny<DotnetDependency>()))
                 .ReturnsAsync(new Component { Name = "Package1", Version = "1.0.0" })
                 .ReturnsAsync(new Component { Name = "Package2", Version = "1.0.0" })
                 .ReturnsAsync(new Component { Name = "Package3", Version = "1.0.0" });
             var nugetService = mockNugetService.Object;
             var componentService = new ComponentService(nugetService);
-            var nugetPackages = new List<NugetPackage>
+            var DotnetDependencys = new List<DotnetDependency>
             {
-                new NugetPackage { Name = "Package1", Version = "1.0.0" },
-                new NugetPackage { Name = "Package2", Version = "1.0.0" },
-                new NugetPackage { Name = "Package3", Version = "1.0.0" },
+                new DotnetDependency { Name = "Package1", Version = "1.0.0" },
+                new DotnetDependency { Name = "Package2", Version = "1.0.0" },
+                new DotnetDependency { Name = "Package3", Version = "1.0.0" },
             };
 
-            var components = await componentService.RecursivelyGetComponentsAsync(nugetPackages).ConfigureAwait(false);
+            var components = await componentService.RecursivelyGetComponentsAsync(DotnetDependencys).ConfigureAwait(false);
             var sortedComponents = components.OrderBy(c => c.Name).ToList();
 
             Assert.Collection(sortedComponents,

@@ -23,6 +23,8 @@ using CycloneDX.Interfaces;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 using Moq;
 using CycloneDX.Services;
+using CycloneDX.Models;
+using System.IO;
 
 namespace CycloneDX.Tests
 {
@@ -41,7 +43,7 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project\P
             var mockProjectFileService = new Mock<IProjectFileService>();
             mockProjectFileService
                 .Setup(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<string>());
+                .ReturnsAsync(new HashSet<DotnetDependency>());
             var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
             var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(false);
@@ -67,9 +69,9 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\
             var mockProjectFileService = new Mock<IProjectFileService>();
             mockProjectFileService
                 .SetupSequence(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<string>())
-                .ReturnsAsync(new HashSet<string>())
-                .ReturnsAsync(new HashSet<string>());
+                .ReturnsAsync(new HashSet<DotnetDependency>())
+                .ReturnsAsync(new HashSet<DotnetDependency>())
+                .ReturnsAsync(new HashSet<DotnetDependency>());
             var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
             var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(false);
@@ -99,9 +101,9 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\
             var mockProjectFileService = new Mock<IProjectFileService>();
             mockProjectFileService
                 .SetupSequence(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<string>())
-                .ReturnsAsync(new HashSet<string>())
-                .ReturnsAsync(new HashSet<string>());
+                .ReturnsAsync(new HashSet<DotnetDependency>())
+                .ReturnsAsync(new HashSet<DotnetDependency>())
+                .ReturnsAsync(new HashSet<DotnetDependency>());
             var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
             var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(false);
@@ -128,11 +130,14 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project1\
             var mockProjectFileService = new Mock<IProjectFileService>();
             mockProjectFileService
                 .SetupSequence(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
-                .ReturnsAsync(new HashSet<string>
-                    {
-                        XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"),
-                    })
-                .ReturnsAsync(new HashSet<string>());
+                .ReturnsAsync(new HashSet<DotnetDependency>
+                    { new DotnetDependency() {
+                        Name = "Project2",
+                        Version = "1.0.0",
+                        Path = XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"),
+
+                    } })
+                .ReturnsAsync(new HashSet<DotnetDependency>());
             var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
             var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(false);
