@@ -31,13 +31,11 @@ namespace CycloneDX.Services
     public class ProjectAssetsFileService : IProjectAssetsFileService 
     {
         private readonly IFileSystem _fileSystem;
-        private readonly IDotnetCommandService _dotnetCommandService;
         private readonly Func<IAssetFileReader> _assetFileReaderFactory;
 
-        public ProjectAssetsFileService(IFileSystem fileSystem, IDotnetCommandService dotnetCommandService, Func<IAssetFileReader> assetFileReaderFactory)
+        public ProjectAssetsFileService(IFileSystem fileSystem, Func<IAssetFileReader> assetFileReaderFactory)
         {
             _fileSystem = fileSystem;
-            _dotnetCommandService = dotnetCommandService;
             _assetFileReaderFactory = assetFileReaderFactory;
         }
 
