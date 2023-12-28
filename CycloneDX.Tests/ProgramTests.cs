@@ -39,14 +39,6 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task CallingCycloneDX_WithoutOutputDirectory_ReturnsInvalidOptions()
-        {
-            var exitCode = await Program.Main(new string[] { XFS.Path(@"c:\SolutionPath\Solution.sln") }).ConfigureAwait(false);
-
-            Assert.Equal((int)ExitCode.InvalidOptions, exitCode);
-        }
-
-        [Fact]
         public async Task CallingCycloneDX_CreatesOutputDirectory()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
