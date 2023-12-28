@@ -468,8 +468,9 @@ namespace CycloneDX
                 if(bom.Metadata.Tools.Services != null)
                 {
                     Console.WriteLine("Cannot add CycloneDX as test component because there is already a service-collection (components and services are exclusive)");
+                    return;
                 }
-                new List<Component>();
+                bom.Metadata.Tools.Components = new List<Component>();
             }
 
             var index = bom.Metadata.Tools.Components.FindIndex(p => p.Name == toolname);
