@@ -49,7 +49,7 @@ namespace CycloneDX.Tests
                 SolutionOrProjectFile = XFS.Path(@"c:\ProjectPath\Project.csproj"),
                 outputDirectory = XFS.Path(@"c:\NewDirectory"),
                 json = fileFormat == "json",
-                disableGithubLicenses = disableGitHubLicenses,
+                enableGithubLicenses = !disableGitHubLicenses,
             };
 
             var exitCode = await runner.HandleCommandAsync(runOptions);

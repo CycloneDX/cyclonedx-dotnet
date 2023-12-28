@@ -76,8 +76,7 @@ namespace CycloneDX
             bool noSerialNumber = options.noSerialNumber;
             string githubUsername = options.githubUsername;
             string githubT = options.githubT;
-            string githubBT = options.githubBT;
-            bool disableGithubLicenses = options.disableGithubLicenses;
+            string githubBT = options.githubBT;            
             bool disablePackageRestore = options.disablePackageRestore;            
             int dotnetCommandTimeout = options.dotnetCommandTimeout;
             string baseIntermediateOutputPath = options.baseIntermediateOutputPath;
@@ -109,7 +108,7 @@ namespace CycloneDX
 
             // instantiate services            
             GithubService githubService = null;
-            if (!(disableGithubLicenses))
+            if (options.enableGithubLicenses)
             {
                 // GitHubService requires its own HttpClient as it adds a default authorization header
                 HttpClient httpClient = new HttpClient(new HttpClientHandler

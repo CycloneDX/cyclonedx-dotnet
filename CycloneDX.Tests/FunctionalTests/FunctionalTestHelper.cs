@@ -73,7 +73,7 @@ namespace CycloneDX.Tests.FunctionalTests
 
         public static async Task<Bom> Test(RunOptions options, INugetServiceFactory nugetService, MockFileSystem mockFileSystem)
         {
-            options.disableGithubLicenses = true;
+            options.enableGithubLicenses = true;
             options.outputDirectory ??= "/bom/";
             options.outputFilename ??= options.json ? "bom.json" : "bom.xml";
             options.SolutionOrProjectFile ??= MockUnixSupport.Path("c:/ProjectPath/Project.csproj");

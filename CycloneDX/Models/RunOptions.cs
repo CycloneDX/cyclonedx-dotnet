@@ -38,8 +38,8 @@ namespace CycloneDX.Models
         public bool noSerialNumber { get; set; }
         public string githubUsername { get; set; }
         public string githubT { get; set; }
-        public string githubBT { get; set; }
-        public bool disableGithubLicenses { get; set; }
+        public string githubBT { get; set; }        
+        public bool enableGithubLicenses { get; set; }
         public bool disablePackageRestore { get; set; }
         public bool disableHashComputation { get; set; }
         public int dotnetCommandTimeout { get; set; } = 30000;
