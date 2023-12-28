@@ -17,6 +17,7 @@
 
 using System;
 using System.CommandLine;
+using System.IO;
 using System.Threading.Tasks;
 using CycloneDX.Models;
 
@@ -31,7 +32,7 @@ namespace CycloneDX
             var SolutionOrProjectFile = new Argument<string>("path", description: "The path to a .sln, .csproj, .fsproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.");
             var framework = new Option<string>(new[] { "--framework", "-tfm" }, "The target framework to use. If not defined, all will be aggregated.");
             var runtime = new Option<string>(new[] { "--runtime", "-rt" }, "The runtime to use. If not defined, all will be aggregated.");
-            var outputDirectory = new Option<string>(new[] { "--output", "-o" }, description: "The directory to write the BOM") { IsRequired = true };
+            var outputDirectory = new Option<string>(new[] { "--output", "-o" }, description: "The directory to write the BOM");
             var outputFilename = new Option<string>(new[] { "--filename", "-fn" }, "Optionally provide a filename for the BOM (default: bom.xml or bom.json)");
             var json = new Option<bool>(new[] { "--json", "-j" }, "Produce a JSON BOM instead of XML");
             var excludeDev = new Option<bool>(new[] { "--exclude-dev", "-ed" }, "Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)");
@@ -59,6 +60,7 @@ namespace CycloneDX
             var outputFilenameDeprecated = new Option<string>(new[] { "-f" }, "(Deprecated use -fn instead) Optionally provide a filename for the BOM (default: bom.xml or bom.json).");
             var excludeDevDeprecated = new Option<bool>(new[] {"-d" }, "(Deprecated use -ed instead) Exclude development dependencies from the BOM.");
             var scanProjectDeprecated = new Option<bool>(new[] {"-r" }, "(Deprecated use -rs instead) To be used with a single project file, it will recursively scan project references of the supplied project file.");
+            var outputDirectoryDeprecated = new Option<string>(new[] { "--out", }, description: "(Deprecated use -output instead) The directory to write the BOM");
 
 
             RootCommand rootCommand = new RootCommand
@@ -92,7 +94,8 @@ namespace CycloneDX
                 includeProjectReferences,
                 outputFilenameDeprecated,
                 excludeDevDeprecated,
-                scanProjectDeprecated
+                scanProjectDeprecated,
+                outputDirectoryDeprecated
             };
             rootCommand.Description = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.";
             rootCommand.SetHandler(async (context) =>
@@ -102,7 +105,7 @@ namespace CycloneDX
                     SolutionOrProjectFile = context.ParseResult.GetValueForArgument(SolutionOrProjectFile),
                     runtime = context.ParseResult.GetValueForOption(runtime),
                     framework = context.ParseResult.GetValueForOption(framework),
-                    outputDirectory = context.ParseResult.GetValueForOption(outputDirectory),
+                    outputDirectory = context.ParseResult.GetValueForOption(outputDirectory) ?? context.ParseResult.GetValueForOption(outputDirectory),
                     outputFilename = context.ParseResult.GetValueForOption(outputFilename) ?? context.ParseResult.GetValueForOption(outputFilenameDeprecated),
                     json = context.ParseResult.GetValueForOption(json),
                     excludeDev = context.ParseResult.GetValueForOption(excludeDev) | context.ParseResult.GetValueForOption(excludeDevDeprecated),

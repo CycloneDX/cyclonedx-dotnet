@@ -63,6 +63,7 @@ namespace CycloneDX
 
         public async Task<int> HandleCommandAsync(RunOptions options)
         {
+            options.outputDirectory ??= fileSystem.Directory.GetCurrentDirectory();
             string outputDirectory = options.outputDirectory;
             string SolutionOrProjectFile = options.SolutionOrProjectFile;
             string framework = options.framework;
