@@ -375,6 +375,8 @@ namespace CycloneDX.Tests
                 }
             }";
             var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet.git/license")
+                .Respond(HttpStatusCode.NotFound);
             mockHttp.When("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet/license")
                 .Respond("application/json", mockResponseContent);
             var client = mockHttp.ToHttpClient();
