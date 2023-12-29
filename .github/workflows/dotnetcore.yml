@@ -80,7 +80,8 @@ jobs:
         run: cat ./coveragereport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
         shell: bash
       - name: Upload coverage report artifact
-        uses: actions/upload-artifact@v3
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.framework == 'net8.0' }}
+        uses: actions/upload-artifact@v4
         with:
-          name: CoverageReport
+          name: CoverageReport_${{ matrix.framework }}_${{ matrix.os }}
           path: coveragereport
