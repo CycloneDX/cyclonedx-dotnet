@@ -93,7 +93,7 @@ namespace CycloneDX.Services
                 fileName += ".exe";
             }
             var mainModule = Process.GetCurrentProcess().MainModule;
-            if (!string.IsNullOrEmpty(mainModule.FileName)
+            if (!string.IsNullOrEmpty(mainModule?.FileName)
                 && Path.GetFileName(mainModule.FileName).Equals(fileName, StringComparison.OrdinalIgnoreCase))
             {
                 return mainModule.FileName;
@@ -105,13 +105,32 @@ namespace CycloneDX.Services
             {
                 // fall back to default location
                 // https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-environment-variables#dotnet_root-dotnet_rootx86
-                dotnetRoot = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "C:\\Program Files\\dotnet" : "/usr/local/share/dotnet";
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    dotnetRoot = "C:\\Program Files\\dotnet";
+
+                }
+                else
+                {                  
+                    dotnetRoot = "/usr/local/share/dotnet";
+                    if (!Directory.Exists(dotnetRoot))
+                    {
+                        dotnetRoot = "/usr/share/dotnet";
+                    }
+                    if (!Directory.Exists(dotnetRoot))
+                    {
+                        dotnetRoot = "/usr/lib/dotnet";
+                    }
+                }
+
+
             }
 
             return Path.Combine(dotnetRoot, fileName);
         }
 
-    private static async Task ConsumeStreamReaderAsync(StreamReader reader, StringBuilder lines)
+        private static async Task ConsumeStreamReaderAsync(StreamReader reader, StringBuilder lines)
         {
             await Task.Yield();
 
