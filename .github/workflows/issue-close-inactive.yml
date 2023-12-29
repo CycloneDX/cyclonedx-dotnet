@@ -14,6 +14,7 @@ jobs:
     steps:
       - uses: actions/stale@v8
         with:
+          exempt-issue-labels: "ready for development"
           days-before-issue-stale: 90
           days-before-issue-close: 275
           stale-issue-label: "stale"
