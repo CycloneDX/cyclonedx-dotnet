@@ -46,7 +46,7 @@ namespace CycloneDX.Tests
                 new DotnetDependency { Name = "Package3", Version = "1.0.0" },
             };
 
-            var components = await componentService.RecursivelyGetComponentsAsync(DotnetDependencys).ConfigureAwait(false);
+            var components = await componentService.RecursivelyGetComponentsAsync(DotnetDependencys).ConfigureAwait(true);
             var sortedComponents = components.OrderBy(c => c.Name).ToList();
 
             Assert.Collection(sortedComponents,

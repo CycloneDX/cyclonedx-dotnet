@@ -36,7 +36,7 @@ namespace CycloneDX.Tests
                 });
             var packagesFileService = new PackagesFileService(mockFileSystem);
 
-            var packages = await packagesFileService.GetDotnetDependencysAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(false);
+            var packages = await packagesFileService.GetDotnetDependencysAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(true);
             
             Assert.Collection(packages,
                 item => {
@@ -60,7 +60,7 @@ namespace CycloneDX.Tests
                 });
             var packagesFileService = new PackagesFileService(mockFileSystem);
 
-            var packages = await packagesFileService.GetDotnetDependencysAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(false);
+            var packages = await packagesFileService.GetDotnetDependencysAsync(XFS.Path(@"c:\Project\packages.config")).ConfigureAwait(true);
             var sortedPackages = new List<DotnetDependency>(packages);
             sortedPackages.Sort();
 
