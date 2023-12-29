@@ -75,7 +75,7 @@ namespace CycloneDX.Tests
                 new Mock<IGithubService>().Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Equal("testpackage", component.Name);
         }
@@ -117,7 +117,7 @@ namespace CycloneDX.Tests
                 new Mock<IGithubService>().Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", rawVersion, Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", rawVersion, Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Equal("testpackage", component.Name);
             Assert.Equal(rawVersion, component.Version);
@@ -147,7 +147,7 @@ namespace CycloneDX.Tests
                 new Mock<IGithubService>().Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", $"{rawVersion}", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", $"{rawVersion}", Component.ComponentScope.Required).ConfigureAwait(true);
 
             byte[] hashBytes;
             using (SHA512 sha = SHA512.Create())
@@ -183,7 +183,7 @@ namespace CycloneDX.Tests
                 new NullLogger(),
                 true);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Null(component.Hashes);
         }
@@ -201,7 +201,7 @@ namespace CycloneDX.Tests
             var packageVersion = "13.0.1";
             var component = await nugetService
                 .GetComponentAsync("Newtonsoft.Json", packageVersion, Component.ComponentScope.Required)
-                .ConfigureAwait(false);
+                .ConfigureAwait(true);
 
             Assert.Equal(packageName, component.Name);
             Assert.Equal(packageVersion, component.Version);
@@ -220,7 +220,7 @@ namespace CycloneDX.Tests
             var packageVersion = "13.0.1";
             var component = await nugetService
                 .GetComponentAsync("Newtonsoft.Json", packageVersion, Component.ComponentScope.Required)
-                .ConfigureAwait(false);
+                .ConfigureAwait(true);
 
             Assert.Equal(packageName, component.Name);
             Assert.Equal(packageVersion, component.Version);
@@ -250,7 +250,7 @@ namespace CycloneDX.Tests
                 mockGitHubService.Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             mockGitHubService.Verify(x => x.GetLicenseAsync(It.IsAny<string>()), Times.Once);
             Assert.Single(component.Licenses);
@@ -281,7 +281,7 @@ namespace CycloneDX.Tests
                 mockGitHubService.Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             mockGitHubService.Verify(x => x.GetLicenseAsync(It.IsAny<string>()), Times.Once);
             Assert.Single(component.Licenses);
@@ -312,7 +312,7 @@ namespace CycloneDX.Tests
                 mockGitHubService.Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             mockGitHubService.Verify(x => x.GetLicenseAsync(It.IsAny<string>()), Times.Once);
             Assert.Single(component.Licenses);
@@ -343,7 +343,7 @@ namespace CycloneDX.Tests
                 mockGitHubService.Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             mockGitHubService.Verify(x => x.GetLicenseAsync(It.IsAny<string>()), Times.Once);
             Assert.Single(component.Licenses);
@@ -375,7 +375,7 @@ namespace CycloneDX.Tests
                 mockGitHubService.Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             mockGitHubService.Verify(x => x.GetLicenseAsync(It.IsAny<string>()), Times.Exactly(2));
             Assert.Single(component.Licenses);
@@ -405,7 +405,7 @@ namespace CycloneDX.Tests
                 mockGitHubService.Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Single(component.Licenses);
             Assert.Equal("Apache-2.0", component.Licenses.First().License.Id);
@@ -434,7 +434,7 @@ namespace CycloneDX.Tests
                 mockGitHubService.Object,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Equal(2, component.Licenses.Count);
             Assert.Contains(component.Licenses, choice => choice.License.Id.Equals("Apache-2.0"));
@@ -463,7 +463,7 @@ namespace CycloneDX.Tests
                 null,
                 new NullLogger(), false);
 
-            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(false);
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Single(component.Licenses);
             Assert.Equal("https://not-licence.url", component.Licenses.First().License.Url);

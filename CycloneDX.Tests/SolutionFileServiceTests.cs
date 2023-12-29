@@ -46,7 +46,7 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project\P
                 .ReturnsAsync(new HashSet<DotnetDependency>());
             var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
-            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(false);
+            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(true);
             
             Assert.Collection(projects, 
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project\Project.csproj"), item));
@@ -74,7 +74,7 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\
                 .ReturnsAsync(new HashSet<DotnetDependency>());
             var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
-            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(false);
+            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(true);
             var sortedProjects = new List<string>(projects);
             sortedProjects.Sort();
             
@@ -106,7 +106,7 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\
                 .ReturnsAsync(new HashSet<DotnetDependency>());
             var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
-            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(false);
+            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(true);
             var sortedProjects = new List<string>(projects);
             sortedProjects.Sort();
             
@@ -140,7 +140,7 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project1\
                 .ReturnsAsync(new HashSet<DotnetDependency>());
             var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
 
-            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(false);
+            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.sln")).ConfigureAwait(true);
             var sortedProjects = new List<string>(projects);
             sortedProjects.Sort();
             
