@@ -100,34 +100,9 @@ namespace CycloneDX.Services
             }
             // DOTNET_ROOT specifies the location of the .NET runtimes, if they are not installed in the default location.
             var dotnetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT");
-
-            if (string.IsNullOrEmpty(dotnetRoot))
-            {
-                // fall back to default location
-                // https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-environment-variables#dotnet_root-dotnet_rootx86
-
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    dotnetRoot = "C:\\Program Files\\dotnet";
-
-                }
-                else
-                {                  
-                    dotnetRoot = "/usr/local/share/dotnet";
-                    if (!Directory.Exists(dotnetRoot))
-                    {
-                        dotnetRoot = "/usr/share/dotnet";
-                    }
-                    if (!Directory.Exists(dotnetRoot))
-                    {
-                        dotnetRoot = "/usr/lib/dotnet";
-                    }
-                }
-
-
-            }
-
-            return Path.Combine(dotnetRoot, fileName);
+            return !string.IsNullOrEmpty(dotnetRoot)
+                ? Path.Combine(dotnetRoot, fileName)
+                : fileName;
         }
 
         private static async Task ConsumeStreamReaderAsync(StreamReader reader, StringBuilder lines)
