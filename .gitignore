@@ -16,3 +16,5 @@ SBOM/
 .opencode-server/
 TestResults/
 CycloneDX/Properties/launchSettings.json
+*.binlog
+MSBuild_Logs/

@@ -1,0 +1,5 @@
+---
+engines:
+  remark-lint:
+    exclude_paths:
+    - "CHANGELOG.md"
