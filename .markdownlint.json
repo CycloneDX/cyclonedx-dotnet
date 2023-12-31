@@ -1,0 +1,12 @@
+{
+    "default": true,
+    "MD024": {
+        "siblings_only": true
+    },
+    "MD013": {
+      "line_length": 100
+    },
+    "MD007": {
+      "start_indented": false
+    }
+}
