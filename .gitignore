@@ -17,4 +17,4 @@ SBOM/
 TestResults/
 CycloneDX/Properties/launchSettings.json
 *.binlog
-MSBuild_Logs
+MSBuild_Logs/
