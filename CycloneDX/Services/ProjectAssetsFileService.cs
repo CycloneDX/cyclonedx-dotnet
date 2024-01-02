@@ -61,6 +61,7 @@ namespace CycloneDX.Services
                         {
                             var x = d.Split(" ");
                             return new { Name = x.First() };
+
                         });
 
                     foreach (var lockFileLibrary in targetRuntime.Libraries)
