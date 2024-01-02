@@ -42,6 +42,9 @@
     <None Update="FunctionalTests\TestcaseFiles\DevDependencies_WithPackageConfig_PackageConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="FunctionalTests\TestcaseFiles\FloatingVersions.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\TestcaseFiles\Issue-758.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -60,7 +60,7 @@ namespace CycloneDX.Services
                         .Select(d =>
                         {
                             var x = d.Split(" ");
-                            return new { Name = x.First(), Version = new NuGetVersion(x.Last()) };
+                            return new { Name = x.First() };
                         });
 
                     foreach (var lockFileLibrary in targetRuntime.Libraries)
@@ -76,7 +76,7 @@ namespace CycloneDX.Services
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
                             IsDevDependency = SetIsDevDependency(libs),
-                            IsDirectReference = directDependencies?.Any(d => string.Compare(d.Name, lockFileLibrary.Name, true) == 0 && d.Version <= lockFileLibrary.Version) ?? false,                            
+                            IsDirectReference = directDependencies?.Any(d => string.Compare(d.Name, lockFileLibrary.Name, true) == 0) ?? false,                            
                             DependencyType = (lockFileLibrary.Type != "project") ? DependencyType.Package : DependencyType.Project,
                             Path = Path.Combine(Path.GetDirectoryName(projectFilePath), library?.Path ?? "")
                         };
