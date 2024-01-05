@@ -350,14 +350,14 @@ namespace CycloneDX
 
             if (!string.IsNullOrEmpty(importMetadataPath))
             {
-                if (!File.Exists(importMetadataPath))
+                if (!fileSystem.File.Exists(importMetadataPath))
                 {
                     Console.Error.WriteLine($"Metadata template '{importMetadataPath}' does not exist.");
                     return (int)ExitCode.InvalidOptions;
                 }
                 else
                 {
-                    bom = ReadMetaDataFromFile(bom, importMetadataPath);
+                    bom = ReadMetaDataFromFile(bom, importMetadataPath, fileSystem);
                 }
             }
             SetMetadataComponentIfNecessary(bom, topLevelComponent);
@@ -448,11 +448,11 @@ namespace CycloneDX
             
         }
 
-        internal static Bom ReadMetaDataFromFile(Bom bom, string templatePath)
+        internal static Bom ReadMetaDataFromFile(Bom bom, string templatePath, IFileSystem fileSystem)
         {
             try
             {
-                return Xml.Serializer.Deserialize(File.ReadAllText(templatePath));
+                return Xml.Serializer.Deserialize(fileSystem.File.ReadAllText(templatePath));
             }
             catch (IOException ex)
             {
