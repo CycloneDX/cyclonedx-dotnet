@@ -141,6 +141,9 @@
     <None Update="FunctionalTests\TestcaseFiles\Issue-758.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="FunctionalTests\TestcaseFiles\metadata.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\TestcaseFiles\ProjectReferenceWithPackageReferenceWithTransitivePackage.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

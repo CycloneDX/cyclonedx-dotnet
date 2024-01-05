@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
@@ -237,7 +238,7 @@ namespace CycloneDX.Tests
         {
             var bom = new Bom();
             string resourcePath = Path.Join(AppContext.BaseDirectory, "Resources", "metadata");
-            bom = Runner.ReadMetaDataFromFile(bom, Path.Join(resourcePath, "cycloneDX-metadata-template.xml"));
+            bom = Runner.ReadMetaDataFromFile(bom, Path.Join(resourcePath, "cycloneDX-metadata-template.xml"), new FileSystem());
             Assert.NotNull(bom.Metadata);
             Assert.Matches("CycloneDX", bom.Metadata.Component.Name);
             Assert.NotEmpty(bom.Metadata.Tools.Tools);

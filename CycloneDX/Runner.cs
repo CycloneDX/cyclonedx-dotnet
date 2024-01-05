@@ -403,17 +403,17 @@ namespace CycloneDX
 
             if (!string.IsNullOrEmpty(importMetadataPath))
             {
-                if (!File.Exists(importMetadataPath))
+                if (!fileSystem.File.Exists(importMetadataPath))
                 {
                     Console.Error.WriteLine($"Metadata template '{importMetadataPath}' does not exist.");
                     return (int)ExitCode.InvalidOptions;
                 }
                 else
                 {
-                    bom = ReadMetaDataFromFile(bom, importMetadataPath);
+                    bom = ReadMetaDataFromFile(bom, importMetadataPath, fileSystem);
                 }
             }
-            SetMetadataComponentIfNecessary(bom, topLevelComponent, setNugetPurl);
+            SetMetadataComponentIfNecessary(bom, topLevelComponent, setNugetPurl, setName, setVersion, setType);
             Runner.AddMetadataTool(bom);
 
             if (!(noSerialNumber))
@@ -521,7 +521,8 @@ namespace CycloneDX
             return packages;
         }
 
-        private static void SetMetadataComponentIfNecessary(Bom bom, Component topLevelComponent, bool setNugetPurl)
+        private static void SetMetadataComponentIfNecessary(Bom bom, Component topLevelComponent, bool setNugetPurl,
+            string setName = null, string setVersion = null, Classification setType = Classification.Null)
         {
             if (bom.Metadata is null)
             {
@@ -533,17 +534,31 @@ namespace CycloneDX
             }
             else
             {
-                if (string.IsNullOrEmpty(bom.Metadata.Component.Name))
+                // If the user explicitly provided a name/version/type override, apply it regardless
+                // of what was imported from metadata; otherwise only fill in missing values.
+                if (!string.IsNullOrEmpty(setName))
+                {
+                    bom.Metadata.Component.Name = setName;
+                }
+                else if (string.IsNullOrEmpty(bom.Metadata.Component.Name))
                 {
                     bom.Metadata.Component.Name = topLevelComponent.Name;
                 }
 
-                if (string.IsNullOrEmpty(bom.Metadata.Component.Version))
+                if (!string.IsNullOrEmpty(setVersion))
+                {
+                    bom.Metadata.Component.Version = setVersion;
+                }
+                else if (string.IsNullOrEmpty(bom.Metadata.Component.Version))
                 {
                     bom.Metadata.Component.Version = topLevelComponent.Version;
                 }
 
-                if (bom.Metadata.Component.Type == Component.Classification.Null)
+                if (setType != Classification.Null)
+                {
+                    bom.Metadata.Component.Type = setType;
+                }
+                else if (bom.Metadata.Component.Type == Component.Classification.Null)
                 {
                     bom.Metadata.Component.Type = Component.Classification.Application;
                 }
@@ -572,11 +587,13 @@ namespace CycloneDX
 
         }
 
-        internal static Bom ReadMetaDataFromFile(Bom bom, string templatePath)
+        internal static Bom ReadMetaDataFromFile(Bom bom, string templatePath, IFileSystem fileSystem)
         {
             try
             {
-                return Xml.Serializer.Deserialize(File.ReadAllText(templatePath));
+                var templateBom = Xml.Serializer.Deserialize(fileSystem.File.ReadAllText(templatePath));
+                bom.Metadata = templateBom.Metadata;
+                return bom;
             }
             catch (IOException ex)
             {
