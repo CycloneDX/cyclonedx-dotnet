@@ -1,9 +1,9 @@
 # This workflow is used for publishing the NuGet package and Docker image.
 #
-# Before triggering a release the `semver.txt` file should be updated in the
+# Before triggering a release the `version.json` file should be updated in the
 # relevant branch.
 #
-# When commiting the version change in `semver.txt` the commit message is
+# When commiting the version change in `version.json` the commit message is
 # important as it will be used for the release in GitHub.
 #
 # For an example commit browse to
@@ -29,6 +29,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0 # avoid shallow clone so nbgv can do its
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
@@ -43,14 +45,19 @@ jobs:
       - name: Package release
         id: package_release
         run: |
-          VERSION=`cat semver.txt`
+          dotnet tool restore
+          VERSION=`nbgv get-version --variable Version`
+          NUGETVERSION=`nbgv get-version --variable NuGetPackageVersion`
+          # versionize --tag-only
+          # git add CHANGELOG.md
+          # git commit -m "update CHANGELOG.md"
           OUTPUT=./nupkgs
           echo "##[set-output name=version;]$VERSION"
-          echo "##[set-output name=package_name;]CycloneDX.$VERSION.nupkg"
-          echo "##[set-output name=package_filename;]$OUTPUT/CycloneDX.$VERSION.nupkg"
+          echo "##[set-output name=package_name;]CycloneDX.$NUGETVERSION.nupkg"
+          echo "##[set-output name=package_filename;]$OUTPUT/CycloneDX.$NUGETVERSION.nupkg"
           REPO=cyclonedx/cyclonedx-dotnet
-          dotnet build --configuration Release /p:Version=$VERSION
-          dotnet pack CycloneDX/CycloneDX.csproj --configuration Release /p:Version=$VERSION --output $OUTPUT
+          dotnet build --configuration Release
+          dotnet pack CycloneDX/CycloneDX.csproj --configuration Release --output $OUTPUT
           docker build -f Dockerfile --build-arg VERSION=$VERSION -t $REPO:$VERSION -t $REPO:latest .
 
       # We install the newly generated tool as bit of a "smoke test" and to generate an SBOM for the release
