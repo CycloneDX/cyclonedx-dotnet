@@ -7,12 +7,6 @@
       "commands": [
         "nbgv"
       ]
-    },
-    "versionize": {
-      "version": "1.21.0",
-      "commands": [
-        "versionize"
-      ]
     }
   }
 }

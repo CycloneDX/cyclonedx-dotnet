@@ -48,9 +48,6 @@ jobs:
           dotnet tool restore
           VERSION=`nbgv get-version --variable Version`
           NUGETVERSION=`nbgv get-version --variable NuGetPackageVersion`
-          # versionize --tag-only
-          # git add CHANGELOG.md
-          # git commit -m "update CHANGELOG.md"
           OUTPUT=./nupkgs
           echo "##[set-output name=version;]$VERSION"
           echo "##[set-output name=package_name;]CycloneDX.$NUGETVERSION.nupkg"
