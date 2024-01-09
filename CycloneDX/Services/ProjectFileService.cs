@@ -221,11 +221,6 @@ namespace CycloneDX.Services
             {
                 var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project.Path, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
 
-                foreach (var dependency in projectDotnetDependencys)
-                {
-                    project.Dependencies.Add(dependency.Name, dependency.Version);
-                }
-
                 DotnetDependencys.UnionWith(projectDotnetDependencys);
             }
 
