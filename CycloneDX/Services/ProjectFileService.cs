@@ -324,7 +324,6 @@ namespace CycloneDX.Services
                 dependency.Dependencies = foundProjectReferences.ToDictionary(key => key, value => (string)null);
                 dependency.Scope = Component.ComponentScope.Required;
                 dependency.DependencyType = DependencyType.Project;
-                dependency.Dependencies = new Dictionary<string, string>();
                 projectReferences.Add(dependency);
 
                 // Add unvisited project files to the queue
