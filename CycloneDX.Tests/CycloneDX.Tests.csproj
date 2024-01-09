@@ -33,6 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="FunctionalTests\Issue826-ProjectFileDoesntExist\project1csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue826-ProjectFileDoesntExist\solution1sln.text">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\TestcaseFiles\DevDependencies.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
