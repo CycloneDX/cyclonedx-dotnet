@@ -30,7 +30,7 @@ namespace CycloneDX.Tests.FunctionalTests
         }
 
         [Fact]
-        public async Task WithoutRecursiveScan()
+        public async Task NoExceptionHappens()
         {
             var options = new RunOptions
             {
