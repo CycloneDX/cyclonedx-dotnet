@@ -104,21 +104,21 @@ namespace CycloneDX.Services
             string version = versionElement?.Value;
 
             if (version == null)
-            {                
+            {
                 string assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "Properties", "AssemblyInfo.cs");
                 if (_fileSystem.File.Exists(assemblyInfoPath))
                 {
-                    
+
                     string[] lines = _fileSystem.File.ReadAllLines(assemblyInfoPath);
                     string pattern = @"^\[assembly: AssemblyVersion\(""(?<Version>.*?)""\)\]$";
 
                     foreach (var line in lines)
-                    {                        
+                    {
                         Match match = Regex.Match(line, pattern);
-                        
+
                         if (match.Success)
-                        {                            
-                            version = match.Groups["Version"].Value;                                                        
+                        {
+                            version = match.Groups["Version"].Value;
                             break;
                         }
                     }
@@ -214,7 +214,12 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
         {
-            var DotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
+            var dotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
+            foreach (var item in dotnetDependencys)
+            {
+                item.IsDirectReference = true;
+            }
+
             var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
 
             //Remove root-project, it will be added to the metadata
@@ -227,19 +232,20 @@ namespace CycloneDX.Services
             {
                 var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project.Path, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
 
+                //Add dependencies for dependency graph
                 foreach (var dependency in projectDotnetDependencys)
                 {
                     project.Dependencies.Add(dependency.Name, dependency.Version);
                 }
 
-                DotnetDependencys.UnionWith(projectDotnetDependencys);
+                dotnetDependencys.UnionWith(projectDotnetDependencys);
             }
 
             //When there is a project.assets.json, the project references are already added, so check before adding
-            var allAddedDepedencyNames = DotnetDependencys.Select(dep => dep.Name);
-            DotnetDependencys.UnionWith(projectReferences.Where(pr => !allAddedDepedencyNames.Contains(pr.Name)));
+            var allAddedDepedencyNames = dotnetDependencys.Select(dep => dep.Name);
+            dotnetDependencys.UnionWith(projectReferences.Where(pr => !allAddedDepedencyNames.Contains(pr.Name)));
 
-            return DotnetDependencys;
+            return dotnetDependencys;
         }
 
         /// <summary>
@@ -314,7 +320,7 @@ namespace CycloneDX.Services
                 var currentFile = files.Dequeue();
                 // Find all project references inside of currentFile
                 var foundProjectReferences = await GetProjectReferencesAsync(currentFile).ConfigureAwait(false);
-                
+
                 var nameAndVersion = GetProjectNameAndVersion(currentFile);
 
                 DotnetDependency dependency = new();
@@ -324,7 +330,6 @@ namespace CycloneDX.Services
                 dependency.Dependencies = foundProjectReferences.ToDictionary(key => key, value => (string)null);
                 dependency.Scope = Component.ComponentScope.Required;
                 dependency.DependencyType = DependencyType.Project;
-                dependency.Dependencies = new Dictionary<string, string>();
                 projectReferences.Add(dependency);
 
                 // Add unvisited project files to the queue
