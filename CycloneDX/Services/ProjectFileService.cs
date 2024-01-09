@@ -61,6 +61,11 @@ namespace CycloneDX.Services
 
         public bool IsTestProject(string projectFilePath)
         {
+            if (!_fileSystem.File.Exists(projectFilePath))
+            {
+                return false;
+            }
+
             XmlDocument xmldoc = new XmlDocument();
             using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
             xmldoc.Load(fileStream);

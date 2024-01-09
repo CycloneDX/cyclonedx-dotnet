@@ -12,7 +12,7 @@ using Xunit;
 
 namespace CycloneDX.Tests.FunctionalTests
 {
-    public class ReferencedProjectFileDoesntExists
+    public class Issue826ReferencedProjectFileDoesntExists
     {
         private MockFileSystem getMockFS()
         {
