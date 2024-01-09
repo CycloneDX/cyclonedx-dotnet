@@ -61,6 +61,11 @@ namespace CycloneDX.Services
 
         public bool IsTestProject(string projectFilePath)
         {
+            if (!_fileSystem.File.Exists(projectFilePath))
+            {
+                return false;
+            }
+
             XmlDocument xmldoc = new XmlDocument();
             using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
             xmldoc.Load(fileStream);
@@ -77,9 +82,10 @@ namespace CycloneDX.Services
 
         private (string name, string version) GetProjectNameAndVersion(string projectFilePath)
         {
-            string name = null;
-            string version = null;
-
+            if (!_fileSystem.File.Exists(projectFilePath))
+            {
+                return (_fileSystem.Path.GetFileNameWithoutExtension(projectFilePath), "undefined");
+            }
 
 
             XmlDocument xmldoc = new XmlDocument();
@@ -89,13 +95,13 @@ namespace CycloneDX.Services
             XmlNamespaceManager namespaces = new XmlNamespaceManager(xmldoc.NameTable);
             namespaces.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-            name = (xmldoc.SelectSingleNode("/Project/PropertyGroup/AssemblyName") as XmlElement)?.Value
+            string name = (xmldoc.SelectSingleNode("/Project/PropertyGroup/AssemblyName") as XmlElement)?.Value
                 ?? (xmldoc.SelectSingleNode("/Project/PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.Value
                 ?? _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
 
             // Extract Version
             XmlElement versionElement = xmldoc.SelectSingleNode("/Project/PropertyGroup/Version") as XmlElement;
-            version = versionElement?.Value;
+            string version = versionElement?.Value;
 
             if (version == null)
             {                
