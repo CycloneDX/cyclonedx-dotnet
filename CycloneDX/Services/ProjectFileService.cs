@@ -84,7 +84,7 @@ namespace CycloneDX.Services
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
-                return (_fileSystem.Path.GetFileNameWithoutExtension(projectFilePath), "undefined");
+                return (projectFilePath, "undefined");
             }
 
 

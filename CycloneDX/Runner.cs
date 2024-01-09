@@ -288,7 +288,7 @@ namespace CycloneDX
                     {
                         foreach (var dep in package.Dependencies)
                         {
-                            var lookupKey = (dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value.ToLower(CultureInfo.InvariantCulture));
+                            var lookupKey = (dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value?.ToLower(CultureInfo.InvariantCulture));
                             if (!bomRefLookup.ContainsKey(lookupKey))
                             {
                                 var packageNameMatch = bomRefLookup.Where(x => x.Key.Item1 == dep.Key.ToLower(CultureInfo.InvariantCulture)).ToList();

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition=" 'Today' == '30th February'">
+      <ItemGroup>
+        <!-- Project reference that doesn't exist-->
+        <ProjectReference Include="..\foo\log4net.csproj">
+          <Project>{7abb510c-f4de-4413-a9f4-a04db9a3f55f}</Project>
+          <Name>log4net</Name>
+        </ProjectReference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="log4net" Version="2.0.15" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+</Project>
