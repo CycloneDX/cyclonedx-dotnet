@@ -64,13 +64,10 @@ jobs:
           path: ./CycloneDX.sln
           github-bearer-token: ${{ secrets.GITHUB_TOKEN }}
 
+      # Generate the JSON with the docker container as additional smoke test
       - name: Generate JSON SBOM
-        uses: CycloneDX/gh-dotnet-generate-sbom@master
-        with:
-          path: ./CycloneDX.sln
-          json: true
-          github-bearer-token: ${{ secrets.GITHUB_TOKEN }}
-
+        run: docker run --rm -v ${GITHUB_WORKSPACE}:/usr/src/project cyclonedx/cyclonedx-dotnet:${{ steps.package_release.outputs.version }} /usr/src/project/CycloneDX.sln -j -o /usr/src/project 
+        
       - name: Publish package to NuGet
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
