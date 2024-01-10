@@ -235,6 +235,13 @@ namespace CycloneDX.Services
                 //Add dependencies for dependency graph
                 foreach (var dependency in projectDotnetDependencys)
                 {
+                    if (project.Dependencies.TryGetValue(dependency.Name, out string version))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"Warning: trying to add {dependency.Name}@{dependency.Version} as a dependency to {project.Name}, but it was already with version {version}");
+                        Console.ResetColor();
+                        continue;
+                    }
                     project.Dependencies.Add(dependency.Name, dependency.Version);
                 }
 
