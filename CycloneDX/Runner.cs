@@ -159,7 +159,6 @@ namespace CycloneDX
                 return (int)ExitCode.InvalidOptions;
             }
 
-
             try
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
@@ -295,6 +294,14 @@ namespace CycloneDX
                                 if (packageNameMatch.Count == 1)
                                 {
                                     lookupKey = packageNameMatch.First().Key;
+                                }
+                                else if (packageNameMatch.Count > 1 && SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.WriteLine($"Warning: Multiple BOM references were found for {dep.Key} {dep.Value}. It appears that the component has been located multiple times with different versions. To resolve this issue, consider targeting a project file directly that's using a project.assets.json to resolve dependencies and avoid using the --recursive argument.");
+                                    lookupKey = packageNameMatch.First().Key;
+                                    Console.WriteLine($"Choosing first found reference {lookupKey.Item1} {lookupKey.Item2} to resolve.");
+                                    Console.ResetColor();
                                 }
                                 else
                                 {
