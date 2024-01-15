@@ -33,6 +33,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="FunctionalTests\IPR-TwoLevelTree\project1csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\IPR-TwoLevelTree\project2csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\IPR-TwoLevelTree\project3csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\Issue826alt-ProjectFileDoesntExistWithAssetsFile\project2assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

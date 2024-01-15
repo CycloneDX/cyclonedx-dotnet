@@ -84,5 +84,10 @@ namespace CycloneDX.Models
             var other = obj as DotnetDependency;
             return CompareTo(other);
         }
+
+        public override string ToString()
+        {
+            return $"{Name}@{Version}"; 
+        }
     }
 }
