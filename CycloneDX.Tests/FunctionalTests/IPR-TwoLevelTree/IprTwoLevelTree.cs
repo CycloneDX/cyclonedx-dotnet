@@ -26,9 +26,29 @@ namespace CycloneDX.Tests.FunctionalTests
                 },{
                   MockUnixSupport.Path("c:/project3/project3.csproj"),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "project3csproj.xml")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "project3csproj.xml")))                
+                },{
+                  MockUnixSupport.Path("c:/project3/packages.config"),
+                        new MockFileData(
+                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "project3packages.xml")))
                 }
             }); 
+        }
+
+
+        [Fact]
+        public async Task BaseLineWithoutIPR()
+        {
+            var options = new RunOptions
+            {
+                scanProjectReferences = true,
+                SolutionOrProjectFile = MockUnixSupport.Path("c:/project1/project1.csproj")
+
+            };
+
+            var bom = await FunctionalTestHelper.Test(options, getMockFS());
+
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "project1@0.0.0", "pkg:nuget/log4net@2.0.15");
         }
 
         [Fact]
@@ -42,12 +62,11 @@ namespace CycloneDX.Tests.FunctionalTests
 
             };
 
-            //Just test that there is no exception
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
-            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "project1", "project2");
-            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "project2", "project3");
-            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "project3", "log4net@2.0.15");
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "project1@0.0.0", "project2@1.0.0");
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "project2@1.0.0", "project3@1.0.0");
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "project3@1.0.0", "pkg:nuget/log4net@2.0.15");
         }
     }
 }

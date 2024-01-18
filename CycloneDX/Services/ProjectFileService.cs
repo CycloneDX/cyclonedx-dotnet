@@ -224,7 +224,7 @@ namespace CycloneDX.Services
 
             //Remove root-project, it will be added to the metadata
             var rootProject = projectReferences.FirstOrDefault(p => p.Path == projectFilePath);
-            projectReferences.Where(p => rootProject.Dependencies.ContainsKey(p.Path)).ToList().ForEach(p => p.IsDirectReference = true);
+            projectReferences.Where(p => rootProject.Dependencies.ContainsKey(p.Name)).ToList().ForEach(p => p.IsDirectReference = true);
             projectReferences.Remove(rootProject);
 
 
@@ -332,9 +332,11 @@ namespace CycloneDX.Services
 
                 DotnetDependency dependency = new();
                 dependency.Name = nameAndVersion.name;
-                dependency.Version = nameAndVersion.version ?? "undefined";
+                dependency.Version = nameAndVersion.version ?? "1.0.0"; //a project that has no version defined is listed as 1.0.0 in an assets-File
                 dependency.Path = currentFile;
-                dependency.Dependencies = foundProjectReferences.ToDictionary(key => key, value => (string)null);
+                dependency.Dependencies = foundProjectReferences.
+                                          Select(GetProjectNameAndVersion).
+                                          ToDictionary(project => project.name, project => project.version ?? "1.0.0");
                 dependency.Scope = Component.ComponentScope.Required;
                 dependency.DependencyType = DependencyType.Project;
                 projectReferences.Add(dependency);
