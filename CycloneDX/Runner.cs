@@ -37,6 +37,7 @@ namespace CycloneDX
         readonly IDotnetCommandService dotnetCommandService;
         readonly IDotnetUtilsService dotnetUtilsService;
         readonly IPackagesFileService packagesFileService;
+        readonly IBuildalyzerService buildalyzerService;
         readonly IProjectFileService projectFileService;
         readonly ISolutionFileService solutionFileService;
         readonly INugetServiceFactory nugetServiceFactory;
@@ -46,6 +47,7 @@ namespace CycloneDX
                       IProjectAssetsFileService projectAssetsFileService,
                       IDotnetUtilsService dotnetUtilsService,
                       IPackagesFileService packagesFileService,
+                      IBuildalyzerService buildalyzerService,
                       IProjectFileService projectFileService,
                       ISolutionFileService solutionFileService,
                       INugetServiceFactory nugetServiceFactory)
@@ -55,11 +57,12 @@ namespace CycloneDX
             projectAssetsFileService ??= new ProjectAssetsFileService(this.fileSystem, () => new AssetFileReader());
             this.dotnetUtilsService = dotnetUtilsService ?? new DotnetUtilsService(this.fileSystem, this.dotnetCommandService);
             this.packagesFileService = packagesFileService ?? new PackagesFileService(this.fileSystem);
-            this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, projectAssetsFileService);
-            this.solutionFileService = solutionFileService ?? new SolutionFileService(this.fileSystem, this.projectFileService);
+            this.buildalyzerService = buildalyzerService ?? new BuildalyzerService();
+            this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, projectAssetsFileService, this.buildalyzerService);
+            this.solutionFileService = solutionFileService ?? new SolutionFileService(this.fileSystem, this.projectFileService, this.buildalyzerService);
             this.nugetServiceFactory = nugetServiceFactory ?? new NugetV3ServiceFactory();
         }
-        public Runner() : this(null, null, null, null, null, null, null, null) { }
+        public Runner() : this(null, null, null, null, null, null, null, null, null) { }
 
         public async Task<int> HandleCommandAsync(RunOptions options)
         {
@@ -129,8 +132,11 @@ namespace CycloneDX
                     githubService = new GithubService(new HttpClient());
                 }
             }
-
             var nugetService = nugetServiceFactory.Create(options, fileSystem, githubService, packageCachePathsResult.Result);
+            if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+            {
+                buildalyzerService.InitializeAnalyzer(SolutionOrProjectFile);
+            }
 
             var packages = new HashSet<DotnetDependency>();
 
@@ -174,7 +180,7 @@ namespace CycloneDX
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
-                    packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime, null).ConfigureAwait(false);
+                    packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (this.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))

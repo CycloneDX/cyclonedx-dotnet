@@ -25,7 +25,6 @@ using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using System.Text.RegularExpressions;
-using Buildalyzer;
 
 namespace CycloneDX.Services
 {
@@ -47,17 +46,20 @@ namespace CycloneDX.Services
         private IDotnetUtilsService _dotnetUtilsService;
         private IPackagesFileService _packagesFileService;
         private IProjectAssetsFileService _projectAssetsFileService;
+        private IBuildalyzerService _buildalyzerService;
 
         public ProjectFileService(
             IFileSystem fileSystem,
             IDotnetUtilsService dotnetUtilsService,
             IPackagesFileService packagesFileService,
-            IProjectAssetsFileService projectAssetsFileService)
+            IProjectAssetsFileService projectAssetsFileService,
+            IBuildalyzerService buildalyzerService)
         {
             _fileSystem = fileSystem;
             _dotnetUtilsService = dotnetUtilsService;
             _packagesFileService = packagesFileService;
             _projectAssetsFileService = projectAssetsFileService;
+            this._buildalyzerService = buildalyzerService ?? throw new ArgumentNullException(nameof(buildalyzerService));
         }
 
         public bool IsTestProject(string projectFilePath)
@@ -66,21 +68,7 @@ namespace CycloneDX.Services
             {
                 return false;
             }
-            var manager = new AnalyzerManager();
-            try
-            {
-                var project = manager.GetProject(projectFilePath);
-                var buildResults = project.Build();
-                var isTestProject = buildResults.SelectMany(x => x.Properties)
-                        .Any(x => x.Key.Equals("IsTestProject", StringComparison.OrdinalIgnoreCase) && x.Value.Equals("true", StringComparison.OrdinalIgnoreCase));
-
-                return isTestProject;
-            }
-            catch (ArgumentException)
-            {
-                // can only happen while testing (because it will be checked before this method is called)
-                return false;
-            }
+            return _buildalyzerService.IsTestProject(projectFilePath);
         }
 
         private (string name, string version) GetProjectNameAndVersion(string projectFilePath)
@@ -151,7 +139,7 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime, bool? isTestProject)
+        public async Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
@@ -159,15 +147,17 @@ namespace CycloneDX.Services
                 return new HashSet<DotnetDependency>();
             }
 
-            if (!isTestProject.HasValue)
-            {
-                isTestProject = IsTestProject(projectFilePath);
-            }
-
             Console.WriteLine();
             Console.WriteLine($"» Analyzing: {projectFilePath}");
 
-            if (excludeTestProjects && isTestProject.Value)
+            var isTestProject = IsTestProject(projectFilePath);
+
+            if(isTestProject)
+            {                
+                Console.WriteLine($"  Identified {projectFilePath} as a test project");
+            }
+
+            if (excludeTestProjects && isTestProject) 
             {
                 Console.WriteLine($"Skipping: {projectFilePath}");
                 return new HashSet<DotnetDependency>();
@@ -195,7 +185,7 @@ namespace CycloneDX.Services
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
             }
-            var packages = _projectAssetsFileService.GetDotnetDependencys(projectFilePath, assetsFilename, isTestProject.Value);
+            var packages = _projectAssetsFileService.GetDotnetDependencys(projectFilePath, assetsFilename, isTestProject);
 
 
             // if there are no project file package references look for a packages.config
@@ -220,7 +210,7 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
         {
-            var dotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, null).ConfigureAwait(false);
+            var dotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
             foreach (var item in dotnetDependencys)
             {
                 item.IsDirectReference = true;
@@ -236,7 +226,7 @@ namespace CycloneDX.Services
 
             foreach (var project in projectReferences)
             {
-                var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project.Path, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, null).ConfigureAwait(false);
+                var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project.Path, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
 
                 //Add dependencies for dependency graph
                 foreach (var dependency in projectDotnetDependencys)

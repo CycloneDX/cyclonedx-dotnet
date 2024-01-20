@@ -21,9 +21,9 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Buildalyzer;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
+using Microsoft.Build.Logging.StructuredLogger;
 
 namespace CycloneDX.Services
 {
@@ -31,11 +31,13 @@ namespace CycloneDX.Services
     {
         private IFileSystem _fileSystem;
         private IProjectFileService _projectFileService;
+        private IBuildalyzerService _buildalyzerService;
 
-        public SolutionFileService(IFileSystem fileSystem, IProjectFileService projectFileService)
+        public SolutionFileService(IFileSystem fileSystem, IProjectFileService projectFileService, IBuildalyzerService buildalyzerService)
         {
             _fileSystem = fileSystem;
             _projectFileService = projectFileService;
+            _buildalyzerService = buildalyzerService ?? throw new ArgumentNullException(nameof(buildalyzerService));
         }
 
         /// <summary>
@@ -97,17 +99,7 @@ namespace CycloneDX.Services
 
             var packages = new HashSet<DotnetDependency>();
 
-            HashSet<(string path,bool isTestProject)> projectPaths = new();
-
-            AnalyzerManager manager = new AnalyzerManager(solutionFilePath);
-            foreach (var (key, project) in manager.Projects)
-            {
-                var buildResults = project.Build();
-                var isTestProject = buildResults.SelectMany(x => x.Properties)
-                    .Any(x => x.Key.Equals("IsTestProject", StringComparison.OrdinalIgnoreCase) && x.Value.Equals("true", StringComparison.OrdinalIgnoreCase));
-
-                projectPaths.Add((project.ProjectFile.Path, isTestProject));
-            }
+            HashSet<string> projectPaths = _buildalyzerService.GetProjectPathsOfSolution();
 
             if (projectPaths.Count == 0)
             {
@@ -119,12 +111,13 @@ namespace CycloneDX.Services
             }
 
             // Process first all productive projects, then test projects (scope order)
-            var projectQuery = from p in projectPaths orderby p.isTestProject select p;
             var directReferencePackages = new HashSet<DotnetDependency>();
-            foreach (var (projectFilePath, isTest) in projectQuery)
-            {
-                Console.WriteLine();
-                var projectPackages = await _projectFileService.GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, isTest).ConfigureAwait(false);
+            foreach (string projectFilePath in projectPaths)
+            {                
+                if (excludeTestProjects && _buildalyzerService.IsTestProject(projectFilePath))
+                    continue;
+                
+                var projectPackages = await _projectFileService.GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
                 directReferencePackages.UnionWith(projectPackages.Where(p => p.IsDirectReference));
                 packages.UnionWith(projectPackages);
             }

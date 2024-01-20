@@ -36,6 +36,12 @@ namespace CycloneDX.Tests
 
         private readonly string _testProjectsBaseDir = XFS.Path(Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..", "..", "..", "..", "TestProjects", "SolutionPath")));
 
+        private IBuildalyzerService GetBuildalyzerServiceMock()
+        {
+            return new Mock<IBuildalyzerService>().Object;
+        }
+
+
         private ProjectFileService GetInstanceOfProjectFileService()
         {
             var fileSystem = new FileSystem();
@@ -44,7 +50,9 @@ namespace CycloneDX.Tests
                 fileSystem,
                 new DotnetUtilsService(fileSystem, dotnetCommandService),
                 new PackagesFileService(fileSystem),
-                new ProjectAssetsFileService(fileSystem, () => new AssetFileReader()));
+                new ProjectAssetsFileService(fileSystem, () => new AssetFileReader()),
+                new BuildalyzerService()
+                );
 
         }
 
@@ -95,9 +103,10 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 mockDotnetUtilsService.Object,
                 mockPackageFileService.Object,
-                mockProjectAssetsFileService.Object);
+                mockProjectAssetsFileService.Object,
+                GetBuildalyzerServiceMock());
 
-            var packages = await projectFileService.GetProjectDotnetDependencysAsync(XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "", null).ConfigureAwait(true);
+            var packages = await projectFileService.GetProjectDotnetDependencysAsync(XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "").ConfigureAwait(true);
 
             Assert.Collection(packages,
                 item => {
@@ -130,10 +139,12 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 mockDotnetUtilsService.Object,
                 mockPackageFileService.Object,
-                mockProjectAssetsFileService.Object);
+                mockProjectAssetsFileService.Object,
+                GetBuildalyzerServiceMock()
+                );
             projectFileService.DisablePackageRestore = true;
 
-            var packages = await projectFileService.GetProjectDotnetDependencysAsync(XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "", null).ConfigureAwait(true);
+            var packages = await projectFileService.GetProjectDotnetDependencysAsync(XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "").ConfigureAwait(true);
 
             Assert.Collection(packages,
                 item => {
@@ -168,9 +179,10 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 mockDotnetUtilsService.Object,
                 mockPackageFileService.Object,
-                mockProjectAssetsFileService.Object);
+                mockProjectAssetsFileService.Object,
+                GetBuildalyzerServiceMock());
 
-            var packages = await projectFileService.GetProjectDotnetDependencysAsync(XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "", null).ConfigureAwait(true);
+            var packages = await projectFileService.GetProjectDotnetDependencysAsync(XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "").ConfigureAwait(true);
             var sortedPackages = new List<DotnetDependency>(packages);
             sortedPackages.Sort();
 
@@ -209,9 +221,9 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 mockDotnetUtilsService.Object,
                 mockPackageFileService.Object,
-                mockProjectAssetsFileService.Object);
+                mockProjectAssetsFileService.Object, GetBuildalyzerServiceMock());
 
-            var packages = await projectFileService.GetProjectDotnetDependencysAsync(XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "", null).ConfigureAwait(true);
+            var packages = await projectFileService.GetProjectDotnetDependencysAsync(XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "").ConfigureAwait(true);
 
             Assert.Collection(packages,
                 item => {
@@ -251,9 +263,10 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 mockDotnetUtilsService.Object,
                 mockPackageFileService.Object,
-                mockProjectAssetsFileService.Object);
+                mockProjectAssetsFileService.Object,
+                GetBuildalyzerServiceMock());
 
-            var packages = await projectFileService.GetProjectDotnetDependencysAsync(XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "", null).ConfigureAwait(true);
+            var packages = await projectFileService.GetProjectDotnetDependencysAsync(XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "").ConfigureAwait(true);
             var sortedPackages = new List<DotnetDependency>(packages);
             sortedPackages.Sort();
 
@@ -273,7 +286,8 @@ namespace CycloneDX.Tests
                 new System.IO.Abstractions.FileSystem(),
                 mockDotnetUtilsService.Object,
                 mockPackageFileService.Object,
-                mockProjectAssetsFileService.Object);
+                mockProjectAssetsFileService.Object,
+                GetBuildalyzerServiceMock());
 
             var projects = await projectFileService.GetProjectReferencesAsync(XFS.Path(Path.Combine(_testProjectsBaseDir, @"Project\Project.csproj"))).ConfigureAwait(true);
             var sortedProjects = new List<string>(projects);
@@ -295,7 +309,8 @@ namespace CycloneDX.Tests
                 new System.IO.Abstractions.FileSystem(),
                 mockDotnetUtilsService.Object,
                 mockPackageFileService.Object,
-                mockProjectAssetsFileService.Object);
+                mockProjectAssetsFileService.Object,
+                GetBuildalyzerServiceMock());
 
             var projects = await projectFileService.RecursivelyGetProjectReferencesAsync(XFS.Path(Path.Combine(_testProjectsBaseDir, @"Project1\Project1.csproj"))).ConfigureAwait(true);
             var sortedProjects = new List<string>(projects.Select(d => d.Path));
