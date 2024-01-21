@@ -17,7 +17,7 @@
 
 using System.Collections.Generic;
 
-namespace CycloneDX.Services
+namespace CycloneDX.Interfaces
 {
     public interface IBuildalyzerService
     {

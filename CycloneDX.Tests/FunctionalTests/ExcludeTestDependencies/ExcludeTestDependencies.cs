@@ -51,7 +51,7 @@ namespace CycloneDX.Tests.FunctionalTests
         {
             var options = new RunOptions
             {
-                SolutionOrProjectFile = "c:/solution.sln"
+                SolutionOrProjectFile = MockUnixSupport.Path("c:/solution.sln")
             };
             
             //Just test that there is no exception
@@ -69,7 +69,7 @@ namespace CycloneDX.Tests.FunctionalTests
         {
             var options = new RunOptions
             {
-                SolutionOrProjectFile = "c:/solution.sln",
+                SolutionOrProjectFile = MockUnixSupport.Path("c:/solution.sln"),
                 excludeTestProjects = true
                 
             };

@@ -8,6 +8,7 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CycloneDX.Interfaces;
 using CycloneDX.Services;
 
 namespace CycloneDX.Tests
@@ -27,7 +28,7 @@ namespace CycloneDX.Tests
             DumpFilesystemOnDisk();
         }
 
-        Dictionary<string, string> reversePathMap = [];
+        readonly Dictionary<string, string> reversePathMap = [];
 
 
         void DumpFilesystemOnDisk()
@@ -97,8 +98,9 @@ namespace CycloneDX.Tests
                     Directory.Delete(_tempFolderPath, true);
                 }
             }
-            catch (Exception)
-            {                             
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.GetType()} when deleting {_tempFolderPath}\r\n{ex.Message}");
             }
         }
     }

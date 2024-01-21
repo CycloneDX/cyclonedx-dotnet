@@ -42,11 +42,11 @@ namespace CycloneDX.Services
             Async = true
         };
 
-        private IFileSystem _fileSystem;
-        private IDotnetUtilsService _dotnetUtilsService;
-        private IPackagesFileService _packagesFileService;
-        private IProjectAssetsFileService _projectAssetsFileService;
-        private IBuildalyzerService _buildalyzerService;
+        private readonly IFileSystem _fileSystem;
+        private readonly IDotnetUtilsService _dotnetUtilsService;
+        private readonly IPackagesFileService _packagesFileService;
+        private readonly IProjectAssetsFileService _projectAssetsFileService;
+        private readonly IBuildalyzerService _buildalyzerService;
 
         public ProjectFileService(
             IFileSystem fileSystem,

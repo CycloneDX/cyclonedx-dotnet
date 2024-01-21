@@ -29,9 +29,9 @@ namespace CycloneDX.Services
 {
     public class SolutionFileService : ISolutionFileService
     {
-        private IFileSystem _fileSystem;
-        private IProjectFileService _projectFileService;
-        private IBuildalyzerService _buildalyzerService;
+        private readonly IFileSystem _fileSystem;
+        private readonly IProjectFileService _projectFileService;
+        private readonly IBuildalyzerService _buildalyzerService;
 
         public SolutionFileService(IFileSystem fileSystem, IProjectFileService projectFileService, IBuildalyzerService buildalyzerService)
         {
@@ -113,9 +113,9 @@ namespace CycloneDX.Services
             // Process first all productive projects, then test projects (scope order)
             var directReferencePackages = new HashSet<DotnetDependency>();
             foreach (string projectFilePath in projectPaths)
-            {                
+            {
                 if (excludeTestProjects && _buildalyzerService.IsTestProject(projectFilePath))
-                    continue;
+                {  continue; }                    
                 
                 var projectPackages = await _projectFileService.GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
                 directReferencePackages.UnionWith(projectPackages.Where(p => p.IsDirectReference));

@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buildalyzer;
+using CycloneDX.Interfaces;
 using CycloneDX.Models;
 
 namespace CycloneDX.Services
@@ -35,7 +36,9 @@ namespace CycloneDX.Services
             get
             {
                 if (_manager == null)
+                {
                     InitializeAnalyzer(null);
+                }
                 return _manager;
             }
         }
