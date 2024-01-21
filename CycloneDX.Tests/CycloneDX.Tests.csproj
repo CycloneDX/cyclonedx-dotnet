@@ -33,6 +33,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="FunctionalTests\ExcludeTestDependencies\assetsProject1.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\ExcludeTestDependencies\assetsTestProject1.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\ExcludeTestDependencies\project1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\ExcludeTestDependencies\sln.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\ExcludeTestDependencies\testproject1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\Issue826alt-ProjectFileDoesntExistWithAssetsFile\project2assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

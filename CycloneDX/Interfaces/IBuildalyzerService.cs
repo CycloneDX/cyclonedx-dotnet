@@ -16,19 +16,13 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using CycloneDX.Models;
 
 namespace CycloneDX.Interfaces
 {
-    public interface IProjectFileService
+    public interface IBuildalyzerService
     {
-        bool DisablePackageRestore { get; set; }
-        Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime);
-        Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);
-        Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime);
-        Task<HashSet<DotnetDependency>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
-        Component GetComponent(DotnetDependency dotnetDependency);
+        HashSet<string> GetProjectPathsOfSolution();
+        void InitializeAnalyzer(string solutionFilePath);
         bool IsTestProject(string projectFilePath);
     }
 }

@@ -79,7 +79,7 @@ namespace CycloneDX.Tests.FunctionalTests
             options.SolutionOrProjectFile ??= MockUnixSupport.Path("c:/ProjectPath/Project.csproj");
             options.disablePackageRestore = true;
 
-            Runner runner = new Runner(mockFileSystem, null, null, null, null, null, null, nugetService);
+            Runner runner = new Runner(fileSystem: mockFileSystem,  null, null, null, null, new BuildalyzerServiceTestWrapper(mockFileSystem) , null, null, nugetServiceFactory: nugetService);
             int exitCode = await runner.HandleCommandAsync(options);
 
             Assert.Equal((int)ExitCode.OK, exitCode);

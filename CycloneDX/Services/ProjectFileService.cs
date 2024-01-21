@@ -42,21 +42,24 @@ namespace CycloneDX.Services
             Async = true
         };
 
-        private IFileSystem _fileSystem;
-        private IDotnetUtilsService _dotnetUtilsService;
-        private IPackagesFileService _packagesFileService;
-        private IProjectAssetsFileService _projectAssetsFileService;
+        private readonly IFileSystem _fileSystem;
+        private readonly IDotnetUtilsService _dotnetUtilsService;
+        private readonly IPackagesFileService _packagesFileService;
+        private readonly IProjectAssetsFileService _projectAssetsFileService;
+        private readonly IBuildalyzerService _buildalyzerService;
 
         public ProjectFileService(
             IFileSystem fileSystem,
             IDotnetUtilsService dotnetUtilsService,
             IPackagesFileService packagesFileService,
-            IProjectAssetsFileService projectAssetsFileService)
+            IProjectAssetsFileService projectAssetsFileService,
+            IBuildalyzerService buildalyzerService)
         {
             _fileSystem = fileSystem;
             _dotnetUtilsService = dotnetUtilsService;
             _packagesFileService = packagesFileService;
             _projectAssetsFileService = projectAssetsFileService;
+            this._buildalyzerService = buildalyzerService ?? throw new ArgumentNullException(nameof(buildalyzerService));
         }
 
         public bool IsTestProject(string projectFilePath)
@@ -65,19 +68,7 @@ namespace CycloneDX.Services
             {
                 return false;
             }
-
-            XmlDocument xmldoc = new XmlDocument();
-            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
-            xmldoc.Load(fileStream);
-
-            XmlElement testSdkReference = xmldoc.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.NET.Test.Sdk']") as XmlElement;
-            if (testSdkReference != null)
-            {
-                return true;
-            }
-            // if this is meant for old csproj file format, then it's probably not working because there is no namespace given
-            XmlElement testProjectPropertyGroup = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
-            return testProjectPropertyGroup != null;
+            return _buildalyzerService.IsTestProject(projectFilePath);
         }
 
         private (string name, string version) GetProjectNameAndVersion(string projectFilePath)
@@ -156,12 +147,17 @@ namespace CycloneDX.Services
                 return new HashSet<DotnetDependency>();
             }
 
-            var isTestProject = IsTestProject(projectFilePath);
-
             Console.WriteLine();
             Console.WriteLine($"» Analyzing: {projectFilePath}");
 
-            if (excludeTestProjects && isTestProject)
+            var isTestProject = IsTestProject(projectFilePath);
+
+            if(isTestProject)
+            {                
+                Console.WriteLine($"  Identified {projectFilePath} as a test project");
+            }
+
+            if (excludeTestProjects && isTestProject) 
             {
                 Console.WriteLine($"Skipping: {projectFilePath}");
                 return new HashSet<DotnetDependency>();

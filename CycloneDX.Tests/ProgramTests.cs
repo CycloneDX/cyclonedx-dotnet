@@ -43,14 +43,14 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), "" }
+                    { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), "Microsoft Visual Studio Solution File, Format Version 12.00" }
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
                 .Setup(s => s.GetSolutionDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new HashSet<DotnetDependency>());
 
-            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object, null);
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, buildalyzerService: new BuildalyzerServiceTestWrapper(mockFileSystem), null, solutionFileService: mockSolutionFileService.Object, null);
 
             RunOptions runOptions = new RunOptions
             {
@@ -68,14 +68,14 @@ namespace CycloneDX.Tests
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
-                    { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), "" }
+                    { XFS.Path(@"c:\SolutionPath\SolutionFile.sln"), "Microsoft Visual Studio Solution File, Format Version 12.00" }
                 });
             var mockSolutionFileService = new Mock<ISolutionFileService>();
             mockSolutionFileService
                 .Setup(s => s.GetSolutionDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new HashSet<DotnetDependency>());
 
-            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object, null);            
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, buildalyzerService: new BuildalyzerServiceTestWrapper(mockFileSystem), null, solutionFileService: mockSolutionFileService.Object, null);            
 
             RunOptions runOptions = new RunOptions
             {
