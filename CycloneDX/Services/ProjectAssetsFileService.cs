@@ -83,7 +83,7 @@ namespace CycloneDX.Services
                         };
 
                         // is this a test project dependency or only a development dependency
-                        if ( isTestProject)
+                        if ( isTestProject || package.IsDevDependency )
                         {
                             package.Scope = Component.ComponentScope.Excluded;
                         }

@@ -60,13 +60,13 @@
     <None Update="FunctionalTests\Issue830-rsMultipleFrameworks\project2csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\TestcaseFiles\DevDependencies.json">
+    <None Update="FunctionalTests\ExcludeDevDependencies\DevDependencies.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\TestcaseFiles\DevDependencies_WithPackageConfig_CsProj.xml">
+    <None Update="FunctionalTests\ExcludeDevDependenciesPackagesConfig\DevDependencies_WithPackageConfig_CsProj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\TestcaseFiles\DevDependencies_WithPackageConfig_PackageConfig.xml">
+    <None Update="FunctionalTests\ExcludeDevDependenciesPackagesConfig\DevDependencies_WithPackageConfig_PackageConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\TestcaseFiles\FloatingVersions.json">
