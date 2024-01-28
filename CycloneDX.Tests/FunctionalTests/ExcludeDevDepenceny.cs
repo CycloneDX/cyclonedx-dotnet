@@ -25,6 +25,7 @@ namespace CycloneDX.Tests.FunctionalTests
 
             Assert.True(bom.Components.Count == 1);
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "SonarAnalyzer.CSharp", true) == 0 && c.Version == "9.16.0.82469");
+            Assert.True(bom.Components.First(c => c.Name == "SonarAnalyzer.CSharp").Scope == Component.ComponentScope.Excluded, "Scope of development dependency is not excluded.");
 
         }
 
