@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using CycloneDX.Models;
 using Xunit;
 
-namespace CycloneDX.Tests.FunctionalTests.ExcludeDevDependencies
+namespace CycloneDX.Tests.FunctionalTests
 {
     public class ExcludeDevDependency
     {

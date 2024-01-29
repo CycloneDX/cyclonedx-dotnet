@@ -33,6 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="FunctionalTests\ExcludeTransitiveDevDependency\AssetsFile.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\Issue826alt-ProjectFileDoesntExistWithAssetsFile\project2assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
