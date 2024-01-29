@@ -289,6 +289,7 @@ namespace CycloneDX.Services
             var title = nuspecModel.nuspecReader.GetTitle();
             var summary = nuspecModel.nuspecReader.GetSummary();
             var description = nuspecModel.nuspecReader.GetDescription();
+            var owner = nuspecModel.nuspecReader.GetOwners();
             if (!string.IsNullOrEmpty(summary))
             {
                 component.Description = summary;
@@ -300,6 +301,14 @@ namespace CycloneDX.Services
             else if (!string.IsNullOrEmpty(title))
             {
                 component.Description = title;
+            }
+            if (!string.IsNullOrEmpty(owner))
+            {
+                component.Publisher = owner;
+            }
+            else
+            {
+                component.Publisher = component.Author;
             }
 
             return component;
