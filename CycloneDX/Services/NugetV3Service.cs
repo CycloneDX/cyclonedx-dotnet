@@ -330,50 +330,50 @@ namespace CycloneDX.Services
             {
                 releaseNoteType = "patch";
             }
-            component.ReleaseNotes = new ReleaseNotes()
+            component.ReleaseNotes = new ReleaseNotes
             {
                 Type = releaseNoteType,
                 Title = version.ToString(),
                 Tags = nuspecModel.nuspecReader.GetTags().Split(",").ToList(),
-                Notes = new List<Note>()
+                Notes = new List<Note>
                 {
-                    new Note()
+                    new Note
                     {
-                        Text = new AttachedText(){
+                        Text = new AttachedText{
                             Content = nuspecModel.nuspecReader.GetReleaseNotes()
                         }
                     }
                 }
             };
 
-            var properties = new List<Property>()
+            var properties = new List<Property>
             {
-                new Property()
+                new Property
                 {
                     Name = "language",
                     Value = nuspecModel.nuspecReader.GetLanguage()
                 },
-                new Property()
+                new Property
                 {
                     Name = "minclientVersion",
                     Value = nuspecModel.nuspecReader.GetMinClientVersion().Version.ToString(),
                 },
-                new Property()
+                new Property
                 {
                     Name = "gitBranch",
                     Value = nuspecModel.nuspecReader.GetRepositoryMetadata().Branch
                 },
-                new Property()
+                new Property
                 {
                     Name = "gitCommit",
                     Value = nuspecModel.nuspecReader.GetRepositoryMetadata().Commit
                 },
-                new Property()
+                new Property
                 {
                     Name = "gitRepositoryType",
                     Value = nuspecModel.nuspecReader.GetRepositoryMetadata().Type
                 },
-                new Property()
+                new Property
                 {
                     Name = "licenceAcceptanceRequired",
                     Value = nuspecModel.nuspecReader.GetRequireLicenseAcceptance().ToString()
