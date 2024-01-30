@@ -12,7 +12,7 @@ using Xunit;
 
 namespace CycloneDX.Tests.FunctionalTests
 {
-    public class ProjectReferencesDontUseAssemblyName
+    public class ProjectReferencesUseAssemblyNames
     {
         private MockFileSystem getMockFS()
         {
@@ -21,19 +21,19 @@ namespace CycloneDX.Tests.FunctionalTests
                 {
                     MockUnixSupport.Path("c:/project1/project1.csproj"),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesDontUseAssemblyName", "project1csproj.xml")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesUseAssemblyNames", "project1csproj.xml")))
                 },{
                     MockUnixSupport.Path("c:/project2/project2.csproj"),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesDontUseAssemblyName", "project2csproj.xml")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesUseAssemblyNames", "project2csproj.xml")))
                 },{
                     MockUnixSupport.Path("c:/project1/obj/project.assets.json"),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesDontUseAssemblyName", "project1assets.json")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesUseAssemblyNames", "project1assets.json")))
                 },{
                     MockUnixSupport.Path("c:/project2/obj/project.assets.json"),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesDontUseAssemblyName", "project2assets.json")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesUseAssemblyNames", "project2assets.json")))
                 }
             });
         }

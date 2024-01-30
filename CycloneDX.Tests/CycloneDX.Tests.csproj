@@ -72,16 +72,16 @@
     <None Update="FunctionalTests\Issue830-rsMultipleFrameworks\project2csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\ProjectReferencesDontUseAssemblyName\project1assets.json">
+    <None Update="FunctionalTests\ProjectReferencesUseAssemblyNames\project1assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\ProjectReferencesDontUseAssemblyName\project1csproj.xml">
+    <None Update="FunctionalTests\ProjectReferencesUseAssemblyNames\project1csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\ProjectReferencesDontUseAssemblyName\project2assets.json">
+    <None Update="FunctionalTests\ProjectReferencesUseAssemblyNames\project2assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\ProjectReferencesDontUseAssemblyName\project2csproj.xml">
+    <None Update="FunctionalTests\ProjectReferencesUseAssemblyNames\project2csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\TestcaseFiles\DevDependencies.json">
