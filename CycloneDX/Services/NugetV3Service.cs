@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -310,7 +311,39 @@ namespace CycloneDX.Services
             {
                 component.Publisher = component.Author;
             }
-
+            
+            var releaseNoteType = "internal";
+            var version = nuspecModel.nuspecReader.GetVersion();
+            if (version.IsPrerelease)
+            {
+                releaseNoteType = "pre-release";
+            }
+            else if (version.Minor == 0 && version.Patch == 0)
+            {
+                releaseNoteType = "major";
+            }
+            else if (version.Minor != 0 && version.Patch == 0)
+            {
+                releaseNoteType = "minor";
+            }
+            else if (version.Patch != 0)
+            {
+                releaseNoteType = "patch";
+            }
+            component.ReleaseNotes = new ReleaseNotes()
+            {
+                Type = releaseNoteType,
+                Title = version.ToString(),
+                Tags = version.ReleaseLabels.ToList(),
+                Notes = [
+                    new Note()
+                    {
+                        Text = new AttachedText(){
+                            Content = nuspecModel.nuspecReader.GetReleaseNotes()
+                        }
+                    }
+                ]
+            };
             return component;
         }
 
