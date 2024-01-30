@@ -95,8 +95,8 @@ namespace CycloneDX.Services
             XmlNamespaceManager namespaces = new XmlNamespaceManager(xmldoc.NameTable);
             namespaces.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-            string name = (xmldoc.SelectSingleNode("/Project/PropertyGroup/AssemblyName") as XmlElement)?.Value
-                ?? (xmldoc.SelectSingleNode("/Project/PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.Value
+            string name = (xmldoc.SelectSingleNode("/Project/PropertyGroup/AssemblyName") as XmlElement)?.InnerText
+                ?? (xmldoc.SelectSingleNode("/Project/PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.InnerText
                 ?? _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
 
             // Extract Version
