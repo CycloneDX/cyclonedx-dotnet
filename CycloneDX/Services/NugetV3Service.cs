@@ -311,7 +311,7 @@ namespace CycloneDX.Services
             {
                 component.Publisher = component.Author;
             }
-            
+
             var releaseNoteType = "internal";
             var version = nuspecModel.nuspecReader.GetVersion();
             if (version.IsPrerelease)
@@ -344,6 +344,25 @@ namespace CycloneDX.Services
                     }
                 ]
             };
+
+            var properties = nuspecModel.nuspecReader.GetMetadata()
+                .Select(x => new Property()
+                {
+                    Name = x.Key,
+                    Value = x.Value
+                })
+                .ToList();
+            properties.Add(new Property()
+            {
+                Name = "tags",
+                Value = nuspecModel.nuspecReader.GetTags(),
+            });
+            properties.Add(new Property()
+            {
+                Name = "language",
+                Value = nuspecModel.nuspecReader.GetLanguage()
+            });
+            component.Properties = properties;
             return component;
         }
 
