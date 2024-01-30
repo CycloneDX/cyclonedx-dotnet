@@ -334,15 +334,16 @@ namespace CycloneDX.Services
             {
                 Type = releaseNoteType,
                 Title = version.ToString(),
-                Tags = version.ReleaseLabels.ToList(),
-                Notes = [
+                Tags = nuspecModel.nuspecReader.GetTags().Split(",").ToList(),
+                Notes = new List<Note>()
+                {
                     new Note()
                     {
                         Text = new AttachedText(){
                             Content = nuspecModel.nuspecReader.GetReleaseNotes()
                         }
                     }
-                ]
+                }
             };
 
             var properties = nuspecModel.nuspecReader.GetMetadata()
@@ -352,11 +353,6 @@ namespace CycloneDX.Services
                     Value = x.Value
                 })
                 .ToList();
-            properties.Add(new Property()
-            {
-                Name = "tags",
-                Value = nuspecModel.nuspecReader.GetTags(),
-            });
             properties.Add(new Property()
             {
                 Name = "language",
