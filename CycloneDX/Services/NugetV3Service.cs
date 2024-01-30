@@ -346,18 +346,40 @@ namespace CycloneDX.Services
                 }
             };
 
-            var properties = nuspecModel.nuspecReader.GetMetadata()
-                .Select(x => new Property()
-                {
-                    Name = x.Key,
-                    Value = x.Value
-                })
-                .ToList();
-            properties.Add(new Property()
+            var properties = new List<Property>()
             {
-                Name = "language",
-                Value = nuspecModel.nuspecReader.GetLanguage()
-            });
+                new Property()
+                {
+                    Name = "language",
+                    Value = nuspecModel.nuspecReader.GetLanguage()
+                },
+                new Property()
+                {
+                    Name = "minclientVersion",
+                    Value = nuspecModel.nuspecReader.GetMinClientVersion().Version.ToString(),
+                },
+                new Property()
+                {
+                    Name = "gitBranch",
+                    Value = nuspecModel.nuspecReader.GetRepositoryMetadata().Branch
+                },
+                new Property()
+                {
+                    Name = "gitCommit",
+                    Value = nuspecModel.nuspecReader.GetRepositoryMetadata().Commit
+                },
+                new Property()
+                {
+                    Name = "gitRepositoryType",
+                    Value = nuspecModel.nuspecReader.GetRepositoryMetadata().Type
+                },
+                new Property()
+                {
+                    Name = "licenceAcceptanceRequired",
+                    Value = nuspecModel.nuspecReader.GetRequireLicenseAcceptance().ToString()
+                }
+
+            };
             component.Properties = properties;
             return component;
         }
