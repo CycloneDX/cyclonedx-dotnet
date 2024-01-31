@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-
     <IsTestProject>true</IsTestProject>
     <IsPackable>false</IsPackable>
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>

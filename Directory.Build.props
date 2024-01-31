@@ -19,7 +19,7 @@
     
     <!-- .NET SDK includes Microsoft.CodeAnalysis.NetAnalyzers -->
     <AnalysisMode>AllEnableByDefault</AnalysisMode>
-
+    <NoWarn>$(NoWarn);NU1507</NoWarn>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <NoWarn>$(NoWarn);NU1507</NoWarn>
   </PropertyGroup>

@@ -3,6 +3,9 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
+    <GlobalPackageReference Include="Nerdbank.GitVersioning" Version="3.6.133" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageVersion Include="CycloneDX.Core" Version="6.0.0" />
     <PackageVersion Include="Microsoft.Build" Version="17.3.2" />
     <PackageVersion Include="Microsoft.Build.Engine" Version="17.8.3" />
