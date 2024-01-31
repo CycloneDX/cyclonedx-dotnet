@@ -7,7 +7,6 @@
   },
   "publicReleaseRefSpec": [
     "^refs/heads/master$",
-    "^refs/heads/release/.*$",
     "^refs/tags/v\\d+\\.\\d+"
   ],
   "cloudBuild": {
@@ -16,7 +15,6 @@
     }
   },
   "release": {
-    "branchName": "release/v{version}",
     "firstUnstableTag": "beta",
     "versionIncrement": "build"
   }
