@@ -10,28 +10,30 @@ using Xunit;
 
 namespace CycloneDX.Tests.FunctionalTests
 {
-    public class ExcludeDevDepenceny
+    public class ExcludeDevDependency
     {
         [Fact]
         public async Task DevDependenciesNormalyGoIntoTheBom()
         {
-            var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies.json"));
+            var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "ExcludeDevDependencies", "DevDependencies.json"));
             var options = new RunOptions
             {
             };
+
 
 
             var bom = await FunctionalTestHelper.Test(assetsJson, options);
 
             Assert.True(bom.Components.Count == 1);
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "SonarAnalyzer.CSharp", true) == 0 && c.Version == "9.16.0.82469");
+            Assert.True(bom.Components.First(c => c.Name == "SonarAnalyzer.CSharp").Scope == Component.ComponentScope.Excluded, "Scope of development dependency is not excluded.");
 
         }
 
         [Fact]
         public async Task DevDependenciesAreExcludedWithExcludeDevDependencies()
         {
-            var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies.json"));
+            var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "ExcludeDevDependencies", "DevDependencies.json"));
             var options = new RunOptions
             {
                 excludeDev = true

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using CycloneDX.Models;
 using Xunit;
 
-namespace CycloneDX.Tests.FunctionalTests
+namespace CycloneDX.Tests.FunctionalTests.ExcludeDevDependenciesPackagesConfig
 {
     public class ExcludeDevDependnciesWithPackageConfig
     {
@@ -20,10 +20,10 @@ namespace CycloneDX.Tests.FunctionalTests
             {
                 { MockUnixSupport.Path("c:/ProjectPath/Project.csproj"),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies_WithPackageConfig_CsProj.xml"))) },
+                            File.ReadAllText(Path.Combine("FunctionalTests", "ExcludeDevDependenciesPackagesConfig", "DevDependencies_WithPackageConfig_CsProj.xml"))) },
                 { MockUnixSupport.Path("c:/ProjectPath/packages.config"),
                      new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies_WithPackageConfig_PackageConfig.xml"))) }
+                            File.ReadAllText(Path.Combine("FunctionalTests", "ExcludeDevDependenciesPackagesConfig", "DevDependencies_WithPackageConfig_PackageConfig.xml"))) }
             });
         }
 
@@ -38,12 +38,13 @@ namespace CycloneDX.Tests.FunctionalTests
 
             Assert.True(bom.Components.Count == 1, $"Unexpected number of components. Expected 1, got {bom.Components.Count}");
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "SonarAnalyzer.CSharp", true) == 0 && c.Version == "9.16.0.82469");
+            Assert.True(bom.Components.First(c => c.Name == "SonarAnalyzer.CSharp").Scope == Component.ComponentScope.Excluded, "Scope of development dependency is not excluded.");
 
         }
 
         [Fact]
         public async Task DevDependenciesAreExcludedWithExcludeDevDependencies()
-        {            
+        {
             var options = new RunOptions
             {
                 excludeDev = true
@@ -53,7 +54,7 @@ namespace CycloneDX.Tests.FunctionalTests
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
             Assert.True(bom.Components.Count == 0);
-            
+
 
         }
 

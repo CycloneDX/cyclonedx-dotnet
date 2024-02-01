@@ -67,6 +67,10 @@ namespace CycloneDX.Services
                                 Scope = Component.ComponentScope.Required
                             };
                             await Console.Out.WriteLineAsync($"\tFound Package:{newPackage.Name}");
+                            if(newPackage.IsDevDependency)
+                            {
+                                newPackage.Scope = Component.ComponentScope.Excluded;
+                            }
                             packages.Add(newPackage);                            
                         }
                     }
