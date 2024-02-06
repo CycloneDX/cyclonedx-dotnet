@@ -214,7 +214,7 @@ namespace CycloneDX.Services
             return true;
         }
 
-        private static readonly HashSet<LibraryIncludeFlags> runtimePartFlags = new HashSet<LibraryIncludeFlags>()
+        private static readonly HashSet<LibraryIncludeFlags> runtimePartFlags = new HashSet<LibraryIncludeFlags>
         {
             LibraryIncludeFlags.Runtime,
             LibraryIncludeFlags.Native,
