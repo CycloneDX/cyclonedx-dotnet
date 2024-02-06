@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using CycloneDX.Models;
 using Xunit;
@@ -42,8 +37,26 @@ namespace CycloneDX.Tests.FunctionalTests
 
             Assert.True(bom.Components.Count == 0);
             Assert.True(bom.Dependencies.Count == 1); // only the meta component
+        }
 
+        [Fact]
+        public async Task DevDependenciesAreExcludedIfNoRuntimepartRemainsWithExcludeDevDependencies()
+        {
+            var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "Issue847-FineGrainedDependencies", "FineGrainedDependency.csproj.project.assets.json"));
+            var options = new RunOptions
+            {
+                excludeDev = true
+            };
+            var bom = await FunctionalTestHelper.Test(assetsJson, options);
 
+            Assert.Equal(10, bom.Dependencies.Count);
+            Assert.Equal(9, bom.Components.Count);
+
+            options.excludeDev = false;
+            bom = await FunctionalTestHelper.Test(assetsJson, options);
+
+            Assert.Equal(17, bom.Dependencies.Count);
+            Assert.Equal(16, bom.Components.Count);
         }
     }
 }

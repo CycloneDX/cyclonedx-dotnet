@@ -38,7 +38,7 @@ namespace CycloneDX.Tests
 
             var mockProjectFileService = new Mock<IProjectFileService>();
             mockProjectFileService.Setup(mock =>
-                mock.GetProjectDotnetDependencysAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())
+                mock.GetProjectDotnetDependencysAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())
             ).ReturnsAsync(packages);
 
             Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, projectFileService: mockProjectFileService.Object, solutionFileService: null, null);
