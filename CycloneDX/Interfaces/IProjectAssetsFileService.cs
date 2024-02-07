@@ -22,6 +22,6 @@ namespace CycloneDX.Interfaces
 {
     public interface IProjectAssetsFileService 
     {
-        HashSet<DotnetDependency> GetDotnetDependencys(string projectFilePath, string projectAssetsFilePath, bool IsTestProject, bool excludeDevDependencies);
+        HashSet<DotnetDependency> GetDotnetDependencys(string projectFilePath, string projectAssetsFilePath, bool IsTestProject);
     }
 }

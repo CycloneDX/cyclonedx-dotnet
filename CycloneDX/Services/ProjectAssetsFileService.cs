@@ -17,14 +17,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
-using CycloneDX.Models;
 using System.Linq;
 using CycloneDX.Interfaces;
-using NuGet.Versioning;
+using CycloneDX.Models;
 using NuGet.LibraryModel;
 using NuGet.ProjectModel;
-using System.IO;
+using NuGet.Versioning;
 
 namespace CycloneDX.Services
 {
@@ -39,7 +39,7 @@ namespace CycloneDX.Services
             _assetFileReaderFactory = assetFileReaderFactory;
         }
 
-        public HashSet<DotnetDependency> GetDotnetDependencys(string projectFilePath, string projectAssetsFilePath, bool isTestProject, bool excludeDevDependencies)
+        public HashSet<DotnetDependency> GetDotnetDependencys(string projectFilePath, string projectAssetsFilePath, bool isTestProject)
         {
             var packages = new HashSet<DotnetDependency>();
 
@@ -100,21 +100,21 @@ namespace CycloneDX.Services
                     var allPackages = runtimePackages.Select(p => p.Name);
                     var packagesNotInAllPackages = allDependencies.Except(allPackages);
 
-                    if (excludeDevDependencies)
+                    var realRuntimePackages = new HashSet<DotnetDependency>();
+                    foreach (DotnetDependency dd in runtimePackages)
                     {
-                        var realRuntimePackages = new HashSet<DotnetDependency>();
-                        foreach (DotnetDependency dd in runtimePackages)
+                        if (!dd.IsDirectReference)
                         {
-                            if (!dd.IsDirectReference)
-                            {
-                                continue;
-                            }
-
-                            ResolvedRuntimeDependencies(dd, runtimePackages, realRuntimePackages);
+                            continue;
                         }
-                        runtimePackages = realRuntimePackages;
-                    }
 
+                        ResolvedRuntimeDependencies(dd, runtimePackages, realRuntimePackages);
+                    }
+                    foreach (DotnetDependency dd in runtimePackages.Except(realRuntimePackages))
+                    {
+                        dd.IsDevDependency = true;
+                    }
+                    
                     // Check if there is an "unresolved" dependency on NetStandard                    
                     if (packagesNotInAllPackages.Any(p => p == "NETStandard.Library"))
                     {
@@ -159,8 +159,11 @@ namespace CycloneDX.Services
 
             foreach (KeyValuePair<string,string> child in dotnetDependency.Dependencies)
             {
-                DotnetDependency childDependency = allpackages.First(p => string.Equals(p.Name, child.Key, StringComparison.OrdinalIgnoreCase));
-                ResolvedRuntimeDependencies(childDependency, allpackages, collectedDependencies);
+                DotnetDependency childDependency = allpackages.FirstOrDefault(p => string.Equals(p.Name, child.Key, StringComparison.OrdinalIgnoreCase));
+                if (childDependency != null)
+                {
+                    ResolvedRuntimeDependencies(childDependency, allpackages, collectedDependencies);
+                }
             }
         }
 
