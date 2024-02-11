@@ -48,7 +48,7 @@ namespace CycloneDX.Tests.FunctionalTests
             var options = new RunOptions
             {
                 excludeDev = false,
-                SolutionOrProjectFile = fineGrainedProject
+                SolutionOrProjectFile = MockUnixSupport.Path(fineGrainedProject)
             };
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
@@ -65,7 +65,7 @@ namespace CycloneDX.Tests.FunctionalTests
             var options = new RunOptions
             {
                 excludeDev = true,
-                SolutionOrProjectFile = fineGrainedProject
+                SolutionOrProjectFile = MockUnixSupport.Path(fineGrainedProject)
             };
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
@@ -82,7 +82,7 @@ namespace CycloneDX.Tests.FunctionalTests
             var options = new RunOptions
             {
                 excludeDev = true,
-                SolutionOrProjectFile = referingFineGrainedProjectProject
+                SolutionOrProjectFile = MockUnixSupport.Path(referingFineGrainedProjectProject)
             };
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
