@@ -16,7 +16,7 @@ namespace CycloneDX.Tests.FunctionalTests
     {
         readonly string testFileFolder = "Issue847-FineGrainedDependencies";
         readonly string fineGrainedProject = "c:/project2/project2.csproj";
-        readonly string referingFineGrainedProjectProject = "c:/project1/project1.csproj";
+        readonly string referringFineGrainedProjectProject = "c:/project1/project1.csproj";
 
         private MockFileSystem getMockFS()
         {
@@ -25,15 +25,15 @@ namespace CycloneDX.Tests.FunctionalTests
                 {
                     MockUnixSupport.Path("c:/project1/obj/project.assets.json"),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "ReferingFineGrainedDependency.csproj.project.assets.json")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "ReferringFineGrainedDependency.csproj.project.assets.json")))
                 },{
                     MockUnixSupport.Path("c:/project2/obj/project.assets.json"),
                         new MockFileData(
                             File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "FineGrainedDependency.csproj.project.assets.json")))
                 },{
-                    MockUnixSupport.Path(referingFineGrainedProjectProject),
+                    MockUnixSupport.Path(referringFineGrainedProjectProject),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "ReferingFineGrainedDependency.csproj.xml")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "ReferringFineGrainedDependency.csproj.xml")))
                 },{
                     MockUnixSupport.Path(fineGrainedProject),
                         new MockFileData(
@@ -82,7 +82,7 @@ namespace CycloneDX.Tests.FunctionalTests
             var options = new RunOptions
             {
                 excludeDev = true,
-                SolutionOrProjectFile = MockUnixSupport.Path(referingFineGrainedProjectProject)
+                SolutionOrProjectFile = MockUnixSupport.Path(referringFineGrainedProjectProject)
             };
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 

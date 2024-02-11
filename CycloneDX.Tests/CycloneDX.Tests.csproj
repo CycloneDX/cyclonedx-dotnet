@@ -60,10 +60,10 @@
     <None Update="FunctionalTests\Issue830-rsMultipleFrameworks\project2csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\Issue847-FineGrainedDependencies\ReferingFineGrainedDependency.csproj.project.assets.json">
+    <None Update="FunctionalTests\Issue847-FineGrainedDependencies\ReferringFineGrainedDependency.csproj.project.assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\Issue847-FineGrainedDependencies\ReferingFineGrainedDependency.csproj.xml">
+    <None Update="FunctionalTests\Issue847-FineGrainedDependencies\ReferringFineGrainedDependency.csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\Issue847-FineGrainedDependencies\FineGrainedDependency.csproj.project.assets.json">
