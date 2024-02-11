@@ -17,19 +17,18 @@
 
 using System;
 using System.Collections.Generic;
-using Xunit;
+using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using CycloneDX.Interfaces;
-using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
-using Moq;
 using CycloneDX.Models;
 using CycloneDX.Services;
+using Moq;
 using NuGet.LibraryModel;
-using NuGet.ProjectModel;
 using NuGet.Packaging.Core;
+using NuGet.ProjectModel;
 using NuGet.Versioning;
-using System.IO;
-using NuGet.Packaging.Signing;
+using Xunit;
+using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 
 namespace CycloneDX.Tests
 {
