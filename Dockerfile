@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0
+FROM mcr.microsoft.com/dotnet/sdk:8.0.101
 
 ARG VERSION
 COPY ./nupkgs /tmp/nupkgs/
