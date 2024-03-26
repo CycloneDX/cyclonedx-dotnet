@@ -46,7 +46,7 @@ namespace CycloneDX.Services
             if (_fileSystem.File.Exists(projectAssetsFilePath))
             {
                 var assetFileReader = _assetFileReaderFactory();
-                using var fileStream = _fileSystem.FileStream.New(projectAssetsFilePath, FileMode.Open);
+                using var fileStream = _fileSystem.FileStream.New(projectAssetsFilePath, FileMode.Open, FileAccess.Read);
                 var assetsFile = assetFileReader.Read(fileStream, projectAssetsFilePath);
                 
 
