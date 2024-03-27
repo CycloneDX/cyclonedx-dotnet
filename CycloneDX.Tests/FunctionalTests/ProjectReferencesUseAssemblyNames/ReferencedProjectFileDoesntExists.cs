@@ -26,6 +26,10 @@ namespace CycloneDX.Tests.FunctionalTests
                     MockUnixSupport.Path("c:/project2/project2.csproj"),
                         new MockFileData(
                             File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesUseAssemblyNames", "project2csproj.xml")))
+                            },{
+                    MockUnixSupport.Path("c:/project3/project3.csproj"),
+                        new MockFileData(
+                            File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesUseAssemblyNames", "project3csproj.xml")))
                 },{
                     MockUnixSupport.Path("c:/project1/obj/project.assets.json"),
                         new MockFileData(
@@ -34,6 +38,10 @@ namespace CycloneDX.Tests.FunctionalTests
                     MockUnixSupport.Path("c:/project2/obj/project.assets.json"),
                         new MockFileData(
                             File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesUseAssemblyNames", "project2assets.json")))
+                },{
+                    MockUnixSupport.Path("c:/project3/obj/project.assets.json"),
+                        new MockFileData(
+                            File.ReadAllText(Path.Combine("FunctionalTests", "ProjectReferencesUseAssemblyNames", "project3assets.json")))
                 }
             });
         }
@@ -53,8 +61,9 @@ namespace CycloneDX.Tests.FunctionalTests
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
 
-            Assert.True(bom.Components.Count == 1, $"Unexpected number of components. Expected 1, got {bom.Components.Count}");
+            Assert.True(bom.Components.Count == 2, $"Unexpected number of components. Expected 2, got {bom.Components.Count}");
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "AssemblyName", true) == 0);
+            Assert.Contains(bom.Components, c => string.Compare(c.Name, "ABC.project3", true) == 0);
         }
 
         [Fact]
@@ -72,8 +81,9 @@ namespace CycloneDX.Tests.FunctionalTests
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
 
-            Assert.True(bom.Components.Count == 1, $"Unexpected number of components. Expected 1, got {bom.Components.Count}");
+            Assert.True(bom.Components.Count == 2, $"Unexpected number of components. Expected 2, got {bom.Components.Count}");
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "AssemblyName", true) == 0);
+            Assert.Contains(bom.Components, c => string.Compare(c.Name, "ABC.project3", true) == 0);
         }
 
     }

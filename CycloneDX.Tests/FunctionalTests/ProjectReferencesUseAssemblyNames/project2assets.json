@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\src\\CycloneDX-843\\ConsoleApp1\\ClassLibrary1\\ClassLibrary1.csproj",
+      "projectUniqueName": "E:\\src\\CycloneDX-833\\CycloneDX-833\\project2\\project2.csproj",
       "projectName": "AssemblyName",
-      "projectPath": "E:\\src\\CycloneDX-843\\ConsoleApp1\\ClassLibrary1\\ClassLibrary1.csproj",
+      "projectPath": "E:\\src\\CycloneDX-833\\CycloneDX-833\\project2\\project2.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "E:\\src\\CycloneDX-843\\ConsoleApp1\\ClassLibrary1\\obj\\",
+      "outputPath": "E:\\src\\CycloneDX-833\\CycloneDX-833\\project2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -33,6 +33,7 @@
       ],
       "sources": {
         "C:\\Program Files\\dotnet\\library-packs": {},
+        "E:\\src\\repos\\CycloneDX.Build\\CycloneDX.Build\\bin\\Debug\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -66,7 +67,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.103/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
