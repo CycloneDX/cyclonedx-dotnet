@@ -45,7 +45,7 @@ namespace CycloneDX.Tests.FunctionalTests
             {
                 //scanProjectReferences = true
                 includeProjectReferences = true,
-                SolutionOrProjectFile = "c:/project1/project1.csproj"
+                SolutionOrProjectFile = MockUnixSupport.Path("c:/project1/project1.csproj")
             };
 
 
@@ -64,7 +64,7 @@ namespace CycloneDX.Tests.FunctionalTests
             {
                 scanProjectReferences = true,
                 includeProjectReferences = true,
-                SolutionOrProjectFile = "c:/project1/project1.csproj"
+                SolutionOrProjectFile = MockUnixSupport.Path("c:/project1/project1.csproj")
             };
 
 
