@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace CycloneDX.Services
 {
@@ -80,7 +81,7 @@ namespace CycloneDX.Services
             return testProjectPropertyGroup != null;
         }
 
-        private (string name, string version) GetProjectNameAndVersion(string projectFilePath)
+        private (string name, string version) GetAssemblyNameAndVersion(string projectFilePath)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
@@ -95,9 +96,18 @@ namespace CycloneDX.Services
             XmlNamespaceManager namespaces = new XmlNamespaceManager(xmldoc.NameTable);
             namespaces.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-            string name = (xmldoc.SelectSingleNode("/Project/PropertyGroup/AssemblyName") as XmlElement)?.Value
-                ?? (xmldoc.SelectSingleNode("/Project/PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.Value
-                ?? _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
+            string name = (xmldoc.SelectSingleNode("/Project/PropertyGroup/AssemblyName") as XmlElement)?.InnerText;
+            name ??= (xmldoc.SelectSingleNode("/Project/PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.InnerText;
+                
+
+            if (name?.Contains("$(MSBuildProjectName)") == true)
+            {
+                var projectName = _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
+                name = name.Replace("$(MSBuildProjectName)", projectName);                
+            }
+
+            name ??= _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
+
 
             // Extract Version
             XmlElement versionElement = xmldoc.SelectSingleNode("/Project/PropertyGroup/Version") as XmlElement;
@@ -224,7 +234,7 @@ namespace CycloneDX.Services
 
             //Remove root-project, it will be added to the metadata
             var rootProject = projectReferences.FirstOrDefault(p => p.Path == projectFilePath);
-            projectReferences.Where(p => rootProject.Dependencies.ContainsKey(p.Path)).ToList().ForEach(p => p.IsDirectReference = true);
+            projectReferences.Where(p => rootProject.Dependencies.ContainsKey(p.Name)).ToList().ForEach(p => p.IsDirectReference = true);
             projectReferences.Remove(rootProject);
 
 
@@ -328,13 +338,15 @@ namespace CycloneDX.Services
                 // Find all project references inside of currentFile
                 var foundProjectReferences = await GetProjectReferencesAsync(currentFile).ConfigureAwait(false);
 
-                var nameAndVersion = GetProjectNameAndVersion(currentFile);
+                var nameAndVersion = GetAssemblyNameAndVersion(currentFile);
 
                 DotnetDependency dependency = new();
                 dependency.Name = nameAndVersion.name;
-                dependency.Version = nameAndVersion.version ?? "undefined";
+                dependency.Version = nameAndVersion.version ?? "1.0.0"; //a project that has no version defined is listed as 1.0.0 in an assets-File
                 dependency.Path = currentFile;
-                dependency.Dependencies = foundProjectReferences.ToDictionary(key => key, value => (string)null);
+                dependency.Dependencies = foundProjectReferences.
+                                          Select(GetAssemblyNameAndVersion).
+                                          ToDictionary(project => project.name, project => project.version ?? "1.0.0");
                 dependency.Scope = Component.ComponentScope.Required;
                 dependency.DependencyType = DependencyType.Project;
                 projectReferences.Add(dependency);

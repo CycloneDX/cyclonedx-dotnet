@@ -1,0 +1,116 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "ABC.project3/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/ABC.project3.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ABC.project3.dll": {}
+        }
+      },
+      "AssemblyName/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/AssemblyName.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AssemblyName.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ABC.project3/1.0.0": {
+      "type": "project",
+      "path": "../project3/project3.csproj",
+      "msbuildProject": "../project3/project3.csproj"
+    },
+    "AssemblyName/1.0.0": {
+      "type": "project",
+      "path": "../project2/project2.csproj",
+      "msbuildProject": "../project2/project2.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "ABC.project3 >= 1.0.0",
+      "AssemblyName >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\user\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "E:\\src\\CycloneDX-833\\CycloneDX-833\\project1\\project1.csproj",
+      "projectName": "project1",
+      "projectPath": "E:\\src\\CycloneDX-833\\CycloneDX-833\\project1\\project1.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "E:\\src\\CycloneDX-833\\CycloneDX-833\\project1\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "C:\\Program Files\\dotnet\\library-packs": {},
+        "E:\\src\\repos\\CycloneDX.Build\\CycloneDX.Build\\bin\\Debug\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "E:\\src\\CycloneDX-833\\CycloneDX-833\\project2\\project2.csproj": {
+              "projectPath": "E:\\src\\CycloneDX-833\\CycloneDX-833\\project2\\project2.csproj"
+            },
+            "E:\\src\\CycloneDX-833\\CycloneDX-833\\project3\\project3.csproj": {
+              "projectPath": "E:\\src\\CycloneDX-833\\CycloneDX-833\\project3\\project3.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.103/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
