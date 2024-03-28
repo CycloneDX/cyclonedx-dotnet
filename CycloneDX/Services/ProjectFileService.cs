@@ -67,7 +67,7 @@ namespace CycloneDX.Services
             }
 
             XmlDocument xmldoc = new XmlDocument();
-            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
+            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open, FileAccess.Read);
             xmldoc.Load(fileStream);
 
             XmlElement testSdkReference = xmldoc.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.NET.Test.Sdk']") as XmlElement;
@@ -89,7 +89,7 @@ namespace CycloneDX.Services
 
 
             XmlDocument xmldoc = new XmlDocument();
-            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
+            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open, FileAccess.Read);
             xmldoc.Load(fileStream);
 
             XmlNamespaceManager namespaces = new XmlNamespaceManager(xmldoc.NameTable);
