@@ -117,16 +117,15 @@ namespace CycloneDX.Services
             {
                 string assemblyInfoPath;
                 string pattern;
-                switch (Path.GetExtension(projectFilePath))
+                if (Path.GetExtension(projectFilePath).Equals(".vbproj", StringComparison.Ordinal))
                 {
-                    case ".vbproj":
-                        assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "My Project", "AssemblyInfo.vb");
-                        pattern = @"^\<Assembly: AssemblyVersion\(""(?<Version>.*?)""\)\>$";
-                        break;
-                    default:
-                        assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "Properties", "AssemblyInfo.cs");
-                        pattern = @"^\[assembly: AssemblyVersion\(""(?<Version>.*?)""\)\]$";
-                        break;
+                    assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "My Project", "AssemblyInfo.vb");
+                    pattern = @"^\<Assembly: AssemblyVersion\(""(?<Version>.*?)""\)\>$";
+                }
+                else
+                {
+                    assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "Properties", "AssemblyInfo.cs");
+                    pattern = @"^\[assembly: AssemblyVersion\(""(?<Version>.*?)""\)\]$";
                 }
 
                 if (_fileSystem.File.Exists(assemblyInfoPath))
