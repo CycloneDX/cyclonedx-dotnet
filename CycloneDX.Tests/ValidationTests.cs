@@ -34,6 +34,7 @@ namespace CycloneDX.Tests
                 new() { Name = "LibGit2Sharp", Version = "0.27.0-preview-0096" },
                 new() { Name = "NLog", Version = "4.7.7" },
                 new() { Name = "RestSharp", Version = "106.11.7" },
+                new() { Name = "CsvHelper", Version = "32.0.3" },
             };
 
             var mockProjectFileService = new Mock<IProjectFileService>();
