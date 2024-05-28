@@ -3,7 +3,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="CycloneDX.Core" Version="6.0.0" />
+    <PackageVersion Include="CycloneDX.Core" Version="7.0.1" />
     <PackageVersion Include="Microsoft.Build" Version="17.3.2" />
     <PackageVersion Include="Microsoft.Build.Engine" Version="17.8.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
