@@ -169,7 +169,7 @@ namespace CycloneDX
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
-                    if(!fileSystem.File.Exists(SolutionOrProjectFile)
+                    if(!fileSystem.File.Exists(SolutionOrProjectFile))
                     {
                         Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
                         return (int)ExitCode.InvalidOptions;                        
@@ -180,7 +180,7 @@ namespace CycloneDX
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
                     
-                    if(!fileSystem.File.Exists(SolutionOrProjectFile)
+                    if(!fileSystem.File.Exists(SolutionOrProjectFile))
                     {
                         Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
                         return (int)ExitCode.InvalidOptions;                        
