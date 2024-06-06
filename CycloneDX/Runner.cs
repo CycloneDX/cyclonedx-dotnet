@@ -169,11 +169,22 @@ namespace CycloneDX
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
+                    if(!fileSystem.File.Exists(SolutionOrProjectFile)
+                    {
+                        Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
+                        return (int)ExitCode.InvalidOptions;                        
+                    }
                     packages = await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
+                    
+                    if(!fileSystem.File.Exists(SolutionOrProjectFile)
+                    {
+                        Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
+                        return (int)ExitCode.InvalidOptions;                        
+                    }
                     packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
