@@ -115,13 +115,22 @@ namespace CycloneDX.Services
 
             if (version == null)
             {
-                string assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "Properties", "AssemblyInfo.cs");
+                string assemblyInfoPath;
+                string pattern;
+                if (Path.GetExtension(projectFilePath).Equals(".vbproj", StringComparison.Ordinal))
+                {
+                    assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "My Project", "AssemblyInfo.vb");
+                    pattern = @"^\<Assembly: AssemblyVersion\(""(?<Version>.*?)""\)\>$";
+                }
+                else
+                {
+                    assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "Properties", "AssemblyInfo.cs");
+                    pattern = @"^\[assembly: AssemblyVersion\(""(?<Version>.*?)""\)\]$";
+                }
+
                 if (_fileSystem.File.Exists(assemblyInfoPath))
                 {
-
                     string[] lines = _fileSystem.File.ReadAllLines(assemblyInfoPath);
-                    string pattern = @"^\[assembly: AssemblyVersion\(""(?<Version>.*?)""\)\]$";
-
                     foreach (var line in lines)
                     {
                         Match match = Regex.Match(line, pattern);

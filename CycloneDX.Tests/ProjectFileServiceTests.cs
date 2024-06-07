@@ -326,5 +326,49 @@ namespace CycloneDX.Tests
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), item),
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), item));
         }
+
+        [Fact]
+        public async Task RecursivelyGetProjectReferences_ReturnsCSAssemblyVersion()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), new MockFileData(@"<Project></Project>") },
+                { XFS.Path(@"c:\SolutionPath\Project1\Properties\AssemblyInfo.cs"), new MockFileData(@"[assembly: AssemblyVersion(""3.2.1.0"")]")}
+            });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            var projects = await projectFileService.RecursivelyGetProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj")).ConfigureAwait(true);
+
+            Assert.Equal("3.2.1.0", projects.FirstOrDefault().Version);
+        }
+
+        [Fact]
+        public async Task RecursivelyGetProjectReferences_ReturnsVBAssemblyVersion()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\SolutionPath\Project1\Project1.vbproj"), new MockFileData(@"<Project></Project>") },
+                { XFS.Path(@"c:\SolutionPath\Project1\My Project\AssemblyInfo.vb"), new MockFileData(@"<Assembly: AssemblyVersion(""3.2.1.0"")>")}
+            });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            var projects = await projectFileService.RecursivelyGetProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\Project1\Project1.vbproj")).ConfigureAwait(true);
+
+            Assert.Equal("3.2.1.0", projects.FirstOrDefault().Version);
+        }
     }
 }
