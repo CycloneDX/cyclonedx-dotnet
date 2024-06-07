@@ -164,21 +164,41 @@ namespace CycloneDX
             {
                 if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
+                    if (!fileSystem.File.Exists(SolutionOrProjectFile))
+                    {
+                        Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
+                        return (int)ExitCode.InvalidOptions;
+                    }
                     packages = await solutionFileService.GetSolutionDotnetDependencys(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
+                    if(!fileSystem.File.Exists(SolutionOrProjectFile))
+                    {
+                        Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
+                        return (int)ExitCode.InvalidOptions;                        
+                    }
                     packages = await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
-                {
+                {                    
+                    if(!fileSystem.File.Exists(SolutionOrProjectFile))
+                    {
+                        Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
+                        return (int)ExitCode.InvalidOptions;                        
+                    }
                     packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
-                else if (this.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
+                else if (fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {
+                    if (!fileSystem.File.Exists(SolutionOrProjectFile))
+                    {
+                        Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
+                        return (int)ExitCode.InvalidOptions;
+                    }
                     packages = await packagesFileService.GetDotnetDependencysAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
                 }
