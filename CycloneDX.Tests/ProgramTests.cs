@@ -102,5 +102,33 @@ namespace CycloneDX.Tests
             Assert.Matches("CycloneDX", bom.Metadata.Tools.Tools[0].Vendor);
             Assert.Matches("1.2.0", bom.Metadata.Tools.Tools[0].Version);
         }
+
+        [Theory]
+        [InlineData(@"c:\SolutionPath\SolutionFile.sln", false)]
+        [InlineData(@"c:\SolutionPath\ProjectFile.csproj", false)]
+        [InlineData(@"c:\SolutionPath\ProjectFile.csproj", true)]
+        [InlineData(@"c:\SolutionPath\packages.config", false)]
+        public async Task CallingCycloneDX_WithSolutionOrProjectFileThatDoesntExistsReturnAnythingButZero(string path, bool rs)
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>());
+            var mockSolutionFileService = new Mock<ISolutionFileService>();
+            mockSolutionFileService
+                .Setup(s => s.GetSolutionDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>());
+
+            Runner runner = new Runner(fileSystem: mockFileSystem, null, null, null, null, null, solutionFileService: mockSolutionFileService.Object, null);
+
+            RunOptions runOptions = new RunOptions
+            {
+                SolutionOrProjectFile = XFS.Path(path),
+                scanProjectReferences = rs,
+                outputDirectory = XFS.Path(@"c:\NewDirectory"),
+                outputFilename = XFS.Path(@"my_bom.xml")
+            };
+
+            var exitCode = await runner.HandleCommandAsync(runOptions);
+
+            Assert.NotEqual((int)ExitCode.OK, exitCode);            
+        }
     }
 }
