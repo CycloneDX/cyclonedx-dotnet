@@ -99,14 +99,14 @@ namespace CycloneDX.Tests.FunctionalTests
             }
             else
             {
-                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_5);
+                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_5);                
             }
             Assert.True(validationResult.Valid);
 
             return runner.LastGeneratedBom;
         }
 
-        private const string CsprojContents =
+        public const string CsprojContents =
         "<Project Sdk=\"Microsoft.NET.Sdk\">\n\n  " +
             "<PropertyGroup>\n    " +
                 "<OutputType>Exe</OutputType>\n    " +
