@@ -64,6 +64,8 @@ namespace CycloneDX
         public async Task<int> HandleCommandAsync(RunOptions options)
         {
             options.outputDirectory ??= fileSystem.Directory.GetCurrentDirectory();
+            SetOutputFormatFromFilename(options);
+            
             string outputDirectory = options.outputDirectory;
             string SolutionOrProjectFile = options.SolutionOrProjectFile;
             string framework = options.framework;
@@ -511,5 +513,29 @@ namespace CycloneDX
             }
         }
 
+        private void SetOutputFormatFromFilename(RunOptions options)
+        {
+            if (!string.IsNullOrEmpty(options.outputFilename))
+            {
+                var extension = Path.GetExtension(options.outputFilename).ToLowerInvariant();
+                switch (extension)
+                {
+                    case ".xml":
+                        options.json = false;
+                        break;
+                    case ".json":
+                        options.json = true;
+                        break;
+                    case ".proto":
+                    case ".pb":
+                    case ".bin":
+                        // Add handling for other future formats here
+                        break;
+                    default:
+                        Console.Error.WriteLine($"Unsupported file extension '{extension}' for output filename");
+                        break;
+                }
+            }
+        }
     }
 }
