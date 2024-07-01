@@ -22,18 +22,26 @@ namespace CycloneDX.Services {
     /// <summary>
     /// Service to generate bill of materials
     /// </summary>
-    public static class BomService
+public static class BomService
+{
+    public static string CreateDocument(Bom bom, bool json)
     {
-        public static string CreateDocument(Bom bom, bool json)
+        if (json)
         {
-            if (json)
-            {
-                return Json.Serializer.Serialize(bom);
-            }
-            else
-            {
-                return Xml.Serializer.Serialize(bom);
-            }
+            return JsonSerializer.Serialize(bom);
+        }
+        else
+        {
+            return XmlSerializer.Serialize(bom);
         }
     }
+
+    public static string CreateProtobuf(Bom bom)
+    {
+        using var stream = new MemoryStream();
+        ProtoBuf.Serializer.Serialize(stream, bom);
+        return Convert.ToBase64String(stream.ToArray());
+    }
+}
+
 }
