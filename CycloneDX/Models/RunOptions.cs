@@ -19,6 +19,13 @@ using System.Globalization;
 
 namespace CycloneDX.Models
 {
+    public enum BomFormat
+    {
+        XML,
+        JSON,
+        Protobuf
+    }
+
     public class RunOptions
     {
         public string SolutionOrProjectFile { get; set; }
@@ -26,7 +33,7 @@ namespace CycloneDX.Models
         public string framework { get; set; }
         public string outputDirectory { get; set; }
         public string outputFilename { get; set; }
-        public bool json { get; set; }
+        public bool json { get; set; } // Deprecated
         public bool excludeDev { get; set; }
         public bool excludeTestProjects { get; set; }
         public bool includeProjectReferences { get; set; }
@@ -48,6 +55,7 @@ namespace CycloneDX.Models
         public string setName { get; set; }
         public string setVersion { get; set; }
         public Component.Classification setType { get; set; } = Component.Classification.Application;
+        public BomFormat BomFormat { get; set; } = BomFormat.XML; // New property
 
 
     }
