@@ -33,9 +33,11 @@ namespace CycloneDX
         }
         public static bool IsSupportedProjectType(string filename) {
             Contract.Requires(filename != null);
-            return filename.ToLowerInvariant().EndsWith(".csproj", StringComparison.OrdinalIgnoreCase) ||
-                filename.ToLowerInvariant().EndsWith(".fsproj", StringComparison.OrdinalIgnoreCase) ||
-                filename.ToLowerInvariant().EndsWith(".vbproj", StringComparison.OrdinalIgnoreCase);
+            string filenameLowerInvariant = filename.ToLowerInvariant();
+            return filenameLowerInvariant.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase) ||
+                filenameLowerInvariant.EndsWith(".fsproj", StringComparison.OrdinalIgnoreCase) ||
+                filenameLowerInvariant.EndsWith(".vbproj", StringComparison.OrdinalIgnoreCase) ||
+                filenameLowerInvariant.EndsWith(".xsproj", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

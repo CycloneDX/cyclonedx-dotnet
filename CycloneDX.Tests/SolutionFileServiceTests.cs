@@ -85,7 +85,7 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\
         }
 
         [Fact]
-        public async Task GetSolutionProjectReferences_ReturnsListOfProjectsIncludingFSharpAndVB()
+        public async Task GetSolutionProjectReferences_ReturnsListOfProjectsIncludingFSharpAndVBAndXSharp()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
@@ -93,14 +93,17 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\
 Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project1\Project1.csproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
 Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project2\Project2.fsproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
 Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\Project3.vbproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
+Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project4\Project4.xsproj"", ""{88DFA76C-1C0A-4A83-AA48-EA1D28A9ABED}""
                         ")},
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetEmptyProjectFile() },
                     { XFS.Path(@"c:\SolutionPath\Project2\Project2.fsproj"), Helpers.GetEmptyProjectFile() },
                     { XFS.Path(@"c:\SolutionPath\Project3\Project3.vbproj"), Helpers.GetEmptyProjectFile() },
+                    { XFS.Path(@"c:\SolutionPath\Project4\Project4.xsproj"), Helpers.GetEmptyProjectFile() },
                 });
             var mockProjectFileService = new Mock<IProjectFileService>();
             mockProjectFileService
                 .SetupSequence(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>())
                 .ReturnsAsync(new HashSet<DotnetDependency>())
                 .ReturnsAsync(new HashSet<DotnetDependency>())
                 .ReturnsAsync(new HashSet<DotnetDependency>());
@@ -113,7 +116,8 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project3\
             Assert.Collection(sortedProjects,
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), item),
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project2\Project2.fsproj"), item),
-                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project3\Project3.vbproj"), item));
+                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project3\Project3.vbproj"), item),
+                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project4\Project4.xsproj"), item));
         }
 
         [Fact]
