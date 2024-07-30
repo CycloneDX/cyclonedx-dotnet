@@ -209,7 +209,7 @@ namespace CycloneDX
                 }
                 else
                 {
-                    Console.Error.WriteLine($"Only .sln, .csproj, .fsproj, .vbproj, and packages.config files are supported");
+                    Console.Error.WriteLine($"Only .sln, .csproj, .fsproj, .vbproj, .xsproj, and packages.config files are supported");
                     return (int)ExitCode.InvalidOptions;
                 }
             }

@@ -370,5 +370,28 @@ namespace CycloneDX.Tests
 
             Assert.Equal("3.2.1.0", projects.FirstOrDefault().Version);
         }
+
+        [Fact]
+        public async Task RecursivelyGetProjectReferences_ReturnsXSharpAssemblyVersion()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\SolutionPath\Project1\Project1.xsproj"), new MockFileData(@"<Project></Project>") },
+                { XFS.Path(@"c:\SolutionPath\Project1\Properties\AssemblyInfo.prg"), new MockFileData(@"[assembly: AssemblyVersion(""3.2.1.0"")]")}
+            });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            var projects = await projectFileService.RecursivelyGetProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\Project1\Project1.xsproj")).ConfigureAwait(true);
+
+            Assert.Equal("3.2.1.0", projects.FirstOrDefault().Version);
+        }
+
     }
 }

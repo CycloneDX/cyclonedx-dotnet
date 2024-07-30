@@ -29,7 +29,7 @@ namespace CycloneDX
         {
 
 
-            var SolutionOrProjectFile = new Argument<string>("path", description: "The path to a .sln, .csproj, .fsproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.");
+            var SolutionOrProjectFile = new Argument<string>("path", description: "The path to a .sln, .csproj, .fsproj, .vbproj, .xsproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.");
             var framework = new Option<string>(new[] { "--framework", "-tfm" }, "The target framework to use. If not defined, all will be aggregated.");
             var runtime = new Option<string>(new[] { "--runtime", "-rt" }, "The runtime to use. If not defined, all will be aggregated.");
             var outputDirectory = new Option<string>(new[] { "--output", "-o" }, description: "The directory to write the BOM");
