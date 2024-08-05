@@ -117,10 +117,16 @@ namespace CycloneDX.Services
             {
                 string assemblyInfoPath;
                 string pattern;
-                if (Path.GetExtension(projectFilePath).Equals(".vbproj", StringComparison.Ordinal))
+                string projectFileExtension = Path.GetExtension(projectFilePath);
+                if (projectFileExtension.Equals(".vbproj", StringComparison.Ordinal))
                 {
                     assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "My Project", "AssemblyInfo.vb");
                     pattern = @"^\<Assembly: AssemblyVersion\(""(?<Version>.*?)""\)\>$";
+                }
+                else if (projectFileExtension.Equals(".xsproj", StringComparison.Ordinal))
+                {
+                    assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "Properties", "AssemblyInfo.prg");
+                    pattern = @"^\[assembly: AssemblyVersion\(""(?<Version>.*?)""\)\]$";
                 }
                 else
                 {
