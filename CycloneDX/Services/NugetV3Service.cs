@@ -80,11 +80,12 @@ namespace CycloneDX.Services
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) { return null; }
 
             var lowerName = name.ToLowerInvariant();
+            var lowerVersion = version.ToLowerInvariant();
             string nuspecFilename = null;
 
             foreach (var packageCachePath in _packageCachePaths)
             {
-                var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, NormalizeVersion(version));
+                var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, NormalizeVersion(lowerVersion));
                 var currentFilename = _fileSystem.Path.Combine(currentDirectory, lowerName + _nuspecExtension);
                 if (_fileSystem.File.Exists(currentFilename))
                 {
