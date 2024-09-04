@@ -344,6 +344,12 @@ namespace CycloneDX.Services
             while (files.Count > 0)
             {
                 var currentFile = files.Dequeue();
+
+                if (!Utils.IsSupportedProjectType(currentFile))
+                {
+                    continue;
+                }
+
                 // Find all project references inside of currentFile
                 var foundProjectReferences = await GetProjectReferencesAsync(currentFile).ConfigureAwait(false);
 
