@@ -278,7 +278,7 @@ namespace CycloneDX.Services
 
         private static Component SetupComponentProperties(Component component, NuspecModel nuspecModel)
         {
-            component.Author = nuspecModel.nuspecReader.GetAuthors();
+            component.Authors = new List<OrganizationalContact> { new OrganizationalContact { Name = nuspecModel.nuspecReader.GetAuthors() } };
             component.Copyright = nuspecModel.nuspecReader.GetCopyright();
             // this prevents empty copyright values in the JSON BOM
             if (string.IsNullOrEmpty(component.Copyright))
