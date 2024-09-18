@@ -95,11 +95,11 @@ namespace CycloneDX.Tests.FunctionalTests
             ValidationResult validationResult;
             if (options.json)
             {
-                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_5).ConfigureAwait(false);
+                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_6).ConfigureAwait(false);
             }
             else
             {
-                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_5);
+                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_6);
             }
             Assert.True(validationResult.Valid);
 
