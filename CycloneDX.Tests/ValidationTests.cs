@@ -69,11 +69,11 @@ namespace CycloneDX.Tests
             ValidationResult validationResult;
             if (fileFormat == "json")
             {
-                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_5).ConfigureAwait(true);
+                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_6).ConfigureAwait(true);
             }
             else
             {
-                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_5);
+                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_6);
             }
 
             Assert.True(validationResult.Valid);
