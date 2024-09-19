@@ -312,7 +312,7 @@ namespace CycloneDX
                             if (!bomRefLookup.ContainsKey(lookupKey))
                             {
                                 var packageNameMatch = bomRefLookup.Where(x => x.Key.Item1 == dep.Key.ToLower(CultureInfo.InvariantCulture)).ToList();
-                                if (packageNameMatch.Count == 1)
+                                if (packageNameMatch.Count >= 1)
                                 {
                                     lookupKey = packageNameMatch.First().Key;
                                 }
