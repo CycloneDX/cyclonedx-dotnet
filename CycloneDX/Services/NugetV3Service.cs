@@ -21,6 +21,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Abstractions;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
@@ -112,6 +113,78 @@ namespace CycloneDX.Services
             }
 
             return version;
+        }
+
+        /// <summary>
+        /// Converts Git SCP-like URLs to IRI / .NET URI parse-able equivalent.
+        /// </summary>
+        /// <param name="input">The VCS URI to normalize.</param>
+        /// <returns>A string parseable by Uri.Parse, otherwise null.</returns>
+        private string NormalizeUri(string input)
+        {
+            const string FALLBACK_SCHEME = "https://";
+
+            if (string.IsNullOrWhiteSpace(input)) { return null; }
+
+            UriCreationOptions ops = new UriCreationOptions();
+
+            input = input.Trim();
+
+            if (Uri.TryCreate(input, ops, out Uri? result))
+            {
+                return result.ToString();
+            }
+
+            // Locate the main parts of the 'SCP-like' Git URL
+            // https://git-scm.com/docs/git-clone#_git_urls
+            // 1. Optional user
+            // 2. Host
+            // 3. Path
+            int colonLocation = input.IndexOf(':');
+            if (colonLocation == -1)
+            {
+                // Uri.Parse can fail in the absense of colons AND the absense of a scheme.
+                // Add the fallback scheme to see if Uri.Parse can then interpret.
+                return NormalizeUri($"{FALLBACK_SCHEME}{input}");
+            }
+
+            var userAndHostPart = input.Substring(0, colonLocation);
+            var pathPart = input.Substring(colonLocation + 1, input.Length - 1 - userAndHostPart.Length);
+
+            var tokens = userAndHostPart.Split('@');
+            if (tokens.Length != 2)
+            {
+                // More than 1 @ would be invalid. No @ would probably have parsed ok by .NET.
+                return null;
+            }
+
+            var user = tokens[0];
+            var host = tokens[1];
+
+            var sb = new StringBuilder();
+            sb.Append(FALLBACK_SCHEME); // Assume this is the scheme which caused the parsing issue.
+
+            if (!string.IsNullOrEmpty(user))
+            {
+                sb.Append(user);
+                sb.Append(":@");
+            }
+
+            sb.Append(host);
+
+            if (!pathPart.StartsWith('/'))
+            {
+                sb.Append("/");
+            }
+
+            sb.Append(pathPart);
+
+            if (Uri.TryCreate(sb.ToString(), ops, out var adapted))
+            {
+                return adapted.ToString();
+            }
+
+            return null;
         }
 
         private SourceRepository SetupNugetRepository(NugetInputModel nugetInput)
@@ -255,7 +328,7 @@ namespace CycloneDX.Services
 
             // Source: https://docs.microsoft.com/de-de/nuget/reference/nuspec#repository
             var repoMeta = nuspecModel.nuspecReader.GetRepositoryMetadata();
-            var vcsUrl = repoMeta?.Url;
+            var vcsUrl = NormalizeUri(repoMeta?.Url);
             if (!string.IsNullOrEmpty(vcsUrl))
             {
                 var externalReference = new ExternalReference
