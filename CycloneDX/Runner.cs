@@ -23,8 +23,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using CycloneDX.Models;
 using CycloneDX.Interfaces;
+using CycloneDX.Models;
 using CycloneDX.Services;
 using static CycloneDX.Models.Component;
 
@@ -71,13 +71,13 @@ namespace CycloneDX
             string outputFilename = options.outputFilename;
             bool json = options.json;
             bool excludeDev = options.excludeDev;
-            bool excludetestprojects = options.excludeTestProjects;            
+            bool excludetestprojects = options.excludeTestProjects;
             bool scanProjectReferences = options.scanProjectReferences;
             bool noSerialNumber = options.noSerialNumber;
             string githubUsername = options.githubUsername;
             string githubT = options.githubT;
-            string githubBT = options.githubBT;            
-            bool disablePackageRestore = options.disablePackageRestore;            
+            string githubBT = options.githubBT;
+            bool disablePackageRestore = options.disablePackageRestore;
             int dotnetCommandTimeout = options.dotnetCommandTimeout;
             string baseIntermediateOutputPath = options.baseIntermediateOutputPath;
             string importMetadataPath = options.importMetadataPath;
@@ -151,6 +151,8 @@ namespace CycloneDX
                 &&
                     (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)
                     ||
+                    SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnf", StringComparison.OrdinalIgnoreCase)
+                    ||
                     fileSystem.Directory.Exists(fullSolutionOrProjectFilePath)
                     ||
                     this.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase)))
@@ -162,7 +164,8 @@ namespace CycloneDX
 
             try
             {
-                if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+                if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase) ||
+                    SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnf", StringComparison.OrdinalIgnoreCase))
                 {
                     if (!fileSystem.File.Exists(SolutionOrProjectFile))
                     {
@@ -174,20 +177,20 @@ namespace CycloneDX
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
-                    if(!fileSystem.File.Exists(SolutionOrProjectFile))
+                    if (!fileSystem.File.Exists(SolutionOrProjectFile))
                     {
                         Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
-                        return (int)ExitCode.InvalidOptions;                        
+                        return (int)ExitCode.InvalidOptions;
                     }
                     packages = await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
-                {                    
-                    if(!fileSystem.File.Exists(SolutionOrProjectFile))
+                {
+                    if (!fileSystem.File.Exists(SolutionOrProjectFile))
                     {
                         Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
-                        return (int)ExitCode.InvalidOptions;                        
+                        return (int)ExitCode.InvalidOptions;
                     }
                     packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
@@ -209,7 +212,7 @@ namespace CycloneDX
                 }
                 else
                 {
-                    Console.Error.WriteLine($"Only .sln, .csproj, .fsproj, .vbproj, .xsproj, and packages.config files are supported");
+                    Console.Error.WriteLine($"Only .sln, .slnf, .csproj, .fsproj, .vbproj, .xsproj, and packages.config files are supported");
                     return (int)ExitCode.InvalidOptions;
                 }
             }
@@ -226,7 +229,7 @@ namespace CycloneDX
                 topLevelComponent.Name = setName;
             }
 
-                        
+
             if (excludeDev)
             {
                 foreach (var item in packages.Where(p => p.IsDevDependency))
@@ -239,7 +242,7 @@ namespace CycloneDX
             }
 
 
-            
+
 
             // get all the components and dependency graph from the NuGet packages
             var components = new HashSet<Component>();
@@ -423,7 +426,7 @@ namespace CycloneDX
             Console.WriteLine("Writing to: " + bomFilePath);
             this.fileSystem.File.WriteAllText(bomFilePath, bomContents);
 
-            return 0;    
+            return 0;
         }
 
 
@@ -465,7 +468,7 @@ namespace CycloneDX
             {
                 bom.Metadata.Timestamp = DateTime.UtcNow;
             }
-            
+
         }
 
         internal static Bom ReadMetaDataFromFile(Bom bom, string templatePath)
