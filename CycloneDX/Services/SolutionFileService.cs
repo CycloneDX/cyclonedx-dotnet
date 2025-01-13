@@ -47,9 +47,13 @@ namespace CycloneDX.Services
         {
             HashSet<string> projects;
             if (solutionFilePath.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+            {
                 projects = await GetProjectsForSolution(solutionFilePath).ConfigureAwait(false);
+            }
             else
+            {
                 projects = await GetProjectsForSolutionFilter(solutionFilePath).ConfigureAwait(false);
+            }
 
             foreach (var project in projects.ToArray())
             {
