@@ -32,7 +32,6 @@ using NuGet.Packaging.Licenses;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
-using InvalidOperationException = System.InvalidOperationException;
 
 namespace CycloneDX.Services
 {
