@@ -32,6 +32,7 @@ using NuGet.Packaging.Licenses;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace CycloneDX.Services
 {
@@ -316,8 +317,16 @@ namespace CycloneDX.Services
                 await resource.CopyNupkgToStreamAsync(name, packageVersion, packageStream, _sourceCacheContext,
                     _logger, _cancellationToken);
 
-                using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
-                nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
+                try
+                {
+                    using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
+                    nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
+                }
+                catch (InvalidOperationException)
+                {
+                    Console.Error.WriteLine($"Unable to extract the nuget package: {name} - {version}");
+                    throw;
+                }
 
                 if (!_disableHashComputation)
                 {
