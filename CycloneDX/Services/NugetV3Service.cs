@@ -321,7 +321,7 @@ namespace CycloneDX.Services
                     using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
                     nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
                 }
-                catch (InvalidOperationException)
+                catch (InvalidDataException)
                 {
                     Console.Error.WriteLine($"Unable to extract the nuget package: {name} - {version}");
                     throw;
