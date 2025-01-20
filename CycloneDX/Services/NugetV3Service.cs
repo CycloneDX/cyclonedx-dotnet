@@ -326,11 +326,6 @@ namespace CycloneDX.Services
                     Console.Error.WriteLine($"Unable to extract the nuget package: {name} - {version}");
                     throw;
                 }
-
-                if (!_disableHashComputation)
-                {
-                    nuspecModel.hashBytes = ComputeSha215Hash(packageStream);
-                }
             }
             else
             {
