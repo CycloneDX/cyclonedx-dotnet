@@ -320,6 +320,11 @@ namespace CycloneDX.Services
                 {
                     using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
                     nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
+
+                    if (!_disableHashComputation)
+                    {
+                        nuspecModel.hashBytes = ComputeSha215Hash(packageStream);
+                    }
                 }
                 catch (InvalidDataException)
                 {
