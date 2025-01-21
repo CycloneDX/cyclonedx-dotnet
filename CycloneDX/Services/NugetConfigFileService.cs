@@ -29,13 +29,13 @@ namespace CycloneDX.Services
 {
     public class NugetConfigFileService : INugetConfigFileService
     {
-        private XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings 
+        private readonly XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings 
         {
             Async = true
         };
         
-        private IFileSystem _fileSystem;
-        private FileDiscoveryService _fileDiscoveryService;
+        private readonly IFileSystem _fileSystem;
+        private readonly FileDiscoveryService _fileDiscoveryService;
 
         public NugetConfigFileService(IFileSystem fileSystem)
         {

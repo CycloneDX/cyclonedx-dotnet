@@ -15,12 +15,20 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.Transactions;
+
 namespace CycloneDX.Models
 {
     public static class NugetInputFactory
     {
         public static NugetInputModel Create(string baseUrl, string baseUrlUserName, string baseUrlUserPassword,
-            bool isPasswordClearText, string feedName = "Unnamed Source" )
+            bool isPasswordClearText)
+        {
+            return Create(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText, "Unnamed Source");
+        }
+
+        public static NugetInputModel Create(string baseUrl, string baseUrlUserName, string baseUrlUserPassword,
+            bool isPasswordClearText, string feedName )
         {
             if (string.IsNullOrEmpty(baseUrl))
             {
@@ -57,7 +65,7 @@ namespace CycloneDX.Models
             nugetUsername = baseUrlUserName;
             nugetPassword = baseUrlUserPassword;
             IsPasswordClearText = isPasswordClearText;
-            nugetFeedName = nugetFeedName;
+            nugetFeedName = feedName;
         }
     }
 }

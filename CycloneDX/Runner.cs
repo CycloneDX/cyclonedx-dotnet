@@ -134,7 +134,7 @@ namespace CycloneDX
             }
 
             var packages = new HashSet<DotnetDependency>();
-            var sources = new HashSet<NugetInputModel>();
+            HashSet<NugetInputModel> sources = null;
 
             // determine what we are analyzing and do the analysis
             var fullSolutionOrProjectFilePath = this.fileSystem.Path.GetFullPath(SolutionOrProjectFile);

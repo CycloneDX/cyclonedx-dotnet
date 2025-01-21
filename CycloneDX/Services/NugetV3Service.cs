@@ -40,6 +40,15 @@ namespace CycloneDX.Services
     /// </summary>
     public class NugetV3Service : INugetService
     {
+        public class PackageNotFoundException : Exception
+        {
+            public PackageNotFoundException(string message) : base(message) { }
+
+            public PackageNotFoundException(string message, Exception innerException) : base(message, innerException) { }
+        }
+
+
+
         private readonly List<SourceRepository> _sourceRepositories;
         private readonly SourceCacheContext _sourceCacheContext;
         private readonly CancellationToken _cancellationToken;
@@ -360,7 +369,7 @@ namespace CycloneDX.Services
                 }
                 if (!foundResource)
                 {
-                    throw new Exception( $"Did not find package {name} {version}");
+                    throw new PackageNotFoundException( $"Did not find package {name} {version}");
                 }
 
                 using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
