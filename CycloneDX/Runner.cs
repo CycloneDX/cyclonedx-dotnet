@@ -37,6 +37,7 @@ namespace CycloneDX
         readonly IDotnetCommandService dotnetCommandService;
         readonly IDotnetUtilsService dotnetUtilsService;
         readonly IPackagesFileService packagesFileService;
+        readonly INugetConfigFileService configFileService;
         readonly IProjectFileService projectFileService;
         readonly ISolutionFileService solutionFileService;
         readonly INugetServiceFactory nugetServiceFactory;
@@ -46,6 +47,7 @@ namespace CycloneDX
                       IProjectAssetsFileService projectAssetsFileService,
                       IDotnetUtilsService dotnetUtilsService,
                       IPackagesFileService packagesFileService,
+                      INugetConfigFileService configFileService,
                       IProjectFileService projectFileService,
                       ISolutionFileService solutionFileService,
                       INugetServiceFactory nugetServiceFactory)
@@ -55,11 +57,12 @@ namespace CycloneDX
             projectAssetsFileService ??= new ProjectAssetsFileService(this.fileSystem, () => new AssetFileReader());
             this.dotnetUtilsService = dotnetUtilsService ?? new DotnetUtilsService(this.fileSystem, this.dotnetCommandService);
             this.packagesFileService = packagesFileService ?? new PackagesFileService(this.fileSystem);
+            this.configFileService = configFileService ?? new NugetConfigFileService(this.fileSystem);
             this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, projectAssetsFileService);
             this.solutionFileService = solutionFileService ?? new SolutionFileService(this.fileSystem, this.projectFileService);
             this.nugetServiceFactory = nugetServiceFactory ?? new NugetV3ServiceFactory();
         }
-        public Runner() : this(null, null, null, null, null, null, null, null) { }
+        public Runner() : this(null, null, null, null, null, null, null, null, null) { }
 
         public async Task<int> HandleCommandAsync(RunOptions options)
         {
@@ -130,9 +133,8 @@ namespace CycloneDX
                 }
             }
 
-            var nugetService = nugetServiceFactory.Create(options, fileSystem, githubService, packageCachePathsResult.Result);
-
             var packages = new HashSet<DotnetDependency>();
+            HashSet<NugetInputModel> sources = null;
 
             // determine what we are analyzing and do the analysis
             var fullSolutionOrProjectFilePath = this.fileSystem.Path.GetFullPath(SolutionOrProjectFile);
@@ -170,6 +172,7 @@ namespace CycloneDX
                         return (int)ExitCode.InvalidOptions;
                     }
                     packages = await solutionFileService.GetSolutionDotnetDependencys(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
+                    sources = await configFileService.RecursivelyGetPackageSourcesAsync( fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath)).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
@@ -180,6 +183,7 @@ namespace CycloneDX
                         return (int)ExitCode.InvalidOptions;                        
                     }
                     packages = await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
+                    sources = await configFileService.RecursivelyGetPackageSourcesAsync(fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath)).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
@@ -190,6 +194,7 @@ namespace CycloneDX
                         return (int)ExitCode.InvalidOptions;                        
                     }
                     packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
+                    sources = await configFileService.RecursivelyGetPackageSourcesAsync(fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath)).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
@@ -200,11 +205,13 @@ namespace CycloneDX
                         return (int)ExitCode.InvalidOptions;
                     }
                     packages = await packagesFileService.GetDotnetDependencysAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
+                    sources = await configFileService.RecursivelyGetPackageSourcesAsync(fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath)).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
                 }
                 else if (fileSystem.Directory.Exists(fullSolutionOrProjectFilePath))
                 {
                     packages = await packagesFileService.RecursivelyGetDotnetDependencysAsync(fullSolutionOrProjectFilePath).ConfigureAwait(false);
+                    sources = await configFileService.RecursivelyGetPackageSourcesAsync(fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath)).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetDirectoryName(fullSolutionOrProjectFilePath);
                 }
                 else
@@ -219,7 +226,7 @@ namespace CycloneDX
             }
 
             await Console.Out.WriteLineAsync($"Found {packages.Count()} packages");
-
+            var nugetService = nugetServiceFactory.Create(options, fileSystem, githubService, packageCachePathsResult.Result, sources);
 
             if (!string.IsNullOrEmpty(setName))
             {

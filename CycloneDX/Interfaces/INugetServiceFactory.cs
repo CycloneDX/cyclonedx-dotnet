@@ -11,6 +11,6 @@ namespace CycloneDX.Interfaces
 {
     public interface INugetServiceFactory
     {
-        INugetService Create(RunOptions option, IFileSystem fileSystem, IGithubService githubService, List<string> packageCachePaths);
+        INugetService Create(RunOptions option, IFileSystem fileSystem, IGithubService githubService, List<string> packageCachePaths, HashSet<NugetInputModel> nugetInputModels);
     }
 }

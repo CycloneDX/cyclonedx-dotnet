@@ -103,6 +103,18 @@ namespace CycloneDX.Tests
 
         }
 
+        public static MockFileData GetNugetConfigFileWithSources(IEnumerable<NugetInputModel> sources)
+        {
+            var fileData = "<configuration><packageSources>";
+            foreach (var source in sources)
+            {
+                fileData += @"<add key=""" + source.nugetFeedName + @""" value=""" + source.nugetFeedUrl + @""" />";
+            }
+            fileData += "</packageSources></configuration>";
+            return new MockFileData(fileData);
+
+        }
+
         public static DotnetCommandResult GetDotnetListPackagesResult(IEnumerable<(string projectName, (string packageName, string version)[] packages)> projects)
         {
             StringBuilder stdout = new StringBuilder();

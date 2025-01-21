@@ -39,7 +39,8 @@ namespace CycloneDX.Tests.FunctionalTests
                 It.IsAny<RunOptions>(),
                 It.IsAny<IFileSystem>(),
                 It.IsAny<IGithubService>(),
-                It.IsAny<List<string>>()))
+                It.IsAny<List<string>>(),
+                It.IsAny<HashSet<NugetInputModel>>()))
                 .Returns(nugetService);
 
             return mockNugetServiceFactory.Object;
@@ -79,7 +80,7 @@ namespace CycloneDX.Tests.FunctionalTests
             options.SolutionOrProjectFile ??= MockUnixSupport.Path("c:/ProjectPath/Project.csproj");
             options.disablePackageRestore = true;
 
-            Runner runner = new Runner(mockFileSystem, null, null, null, null, null, null, nugetService);
+            Runner runner = new Runner(mockFileSystem, null, null, null, null, null, null, null, nugetService);
             int exitCode = await runner.HandleCommandAsync(options);
 
             Assert.Equal((int)ExitCode.OK, exitCode);

@@ -40,5 +40,15 @@ namespace CycloneDX.Services
             return _fileSystem.Directory.GetFiles(directory, "packages.config", SearchOption.AllDirectories);
         }
 
+        /// <summary>
+        /// Recursively searches a directory for nuget.config files.
+        /// </summary>
+        /// <param name="directory">Directory path to search</param>
+        /// <returns>List of full file paths</returns>
+        public IEnumerable<string> GetNugetConfigFiles(string directory)
+        {
+            return _fileSystem.Directory.GetFiles(directory, "nuget.config", SearchOption.AllDirectories);
+        }
+
     }
 }

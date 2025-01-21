@@ -15,12 +15,20 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.Transactions;
+
 namespace CycloneDX.Models
 {
     public static class NugetInputFactory
     {
         public static NugetInputModel Create(string baseUrl, string baseUrlUserName, string baseUrlUserPassword,
             bool isPasswordClearText)
+        {
+            return Create(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText, "Unnamed Source");
+        }
+
+        public static NugetInputModel Create(string baseUrl, string baseUrlUserName, string baseUrlUserPassword,
+            bool isPasswordClearText, string feedName )
         {
             if (string.IsNullOrEmpty(baseUrl))
             {
@@ -29,7 +37,7 @@ namespace CycloneDX.Models
 
             if (!string.IsNullOrEmpty(baseUrlUserName) && !string.IsNullOrEmpty(baseUrlUserPassword))
             {
-                return new NugetInputModel(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText);
+                return new NugetInputModel(baseUrl, baseUrlUserName, baseUrlUserPassword, isPasswordClearText, feedName);
             }
 
             return new NugetInputModel(baseUrl);
@@ -39,6 +47,7 @@ namespace CycloneDX.Models
 
     public class NugetInputModel
     {
+        public string nugetFeedName { get; set; }
         public string nugetFeedUrl { get; set; }
         public string nugetUsername { get; set; }
         public string nugetPassword { get; set; }
@@ -50,12 +59,13 @@ namespace CycloneDX.Models
         }
 
         public NugetInputModel(string baseUrl, string baseUrlUserName, string baseUrlUserPassword,
-            bool isPasswordClearText)
+            bool isPasswordClearText, string feedName)
         {
             nugetFeedUrl = baseUrl;
             nugetUsername = baseUrlUserName;
             nugetPassword = baseUrlUserPassword;
             IsPasswordClearText = isPasswordClearText;
+            nugetFeedName = feedName;
         }
     }
 }
