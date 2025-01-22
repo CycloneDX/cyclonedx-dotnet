@@ -40,7 +40,16 @@ namespace CycloneDX.Services
     /// </summary>
     public class NugetV3Service : INugetService
     {
-        private readonly SourceRepository _sourceRepository;
+        public class PackageNotFoundException : Exception
+        {
+            public PackageNotFoundException(string message) : base(message) { }
+
+            public PackageNotFoundException(string message, Exception innerException) : base(message, innerException) { }
+        }
+
+
+
+        private readonly List<SourceRepository> _sourceRepositories;
         private readonly SourceCacheContext _sourceCacheContext;
         private readonly CancellationToken _cancellationToken;
         private readonly ILogger _logger;
@@ -56,7 +65,7 @@ namespace CycloneDX.Services
         private const string _sha512Extension = ".nupkg.sha512";
 
         public NugetV3Service(
-            NugetInputModel nugetInput,
+            HashSet<NugetInputModel> nugetInputModels,
             IFileSystem fileSystem,
             List<string> packageCachePaths,
             IGithubService githubService,
@@ -70,7 +79,22 @@ namespace CycloneDX.Services
             _disableHashComputation = disableHashComputation;
             _logger = logger;
 
-            _sourceRepository = SetupNugetRepository(nugetInput);
+            _sourceRepositories = new List<SourceRepository>();
+            if (nugetInputModels != null)
+            {
+                foreach (var nugetInput in nugetInputModels)
+                {
+                    var repo = SetupNugetRepository(nugetInput);
+                    if (repo != null)
+                    {
+                        _sourceRepositories.Add(repo);
+                    }
+                }
+            }
+            else
+            {
+                _sourceRepositories.Add(SetupNugetRepository(null));
+            }
             _sourceCacheContext = new SourceCacheContext();
             _cancellationToken = CancellationToken.None;
         }
@@ -167,11 +191,15 @@ namespace CycloneDX.Services
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) { return null; }
 
             // https://docs.microsoft.com/en-us/nuget/reference/nuget-client-sdk - Download a package
-            var resource = await _sourceRepository.GetResourceAsync<FindPackageByIdResource>();
+            var resources = new List<FindPackageByIdResource>();
+            foreach (var repo in _sourceRepositories)
+            {
+                resources.Add( await repo.GetResourceAsync<FindPackageByIdResource>() );
+            }
 
             var component = SetupComponent(name, version, scope);
             var nuspecFilename = GetCachedNuspecFilename(name, version);
-            var nuspecModel = await GetNuspec(name, version, nuspecFilename, resource).ConfigureAwait(false);
+            var nuspecModel = await GetNuspec(name, version, nuspecFilename, resources).ConfigureAwait(false);
             if (nuspecModel.hashBytes != null)
             {
                 var hex = BitConverter.ToString(nuspecModel.hashBytes).Replace("-", string.Empty);
@@ -306,15 +334,43 @@ namespace CycloneDX.Services
         }
 
         private async Task<NuspecModel> GetNuspec(string name, string version, string nuspecFilename,
-            FindPackageByIdResource resource)
+            List<FindPackageByIdResource> resources)
         {
             var nuspecModel = new NuspecModel();
             if (nuspecFilename == null)
             {
                 var packageVersion = new NuGetVersion(version);
                 await using MemoryStream packageStream = new MemoryStream();
-                await resource.CopyNupkgToStreamAsync(name, packageVersion, packageStream, _sourceCacheContext,
-                    _logger, _cancellationToken);
+                Console.WriteLine($"Looking for {name} {version}");
+                bool foundResource = false;
+                foreach (var resource in resources)
+                {
+                    try
+                    {
+                        await resource.CopyNupkgToStreamAsync(name, packageVersion, packageStream, _sourceCacheContext,
+                            _logger, _cancellationToken);
+                        if ((packageStream != null)
+                        && (packageStream.Length == 0))
+                        {
+                            continue;
+                        }
+                        if ((packageStream != null)
+                        && (packageStream.Length > 0))
+                        {
+                            foundResource = true;
+                            Console.WriteLine($"    found");
+                            break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"    Error looking for package {name} {version}: {ex.ToString()}");
+                    }
+                }
+                if (!foundResource)
+                {
+                    throw new PackageNotFoundException( $"Did not find package {name} {version}");
+                }
 
                 using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
                 nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);

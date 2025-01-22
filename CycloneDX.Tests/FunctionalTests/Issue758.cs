@@ -37,7 +37,8 @@ namespace CycloneDX.Tests.FunctionalTests
                 It.IsAny<RunOptions>(),
                 It.IsAny<IFileSystem>(),
                 It.IsAny<IGithubService>(),
-                It.IsAny<List<string>>()))
+                It.IsAny<List<string>>(),
+                It.IsAny<HashSet<NugetInputModel>>()))
                 .Returns(nugetService);
 
             nugetServiceFactory = mockNugetServiceFactory.Object;
