@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary2", "c:/ProjectPath/project1/Project1.csproj", "{3EA60E8F-5BEE-465D-8440-013C12EB2C2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary3", "c:/ProjectPath/project2/Project2.csproj", "{08F83629-063E-4E73-9312-8ECF76C372DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3EA60E8F-5BEE-465D-8440-013C12EB2C2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EA60E8F-5BEE-465D-8440-013C12EB2C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EA60E8F-5BEE-465D-8440-013C12EB2C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EA60E8F-5BEE-465D-8440-013C12EB2C2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08F83629-063E-4E73-9312-8ECF76C372DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08F83629-063E-4E73-9312-8ECF76C372DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08F83629-063E-4E73-9312-8ECF76C372DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08F83629-063E-4E73-9312-8ECF76C372DC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
