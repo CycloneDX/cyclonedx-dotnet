@@ -11,6 +11,7 @@
     <ToolCommandName>dotnet-CycloneDX</ToolCommandName>
     <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
     <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
+    <RollForward>Major</RollForward>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(OsEnvironment )'=='windows'">
