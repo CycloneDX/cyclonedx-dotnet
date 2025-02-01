@@ -316,12 +316,20 @@ namespace CycloneDX.Services
                 await resource.CopyNupkgToStreamAsync(name, packageVersion, packageStream, _sourceCacheContext,
                     _logger, _cancellationToken);
 
-                using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
-                nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
-
-                if (!_disableHashComputation)
+                try
                 {
-                    nuspecModel.hashBytes = ComputeSha215Hash(packageStream);
+                    using PackageArchiveReader packageReader = new PackageArchiveReader(packageStream);
+                    nuspecModel.nuspecReader = await packageReader.GetNuspecReaderAsync(_cancellationToken);
+
+                    if (!_disableHashComputation)
+                    {
+                        nuspecModel.hashBytes = ComputeSha215Hash(packageStream);
+                    }
+                }
+                catch (InvalidDataException)
+                {
+                    Console.Error.WriteLine($"Unable to extract the nuget package: {name} - {version}");
+                    throw;
                 }
             }
             else
