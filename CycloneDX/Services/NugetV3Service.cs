@@ -130,7 +130,7 @@ namespace CycloneDX.Services
 
             input = input.Trim();
 
-            if (Uri.TryCreate(input, ops, out Uri? result))
+            if (Uri.TryCreate(input, ops, out var result))
             {
                 return result.ToString();
             }
