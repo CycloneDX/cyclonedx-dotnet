@@ -41,11 +41,13 @@ If you already have a previous version of **CycloneDX** installed, you can upgra
 dotnet tool update --global CycloneDX
 ```
 
-#### Execution via DotNet
+#### Execution  
 
 ```bash
-dotnet CycloneDX <path> -o <OUTPUT_DIRECTORY>
-```
+dotnet-CycloneDX <path> -o <OUTPUT_DIRECTORY>
+```  
+
+> **Note:** If you encounter a "command not found" error after installation, try restarting your terminal. Also, ensure that the `~/.dotnet/tools` directory is included in your `PATH`.
 
 #### Execution via Docker
 
@@ -57,7 +59,7 @@ docker run cyclonedx/cyclonedx-dotnet [OPTIONS] <path>
 
 ```text
 Usage:
-  CycloneDX <path> [options]
+  dotnet-CycloneDX <path> [options]
 
 Arguments:
   <path>  The path to a .sln, .csproj, .fsproj, .vbproj, .xsproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.
@@ -100,17 +102,17 @@ To run the **CycloneDX** tool you need to specify a solution or project file. In
 
 The following will create a BOM from a solution and all projects defined within:
 ```bash
-dotnet CycloneDX YourSolution.sln -o /output/path
+dotnet-CycloneDX YourSolution.sln -o /output/path
 ```
 
 The following will recursively scan the directory structure for packages.config and create a BOM:
 ```bash
-dotnet CycloneDX /path/to/project -o /output/path
+dotnet-CycloneDX /path/to/project -o /output/path
 ```
 
 The following will recursively scan the project references of the supplied project file, and create a BOM of all package references from all included projects:
 ```bash
-dotnet CycloneDX /path/to/project/MyProject.csproj -o /output/path -rs
+dotnet-CycloneDX /path/to/project/MyProject.csproj -o /output/path -rs
 ```
 
 Project [metadata](https://cyclonedx.org/docs/1.2/#type_metadata) **template example**
@@ -169,7 +171,7 @@ Permission to modify and redistribute is granted under the terms of the Apache 2
 Pull requests are welcome. But please read the
 [CycloneDX contributing guidelines](https://github.com/CycloneDX/.github/blob/master/CONTRIBUTING.md) first.
 
-To build and test the solution locally you should have .NET 6.0 or .NET 7.0
+To build and test the solution locally you should have .NET 8.0 or .NET 9.0
 installed. Standard commands like `dotnet build` and `dotnet test` work.
 
 Alternatively, you can use VS Code and the included devcontainer configuration
