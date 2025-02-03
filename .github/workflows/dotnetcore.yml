@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.2
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v4.3.0
         with:
           dotnet-version: |
             9.x
@@ -49,11 +49,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.2
       - name: Setup dotnet 9
-        uses: actions/setup-dotnet@v3.0.3
+        uses: actions/setup-dotnet@v4.3.0
         with:
           dotnet-version: '9.x'
       - name: Setup dotnet 8
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v4.3.0
         with:
           dotnet-version: '8.x'
       - name: Tests
