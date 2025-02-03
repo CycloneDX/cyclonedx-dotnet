@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.2
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v4.3.0
         with:
           dotnet-version: |
             9.x
