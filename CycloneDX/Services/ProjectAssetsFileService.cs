@@ -25,6 +25,7 @@ using NuGet.Versioning;
 using NuGet.LibraryModel;
 using NuGet.ProjectModel;
 using System.IO;
+using NuGet.Packaging;
 
 namespace CycloneDX.Services
 {
@@ -55,6 +56,7 @@ namespace CycloneDX.Services
                     var runtimePackages = new HashSet<DotnetDependency>();
                     var targetFramework = assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
                     var dependencies = targetFramework.Dependencies;
+                    var centralPackageVersions = targetFramework.CentralPackageVersions;
                     var directDependencies = assetsFile.ProjectFileDependencyGroups
                         .Where(f => f.FrameworkName == targetRuntime.Name)?.SelectMany(p => p.Dependencies)
                         .Select(d =>
@@ -112,7 +114,7 @@ namespace CycloneDX.Services
                         }
                     }
 
-                    ResolveDependencyVersionRanges(runtimePackages);
+                    ResolveDependencyVersionRanges(runtimePackages, centralPackageVersions);
 
                     packages.UnionWith(runtimePackages);
                 }
@@ -130,11 +132,12 @@ namespace CycloneDX.Services
         }
 
         /// <summary>
-        /// Updates all dependencies with version ranges to the version it was resolved to.
+        /// Updates all dependencies with version ranges to the version it was resolved to where possible.
         /// </summary>
-        private static void ResolveDependencyVersionRanges(HashSet<DotnetDependency> runtimePackages)
+        private static void ResolveDependencyVersionRanges(HashSet<DotnetDependency> runtimePackages, IDictionary<string, CentralPackageVersion> centralPackageVersions)
         {
             var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
+            var missingPackages = new Dictionary<string, DotnetDependency>();
             foreach (var runtimePackage in runtimePackages)
             {
                 foreach (var dependency in runtimePackage.Dependencies.ToList())
@@ -143,18 +146,57 @@ namespace CycloneDX.Services
                     {
                         var normalizedDependencyKey = dependency.Key.ToLowerInvariant();
                         var package = runtimePackagesLookup[normalizedDependencyKey].FirstOrDefault(pkg => versionRange.Satisfies(NuGetVersion.Parse(pkg.Version)));
-                        if (package != default)
+                        if (package == default)
                         {
-                            runtimePackage.Dependencies[dependency.Key] = package.Version;
+                            // Try to use an already created missing package if possible.
+                            if (missingPackages.TryGetValue(normalizedDependencyKey, out var missingPackage))
+                            {
+                                package = missingPackage;
+                            }
                         }
-                        else
+
+                        if (package == default)
                         {
-                            // This should not happen, since all dependencies are resolved to a specific version.
-                            Console.Error.WriteLine($"Dependency ({dependency.Key}) with version range ({dependency.Value}) referenced by (Name:{runtimePackage.Name} Version:{runtimePackage.Version}) did not resolve to a specific version.");
+                            // Central package versions can change the expected range.
+                            if (centralPackageVersions.TryGetValue(dependency.Key, out var cpv))
+                            {
+                                versionRange = cpv.VersionRange;
+                            }
+
+                            var version = versionRange.IsMinInclusive
+                                ? versionRange.MinVersion
+                                : versionRange.IsMaxInclusive
+                                    ? versionRange.MaxVersion
+                                    : null;
+
+                            if (version == null)
+                            {
+                                // This can happen for development build-only dependencies.
+                                Console.Error.WriteLine($"Dependency ({dependency.Key}) with version range ({dependency.Value}) referenced by (Name:{runtimePackage.Name} Version:{runtimePackage.Version}) did not resolve to a specific version.");
+                                continue;
+                            }
+
+                            // Generate a temporary placeholder package.
+                            package = new DotnetDependency
+                            {
+                                DependencyType = DependencyType.Package,
+                                IsDevDependency = true,
+                                IsDirectReference = false,
+                                Name = dependency.Key,
+                                Scope = Component.ComponentScope.Excluded,
+                                Version = version.ToNormalizedString()
+                            };
+
+                            // Update cache with generated package.
+                            missingPackages.Add(normalizedDependencyKey, package);
                         }
+
+                        runtimePackage.Dependencies[dependency.Key] = package.Version;
                     }
                 }
             }
+
+            runtimePackages.AddRange(missingPackages.Values);
         }
     }
 }

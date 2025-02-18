@@ -276,7 +276,151 @@ namespace CycloneDX.Tests
         [Theory]
         [InlineData(".NETStandard", 2, 1, ".NETStandard,Version=v2.1")]
         [InlineData(".NETCoreApp", 6, 0, "net6.0")]
-        public void GetDotnetDependencys_MissingResolvedPackageVersion(string framework, int frameworkMajor, int frameworkMinor, string projectFileDependencyGroupsName)
+        public void GetDotnetDependencys_MissingResolvedPackageVersion_MinVersionExcluded(string framework, int frameworkMajor, int frameworkMinor, string projectFileDependencyGroupsName)
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+                {
+                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
+                        new[] {
+                            new DotnetDependency
+                            {
+                                Name = "Package1",
+                                Version = "1.5.0",
+                                Dependencies = new Dictionary<string, string>
+                                {
+                                    { "Package2", "(4.5, )" },
+                                },
+                            }
+                        })
+                    },
+                    { XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), new MockFileData("")
+                    }
+                });
+
+            var mockAssetReader = new Mock<IAssetFileReader>(MockBehavior.Strict);
+            mockAssetReader
+                .Setup(m => m.Read(It.IsAny<Stream>(), It.IsAny<string>()))
+                .Returns(() =>
+                {
+                    var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
+                    return new LockFile
+                    {
+                        Targets = new[]
+                        {
+                            new LockFileTarget
+                            {
+                                TargetFramework = nuGetFramework,
+                                RuntimeIdentifier = "",
+                                Libraries = new[]
+                                {
+                                    new LockFileTargetLibrary
+                                    {
+                                        Name = "Package1",
+                                        Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package1.dll")
+                                        },
+                                        Dependencies = new[]
+                                        {
+                                            new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), includeMinVersion: false, originalString:"(4.5, )"))
+                                        }
+                                    }
+                                }
+                            },
+                            new LockFileTarget
+                            {
+                                TargetFramework = nuGetFramework,
+                                RuntimeIdentifier = "win-x64",
+                                Libraries = new[]
+                                {
+                                    new LockFileTargetLibrary
+                                    {
+                                        Name = "Package1",
+                                        Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package1.dll")
+                                        },
+                                        Dependencies = new[]
+                                        {
+                                            new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), includeMinVersion: false, originalString:"(4.5, )"))
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        PackageSpec = new PackageSpec
+                        {
+                            TargetFrameworks =
+                            {
+                                new TargetFrameworkInformation
+                                {
+                                    FrameworkName = nuGetFramework,
+                                    TargetAlias = nuGetFramework.Framework,
+                                    Dependencies = new List<LibraryDependency>
+                                    {
+                                        new()
+                                        {
+                                            SuppressParent = LibraryIncludeFlagUtils.DefaultSuppressParent,
+                                            ReferenceType = LibraryDependencyReferenceType.Direct,
+                                            LibraryRange = new LibraryRange
+                                            {
+                                                Name = "Package1",
+                                                VersionRange = VersionRange.Parse("1.5.0"),
+                                                TypeConstraint = LibraryDependencyTarget.Package
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        Libraries = new[]
+                        {
+                            new LockFileLibrary
+                            {
+                                Name = "Package1",
+                                Version = new NuGetVersion("1.5.0"),
+                                Type = "package"
+                            }
+                        },
+                        ProjectFileDependencyGroups = new[]
+                        {
+
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" })
+                        }
+                    };
+                });
+            mockAssetReader.Setup(m => m.ReadAllText(It.IsAny<string>())).Returns(() =>
+            {
+                return "empty";
+            });
+
+            var projectAssetsFileService = new ProjectAssetsFileService(mockFileSystem, () => mockAssetReader.Object);
+            var packages = projectAssetsFileService.GetDotnetDependencys(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), false);
+            var sortedPackages = new List<DotnetDependency>(packages);
+
+            sortedPackages.Sort();
+
+            Assert.Collection(sortedPackages,
+                item =>
+                {
+                    Assert.Equal(@"Package1", item.Name);
+                    Assert.Equal(@"1.5.0", item.Version);
+                    Assert.True(item.IsDirectReference, "Package1 was expected to be a direct reference.");
+                    Assert.Collection(item.Dependencies,
+                        dep =>
+                        {
+                            Assert.Equal(@"Package2", dep.Key);
+                            Assert.Equal(@"(4.5.0, )", dep.Value);
+                        });
+                });
+        }
+
+        [Theory]
+        [InlineData(".NETStandard", 2, 1, ".NETStandard,Version=v2.1")]
+        [InlineData(".NETCoreApp", 6, 0, "net6.0")]
+        public void GetDotnetDependencys_MissingResolvedPackageVersion_MinVersionIncluded(string framework, int frameworkMajor, int frameworkMinor, string projectFileDependencyGroupsName)
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
@@ -412,8 +556,13 @@ namespace CycloneDX.Tests
                         dep =>
                         {
                             Assert.Equal(@"Package2", dep.Key);
-                            Assert.Equal(@"[4.5.0, )", dep.Value);
+                            Assert.Equal(@"4.5.0", dep.Value);
                         });
+                },
+                item =>
+                {
+                    Assert.Equal(@"Package2", item.Name);
+                    Assert.Equal(@"4.5.0", item.Version);
                 });
         }
 
