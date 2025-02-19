@@ -558,11 +558,6 @@ namespace CycloneDX.Tests
                             Assert.Equal(@"Package2", dep.Key);
                             Assert.Equal(@"4.5.0", dep.Value);
                         });
-                },
-                item =>
-                {
-                    Assert.Equal(@"Package2", item.Name);
-                    Assert.Equal(@"4.5.0", item.Version);
                 });
         }
 

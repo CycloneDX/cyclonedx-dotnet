@@ -137,7 +137,6 @@ namespace CycloneDX.Services
         private static void ResolveDependencyVersionRanges(HashSet<DotnetDependency> runtimePackages, IDictionary<string, CentralPackageVersion> centralPackageVersions)
         {
             var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
-            var missingPackages = new Dictionary<string, DotnetDependency>();
             foreach (var runtimePackage in runtimePackages)
             {
                 foreach (var dependency in runtimePackage.Dependencies.ToList())
@@ -146,14 +145,7 @@ namespace CycloneDX.Services
                     {
                         var normalizedDependencyKey = dependency.Key.ToLowerInvariant();
                         var package = runtimePackagesLookup[normalizedDependencyKey].FirstOrDefault(pkg => versionRange.Satisfies(NuGetVersion.Parse(pkg.Version)));
-                        if (package == default)
-                        {
-                            // Try to use an already created missing package if possible.
-                            if (missingPackages.TryGetValue(normalizedDependencyKey, out var missingPackage))
-                            {
-                                package = missingPackage;
-                            }
-                        }
+                        string patchVersion = package?.Version;
 
                         if (package == default)
                         {
@@ -176,27 +168,13 @@ namespace CycloneDX.Services
                                 continue;
                             }
 
-                            // Generate a temporary placeholder package.
-                            package = new DotnetDependency
-                            {
-                                DependencyType = DependencyType.Package,
-                                IsDevDependency = true,
-                                IsDirectReference = false,
-                                Name = dependency.Key,
-                                Scope = Component.ComponentScope.Excluded,
-                                Version = version.ToNormalizedString()
-                            };
-
-                            // Update cache with generated package.
-                            missingPackages.Add(normalizedDependencyKey, package);
+                            patchVersion = version.ToNormalizedString();
                         }
 
-                        runtimePackage.Dependencies[dependency.Key] = package.Version;
+                        runtimePackage.Dependencies[dependency.Key] = patchVersion;
                     }
                 }
             }
-
-            runtimePackages.AddRange(missingPackages.Values);
         }
     }
 }
