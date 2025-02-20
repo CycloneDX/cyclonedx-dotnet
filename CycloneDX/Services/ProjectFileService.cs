@@ -25,7 +25,6 @@ using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using System.Text.RegularExpressions;
-using System.Reflection;
 
 namespace CycloneDX.Services
 {
@@ -240,11 +239,6 @@ namespace CycloneDX.Services
         public async Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
         {
             var dotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
-            foreach (var item in dotnetDependencys)
-            {
-                item.IsDirectReference = true;
-            }
-
             var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
 
             //Remove root-project, it will be added to the metadata
@@ -252,12 +246,12 @@ namespace CycloneDX.Services
             projectReferences.Where(p => rootProject.Dependencies.ContainsKey(p.Name)).ToList().ForEach(p => p.IsDirectReference = true);
             projectReferences.Remove(rootProject);
 
-
+            IEnumerable<string> allAddedDepedencyNames;
             foreach (var project in projectReferences)
             {
                 var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project.Path, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
 
-                //Add dependencies for dependency graph
+                // Add dependencies for dependency graph
                 foreach (var dependency in projectDotnetDependencys)
                 {
                     if (project.Dependencies.TryGetValue(dependency.Name, out string version))
@@ -270,11 +264,18 @@ namespace CycloneDX.Services
                     project.Dependencies.Add(dependency.Name, dependency.Version);
                 }
 
-                dotnetDependencys.UnionWith(projectDotnetDependencys);
+                // A higher version might already be added
+                allAddedDepedencyNames = dotnetDependencys.Select(dep => dep.Name);
+                dotnetDependencys.UnionWith(projectDotnetDependencys.Where(pr => !allAddedDepedencyNames.Contains(pr.Name)).Select(d =>
+                {
+                    // Ensure project references are not added as direct references
+                    d.IsDirectReference = false;
+                    return d;
+                }));
             }
 
-            //When there is a project.assets.json, the project references are already added, so check before adding
-            var allAddedDepedencyNames = dotnetDependencys.Select(dep => dep.Name);
+            // When there is a project.assets.json, the project references are already added, so check before adding
+            allAddedDepedencyNames = dotnetDependencys.Select(dep => dep.Name);
             dotnetDependencys.UnionWith(projectReferences.Where(pr => !allAddedDepedencyNames.Contains(pr.Name)));
 
             return dotnetDependencys;

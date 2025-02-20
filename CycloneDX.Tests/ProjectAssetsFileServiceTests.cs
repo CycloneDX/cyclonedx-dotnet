@@ -29,7 +29,6 @@ using NuGet.ProjectModel;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
 using System.IO;
-using NuGet.Packaging.Signing;
 
 namespace CycloneDX.Tests
 {
@@ -288,7 +287,8 @@ namespace CycloneDX.Tests
                                 Version = "1.5.0",
                                 Dependencies = new Dictionary<string, string>
                                 {
-                                    { "Package2", "[4.5, )" },
+                                    { "Package2", "[4.5, 5)" },
+                                    { "Package3", "[6.7, )" },
                                 },
                             }
                         })
@@ -323,7 +323,8 @@ namespace CycloneDX.Tests
                                         },
                                         Dependencies = new[]
                                         {
-                                            new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), originalString:"[4.5, )"))
+                                            new PackageDependency("Package2", VersionRange.Parse("[4.5, 5)")),
+                                            new PackageDependency("Package3", VersionRange.Parse("[6.7, )"))
                                         }
                                     }
                                 }
@@ -344,7 +345,8 @@ namespace CycloneDX.Tests
                                         },
                                         Dependencies = new[]
                                         {
-                                            new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), originalString:"[4.5, )"))
+                                            new PackageDependency("Package2", VersionRange.Parse("[4.5, 5)")),
+                                            new PackageDependency("Package3", VersionRange.Parse("[6.7, )"))
                                         }
                                     }
                                 }
@@ -371,6 +373,11 @@ namespace CycloneDX.Tests
                                                 TypeConstraint = LibraryDependencyTarget.Package
                                             }
                                         }
+                                    },
+                                    CentralPackageVersions =
+                                    {
+                                        new("Package2", new CentralPackageVersion("Package2", VersionRange.Parse("[4.5, 5)"))),
+                                        new("Package3", new CentralPackageVersion("Package3", VersionRange.Parse("6.7")))
                                     }
                                 }
                             }
@@ -412,7 +419,12 @@ namespace CycloneDX.Tests
                         dep =>
                         {
                             Assert.Equal(@"Package2", dep.Key);
-                            Assert.Equal(@"[4.5.0, )", dep.Value);
+                            Assert.Equal(@"[4.5.0, 5.0.0)", dep.Value);
+                        },
+                        dep =>
+                        {
+                            Assert.Equal(@"Package3", dep.Key);
+                            Assert.Equal(@"6.7.0", dep.Value);
                         });
                 });
         }

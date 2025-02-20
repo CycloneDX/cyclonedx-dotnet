@@ -55,6 +55,7 @@ namespace CycloneDX.Services
                     var runtimePackages = new HashSet<DotnetDependency>();
                     var targetFramework = assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
                     var dependencies = targetFramework.Dependencies;
+                    var centralPackageVersions = targetFramework.CentralPackageVersions;
                     var directDependencies = assetsFile.ProjectFileDependencyGroups
                         .Where(f => f.FrameworkName == targetRuntime.Name)?.SelectMany(p => p.Dependencies)
                         .Select(d =>
@@ -112,7 +113,7 @@ namespace CycloneDX.Services
                         }
                     }
 
-                    ResolveDependencyVersionRanges(runtimePackages);
+                    ResolveDependencyVersionRanges(runtimePackages, centralPackageVersions);
 
                     packages.UnionWith(runtimePackages);
                 }
@@ -130,9 +131,9 @@ namespace CycloneDX.Services
         }
 
         /// <summary>
-        /// Updates all dependencies with version ranges to the version it was resolved to.
+        /// Updates all dependencies with version ranges to the version it was resolved to where possible.
         /// </summary>
-        private static void ResolveDependencyVersionRanges(HashSet<DotnetDependency> runtimePackages)
+        private static void ResolveDependencyVersionRanges(HashSet<DotnetDependency> runtimePackages, IDictionary<string, CentralPackageVersion> centralPackageVersions)
         {
             var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
             foreach (var runtimePackage in runtimePackages)
@@ -143,15 +144,24 @@ namespace CycloneDX.Services
                     {
                         var normalizedDependencyKey = dependency.Key.ToLowerInvariant();
                         var package = runtimePackagesLookup[normalizedDependencyKey].FirstOrDefault(pkg => versionRange.Satisfies(NuGetVersion.Parse(pkg.Version)));
-                        if (package != default)
+                        string patchVersion = package?.Version;
+
+                        // This can happen for dev-only packages that only have SDK functionality.
+                        if (package == default)
                         {
-                            runtimePackage.Dependencies[dependency.Key] = package.Version;
+                            // Central package versions can already limit the expected range.
+                            if (!centralPackageVersions.TryGetValue(dependency.Key, out var cpv))
+                            {
+                                // If we don't have a CPV, ignore for now.
+                                // It will be tried to match later in the Runner again.
+                                continue;
+                            }
+
+                            // Despite the name, this could already be a non-range version.
+                            patchVersion = cpv.VersionRange.ToShortString();
                         }
-                        else
-                        {
-                            // This should not happen, since all dependencies are resolved to a specific version.
-                            Console.Error.WriteLine($"Dependency ({dependency.Key}) with version range ({dependency.Value}) referenced by (Name:{runtimePackage.Name} Version:{runtimePackage.Version}) did not resolve to a specific version.");
-                        }
+
+                        runtimePackage.Dependencies[dependency.Key] = patchVersion;
                     }
                 }
             }
