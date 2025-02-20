@@ -521,7 +521,10 @@ namespace CycloneDX
             foreach (var runtimePackage in runtimePackages)
             {
                 var dependencies = runtimePackage.Dependencies?.ToList();
-                if (dependencies == null) continue;
+                if (dependencies == null)
+                {
+                    continue;
+                }
 
                 foreach (var dependency in dependencies)
                 {
