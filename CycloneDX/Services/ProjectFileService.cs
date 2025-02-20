@@ -25,7 +25,6 @@ using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using System.Text.RegularExpressions;
-using System.Reflection;
 
 namespace CycloneDX.Services
 {
@@ -240,11 +239,6 @@ namespace CycloneDX.Services
         public async Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
         {
             var dotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
-            foreach (var item in dotnetDependencys)
-            {
-                // TODO: This doesn't seem to be really correct as it add's a lot of the indirect refs as-well...
-                item.IsDirectReference = true;
-            }
             var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
 
             //Remove root-project, it will be added to the metadata

@@ -25,7 +25,6 @@ using NuGet.Versioning;
 using NuGet.LibraryModel;
 using NuGet.ProjectModel;
 using System.IO;
-using NuGet.Packaging;
 
 namespace CycloneDX.Services
 {
@@ -147,28 +146,19 @@ namespace CycloneDX.Services
                         var package = runtimePackagesLookup[normalizedDependencyKey].FirstOrDefault(pkg => versionRange.Satisfies(NuGetVersion.Parse(pkg.Version)));
                         string patchVersion = package?.Version;
 
+                        // This can happen for dev-only packages that only have SDK functionality.
                         if (package == default)
                         {
-                            // Central package versions can change the expected range.
-                            if (centralPackageVersions.TryGetValue(dependency.Key, out var cpv))
+                            // Central package versions can already limit the expected range.
+                            if (!centralPackageVersions.TryGetValue(dependency.Key, out var cpv))
                             {
-                                versionRange = cpv.VersionRange;
-                            }
-
-                            var version = versionRange.IsMinInclusive
-                                ? versionRange.MinVersion
-                                : versionRange.IsMaxInclusive
-                                    ? versionRange.MaxVersion
-                                    : null;
-
-                            if (version == null)
-                            {
-                                // This can happen for development build-only dependencies.
-                                Console.Error.WriteLine($"Dependency ({dependency.Key}) with version range ({dependency.Value}) referenced by (Name:{runtimePackage.Name} Version:{runtimePackage.Version}) did not resolve to a specific version.");
+                                // If we don't have a CPV, ignore for now.
+                                // It will be tried to match later in the Runner again.
                                 continue;
                             }
 
-                            patchVersion = version.ToNormalizedString();
+                            // Despite the name, this could already be a non-range version.
+                            patchVersion = cpv.VersionRange.ToShortString();
                         }
 
                         runtimePackage.Dependencies[dependency.Key] = patchVersion;

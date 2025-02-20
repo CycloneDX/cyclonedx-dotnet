@@ -22,7 +22,6 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
-using System.Linq;
 using System;
 
 namespace CycloneDX.Services
@@ -64,6 +63,7 @@ namespace CycloneDX.Services
                                 Name = reader["id"],
                                 Version = reader["version"],
                                 IsDevDependency = reader["developmentDependency"] == "true",
+                                IsDirectReference = true,
                                 Scope = Component.ComponentScope.Required
                             };
                             await Console.Out.WriteLineAsync($"\tFound Package:{newPackage.Name}");

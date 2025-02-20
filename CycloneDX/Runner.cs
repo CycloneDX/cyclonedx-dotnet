@@ -27,6 +27,7 @@ using CycloneDX.Models;
 using CycloneDX.Interfaces;
 using CycloneDX.Services;
 using static CycloneDX.Models.Component;
+using NuGet.Versioning;
 
 namespace CycloneDX
 {
@@ -238,8 +239,8 @@ namespace CycloneDX
                 await Console.Out.WriteLineAsync($"{packages.Where(p => p.IsDevDependency).Count()} packages being excluded as DevDependencies");
             }
 
-
-            
+            // Resolve version ranges:
+            ResolveDependencyVersionRanges(packages);
 
             // get all the components and dependency graph from the NuGet packages
             var components = new HashSet<Component>();
@@ -511,5 +512,35 @@ namespace CycloneDX
             }
         }
 
+        /// <summary>
+        /// Updates all dependencies with version ranges to the version it was resolved to where possible.
+        /// </summary>
+        private static void ResolveDependencyVersionRanges(HashSet<DotnetDependency> runtimePackages)
+        {
+            var runtimePackagesLookup = runtimePackages.ToLookup(x => x.Name.ToLowerInvariant());
+            foreach (var runtimePackage in runtimePackages)
+            {
+                var dependencies = runtimePackage.Dependencies?.ToList();
+                if (dependencies == null) continue;
+
+                foreach (var dependency in dependencies)
+                {
+                    if (!NuGetVersion.TryParse(dependency.Value, out _) && VersionRange.TryParse(dependency.Value, out VersionRange versionRange))
+                    {
+                        var normalizedDependencyKey = dependency.Key.ToLowerInvariant();
+                        var package = runtimePackagesLookup[normalizedDependencyKey].FirstOrDefault(pkg => versionRange.Satisfies(NuGetVersion.Parse(pkg.Version)));
+                        
+                        // This can happen for development build-only dependencies.
+                        if (package == default)
+                        {
+                            Console.Error.WriteLine($"Dependency ({dependency.Key}) with version range ({dependency.Value}) referenced by (Name:{runtimePackage.Name} Version:{runtimePackage.Version}) did not resolve to a specific version. You might want to try --recursive to resolve this.");
+                            continue;
+                        }
+
+                        runtimePackage.Dependencies[dependency.Key] = package.Version;
+                    }
+                }
+            }
+        }
     }
 }
