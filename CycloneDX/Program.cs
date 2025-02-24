@@ -56,6 +56,7 @@ namespace CycloneDX
             var setVersion = new Option<string>(new[] { "--set-version", "-sv" }, "Override the default BOM metadata component version (defaults to 0.0.0).");
             var includeProjectReferences = new Option<bool>(new[] { "--include-project-references", "-ipr" }, "Include project references as components (can only be used with project files).");
             var setType = new Option<Component.Classification>(new[] { "--set-type", "-st" }, getDefaultValue: () => Component.Classification.Application, "Override the default BOM metadata component type (defaults to application).");
+            var setNugetPurl = new Option<bool>(new[] { "--set-nuget-purl", "-snp" }, "Override the default BOM metadata component bom ref and PURL as NuGet package.");
             //Deprecated args
             var disableGithubLicenses = new Option<bool>(new[] { "--disable-github-licenses", "-dgl" }, "(Deprecated, this is the default setting now");
             var outputFilenameDeprecated = new Option<string>(new[] { "-f" }, "(Deprecated use -fn instead) Optionally provide a filename for the BOM (default: bom.xml or bom.json).");
@@ -93,6 +94,7 @@ namespace CycloneDX
                 setName,
                 setVersion,
                 setType,
+                setNugetPurl,
                 outputFilenameDeprecated,
                 excludeDevDeprecated,
                 scanProjectDeprecated,
@@ -130,6 +132,7 @@ namespace CycloneDX
                     setName = context.ParseResult.GetValueForOption(setName),
                     setVersion = context.ParseResult.GetValueForOption(setVersion),
                     setType = context.ParseResult.GetValueForOption(setType),
+                    setNugetPurl = context.ParseResult.GetValueForOption(setNugetPurl),
                     includeProjectReferences = context.ParseResult.GetValueForOption(includeProjectReferences)
                 };                
 
