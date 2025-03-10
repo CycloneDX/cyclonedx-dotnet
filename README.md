@@ -93,7 +93,7 @@ Options:
   -st, --set-type   <Application|Container|Data|Device|Device_Driver|          Override the default BOM metadata component type (defaults to application). [default: Application]
                      File|Firmware|Framework|Library|
                      Machine_Learning_Model|Null|Operating_System|Platform>                                                                
-  -snp, --set-nuget-purl                                                       Override the default BOM metadata component bom ref and PURL as NuGet package.
+  --set-nuget-purl                                                             Override the default BOM metadata component bom ref and PURL as NuGet package.
   --version                                                                    Show version information
   -?, -h, --help                                                               Show help and usage information
 ```
