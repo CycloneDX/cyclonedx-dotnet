@@ -71,13 +71,13 @@ namespace CycloneDX
             string outputFilename = options.outputFilename;
             bool json = options.json;
             bool excludeDev = options.excludeDev;
-            bool excludetestprojects = options.excludeTestProjects;            
+            bool excludetestprojects = options.excludeTestProjects;
             bool scanProjectReferences = options.scanProjectReferences;
             bool noSerialNumber = options.noSerialNumber;
             string githubUsername = options.githubUsername;
             string githubT = options.githubT;
-            string githubBT = options.githubBT;            
-            bool disablePackageRestore = options.disablePackageRestore;            
+            string githubBT = options.githubBT;
+            bool disablePackageRestore = options.disablePackageRestore;
             int dotnetCommandTimeout = options.dotnetCommandTimeout;
             string baseIntermediateOutputPath = options.baseIntermediateOutputPath;
             string importMetadataPath = options.importMetadataPath;
@@ -174,20 +174,20 @@ namespace CycloneDX
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile) && scanProjectReferences)
                 {
-                    if(!fileSystem.File.Exists(SolutionOrProjectFile))
+                    if (!fileSystem.File.Exists(SolutionOrProjectFile))
                     {
                         Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
-                        return (int)ExitCode.InvalidOptions;                        
+                        return (int)ExitCode.InvalidOptions;
                     }
                     packages = await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
-                {                    
-                    if(!fileSystem.File.Exists(SolutionOrProjectFile))
+                {
+                    if (!fileSystem.File.Exists(SolutionOrProjectFile))
                     {
                         Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
-                        return (int)ExitCode.InvalidOptions;                        
+                        return (int)ExitCode.InvalidOptions;
                     }
                     packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
@@ -218,28 +218,51 @@ namespace CycloneDX
                 return (int)ExitCode.DotnetRestoreFailed;
             }
 
-            await Console.Out.WriteLineAsync($"Found {packages.Count()} packages");
+            // Remove transitive (via project references) dev-dependencies 
+            // Dev dependencies of referenced projects are typically not included in the assets file.
+            // However, if the dev-dependency is transitive—meaning another dependency of that project depends on it—
+            // the dev-dependency will be listed in the assets file under targets with a version range.
+            // But a corresponding entry under libraries is missing.
+            // This results in a state where there is a dependency on a package but no corresponding package.  
+            // To resolve this, we remove such dependencies.
+            var allDependencies = packages.Where(p => p.Dependencies is not null).SelectMany(p => p.Dependencies!.Keys).ToHashSet();
+            var dependenciesWithoutPackages = allDependencies.Except(packages.Select(p => p.Name)).ToHashSet();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            foreach (var package in packages)
+            {
+                if (package.Dependencies is null) continue;
 
+                foreach (var dep in dependenciesWithoutPackages)
+                {
+                    if (package.Dependencies.Remove(dep))
+                    {
+                        await Console.Out.WriteLineAsync($"Removed transitive dependency {dep} from {package.Name}");
+                    }
+                }                
+            }
+            Console.ResetColor();
+
+            
+            await Console.Out.WriteLineAsync($"Found {packages.Count()} packages");
+            
 
             if (!string.IsNullOrEmpty(setName))
             {
                 topLevelComponent.Name = setName;
             }
 
-                        
+
             if (excludeDev)
             {
                 foreach (var item in packages.Where(p => p.IsDevDependency))
                 {
                     item.Scope = ComponentScope.Excluded;
                 }
-
-
                 await Console.Out.WriteLineAsync($"{packages.Where(p => p.IsDevDependency).Count()} packages being excluded as DevDependencies");
             }
 
 
-            
+
 
             // get all the components and dependency graph from the NuGet packages
             var components = new HashSet<Component>();
@@ -276,25 +299,8 @@ namespace CycloneDX
                 }
                 if (!options.includeProjectReferences)
                 {
-                    var projectReferences = packages.Where(p => p.DependencyType == DependencyType.Project);
-                    // Change all packages that are refered to by a project to direct dependency
-                    var dependenciesOfProjects = projectReferences.SelectMany(p => p.Dependencies);
-                    var newDirectDependencies = packages.Join(dependenciesOfProjects, p => p.Name + '@' + p.Version, d => d.Key + '@' + d.Value, (p, _) => p);
-                    newDirectDependencies.ToList().ForEach(p => p.IsDirectReference = true);
-                    //remove all dependencies of packages to project references (https://github.com/CycloneDX/cyclonedx-dotnet/issues/785)
-                    var projectReferencesNames = projectReferences.Select(p => p.Name);
-                    foreach (var package in packages)
-                    {
-                        foreach (var refName in projectReferencesNames)
-                        {
-                            package.Dependencies?.Remove(refName);
-                        }
-                    }
-
-                    //remove project references from list
-                    packages = packages.Where(p => p.DependencyType != DependencyType.Project).ToHashSet();
+                    packages = RemoveProjectReferencesAndMakeTheirDependenciesDirect(packages);
                 }
-
 
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
                 foreach (var package in packages.Where(p => !excludeDev || packageToComponent[p].Scope != Component.ComponentScope.Excluded))
@@ -304,32 +310,30 @@ namespace CycloneDX
                         Ref = bomRefLookup[(package.Name.ToLower(CultureInfo.InvariantCulture), package.Version.ToLower(CultureInfo.InvariantCulture))],
                         Dependencies = new List<Dependency>()
                     };
-                    if (package.Dependencies != null && package.Dependencies.Any())
-                    {
-                        foreach (var dep in package.Dependencies)
-                        {
-                            var lookupKey = (dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value?.ToLower(CultureInfo.InvariantCulture));
-                            if (!bomRefLookup.ContainsKey(lookupKey))
-                            {
-                                var packageNameMatch = bomRefLookup.Where(x => x.Key.Item1 == dep.Key.ToLower(CultureInfo.InvariantCulture)).ToList();
-                                if (packageNameMatch.Count == 1)
-                                {
-                                    lookupKey = packageNameMatch.First().Key;
-                                }
-                                else
-                                {
-                                    Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value}");
-                                    return (int)ExitCode.UnableToLocateDependencyBomRef;
-                                }
-                            }
 
-                            var bomRef = bomRefLookup[lookupKey];
-                            transitiveDependencies.Add(bomRef);
-                            packageDependencies.Dependencies.Add(new Dependency
+                    foreach (var dep in package.Dependencies ?? [])
+                    {
+                        var lookupKey = (dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value?.ToLower(CultureInfo.InvariantCulture));
+                        if (!bomRefLookup.ContainsKey(lookupKey))
+                        {
+                            var packageNameMatch = bomRefLookup.Where(x => x.Key.Item1 == dep.Key.ToLower(CultureInfo.InvariantCulture)).ToList();
+                            if (packageNameMatch.Count == 1)
                             {
-                                Ref = bomRef
-                            });
+                                lookupKey = packageNameMatch.First().Key;
+                            }
+                            else
+                            {
+                                Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value}");
+                                return (int)ExitCode.UnableToLocateDependencyBomRef;
+                            }
                         }
+
+                        var bomRef = bomRefLookup[lookupKey];
+                        transitiveDependencies.Add(bomRef);
+                        packageDependencies.Dependencies.Add(new Dependency
+                        {
+                            Ref = bomRef
+                        });
                     }
                     dependencies.Add(packageDependencies);
                 }
@@ -423,10 +427,30 @@ namespace CycloneDX
             Console.WriteLine("Writing to: " + bomFilePath);
             this.fileSystem.File.WriteAllText(bomFilePath, bomContents);
 
-            return 0;    
+            return 0;
         }
 
+        private static HashSet<DotnetDependency> RemoveProjectReferencesAndMakeTheirDependenciesDirect(HashSet<DotnetDependency> packages)
+        {
+            var projectReferences = packages.Where(p => p.DependencyType == DependencyType.Project);
+            // Change all packages that are refered to by a project to direct dependency
+            var dependenciesOfProjects = projectReferences.SelectMany(p => p.Dependencies);
+            var newDirectDependencies = packages.Join(dependenciesOfProjects, p => p.Name + '@' + p.Version, d => d.Key + '@' + d.Value, (p, _) => p);
+            newDirectDependencies.ToList().ForEach(p => p.IsDirectReference = true);
+            //remove all dependencies of packages to project references (https://github.com/CycloneDX/cyclonedx-dotnet/issues/785)
+            var projectReferencesNames = projectReferences.Select(p => p.Name);
+            foreach (var package in packages)
+            {
+                foreach (var refName in projectReferencesNames)
+                {
+                    package.Dependencies?.Remove(refName);
+                }
+            }
 
+            //remove project references from list
+            packages = packages.Where(p => p.DependencyType != DependencyType.Project).ToHashSet();
+            return packages;
+        }
 
         private static void SetMetadataComponentIfNecessary(Bom bom, Component topLevelComponent)
         {
@@ -465,7 +489,7 @@ namespace CycloneDX
             {
                 bom.Metadata.Timestamp = DateTime.UtcNow;
             }
-            
+
         }
 
         internal static Bom ReadMetaDataFromFile(Bom bom, string templatePath)
