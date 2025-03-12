@@ -230,7 +230,10 @@ namespace CycloneDX
             Console.ForegroundColor = ConsoleColor.Yellow;
             foreach (var package in packages)
             {
-                if (package.Dependencies is null) continue;
+                if (package.Dependencies is null)
+                {
+                    continue;
+                }
 
                 foreach (var dep in dependenciesWithoutPackages)
                 {
