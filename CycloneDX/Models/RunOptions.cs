@@ -48,6 +48,7 @@ namespace CycloneDX.Models
         public string setName { get; set; }
         public string setVersion { get; set; }
         public Component.Classification setType { get; set; } = Component.Classification.Application;
+        public bool setNugetPurl { get; set; }
 
 
     }
