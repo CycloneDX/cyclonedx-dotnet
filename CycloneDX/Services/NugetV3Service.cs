@@ -130,7 +130,7 @@ namespace CycloneDX.Services
 
             input = input.Trim();
 
-            if (Uri.TryCreate(input, ops, out Uri? result))
+            if (Uri.TryCreate(input, ops, out var result))
             {
                 return result.ToString();
             }
@@ -272,7 +272,7 @@ namespace CycloneDX.Services
             else if (_githubService == null)
             {
                 var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
-                var license = new License { Name = "Unknown - See URL", Url = licenseUrl };
+                var license = new License { Name = "Unknown - See URL", Url = licenseUrl.Trim() };
                 component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
             }
             else

@@ -84,6 +84,7 @@ namespace CycloneDX
             string setName = options.setName;
             string setVersion = options.setVersion;
             Classification setType = options.setType;
+            bool setNugetPurl = options.setNugetPurl;
 
 
             Console.WriteLine();
@@ -106,7 +107,7 @@ namespace CycloneDX
                 Console.WriteLine($"    {cachePath}");
             }
 
-            // instantiate services            
+            // instantiate services
             GithubService githubService = null;
             if (options.enableGithubLicenses)
             {
@@ -162,7 +163,7 @@ namespace CycloneDX
 
             try
             {
-                if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+                if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase) || SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
                 {
                     if (!fileSystem.File.Exists(SolutionOrProjectFile))
                     {
@@ -387,7 +388,7 @@ namespace CycloneDX
                     bom = ReadMetaDataFromFile(bom, importMetadataPath);
                 }
             }
-            SetMetadataComponentIfNecessary(bom, topLevelComponent);
+            SetMetadataComponentIfNecessary(bom, topLevelComponent, setNugetPurl);
             Runner.AddMetadataTool(bom);
 
             if (!(noSerialNumber))
@@ -455,14 +456,11 @@ namespace CycloneDX
             return packages;
         }
 
-        private static void SetMetadataComponentIfNecessary(Bom bom, Component topLevelComponent)
+        private static void SetMetadataComponentIfNecessary(Bom bom, Component topLevelComponent, bool setNugetPurl)
         {
             if (bom.Metadata is null)
             {
-                bom.Metadata = new Metadata
-                {
-                    Component = topLevelComponent
-                };
+                bom.Metadata = new Metadata { Component = topLevelComponent };
             }
             else if (bom.Metadata.Component is null)
             {
@@ -474,13 +472,27 @@ namespace CycloneDX
                 {
                     bom.Metadata.Component.Name = topLevelComponent.Name;
                 }
+
                 if (string.IsNullOrEmpty(bom.Metadata.Component.Version))
                 {
                     bom.Metadata.Component.Version = topLevelComponent.Version;
                 }
+
                 if (bom.Metadata.Component.Type == Component.Classification.Null)
                 {
                     bom.Metadata.Component.Type = Component.Classification.Application;
+                }
+            }
+
+            if (setNugetPurl)
+            {
+                if (string.IsNullOrEmpty(bom.Metadata.Component.Purl))
+                {
+                    bom.Metadata.Component.Purl = Utils.GeneratePackageUrl(bom.Metadata.Component.Name, bom.Metadata.Component.Version);
+                }
+                if (string.IsNullOrEmpty(bom.Metadata.Component.BomRef))
+                {
+                    bom.Metadata.Component.BomRef = bom.Metadata.Component.Purl;
                 }
             }
             if (string.IsNullOrEmpty(bom.Metadata.Component.BomRef))
