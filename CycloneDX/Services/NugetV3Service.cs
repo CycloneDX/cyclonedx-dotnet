@@ -272,7 +272,7 @@ namespace CycloneDX.Services
             else if (_githubService == null)
             {
                 var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
-                var license = new License { Name = "Unknown - See URL", Url = licenseUrl };
+                var license = new License { Name = "Unknown - See URL", Url = licenseUrl.Trim() };
                 component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
             }
             else
