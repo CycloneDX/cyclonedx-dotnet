@@ -45,7 +45,7 @@ namespace CycloneDX.Tests.FunctionalTests
             };
 
             //Just test that there is no exception
-            var bom = await FunctionalTestHelper.Test(options, getMockFS());
+            await FunctionalTestHelper.Test(options, getMockFS());
         }
     }
 }
