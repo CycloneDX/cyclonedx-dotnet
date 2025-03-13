@@ -122,5 +122,13 @@ namespace CycloneDX.Tests.FunctionalTests
         {
             Assert.True(bom.Dependencies.Any(dep => dep.Ref == dependencyBomRef && dep.Dependencies.Any(child => child.Ref == childBomRef)), message);
         }
+
+
+        public static void AssertHasDependency(Bom bom, string dependencyBomRef)
+            => AssertHasDependency(bom, dependencyBomRef,  null);
+        public static void AssertHasDependency(Bom bom, string dependencyBomRef, string message)
+        {
+            Assert.True(bom.Dependencies.Any(dep => dep.Ref == dependencyBomRef), message);
+        }
     }
 }
