@@ -219,6 +219,25 @@ namespace CycloneDX
                 return (int)ExitCode.DotnetRestoreFailed;
             }
 
+            // Apply package exclude filter
+            // The exclude filter may be used to exclude any packages, which are resolved by NuGet, but do not exist
+            // in the final binary output. For example, an application targets .NET 8, but has a dependency to a library,
+            // which only supports .NET Standard 1.6. Without filter, the libraries of .NET Standard 1.6 would be in the
+            // resulting SBOM. But they are not used by application as they do not exist in the binary output folder.
+            try
+            {
+                if (!string.IsNullOrEmpty(options.DependencyExcludeFilter))
+                {
+                    ExcludePackages(packages, options.DependencyExcludeFilter);
+                    RemoveOrphanedPackages(packages);
+                }
+            }
+            catch (ArgumentException e)
+            {
+                await Console.Error.WriteLineAsync(e.Message).ConfigureAwait(false);
+                return (int)ExitCode.InvalidOptions;
+            }
+
             // Remove transitive (via project references) dev-dependencies 
             // Dev dependencies of referenced projects are typically not included in the assets file.
             // However, if the dev-dependency is transitive—meaning another dependency of that project depends on it—
@@ -550,5 +569,59 @@ namespace CycloneDX
             }
         }
 
+        private static void ExcludePackages(HashSet<DotnetDependency> packages, string excludeFilter)
+        {
+            var packagesToExclude = excludeFilter.Split(',');
+            foreach (var packageKey in packagesToExclude)
+            {
+                var packageKeyParts = packageKey.Split('@');
+                if (packageKeyParts.Length != 2)
+                {
+                    throw new ArgumentException("All packages to exclude must have name and version ('name@version').",
+                        nameof(excludeFilter));
+                }
+
+                var packageToExclude = new DotnetDependency { Name = packageKeyParts[0], Version = packageKeyParts[1] };
+                packages.Remove(packageToExclude);
+            }
+        }
+
+        private static HashSet<DotnetDependency> GetMandatoryDependencies(HashSet<DotnetDependency> packages)
+        {
+            var mandatoryDependencies = new HashSet<DotnetDependency>();
+            foreach (var package in packages)
+            {
+                if (!package.IsDirectReference)
+                {
+                    continue;
+                }
+
+                mandatoryDependencies.Add(package);
+                CollectDependencies(package);
+            }
+
+            return mandatoryDependencies;
+
+            void CollectDependencies(DotnetDependency package)
+            {
+                foreach (var packageDependency in package.Dependencies)
+                {
+                    var key = new DotnetDependency { Name = packageDependency.Key, Version = packageDependency.Value };
+                    if (!packages.TryGetValue(key, out var actualDependency))
+                    {
+                        continue;
+                    }
+
+                    mandatoryDependencies.Add(actualDependency);
+                    CollectDependencies(actualDependency);
+                }
+            }
+        }
+
+        private static void RemoveOrphanedPackages(HashSet<DotnetDependency> packages)
+        {
+            var mandatoryPackages = GetMandatoryDependencies(packages);
+            packages.IntersectWith(mandatoryPackages);
+        }
     }
 }

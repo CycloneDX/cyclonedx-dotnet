@@ -49,7 +49,7 @@ namespace CycloneDX.Models
         public string setVersion { get; set; }
         public Component.Classification setType { get; set; } = Component.Classification.Application;
         public bool setNugetPurl { get; set; }
-
+        public string DependencyExcludeFilter { get; set; }
 
     }
 }
