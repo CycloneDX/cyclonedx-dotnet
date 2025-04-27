@@ -33,6 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="FunctionalTests\DependencyFiltering\netstandard.assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\DependencyFiltering\shared_dependency.assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\IPR-TwoLevelTree\project3packages.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

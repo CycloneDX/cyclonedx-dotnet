@@ -70,6 +70,7 @@ Options:
   -o, --output <output>                                                        The directory to write the BOM
   -fn, --filename <filename>                                                   Optionally provide a filename for the BOM (default: bom.xml or bom.json)
   -j, --json                                                                   Produce a JSON BOM instead of XML
+  -ef, --exclude-filter <exclude-filter>                                       A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2'. Transitive dependencies will also be removed.
   -ed, --exclude-dev                                                           Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)
   -t, --exclude-test-projects                                                  Exclude test projects from the BOM
   -u, --url <url>                                                              Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json
@@ -98,6 +99,12 @@ Options:
   -?, -h, --help                                                               Show help and usage information
 ```
 
+*   `-ef, --exclude-filter`  
+    The exclude filter may be used to exclude any packages, which are resolved by NuGet, but do not exist
+    in the final binary output. For example, an application targets .NET 8, but has a dependency to a library,
+    which only supports .NET Standard 1.6. Without filter, the libraries of .NET Standard 1.6 would be in the
+    resulting SBOM. But they are not used by application as they do not exist in the binary output folder.
+
 #### Examples
 To run the **CycloneDX** tool you need to specify a solution or project file. In case you pass a solution, the tool will aggregate all the projects.
 
@@ -115,6 +122,13 @@ The following will recursively scan the project references of the supplied proje
 ```bash
 dotnet-CycloneDX /path/to/project/MyProject.csproj -o /output/path -rs
 ```
+
+The following will create a BOM from a project and exclude transitive dependency .NET Standard:
+```bash
+dotnet-CycloneDX /path/to/project/MyProject.csproj -o /output/path -ef NETStandard.Library@1.6.0
+```
+
+
 
 Project [metadata](https://cyclonedx.org/docs/1.2/#type_metadata) **template example**
 

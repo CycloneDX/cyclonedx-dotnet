@@ -15,7 +15,7 @@ using static CycloneDX.Models.Component;
 
 namespace CycloneDX.Tests.FunctionalTests
 {
-    public static class FunctionalTestHelper
+    internal static class FunctionalTestHelper
     {
         private static INugetServiceFactory CreateMockNugetServiceFactory()
         {
@@ -46,7 +46,8 @@ namespace CycloneDX.Tests.FunctionalTests
         }
 
 
-        public static async Task<Bom> Test(string assetsJson, RunOptions options) => await Test(assetsJson, options, null);
+        public static async Task<Bom> Test(string assetsJson, RunOptions options,
+            ExitCode expectedExitCode = ExitCode.OK) => await Test(assetsJson, options, null, expectedExitCode);
 
         /// <summary>
         /// Trying to build SBOM from provided parameters and validated the result file
@@ -54,7 +55,7 @@ namespace CycloneDX.Tests.FunctionalTests
         /// <param name="assetsJson"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static async Task<Bom> Test(string assetsJson, RunOptions options, INugetServiceFactory nugetService)
+        public static async Task<Bom> Test(string assetsJson, RunOptions options, INugetServiceFactory nugetService, ExitCode expectedExitCode = ExitCode.OK)
         {
             nugetService ??= CreateMockNugetServiceFactory();
 
@@ -64,14 +65,16 @@ namespace CycloneDX.Tests.FunctionalTests
                 { MockUnixSupport.Path("c:/ProjectPath/obj/project.assets.json"), new MockFileData(assetsJson) }
             });
 
-            return await Test(options, nugetService, mockFileSystem).ConfigureAwait(false);
+            return await Test(options, nugetService, mockFileSystem, expectedExitCode).ConfigureAwait(false);
         }
 
 
-        public static async Task<Bom> Test(RunOptions options, MockFileSystem mockFileSystem) => await Test(options, CreateMockNugetServiceFactory(), mockFileSystem);
+        public static async Task<Bom> Test(RunOptions options, MockFileSystem mockFileSystem,
+            ExitCode expectedExitCode = ExitCode.OK) => await Test(options, CreateMockNugetServiceFactory(),
+            mockFileSystem, expectedExitCode);
  
 
-        public static async Task<Bom> Test(RunOptions options, INugetServiceFactory nugetService, MockFileSystem mockFileSystem)
+        public static async Task<Bom> Test(RunOptions options, INugetServiceFactory nugetService, MockFileSystem mockFileSystem, ExitCode expectedExitCode = ExitCode.OK)
         {
             options.enableGithubLicenses = true;
             options.outputDirectory ??= "/bom/";
@@ -82,7 +85,12 @@ namespace CycloneDX.Tests.FunctionalTests
             Runner runner = new Runner(mockFileSystem, null, null, null, null, null, null, nugetService);
             int exitCode = await runner.HandleCommandAsync(options);
 
-            Assert.Equal((int)ExitCode.OK, exitCode);
+            Assert.Equal((int)expectedExitCode, exitCode);
+
+            if (expectedExitCode != ExitCode.OK)
+            {
+                return null;
+            }
 
             var expectedFileName = mockFileSystem.Path.Combine(options.outputDirectory, options.outputFilename);
 

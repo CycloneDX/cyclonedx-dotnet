@@ -219,6 +219,25 @@ namespace CycloneDX
                 return (int)ExitCode.DotnetRestoreFailed;
             }
 
+            // Apply package exclude filter
+            // The exclude filter may be used to exclude any packages, which are resolved by NuGet, but do not exist
+            // in the final binary output. For example, an application targets .NET 8, but has a dependency to a library,
+            // which only supports .NET Standard 1.6. Without filter, the libraries of .NET Standard 1.6 would be in the
+            // resulting SBOM. But they are not used by application as they do not exist in the binary output folder.
+            try
+            {
+                if (!string.IsNullOrEmpty(options.DependencyExcludeFilter))
+                {
+                    ExcludeFilterHelper.ExcludePackages(packages, options.DependencyExcludeFilter);
+                    ExcludeFilterHelper.RemoveOrphanedPackages(packages);
+                }
+            }
+            catch (ArgumentException e)
+            {
+                await Console.Error.WriteLineAsync(e.Message).ConfigureAwait(false);
+                return (int)ExitCode.InvalidOptions;
+            }
+
             // Remove transitive (via project references) dev-dependencies 
             // Dev dependencies of referenced projects are typically not included in the assets file.
             // However, if the dev-dependency is transitive—meaning another dependency of that project depends on it—
@@ -549,6 +568,5 @@ namespace CycloneDX
                 bom.Metadata.Tools.Tools[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
-
     }
 }
