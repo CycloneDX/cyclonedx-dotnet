@@ -228,8 +228,8 @@ namespace CycloneDX
             {
                 if (!string.IsNullOrEmpty(options.DependencyExcludeFilter))
                 {
-                    ExcludePackages(packages, options.DependencyExcludeFilter);
-                    RemoveOrphanedPackages(packages);
+                    ExcludeFilterHelper.ExcludePackages(packages, options.DependencyExcludeFilter);
+                    ExcludeFilterHelper.RemoveOrphanedPackages(packages);
                 }
             }
             catch (ArgumentException e)
@@ -567,61 +567,6 @@ namespace CycloneDX
             {
                 bom.Metadata.Tools.Tools[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
-        }
-
-        private static void ExcludePackages(HashSet<DotnetDependency> packages, string excludeFilter)
-        {
-            var packagesToExclude = excludeFilter.Split(',');
-            foreach (var packageKey in packagesToExclude)
-            {
-                var packageKeyParts = packageKey.Split('@');
-                if (packageKeyParts.Length != 2)
-                {
-                    throw new ArgumentException("All packages to exclude must have name and version ('name@version').",
-                        nameof(excludeFilter));
-                }
-
-                var packageToExclude = new DotnetDependency { Name = packageKeyParts[0], Version = packageKeyParts[1] };
-                packages.Remove(packageToExclude);
-            }
-        }
-
-        private static HashSet<DotnetDependency> GetMandatoryDependencies(HashSet<DotnetDependency> packages)
-        {
-            var mandatoryDependencies = new HashSet<DotnetDependency>();
-            foreach (var package in packages)
-            {
-                if (!package.IsDirectReference)
-                {
-                    continue;
-                }
-
-                mandatoryDependencies.Add(package);
-                CollectDependencies(package);
-            }
-
-            return mandatoryDependencies;
-
-            void CollectDependencies(DotnetDependency package)
-            {
-                foreach (var packageDependency in package.Dependencies)
-                {
-                    var key = new DotnetDependency { Name = packageDependency.Key, Version = packageDependency.Value };
-                    if (!packages.TryGetValue(key, out var actualDependency))
-                    {
-                        continue;
-                    }
-
-                    mandatoryDependencies.Add(actualDependency);
-                    CollectDependencies(actualDependency);
-                }
-            }
-        }
-
-        private static void RemoveOrphanedPackages(HashSet<DotnetDependency> packages)
-        {
-            var mandatoryPackages = GetMandatoryDependencies(packages);
-            packages.IntersectWith(mandatoryPackages);
         }
     }
 }
