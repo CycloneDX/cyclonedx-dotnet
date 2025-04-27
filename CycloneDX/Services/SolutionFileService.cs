@@ -124,42 +124,6 @@ namespace CycloneDX.Services
             return packages;
         }
 
-        /// <summary>
-        /// Extracts the version from a .csproj file.
-        /// </summary>
-        /// <param name="projectFilePath">The path to the .csproj file.</param>
-        /// <returns>The version string if found, otherwise null.</returns>
-        public string GetProjectVersion(string projectFilePath)
-        {
-            if (!_fileSystem.File.Exists(projectFilePath))
-            {
-                Console.Error.WriteLine($"Project file \"{projectFilePath}\" does not exist");
-                return null;
-            }
-
-            try
-            {
-                var projectContent = _fileSystem.File.ReadAllText(projectFilePath);
-                var versionMatch = Regex.Match(projectContent, "<Version>(.*?)</Version>");
-                if (versionMatch.Success)
-                {
-                    return versionMatch.Groups[1].Value;
-                }
-
-                var assemblyVersionMatch = Regex.Match(projectContent, "<AssemblyVersion>(.*?)</AssemblyVersion>");
-                if (assemblyVersionMatch.Success)
-                {
-                    return assemblyVersionMatch.Groups[1].Value;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"Error reading project file \"{projectFilePath}\": {ex.Message}");
-            }
-
-            return null;
-        }
-
         private async Task<ICollection<string>> ReadFromSln(StreamReader reader, string solutionFolder)
         {
             var projects = new HashSet<string>();
