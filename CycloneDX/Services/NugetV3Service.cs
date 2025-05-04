@@ -50,9 +50,13 @@ namespace CycloneDX.Services
         private readonly IFileSystem _fileSystem;
         private readonly List<string> _packageCachePaths;
         private readonly bool _disableHashComputation;
+        private readonly EvidenceLicenseTextCollectionMode _evidenceCollectionMode;
 
         // Used in local files
         private const string _nuspecExtension = ".nuspec";
+        private readonly List<string> _licenseFiles = new() {
+            "LICENSE.txt", "LICENCE.txt", "LICENCE.md", "LICENSE.md", "LICENSE", "LICENCE"
+        };
         private const string _nupkgExtension = ".nupkg";
         private const string _sha512Extension = ".nupkg.sha512";
 
@@ -62,13 +66,15 @@ namespace CycloneDX.Services
             List<string> packageCachePaths,
             IGithubService githubService,
             ILogger logger,
-            bool disableHashComputation
+            bool disableHashComputation,
+            EvidenceLicenseTextCollectionMode evidenceCollectionMode
         )
         {
             _fileSystem = fileSystem;
             _packageCachePaths = packageCachePaths;
             _githubService = githubService;
             _disableHashComputation = disableHashComputation;
+            _evidenceCollectionMode = evidenceCollectionMode;
             _logger = logger;
 
             _sourceRepository = SetupNugetRepository(nugetInput);
@@ -96,6 +102,42 @@ namespace CycloneDX.Services
             }
 
             return nuspecFilename;
+        }
+
+        internal string GetCachedLicenseFilename(string name, string version, string licenseFileNameHint)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) { return null; }
+
+            var lowerName = name.ToLowerInvariant();
+            var lowerVersion = version.ToLowerInvariant();
+            string licenseFilename = null;
+
+            foreach (var packageCachePath in _packageCachePaths)
+            {
+                var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, NormalizeVersion(lowerVersion));
+                if (!string.IsNullOrEmpty(licenseFileNameHint))
+                {
+                    var hintedLicenseFilename = _fileSystem.Path.Combine(currentDirectory, licenseFileNameHint);
+                    //use provided in nuspec filename, if possible
+                    if (_fileSystem.File.Exists(hintedLicenseFilename))
+                    {
+                        licenseFilename = hintedLicenseFilename;
+                        break;
+                    }
+                }
+                //otherwise probe for known license file names
+                foreach (var licenseFile in _licenseFiles)
+                {
+                    var currentFilename = _fileSystem.Path.Combine(currentDirectory, licenseFile);
+                    if (_fileSystem.File.Exists(currentFilename))
+                    {
+                        licenseFilename = currentFilename;
+                        break;
+                    }
+                }
+            }
+
+            return licenseFilename;
         }
 
         /// <summary>
@@ -269,11 +311,13 @@ namespace CycloneDX.Services
                     component.Licenses.Add(new LicenseChoice { License = license });
                 };
                 licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
+                await CollectLicenseEvidenceIfNeeded(null, name, version, licenseMetadata, component);
             }
             else if (_githubService == null)
             {
                 var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
                 var license = new License { Name = "Unknown - See URL", Url = licenseUrl?.Trim() };
+                await CollectLicenseEvidenceIfNeeded(license, name, version, licenseMetadata, component);
                 component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
             }
             else
@@ -309,7 +353,7 @@ namespace CycloneDX.Services
                         license = await _githubService.GetLicenseAsync(project).ConfigureAwait(false);
                     }
                 }
-
+                license = await CollectLicenseEvidenceIfNeeded(license, name, version, licenseMetadata, component);
                 if (license != null)
                 {
                     component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
@@ -348,6 +392,74 @@ namespace CycloneDX.Services
             }
 
             return component;
+        }
+
+        private async Task<License> CollectLicenseEvidenceIfNeeded(License license, string name, string version, LicenseMetadata licenseMetadata, Component component)
+        {
+            if (_evidenceCollectionMode == EvidenceLicenseTextCollectionMode.None)
+            {
+                return license;
+            }
+            if (_evidenceCollectionMode == EvidenceLicenseTextCollectionMode.All)
+            {
+                var evidenceLicense = await CollectComponentLicenseText(name, version, null, licenseMetadata);
+                if (evidenceLicense != null)
+                {
+                    component.Evidence ??= new Evidence();
+                    component.Evidence.Licenses = new List<LicenseChoice> { new LicenseChoice { License = evidenceLicense } };
+                }
+            }
+            else if (_evidenceCollectionMode == EvidenceLicenseTextCollectionMode.Unknown &&
+                (license == null || string.IsNullOrEmpty(license.Id)))
+            {
+                license = await CollectComponentLicenseText(name, version, license, licenseMetadata);
+            }
+            return license;
+        }
+
+        private async Task<License> CollectComponentLicenseText(string name, string version, License license, LicenseMetadata licenseMetadata)
+        {
+            if (license != null && !string.IsNullOrEmpty(license.Id))
+            {
+                // must resolve to id or name, but not both
+                return license;
+            }
+            string licenseText = string.Empty;
+            var licenseFilename = GetCachedLicenseFilename(name, version,
+                //hint valid only of file-typed license
+                licenseMetadata?.Type == LicenseType.File ? licenseMetadata?.License : string.Empty);
+            if (!string.IsNullOrEmpty(licenseFilename))
+            {
+                try
+                {
+                    licenseText = await _fileSystem.File.ReadAllTextAsync(licenseFilename, Encoding.UTF8);
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine($"Could not read License file.");
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(licenseText))
+            {
+                if (license == null)
+                {
+                    license = new License();
+                }
+                if (string.IsNullOrEmpty(license.Name))
+                {
+                    license.Name = $"License detected in: {Path.GetFileName(licenseFilename)}";
+                }
+                license.Text = new AttachedText
+                {
+                    Content = Convert.ToBase64String(Encoding.UTF8.GetBytes(licenseText)),
+                    Encoding = "base64",
+                    ContentType = "text/plain"
+                };
+            }
+
+            return license;
         }
 
         private static Component SetupComponentProperties(Component component, NuspecModel nuspecModel)
