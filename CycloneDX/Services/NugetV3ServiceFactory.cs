@@ -15,7 +15,14 @@ namespace CycloneDX.Services
         {
             var nugetLogger = new NuGet.Common.NullLogger();
             var nugetInput = NugetInputFactory.Create(option.baseUrl, option.baseUrlUserName, option.baseUrlUSP, option.isPasswordClearText);
-            return new NugetV3Service(nugetInput, fileSystem, packageCachePaths, githubService, nugetLogger, option.disableHashComputation);
+            return new NugetV3Service(
+                nugetInput,
+                fileSystem,
+                packageCachePaths,
+                githubService,
+                nugetLogger,
+                option.disableHashComputation,
+                option.evidenceCollectionMode);
         }
     }
 }

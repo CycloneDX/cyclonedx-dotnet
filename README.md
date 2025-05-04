@@ -94,6 +94,7 @@ Options:
   -st, --set-type   <Application|Container|Data|Device|Device_Driver|          Override the default BOM metadata component type (defaults to application). [default: Application]
                      File|Firmware|Framework|Library|
                      Machine_Learning_Model|Null|Operating_System|Platform>                                                                
+  -cle, --collect-license-evidence <None|All|Unknown> [default: None]          Collect license information from shipped files.
   --set-nuget-purl                                                             Override the default BOM metadata component bom ref and PURL as NuGet package.
   --version                                                                    Show version information
   -?, -h, --help                                                               Show help and usage information
@@ -104,6 +105,15 @@ Options:
     in the final binary output. For example, an application targets .NET 8, but has a dependency to a library,
     which only supports .NET Standard 1.6. Without filter, the libraries of .NET Standard 1.6 would be in the
     resulting SBOM. But they are not used by application as they do not exist in the binary output folder.
+
+*   `-cle, --collect-license-evidence`
+    The license evidence collection may be used to collect license information from shipped files, like LICENSE.txt.
+    This is particularly useful for packages, which have no license id provided, but rather information is provided in a file.
+    The default is `None` which means no license evidence will be collected. The other options are `All` which collects
+    all license evidence, even when the license id is known. Lastly, `Unknown` Collect license text only for components 
+    which have unknown license. This avoids collecting all license texts for the case when license text can be obtained 
+    otherwise (like MIT) and therefore reduces the BOM size. In contrast to the "All" mode, this mode will put license 
+    text into license block directly instead of evidence part.
 
 #### Examples
 To run the **CycloneDX** tool you need to specify a solution or project file. In case you pass a solution, the tool will aggregate all the projects.
