@@ -58,13 +58,13 @@ namespace CycloneDX
             var setType = new Option<Component.Classification>(new[] { "--set-type", "-st" }, getDefaultValue: () => Component.Classification.Application, "Override the default BOM metadata component type (defaults to application).");
             var setNugetPurl = new Option<bool>(new[] { "--set-nuget-purl" }, "Override the default BOM metadata component bom ref and PURL as NuGet package.");
             var excludeFilter = new Option<string>(["--exclude-filter", "-ef"], "A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2'. Transitive dependencies will also be removed.");
+            var evidenceCollectionMode = new Option<EvidenceLicenseTextCollectionMode>(new[] { "--collect-license-evidence", "-cle" }, "Collect license information from shipped files.");
             //Deprecated args
             var disableGithubLicenses = new Option<bool>(new[] { "--disable-github-licenses", "-dgl" }, "(Deprecated, this is the default setting now");
             var outputFilenameDeprecated = new Option<string>(new[] { "-f" }, "(Deprecated use -fn instead) Optionally provide a filename for the BOM (default: bom.xml or bom.json).");
             var excludeDevDeprecated = new Option<bool>(new[] {"-d" }, "(Deprecated use -ed instead) Exclude development dependencies from the BOM.");
             var scanProjectDeprecated = new Option<bool>(new[] {"-r" }, "(Deprecated use -rs instead) To be used with a single project file, it will recursively scan project references of the supplied project file.");
             var outputDirectoryDeprecated = new Option<string>(new[] { "--out", }, description: "(Deprecated use -output instead) The directory to write the BOM");
-
 
             RootCommand rootCommand = new RootCommand
             {
@@ -101,7 +101,8 @@ namespace CycloneDX
                 scanProjectDeprecated,
                 outputDirectoryDeprecated,
                 disableGithubLicenses,
-                excludeFilter
+                excludeFilter,
+                evidenceCollectionMode
             };
             rootCommand.Description = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.";
             rootCommand.SetHandler(async (context) =>
@@ -136,7 +137,9 @@ namespace CycloneDX
                     setType = context.ParseResult.GetValueForOption(setType),
                     setNugetPurl = context.ParseResult.GetValueForOption(setNugetPurl),
                     includeProjectReferences = context.ParseResult.GetValueForOption(includeProjectReferences),
-                    DependencyExcludeFilter = context.ParseResult.GetValueForOption(excludeFilter)
+                    DependencyExcludeFilter = context.ParseResult.GetValueForOption(excludeFilter),
+                    evidenceCollectionMode = context.ParseResult.GetValueForOption(evidenceCollectionMode)
+
                 };
 
                 Runner runner = new Runner();

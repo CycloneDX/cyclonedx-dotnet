@@ -19,6 +19,24 @@ using System.Globalization;
 
 namespace CycloneDX.Models
 {
+    public enum EvidenceLicenseTextCollectionMode
+    {
+        /// <summary>
+        /// No evidence collection. This is the default.
+        /// </summary>
+        None,
+        /// <summary>
+        /// Collect evidence for all components which ship license file, regardless if license id or name is known or not.
+        /// </summary>
+        All,
+        /// <summary>
+        /// Collect license text only for components which have unknown license. This avoids collecting all license texts
+        /// for the case when license text can be obtained otherwise (like MIT) and therefore reduces the BOM size. In
+        /// contrast to the "All" mode, this mode will put license text into license block directly instead of evidence
+        /// part.
+        /// </summary>
+        Unknown,
+    }
     public class RunOptions
     {
         public string SolutionOrProjectFile { get; set; }
@@ -50,6 +68,6 @@ namespace CycloneDX.Models
         public Component.Classification setType { get; set; } = Component.Classification.Application;
         public bool setNugetPurl { get; set; }
         public string DependencyExcludeFilter { get; set; }
-
+        public EvidenceLicenseTextCollectionMode evidenceCollectionMode { get; set; } = EvidenceLicenseTextCollectionMode.None;
     }
 }
