@@ -16,6 +16,8 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using CycloneDX.Models;
 
 namespace CycloneDX.Services {
@@ -28,7 +30,13 @@ namespace CycloneDX.Services {
         {
             if (json)
             {
-                return Json.Serializer.Serialize(bom);
+                var serializationOptions = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    // Allows for unescaped characters in JSON
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                };
+                return JsonSerializer.Serialize(bom, serializationOptions);
             }
             else
             {
