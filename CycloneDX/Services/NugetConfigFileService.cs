@@ -50,6 +50,7 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<HashSet<NugetInputModel>> GetPackageSourcesAsync(string configFilePath)
         {
+            Console.WriteLine( $"Reading NuGet config file: {configFilePath}");
             var sources = new HashSet<NugetInputModel>();
             using (StreamReader fileReader = _fileSystem.File.OpenText(configFilePath))
             {
@@ -69,7 +70,6 @@ namespace CycloneDX.Services
                             newSource.nugetFeedName = reader["key"];
 
                             // TODO - user, password
-
                             await Console.Out.WriteLineAsync($"\tFound Package Source:{newSource.nugetFeedName}");
                             sources.Add(newSource);                            
                         }
@@ -86,6 +86,7 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<HashSet<NugetInputModel>> RecursivelyGetPackageSourcesAsync(string directoryPath)
         {
+            Console.WriteLine($"Scanning for nuget.config files in {directoryPath}");
             var sources = new HashSet<NugetInputModel>();
             var configFiles = _fileDiscoveryService.GetNugetConfigFiles(directoryPath);
 
