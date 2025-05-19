@@ -134,7 +134,7 @@ namespace CycloneDX.Services
             }
 
             // License is not on GitHub, we need to abort
-            if (!match.Success) return null;
+            if (match == null || !match.Success) { return null; }
             var repositoryId = match.Groups["repositoryId"].Value;
             string refSpec = null;
 
