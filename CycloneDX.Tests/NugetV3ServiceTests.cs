@@ -48,7 +48,7 @@ namespace CycloneDX.Tests
             };
             var mockGithubService = new Mock<IGithubService>();
             var nugetService = new NugetV3Service(null, mockFileSystem, cachePaths, mockGithubService.Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var nuspecFilename = nugetService.GetCachedNuspecFilename("TestPackage", "1.2.3");
 
@@ -73,7 +73,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -115,7 +115,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", rawVersion, Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -145,7 +145,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", $"{rawVersion}", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -181,7 +181,8 @@ namespace CycloneDX.Tests
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
                 new NullLogger(),
-                true);
+                true,
+                EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -251,7 +252,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -266,7 +267,7 @@ namespace CycloneDX.Tests
                 new MockFileSystem(),
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var packageName = "Newtonsoft.Json";
             var packageVersion = "13.0.1";
@@ -285,7 +286,7 @@ namespace CycloneDX.Tests
                 new MockFileSystem(),
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
-                new NullLogger(), true);
+                new NullLogger(), true, EvidenceLicenseTextCollectionMode.None);
 
             var packageName = "Newtonsoft.Json";
             var packageVersion = "13.0.1";
@@ -319,7 +320,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 mockGitHubService.Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -350,7 +351,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 mockGitHubService.Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -381,7 +382,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 mockGitHubService.Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -412,7 +413,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 mockGitHubService.Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -444,7 +445,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 mockGitHubService.Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -474,7 +475,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 mockGitHubService.Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -503,7 +504,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 mockGitHubService.Object,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -532,13 +533,270 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 null,
-                new NullLogger(), false);
+                new NullLogger(), false, EvidenceLicenseTextCollectionMode.None);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Single(component.Licenses);
             Assert.Equal("https://not-licence.url", component.Licenses.First().License.Url);
             Assert.Equal("Unknown - See URL", component.Licenses.First().License.Name);
+        }
+
+        [Theory]
+        [InlineData("LICENSE.txt", true)]
+        [InlineData("LICENCE.txt", true)]
+        [InlineData("LICENCE", true)]
+        [InlineData("LICENSE", true)]
+        [InlineData("LICENSE.md", true)]
+        [InlineData("LICENCE.md", true)]
+        [InlineData("LIC.md", true)]
+        [InlineData("LICENSE.txt.txt", true)]
+        [InlineData("LIC.md", false)]
+        public async Task GetComponent_CollectLicenseText_GetsTextAndSettingsCorrectly(string licenseFileName, bool isValidName)
+        {
+            var hintFileName = isValidName ? licenseFileName : "LICENSE.txt";
+            var nuspecFileContents = $@"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">{hintFileName}</license>
+                </metadata>
+                </package>";
+            var licenseFileContents = @"this is license text";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path($@"c:\nugetcache\testpackage\1.0.0\{licenseFileName}"), new MockFileData(licenseFileContents) },
+            });
+
+            var nugetService = new NugetV3Service(null,
+            mockFileSystem,
+            new List<string> { XFS.Path(@"c:\nugetcache") },
+            new Mock<IGithubService>().Object,
+            new NullLogger(), false,
+            evidenceCollectionMode: EvidenceLicenseTextCollectionMode.Unknown);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            if (isValidName)
+            {
+                Assert.NotNull(component.Licenses);
+                Assert.Single(component.Licenses);
+                Assert.NotNull(component.Licenses.First().License.Text);
+                //can be only base64 according to cyclonedx.org doc
+                Assert.Equal("base64", component.Licenses.First().License.Text.Encoding);
+                Assert.Equal("text/plain", component.Licenses.First().License.Text.ContentType);
+                var actualName = component.Licenses.First().License.Name;
+                Assert.True(actualName == $"License detected in: {licenseFileName}" || actualName == "Unknown - See URL");
+                var actualText = Encoding.UTF8.GetString(Convert.FromBase64String(component.Licenses.First().License.Text.Content));
+                Assert.Equal(licenseFileContents, actualText);
+            } else {
+                // file based license and invalid name? then no license expected
+                Assert.Null(component.Licenses);
+            }
+        }
+
+        [Theory]
+        [InlineData(EvidenceLicenseTextCollectionMode.None)]
+        [InlineData(EvidenceLicenseTextCollectionMode.Unknown)]
+        [InlineData(EvidenceLicenseTextCollectionMode.All)]
+
+        public async Task GetComponent_CollectLicenseText_LicenseNameFallsBackToUrl(EvidenceLicenseTextCollectionMode evidenceCollectionMode)
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE.txt</license>
+                </metadata>
+                </package>";
+            var licenseFileContents = @"this is license text";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path($@"c:\nugetcache\testpackage\1.0.0\{"LICENSE.txt"}"), new MockFileData(licenseFileContents) },
+            });
+
+            var nugetService = new NugetV3Service(null,
+            mockFileSystem,
+            new List<string> { XFS.Path(@"c:\nugetcache") },
+            null,
+            new NullLogger(), false,
+            evidenceCollectionMode);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            switch (evidenceCollectionMode)
+            {
+                case EvidenceLicenseTextCollectionMode.None:
+                    Assert.Null(component.Evidence);
+                    Assert.Null(component.Licenses.First().License.Text);
+                    Assert.Equal("Unknown - See URL", component.Licenses.First().License.Name);
+                    break;
+                case EvidenceLicenseTextCollectionMode.Unknown:
+                    Assert.NotNull(component.Licenses);
+                    Assert.Single(component.Licenses);
+                    Assert.NotNull(component.Licenses.First().License.Text);
+                    Assert.Equal("base64", component.Licenses.First().License.Text.Encoding);
+                    Assert.Equal("text/plain", component.Licenses.First().License.Text.ContentType);
+                    Assert.Equal("Unknown - See URL", component.Licenses.First().License.Name);
+                    var actualText = Encoding.UTF8.GetString(Convert.FromBase64String(component.Licenses.First().License.Text.Content));
+                    Assert.Equal(licenseFileContents, actualText);
+                    break;
+                case EvidenceLicenseTextCollectionMode.All:
+                    Assert.NotNull(component.Licenses);
+                    Assert.Single(component.Licenses);
+                    //id set, but not the text
+                    Assert.Null(component.Licenses.First().License.Id);
+                    Assert.NotNull(component.Licenses.First().License.Name);
+                    Assert.Null(component.Licenses.First().License.Text);
+                    // now check the evidence
+                    Assert.NotNull(component.Evidence);
+                    Assert.NotNull(component.Evidence.Licenses);
+                    Assert.Single(component.Evidence.Licenses);
+                    Assert.NotNull(component.Evidence.Licenses.First().License.Text);
+                    Assert.Equal("License detected in: LICENSE.txt", component.Evidence.Licenses.First().License.Name);
+                    Assert.Equal("base64", component.Evidence.Licenses.First().License.Text.Encoding);
+                    Assert.Equal("text/plain", component.Evidence.Licenses.First().License.Text.ContentType);
+                    actualText = Encoding.UTF8.GetString(Convert.FromBase64String(component.Evidence.Licenses.First().License.Text.Content));
+                    Assert.Equal(licenseFileContents, actualText);
+                    break;
+                default:
+                    Assert.Fail("Unexpected evidence collection mode");
+                    break;
+            }
+        }
+
+        [Theory]
+        [InlineData(EvidenceLicenseTextCollectionMode.None)]
+        [InlineData(EvidenceLicenseTextCollectionMode.Unknown)]
+        [InlineData(EvidenceLicenseTextCollectionMode.All)]
+        public async Task GetComponent_CollectLicenseText_WhenLicenseIdCanBeResolved(EvidenceLicenseTextCollectionMode evidenceCollectionMode)
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <licenseUrl>https://not-licence.url</licenseUrl>
+                    <repository url=""https://licence.url"" />
+                </metadata>
+                </package>";
+            var licenseFileContents = @"this is license text";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE.txt"), new MockFileData(licenseFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+            mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false,
+                evidenceCollectionMode);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            switch (evidenceCollectionMode)
+            {
+                case EvidenceLicenseTextCollectionMode.None:
+                    Assert.Null(component.Evidence);
+                    Assert.Null(component.Licenses.First().License.Text);
+                    Assert.Null(component.Licenses.First().License.Name);
+                    break;
+                case EvidenceLicenseTextCollectionMode.Unknown:
+                    Assert.Null(component.Evidence);
+                    Assert.Null(component.Licenses.First().License.Text);
+                    Assert.Null(component.Licenses.First().License.Name);
+                    break;
+                case EvidenceLicenseTextCollectionMode.All:
+                    Assert.NotNull(component.Licenses);
+                    Assert.Single(component.Licenses);
+                    //id set, but not the text
+                    Assert.NotNull(component.Licenses.First().License.Id);
+                    Assert.Null(component.Licenses.First().License.Name);
+                    Assert.Null(component.Licenses.First().License.Text);
+                    // now check the evidence
+                    Assert.NotNull(component.Evidence);
+                    Assert.NotNull(component.Evidence.Licenses);
+                    Assert.Single(component.Evidence.Licenses);
+                    Assert.NotNull(component.Evidence.Licenses.First().License.Text);
+                    Assert.Equal("License detected in: LICENSE.txt", component.Evidence.Licenses.First().License.Name);
+                    Assert.Equal("base64", component.Evidence.Licenses.First().License.Text.Encoding);
+                    Assert.Equal("text/plain", component.Evidence.Licenses.First().License.Text.ContentType);
+                    var actualText = Encoding.UTF8.GetString(Convert.FromBase64String(component.Evidence.Licenses.First().License.Text.Content));
+                    Assert.Equal(licenseFileContents, actualText);
+                    break;
+                default:
+                    Assert.Fail("Unexpected evidence collection mode");
+                    break;
+            }
+        }
+
+        [Theory]
+        [InlineData("Apache-2.0", EvidenceLicenseTextCollectionMode.None)]
+        [InlineData("Apache-2.0 OR MPL-2.0", EvidenceLicenseTextCollectionMode.None)]
+        [InlineData("Apache-2.0", EvidenceLicenseTextCollectionMode.Unknown)]
+        [InlineData("Apache-2.0 OR MPL-2.0", EvidenceLicenseTextCollectionMode.Unknown)]
+        [InlineData("Apache-2.0", EvidenceLicenseTextCollectionMode.All)]
+        [InlineData("Apache-2.0 OR MPL-2.0", EvidenceLicenseTextCollectionMode.All)]
+        public async Task GetComponent_CollectLicenseText_GetsTextWhenLicenseExpressionSet(string expression, EvidenceLicenseTextCollectionMode evidenceCollectionMode)
+        {
+            ///"License detected in"
+            var nuspecFileContents = $@"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""expression"">{expression}</license>
+                </metadata>
+                </package>";
+            var licenseFileContents = @"this is license text";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE.txt"), new MockFileData(licenseFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false,
+                evidenceCollectionMode);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            switch (evidenceCollectionMode)
+            {
+                case EvidenceLicenseTextCollectionMode.None:
+                    Assert.Null(component.Evidence);
+                    Assert.Null(component.Licenses.First().License.Text);
+                    Assert.Null(component.Licenses.First().License.Name);
+                    break;
+                case EvidenceLicenseTextCollectionMode.Unknown:
+                    Assert.Null(component.Evidence);
+                    Assert.Null(component.Licenses.First().License.Text);
+                    Assert.Null(component.Licenses.First().License.Name);
+                    break;
+                case EvidenceLicenseTextCollectionMode.All:
+                    Assert.NotNull(component.Evidence.Licenses);
+                    Assert.Single(component.Evidence.Licenses);
+                    Assert.NotNull(component.Evidence.Licenses.First().License.Text);
+                    Assert.Equal("License detected in: LICENSE.txt", component.Evidence.Licenses.First().License.Name);
+                    Assert.Equal("base64", component.Evidence.Licenses.First().License.Text.Encoding);
+                    Assert.Equal("text/plain", component.Evidence.Licenses.First().License.Text.ContentType);
+                    var actualText = Encoding.UTF8.GetString(Convert.FromBase64String(component.Evidence.Licenses.First().License.Text.Content));
+                    Assert.Equal(licenseFileContents, actualText);
+                    break;
+                default:
+                    Assert.Fail("Unexpected evidence collection mode");
+                    break;
+            }
         }
     }
 }
