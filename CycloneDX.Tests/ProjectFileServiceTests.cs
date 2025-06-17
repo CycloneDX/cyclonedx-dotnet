@@ -79,6 +79,9 @@ namespace CycloneDX.Tests
             mockDotnetUtilsService
                 .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+                 .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                 .Returns(new DotnetUtilsResult<string>() { Result = "" });
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
@@ -114,6 +117,9 @@ namespace CycloneDX.Tests
             mockDotnetUtilsService
                 .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new ApplicationException("Restore should not be called"));
+            mockDotnetUtilsService
+                .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult<string>() { Result = "" });
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
@@ -150,6 +156,9 @@ namespace CycloneDX.Tests
             mockDotnetUtilsService
                 .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+                .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult<string>() { Result = "" });
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
@@ -188,6 +197,9 @@ namespace CycloneDX.Tests
             mockDotnetUtilsService
                 .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+                .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult<string>() { Result = ""});
             var mockPackageFileService = new Mock<IPackagesFileService>();
             mockPackageFileService
                 .Setup(s => s.GetDotnetDependencysAsync(It.IsAny<string>()))
@@ -228,6 +240,9 @@ namespace CycloneDX.Tests
             mockDotnetUtilsService
                 .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+             .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+             .Returns(new DotnetUtilsResult<string>() { Result = "" });
             var mockPackageFileService = new Mock<IPackagesFileService>();
             mockPackageFileService
                 .Setup(s => s.GetDotnetDependencysAsync(It.IsAny<string>()))

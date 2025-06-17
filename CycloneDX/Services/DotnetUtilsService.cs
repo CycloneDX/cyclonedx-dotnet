@@ -15,6 +15,8 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
@@ -152,5 +154,47 @@ namespace CycloneDX.Services
                 };
             }
         }
+
+        public DotnetUtilsResult<string> GetAssetsPath(string projectFilePath)
+        {
+            if (string.IsNullOrWhiteSpace(projectFilePath))
+            {
+                return new DotnetUtilsResult<string>
+                {
+                    ErrorMessage = "Project file path is null or empty"
+                };
+            }
+
+            var command = $"msbuild \"{projectFilePath}\" -nologo -v:quiet -getProperty:ProjectAssetsFile";
+            var commandResult = _dotnetCommandService.Run(command);
+
+            if (!commandResult.Success)
+            {
+                return new DotnetUtilsResult<string>
+                {
+                    ErrorMessage = commandResult.StdErr ?? commandResult.StdOut
+                };
+            }
+
+            var outputLines = commandResult.StdOut
+                   .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                   .Select(l => l.Trim())
+                   .Where(l => !string.IsNullOrWhiteSpace(l))
+                   .ToList();
+
+            if (outputLines.Count == 1)
+            {
+                return new DotnetUtilsResult<string>
+                {
+                    Result = outputLines[0]
+                };
+            }
+
+            return new DotnetUtilsResult<string>
+            {
+                ErrorMessage = $"Unexpected output when evaluating ProjectAssetsFile: {commandResult.StdOut}"
+            };
+        }
+
     }
 }
