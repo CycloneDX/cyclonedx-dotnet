@@ -27,6 +27,7 @@ using CycloneDX.Models;
 using CycloneDX.Interfaces;
 using CycloneDX.Services;
 using static CycloneDX.Models.Component;
+using Json.Schema;
 
 namespace CycloneDX
 {
@@ -85,6 +86,7 @@ namespace CycloneDX
             string setVersion = options.setVersion;
             Classification setType = options.setType;
             bool setNugetPurl = options.setNugetPurl;
+            Models.OutputFileFormat outputFormat = options.outputFormat;
 
 
             Console.WriteLine();
@@ -431,7 +433,8 @@ namespace CycloneDX
 
             LastGeneratedBom = bom;
 
-            var bomContents = BomService.CreateDocument(bom, json);
+            var (format, filename) = DetermineOutputFileFormatAndFilename(outputFormat, outputFilename, json);
+            var bomContents = BomService.CreateDocument(bom, format);
 
             // check if the output directory exists and create it if needed
             var bomPath = this.fileSystem.Path.GetFullPath(outputDirectory);
@@ -441,17 +444,63 @@ namespace CycloneDX
             }
 
             // write the BOM to disk
-            var bomFilename = outputFilename;
-            if (string.IsNullOrEmpty(bomFilename))
-            {
-                bomFilename = json ? "bom.json" : "bom.xml";
-            }
+            var bomFilename = filename;
+
             var bomFilePath = this.fileSystem.Path.Combine(bomPath, bomFilename);
             Console.WriteLine("Writing to: " + bomFilePath);
             this.fileSystem.File.WriteAllText(bomFilePath, bomContents);
 
             return 0;
         }
+
+        (OutputFileFormat format, string outputFileName) DetermineOutputFileFormatAndFilename(
+            OutputFileFormat selectedFormat,
+            string userProvidedFilename,
+            bool legacyJsonFlag
+        )
+        {
+            OutputFileFormat resolvedFormat = selectedFormat;
+            string filename = userProvidedFilename ?? string.Empty;
+
+            // Legacy --json support
+            if (legacyJsonFlag && selectedFormat == OutputFileFormat.Auto)
+            {
+                resolvedFormat = OutputFileFormat.Json;
+            }
+
+            // Auto deduction based on filename
+            if (resolvedFormat == OutputFileFormat.Auto)
+            {
+                if (!string.IsNullOrEmpty(filename))
+                {
+                    if (filename.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+                        resolvedFormat = OutputFileFormat.Json;
+                    else if (filename.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
+                        resolvedFormat = OutputFileFormat.Xml;
+                    else
+                        resolvedFormat = OutputFileFormat.Xml; // Default fallback
+                }
+                else
+                {
+                    resolvedFormat = OutputFileFormat.Xml;
+                }
+            }
+
+            // Filename fallback
+            if (string.IsNullOrEmpty(filename))
+            {
+                filename = resolvedFormat switch
+                {
+                    OutputFileFormat.Json or OutputFileFormat.UnsafeJson => "bom.json",
+                    _ => "bom.xml"
+                };
+            }
+
+            return (resolvedFormat, filename);
+        }
+
+
+
 
         private static HashSet<DotnetDependency> RemoveProjectReferencesAndMakeTheirDependenciesDirect(HashSet<DotnetDependency> packages)
         {

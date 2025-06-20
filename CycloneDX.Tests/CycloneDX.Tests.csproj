@@ -66,6 +66,9 @@
     <None Update="FunctionalTests\Issue826alt-ProjectFileDoesntExistWithAssetsFile\project2csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="FunctionalTests\RelaxedJsonEscaping\project1csproj.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\p1.project.assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
