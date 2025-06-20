@@ -69,7 +69,6 @@ Options:
   -rt, --runtime <runtime>                                                     The runtime to use. If not defined, all will be aggregated.
   -o, --output <output>                                                        The directory to write the BOM
   -fn, --filename <filename>                                                   Optionally provide a filename for the BOM (default: bom.xml or bom.json)
-  -j, --json                                                                   Produce a JSON BOM instead of XML
   -ef, --exclude-filter <exclude-filter>                                       A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2'. Transitive dependencies will also be removed.
   -ed, --exclude-dev                                                           Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)
   -t, --exclude-test-projects                                                  Exclude test projects from the BOM
@@ -93,7 +92,9 @@ Options:
   -sv, --set-version <set-version>                                             Override the default BOM metadata component version (defaults to 0.0.0).
   -st, --set-type   <Application|Container|Data|Device|Device_Driver|          Override the default BOM metadata component type (defaults to application). [default: Application]
                      File|Firmware|Framework|Library|
-                     Machine_Learning_Model|Null|Operating_System|Platform>                                                                
+                     Machine_Learning_Model|Null|Operating_System|Platform>
+  -ef, --exclude-filter <exclude-filter>                                       A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2'. Transitive dependencies will also be removed.
+  -F, --output-format <Auto|Json|UnsafeJson|Xml>                               Select the BOM output format: auto (default), xml, json, or unsafeJson (relaxed escaping). [default: Auto]                            
   --set-nuget-purl                                                             Override the default BOM metadata component bom ref and PURL as NuGet package.
   --version                                                                    Show version information
   -?, -h, --help                                                               Show help and usage information
