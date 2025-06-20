@@ -89,7 +89,7 @@ namespace CycloneDX.Tests.FunctionalTests
         [MemberData(nameof(FormatResolutionTestData))]
         public async Task FormatAndFilenameResolution(
             OutputFileFormat inputFormat,
-            string? inputFilename,
+            string inputFilename,
             bool legacyJsonFlag,
             OutputFileFormat expectedFormat,
             string expectedOutputFilename)
