@@ -19,10 +19,7 @@
 # branch.
 name: Release
 permissions:
-  contents: read
-  pull-requests: write
-  packages: write
-  actions: write
+  contents: write
 
 on:
   workflow_dispatch
