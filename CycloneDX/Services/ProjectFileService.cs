@@ -209,7 +209,7 @@ namespace CycloneDX.Services
                 }
             }
 
-            var assetsFilename = _fileSystem.Path.Combine(GetProjectProperty(projectFilePath, baseIntermediateOutputPath), "project.assets.json");
+            var assetsFilename = GetProjectAssetsFilePath(projectFilePath, baseIntermediateOutputPath);
             if (!_fileSystem.File.Exists(assetsFilename))
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
@@ -230,6 +230,21 @@ namespace CycloneDX.Services
                 }
             }
             return packages;
+        }
+
+        private string GetProjectAssetsFilePath(string projectFilePath, string baseIntermediateOutputPath)
+        {            
+            if (string.IsNullOrEmpty(baseIntermediateOutputPath ))
+            {
+                var result = _dotnetUtilsService.GetAssetsPath(projectFilePath);
+                if(result.Success && _fileSystem.File.Exists(result.Result))
+                {
+                    Console.WriteLine($"  Found Assetsfile under {result.Result}");
+                    return result.Result;
+                }                
+                
+            }
+            return _fileSystem.Path.Combine(GetProjectProperty(projectFilePath, baseIntermediateOutputPath), "project.assets.json");                        
         }
 
         /// <summary>
