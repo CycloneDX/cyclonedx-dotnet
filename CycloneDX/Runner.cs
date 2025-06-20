@@ -455,7 +455,7 @@ namespace CycloneDX
 
         (OutputFileFormat format, string outputFileName) DetermineOutputFileFormatAndFilename(
             OutputFileFormat selectedFormat,
-            string? userProvidedFilename,
+            string userProvidedFilename,
             bool legacyJsonFlag
         )
         {
