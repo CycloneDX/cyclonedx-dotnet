@@ -81,7 +81,7 @@ namespace CycloneDX.Services
             return testProjectPropertyGroup != null;
         }
 
-        private (string name, string version) GetAssemblyNameAndVersion(string projectFilePath)
+        internal (string name, string version) GetAssemblyNameAndVersion(string projectFilePath)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
