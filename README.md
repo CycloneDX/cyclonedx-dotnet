@@ -169,7 +169,7 @@ access token and provide this, and your username, when running CycloneDX.
 
 To generate a token go to
 [Personal access tokens](https://github.com/settings/tokens) under
-`Settings / Developer setings`. From there select the option to
+`Settings / Developer settings`. From there, select the option to
 [Generate new token](https://github.com/settings/tokens/new). No special token
 permissions are required.
 
