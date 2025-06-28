@@ -68,17 +68,6 @@ namespace CycloneDX.Tests
             var dotnetMock = new Mock<IDotnetUtilsService>();
             var service = new ProjectFileService(mockFileSystem, dotnetMock.Object, null, null);
 
-            string constructedPath;
-            if (string.IsNullOrEmpty(baseOutputPath))
-            {
-                constructedPath = Path.Combine(Path.GetDirectoryName(projectPath), "obj", "project.assets.json");
-            }
-            else
-            {
-                string projectName = Path.GetFileNameWithoutExtension(projectPath);
-                constructedPath = Path.Combine(baseOutputPath, "obj", projectName, "project.assets.json");
-            }
-
             dotnetMock.Setup(d => d.GetAssetsPath(projectPath))
                 .Returns(new DotnetUtilsResult<string>
                 {
