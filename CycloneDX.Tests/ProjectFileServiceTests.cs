@@ -28,6 +28,7 @@ using CycloneDX.Services;
 using System.IO.Abstractions;
 using System.Linq;
 using System.IO;
+using System.Xml.Schema;
 
 namespace CycloneDX.Tests
 {
@@ -42,7 +43,6 @@ namespace CycloneDX.Tests
                 new DotnetUtilsService(fileSystem, dotnetCommandService),
                 new PackagesFileService(fileSystem),
                 new ProjectAssetsFileService(fileSystem, () => new AssetFileReader()));
-
         }
 
         [Theory]
@@ -55,12 +55,15 @@ namespace CycloneDX.Tests
             bool dotnetServiceShouldBeUsed)
         {
 
+            baseOutputPath = XFS.Path(baseOutputPath);
+            assetsPath = XFS.Path(assetsPath);
+
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(assetsPath), "" }
                 });
 
-            string projectPath = @"C:\Projects\Foo\Foo.csproj";
+            string projectPath = XFS.Path(@"C:\Projects\Foo\Foo.csproj");
             // Arrange
             var dotnetMock = new Mock<IDotnetUtilsService>();
             var service = new ProjectFileService(mockFileSystem, dotnetMock.Object, null, null);
@@ -76,7 +79,6 @@ namespace CycloneDX.Tests
                 constructedPath = Path.Combine(baseOutputPath, "obj", projectName, "project.assets.json");
             }
 
-
             dotnetMock.Setup(d => d.GetAssetsPath(projectPath))
                 .Returns(new DotnetUtilsResult<string>
                 {
@@ -88,9 +90,7 @@ namespace CycloneDX.Tests
             var result = service.GetProjectAssetsFilePath(projectPath, baseOutputPath);
 
             // Assert
-
             Assert.Equal(assetsPath, result);
-
             dotnetMock.Verify(d => d.GetAssetsPath(It.IsAny<string>()), dotnetServiceShouldBeUsed ? Times.Once : Times.Never);            
         }
 
