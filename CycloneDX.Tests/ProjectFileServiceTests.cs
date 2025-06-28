@@ -27,6 +27,7 @@ using CycloneDX.Models;
 using CycloneDX.Services;
 using System.IO.Abstractions;
 using System.Linq;
+using System.IO;
 
 namespace CycloneDX.Tests
 {
@@ -45,12 +46,52 @@ namespace CycloneDX.Tests
         }
 
         [Theory]
-        [InlineData(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.csproj", "", @"C:\github\cyclonedx-dotnet\Core\obj")]
-        [InlineData(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.csproj", @"C:\github\cyclonedx-dotnet\artifacts", @"C:\github\cyclonedx-dotnet\artifacts\obj\CycloneDX")]
-        public void GetPropertyUseProjectFileName(string projectFilePath, string baseIntermediateOutputPath, string expected)
+        [InlineData("", @"C:\Projects\Foo\obj\project.assets.json", false)] // expected file exists
+        [InlineData("", @"C:\Projects\artifacts\obj\Foo\project.assets.json", true)] // expected missing, service finds it
+        [InlineData(@"C:\build", @"C:\build\obj\Foo\project.assets.json", false)] // using baseIntermediateOutputPath        
+        public void GetProjectAssetsFilePath_CoversAllScenarios(
+            string baseOutputPath, 
+            string assetsPath,
+            bool dotnetServiceShouldBeUsed)
         {
-          string outputPath = ProjectFileService.GetProjectProperty(XFS.Path(projectFilePath), XFS.Path(baseIntermediateOutputPath));
-          Assert.Equal(XFS.Path(expected), outputPath);
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+                {
+                    { XFS.Path(assetsPath), "" }
+                });
+
+            string projectPath = @"C:\Projects\Foo\Foo.csproj";
+            // Arrange
+            var dotnetMock = new Mock<IDotnetUtilsService>();
+            var service = new ProjectFileService(mockFileSystem, dotnetMock.Object, null, null);
+
+            string constructedPath;
+            if (string.IsNullOrEmpty(baseOutputPath))
+            {
+                constructedPath = Path.Combine(Path.GetDirectoryName(projectPath), "obj", "project.assets.json");
+            }
+            else
+            {
+                string projectName = Path.GetFileNameWithoutExtension(projectPath);
+                constructedPath = Path.Combine(baseOutputPath, "obj", projectName, "project.assets.json");
+            }
+
+
+            dotnetMock.Setup(d => d.GetAssetsPath(projectPath))
+                .Returns(new DotnetUtilsResult<string>
+                {
+                    ErrorMessage = null,
+                    Result = assetsPath
+                });            
+
+            // Act
+            var result = service.GetProjectAssetsFilePath(projectPath, baseOutputPath);
+
+            // Assert
+
+            Assert.Equal(assetsPath, result);
+
+            dotnetMock.Verify(d => d.GetAssetsPath(It.IsAny<string>()), dotnetServiceShouldBeUsed ? Times.Once : Times.Never);            
         }
 
         [Fact]        
