@@ -68,6 +68,19 @@ namespace CycloneDX.Tests.FunctionalTests
             return await Test(options, nugetService, mockFileSystem, expectedExitCode).ConfigureAwait(false);
         }
 
+        public static async Task<Bom> TestWithProjectFile(string assetsJson, string projectFileContents, RunOptions options, INugetServiceFactory nugetService = null, ExitCode expectedExitCode = ExitCode.OK)
+        {
+            nugetService ??= CreateMockNugetServiceFactory();
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { MockUnixSupport.Path("c:/ProjectPath/Project.csproj"), new MockFileData(projectFileContents) },
+                { MockUnixSupport.Path("c:/ProjectPath/obj/project.assets.json"), new MockFileData(assetsJson) }
+            });
+
+            return await Test(options, nugetService, mockFileSystem, expectedExitCode).ConfigureAwait(false);
+        }
+
 
         public static async Task<Bom> Test(RunOptions options, MockFileSystem mockFileSystem,
             ExitCode expectedExitCode = ExitCode.OK) => await Test(options, CreateMockNugetServiceFactory(),
