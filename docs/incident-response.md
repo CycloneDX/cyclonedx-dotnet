@@ -42,7 +42,7 @@ Tasks that should be completed before moving on to mitigation if any vulnerabili
 	- [ ] Move on with `Phase 2 - Mitigation`
 
 
-> [!INFO]
+> 📘 **Info:**  
 > Not sure if the report is actionable? Use these criteria to guide your decision:
 >
 > * **Can it be reproduced based on the report?** If not, and the reporter won’t clarify, it’s likely not actionable.
