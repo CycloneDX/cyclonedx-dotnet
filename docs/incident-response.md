@@ -54,7 +54,7 @@ Tasks that should be completed before moving on to mitigation if any vulnerabili
 >
 ### 🧾 Record
 
-> [!INFO]
+> 📘 **Info:**  
 > Enter your answers directly into the list below
 
 - Is there a direct risk of [CIA](https://www.energy.gov/femp/operational-technology-cybersecurity-energy-systems#cia) being broken? `Yes|No`
@@ -100,7 +100,7 @@ _Things that must be addressed before ending mitigation phase_
 
 ### 🧾 Record
 
-> [!INFO]
+> 📘 **Info:**  
 > Enter your answers directly into the list below
 
 - The vulnerability was first mitigated on: `YYYY-MM-DD`
@@ -130,12 +130,6 @@ Now that the vulnerability is mitigated, this phase is focused on assessing the 
 ### ✅ Tasks
 _Things that should be completed before moving on_
 
-Scoping is the process of interrogating our data to determine if a vulnerability was used and/or exploited, and what the impact was. Some useful prompts are:
-
-> What is the goal of the scoping work? Writing down specific goals can help reframe the work that needs done.
-> How can you identify expected vs exploitative use?
-> Are you able to find known use of the vulnerability in the data? Perhaps from the security researcher or from internal validation of the vulnerability.
-
 - [ ] Check package download stats (e.g. NuGet) for affected versions.
 - [ ] Confirm if the vulnerability could be exploited under normal usage.
 - [ ] Search for signs of public exploitation (e.g. GitHub issues, tweets, blog posts).
@@ -148,7 +142,7 @@ Scoping is the process of interrogating our data to determine if a vulnerability
 
 ### 🧾 Record
 
-> [!INFO]
+> 📘 **Info:**  
 > Enter your answers directly into the list below
 
 - Estimated reach: `X downloads`    
@@ -195,6 +189,9 @@ If `Yes`, complete the following to ensure users are informed and have everythin
 
 ### 🧾 Record
 
+> 📘 **Info:**  
+> Enter your answers directly into the list below
+
 - When was the advisory published? `YYYY-MM-DD:HH-MM-SSZ`    
 - Link to GitHub Security Advisory: `<URL>`    
 - Link to mitigation PR(s): `<URL>`    
@@ -217,7 +214,9 @@ This phase is for reviewing the effectiveness of your response. Were the right s
 * [ ] File issues or tasks for process or tooling updates.
 * [ ] Update this document or templates to reflect changes.
 ### 🧾 Record
-_What did you learn during this phase?_
+
+> 📘 **Info:**  
+> Enter your answers directly into the list below
 
 - What went well?    
 - What could be improved?    
