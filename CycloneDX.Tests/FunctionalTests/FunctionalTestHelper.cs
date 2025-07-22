@@ -15,7 +15,7 @@ using static CycloneDX.Models.Component;
 
 namespace CycloneDX.Tests.FunctionalTests
 {
-    public static class FunctionalTestHelper
+    internal static class FunctionalTestHelper
     {
         private static INugetServiceFactory CreateMockNugetServiceFactory()
         {
@@ -30,7 +30,7 @@ namespace CycloneDX.Tests.FunctionalTests
                         Type = Classification.Library,
                         BomRef = $"pkg:nuget/{dep.Name}@{dep.Version}",
                         Scope = dep.Scope
-                    })) ;
+                    }));
 
             var nugetService = mockNugetService.Object;
 
@@ -46,7 +46,8 @@ namespace CycloneDX.Tests.FunctionalTests
         }
 
 
-        public static async Task<Bom> Test(string assetsJson, RunOptions options) => await Test(assetsJson, options, null);
+        public static async Task<Bom> Test(string assetsJson, RunOptions options,
+            ExitCode expectedExitCode = ExitCode.OK) => await Test(assetsJson, options, null, expectedExitCode);
 
         /// <summary>
         /// Trying to build SBOM from provided parameters and validated the result file
@@ -54,7 +55,7 @@ namespace CycloneDX.Tests.FunctionalTests
         /// <param name="assetsJson"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static async Task<Bom> Test(string assetsJson, RunOptions options, INugetServiceFactory nugetService)
+        public static async Task<Bom> Test(string assetsJson, RunOptions options, INugetServiceFactory nugetService, ExitCode expectedExitCode = ExitCode.OK)
         {
             nugetService ??= CreateMockNugetServiceFactory();
 
@@ -64,42 +65,68 @@ namespace CycloneDX.Tests.FunctionalTests
                 { MockUnixSupport.Path("c:/ProjectPath/obj/project.assets.json"), new MockFileData(assetsJson) }
             });
 
-            return await Test(options, nugetService, mockFileSystem).ConfigureAwait(false);
+            return await Test(options, nugetService, mockFileSystem, expectedExitCode).ConfigureAwait(false);
         }
 
 
-        public static async Task<Bom> Test(RunOptions options, MockFileSystem mockFileSystem) => await Test(options, CreateMockNugetServiceFactory(), mockFileSystem);
- 
+        public static async Task<Bom> Test(RunOptions options, MockFileSystem mockFileSystem,
+            ExitCode expectedExitCode = ExitCode.OK) => await Test(options, CreateMockNugetServiceFactory(),
+            mockFileSystem, expectedExitCode);
 
-        public static async Task<Bom> Test(RunOptions options, INugetServiceFactory nugetService, MockFileSystem mockFileSystem)
+
+        public static async Task<Bom> Test(RunOptions options, INugetServiceFactory nugetService, MockFileSystem mockFileSystem, ExitCode expectedExitCode = ExitCode.OK)
         {
             options.enableGithubLicenses = true;
             options.outputDirectory ??= "/bom/";
-            options.outputFilename ??= options.json ? "bom.json" : "bom.xml";
             options.SolutionOrProjectFile ??= MockUnixSupport.Path("c:/ProjectPath/Project.csproj");
             options.disablePackageRestore = true;
 
             Runner runner = new Runner(mockFileSystem, null, null, null, null, null, null, nugetService);
             int exitCode = await runner.HandleCommandAsync(options);
 
-            Assert.Equal((int)ExitCode.OK, exitCode);
+            Assert.Equal((int)expectedExitCode, exitCode);
 
-            var expectedFileName = mockFileSystem.Path.Combine(options.outputDirectory, options.outputFilename);
+            if (expectedExitCode != ExitCode.OK)
+            {
+                return null;
+            }
+
+            var expectedFileNameXML = mockFileSystem.Path.Combine(options.outputDirectory, options.outputFilename ?? "bom.xml");
+            var expectedFileNameJSON = mockFileSystem.Path.Combine(options.outputDirectory, options.outputFilename ?? "bom.json");
+            string outputFilePath = string.IsNullOrEmpty(options.outputFilename)
+                                  ? null
+                                  : mockFileSystem.Path.Combine(options.outputDirectory, options.outputFilename);
+
+            if (string.IsNullOrEmpty(outputFilePath))
+            {
+                if (mockFileSystem.FileExists(MockUnixSupport.Path(expectedFileNameXML)))
+                {
+                    outputFilePath = expectedFileNameXML;
+                }
+                else if (mockFileSystem.FileExists(MockUnixSupport.Path(expectedFileNameJSON)))
+                {
+                    outputFilePath = expectedFileNameJSON;
+                }
+                else
+                {
+                    Assert.Fail("No BOM file generated. Expected either XML or JSON file.");
+                }
+            }
 
 
 
-            Assert.True(mockFileSystem.FileExists(MockUnixSupport.Path(expectedFileName)), "Bom file not generated");
-
-            var mockBomFile = mockFileSystem.GetFile(MockUnixSupport.Path(expectedFileName));
+            var mockBomFile = mockFileSystem.GetFile(MockUnixSupport.Path(outputFilePath));
             var mockBomFileStream = new MemoryStream(mockBomFile.Contents);
             ValidationResult validationResult;
-            if (options.json)
+            if ((options.json && options.outputFormat is not OutputFileFormat.Xml)||
+                options.outputFormat is OutputFileFormat.Json or OutputFileFormat.UnsafeJson ||
+                (options.outputFormat is OutputFileFormat.Auto && outputFilePath.EndsWith("json")))
             {
-                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_5).ConfigureAwait(false);
+                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_6).ConfigureAwait(false);
             }
             else
             {
-                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_5);
+                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_6);
             }
             Assert.True(validationResult.Valid);
 
@@ -112,7 +139,7 @@ namespace CycloneDX.Tests.FunctionalTests
                 "<OutputType>Exe</OutputType>\n    " +
                 "<PackageId>SampleProject</PackageId>\n    " +
             "</PropertyGroup>\n\n  " +
-            "<ItemGroup>\n    " +          
+            "<ItemGroup>\n    " +
             "</ItemGroup>\n" +
         "</Project>\n";
 
@@ -121,6 +148,14 @@ namespace CycloneDX.Tests.FunctionalTests
         public static void AssertHasDependencyWithChild(Bom bom, string dependencyBomRef, string childBomRef, string message)
         {
             Assert.True(bom.Dependencies.Any(dep => dep.Ref == dependencyBomRef && dep.Dependencies.Any(child => child.Ref == childBomRef)), message);
+        }
+
+
+        public static void AssertHasDependency(Bom bom, string dependencyBomRef)
+            => AssertHasDependency(bom, dependencyBomRef, null);
+        public static void AssertHasDependency(Bom bom, string dependencyBomRef, string message)
+        {
+            Assert.True(bom.Dependencies.Any(dep => dep.Ref == dependencyBomRef), message);
         }
     }
 }

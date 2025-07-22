@@ -24,15 +24,21 @@ namespace CycloneDX.Services {
     /// </summary>
     public static class BomService
     {
-        public static string CreateDocument(Bom bom, bool json)
+        public static string CreateDocument(Bom bom, OutputFileFormat format)
         {
-            if (json)
+            switch (format)
             {
-                return Json.Serializer.Serialize(bom);
-            }
-            else
-            {
-                return Xml.Serializer.Serialize(bom);
+                case OutputFileFormat.Json:
+                    CycloneDX.Json.Utils.UseUnsafeRelaxedJsonEscaping = false;
+                    return Json.Serializer.Serialize(bom);
+
+                case OutputFileFormat.UnsafeJson:
+                    CycloneDX.Json.Utils.UseUnsafeRelaxedJsonEscaping = true;                    
+                    return Json.Serializer.Serialize(bom);
+
+                case OutputFileFormat.Xml:
+                default:
+                    return Xml.Serializer.Serialize(bom);
             }
         }
     }

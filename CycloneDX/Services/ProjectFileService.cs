@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace CycloneDX.Services
 {
@@ -67,7 +68,7 @@ namespace CycloneDX.Services
             }
 
             XmlDocument xmldoc = new XmlDocument();
-            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
+            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open, FileAccess.Read);
             xmldoc.Load(fileStream);
 
             XmlElement testSdkReference = xmldoc.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.NET.Test.Sdk']") as XmlElement;
@@ -80,7 +81,7 @@ namespace CycloneDX.Services
             return testProjectPropertyGroup != null;
         }
 
-        private (string name, string version) GetProjectNameAndVersion(string projectFilePath)
+        private (string name, string version) GetAssemblyNameAndVersion(string projectFilePath)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
@@ -89,15 +90,24 @@ namespace CycloneDX.Services
 
 
             XmlDocument xmldoc = new XmlDocument();
-            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open);
+            using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open, FileAccess.Read);
             xmldoc.Load(fileStream);
 
             XmlNamespaceManager namespaces = new XmlNamespaceManager(xmldoc.NameTable);
             namespaces.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-            string name = (xmldoc.SelectSingleNode("/Project/PropertyGroup/AssemblyName") as XmlElement)?.Value
-                ?? (xmldoc.SelectSingleNode("/Project/PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.Value
-                ?? _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
+            string name = (xmldoc.SelectSingleNode("/Project/PropertyGroup/AssemblyName") as XmlElement)?.InnerText;
+            name ??= (xmldoc.SelectSingleNode("/Project/PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.InnerText;
+                
+
+            if (name?.Contains("$(MSBuildProjectName)") == true)
+            {
+                var projectName = _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
+                name = name.Replace("$(MSBuildProjectName)", projectName);                
+            }
+
+            name ??= _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
+
 
             // Extract Version
             XmlElement versionElement = xmldoc.SelectSingleNode("/Project/PropertyGroup/Version") as XmlElement;
@@ -105,13 +115,28 @@ namespace CycloneDX.Services
 
             if (version == null)
             {
-                string assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "Properties", "AssemblyInfo.cs");
+                string assemblyInfoPath;
+                string pattern;
+                string projectFileExtension = Path.GetExtension(projectFilePath);
+                if (projectFileExtension.Equals(".vbproj", StringComparison.Ordinal))
+                {
+                    assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "My Project", "AssemblyInfo.vb");
+                    pattern = @"^\<Assembly: AssemblyVersion\(""(?<Version>.*?)""\)\>$";
+                }
+                else if (projectFileExtension.Equals(".xsproj", StringComparison.Ordinal))
+                {
+                    assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "Properties", "AssemblyInfo.prg");
+                    pattern = @"^\[assembly: AssemblyVersion\(""(?<Version>.*?)""\)\]$";
+                }
+                else
+                {
+                    assemblyInfoPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "Properties", "AssemblyInfo.cs");
+                    pattern = @"^\[assembly: AssemblyVersion\(""(?<Version>.*?)""\)\]$";
+                }
+
                 if (_fileSystem.File.Exists(assemblyInfoPath))
                 {
-
                     string[] lines = _fileSystem.File.ReadAllLines(assemblyInfoPath);
-                    string pattern = @"^\[assembly: AssemblyVersion\(""(?<Version>.*?)""\)\]$";
-
                     foreach (var line in lines)
                     {
                         Match match = Regex.Match(line, pattern);
@@ -126,19 +151,6 @@ namespace CycloneDX.Services
             }
 
             return (name, version);
-        }
-
-        static internal string GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
-        {
-            if (string.IsNullOrEmpty(baseIntermediateOutputPath))
-            {
-                return Path.Combine(Path.GetDirectoryName(projectFilePath), "obj");
-            }
-            else
-            {
-                string folderName = Path.GetFileNameWithoutExtension(projectFilePath);
-                return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
-            }
         }
 
         public bool DisablePackageRestore { get; set; }
@@ -184,7 +196,7 @@ namespace CycloneDX.Services
                 }
             }
 
-            var assetsFilename = _fileSystem.Path.Combine(GetProjectProperty(projectFilePath, baseIntermediateOutputPath), "project.assets.json");
+            var assetsFilename = GetProjectAssetsFilePath(projectFilePath, baseIntermediateOutputPath);
             if (!_fileSystem.File.Exists(assetsFilename))
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
@@ -207,6 +219,40 @@ namespace CycloneDX.Services
             return packages;
         }
 
+        internal string GetProjectAssetsFilePath(string projectFilePath, string baseIntermediateOutputPath)
+        {
+            string assetsPath;
+
+            if (string.IsNullOrEmpty(baseIntermediateOutputPath))
+            {
+                // Default to <projectDir>/obj
+                assetsPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "obj", "project.assets.json");
+            }
+            else
+            {
+                // Use <baseIntermediateOutputPath>/obj/<projectName>
+                string projectName = Path.GetFileNameWithoutExtension(projectFilePath);
+                assetsPath = Path.Combine(baseIntermediateOutputPath, "obj", projectName, "project.assets.json");
+            }
+
+            if (_fileSystem.File.Exists(assetsPath))
+            {
+                Console.WriteLine($"  Found Assetsfile under {assetsPath}");
+                return assetsPath;
+            }
+
+            var result = _dotnetUtilsService.GetAssetsPath(projectFilePath);
+            if (result.Success && _fileSystem.File.Exists(result.Result))
+            {
+                Console.WriteLine($"  Found Assetsfile under {result.Result}");
+                return result.Result;
+            }
+
+            // Fall back to expected path even if file doesn't exist
+            return assetsPath;
+        }
+
+
         /// <summary>
         /// Analyzes all Project file references for NuGet package references.
         /// </summary>
@@ -224,7 +270,7 @@ namespace CycloneDX.Services
 
             //Remove root-project, it will be added to the metadata
             var rootProject = projectReferences.FirstOrDefault(p => p.Path == projectFilePath);
-            projectReferences.Where(p => rootProject.Dependencies.ContainsKey(p.Path)).ToList().ForEach(p => p.IsDirectReference = true);
+            projectReferences.Where(p => rootProject.Dependencies.ContainsKey(p.Name)).ToList().ForEach(p => p.IsDirectReference = true);
             projectReferences.Remove(rootProject);
 
 
@@ -325,16 +371,24 @@ namespace CycloneDX.Services
             while (files.Count > 0)
             {
                 var currentFile = files.Dequeue();
+
+                if (!Utils.IsSupportedProjectType(currentFile))
+                {
+                    continue;
+                }
+
                 // Find all project references inside of currentFile
                 var foundProjectReferences = await GetProjectReferencesAsync(currentFile).ConfigureAwait(false);
 
-                var nameAndVersion = GetProjectNameAndVersion(currentFile);
+                var nameAndVersion = GetAssemblyNameAndVersion(currentFile);
 
                 DotnetDependency dependency = new();
                 dependency.Name = nameAndVersion.name;
-                dependency.Version = nameAndVersion.version ?? "undefined";
+                dependency.Version = nameAndVersion.version ?? "1.0.0"; //a project that has no version defined is listed as 1.0.0 in an assets-File
                 dependency.Path = currentFile;
-                dependency.Dependencies = foundProjectReferences.ToDictionary(key => key, value => (string)null);
+                dependency.Dependencies = foundProjectReferences.
+                                          Select(GetAssemblyNameAndVersion).
+                                          ToDictionary(project => project.name, project => project.version ?? "1.0.0");
                 dependency.Scope = Component.ComponentScope.Required;
                 dependency.DependencyType = DependencyType.Project;
                 projectReferences.Add(dependency);

@@ -27,14 +27,11 @@ namespace CycloneDX
     {
         public static Task<int> Main(string[] args)
         {
-
-
-            var SolutionOrProjectFile = new Argument<string>("path", description: "The path to a .sln, .csproj, .fsproj, .vbproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.");
+            var SolutionOrProjectFile = new Argument<string>("path", description: "The path to a .sln, .slnx, .csproj, .fsproj, .vbproj, .xsproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.");
             var framework = new Option<string>(new[] { "--framework", "-tfm" }, "The target framework to use. If not defined, all will be aggregated.");
             var runtime = new Option<string>(new[] { "--runtime", "-rt" }, "The runtime to use. If not defined, all will be aggregated.");
             var outputDirectory = new Option<string>(new[] { "--output", "-o" }, description: "The directory to write the BOM");
             var outputFilename = new Option<string>(new[] { "--filename", "-fn" }, "Optionally provide a filename for the BOM (default: bom.xml or bom.json)");
-            var json = new Option<bool>(new[] { "--json", "-j" }, "Produce a JSON BOM instead of XML");
             var excludeDev = new Option<bool>(new[] { "--exclude-dev", "-ed" }, "Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)");
             var excludetestprojects = new Option<bool>(new[] { "--exclude-test-projects", "-t" }, "Exclude test projects from the BOM");
             var baseUrl = new Option<string>(new[] { "--url", "-u" }, "Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json");
@@ -56,13 +53,22 @@ namespace CycloneDX
             var setVersion = new Option<string>(new[] { "--set-version", "-sv" }, "Override the default BOM metadata component version (defaults to 0.0.0).");
             var includeProjectReferences = new Option<bool>(new[] { "--include-project-references", "-ipr" }, "Include project references as components (can only be used with project files).");
             var setType = new Option<Component.Classification>(new[] { "--set-type", "-st" }, getDefaultValue: () => Component.Classification.Application, "Override the default BOM metadata component type (defaults to application).");
+            var setNugetPurl = new Option<bool>(new[] { "--set-nuget-purl" }, "Override the default BOM metadata component bom ref and PURL as NuGet package.");
+            var excludeFilter = new Option<string>(["--exclude-filter", "-ef"], "A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2'. Transitive dependencies will also be removed.");
+            var outputFormat = new Option<OutputFileFormat>(
+                aliases: new[] { "--output-format", "-F" },
+                description: "Select the BOM output format: auto (default), xml, json, or unsafeJson (relaxed escaping).",
+                getDefaultValue: () => OutputFileFormat.Auto
+            );
+
+
             //Deprecated args
             var disableGithubLicenses = new Option<bool>(new[] { "--disable-github-licenses", "-dgl" }, "(Deprecated, this is the default setting now");
             var outputFilenameDeprecated = new Option<string>(new[] { "-f" }, "(Deprecated use -fn instead) Optionally provide a filename for the BOM (default: bom.xml or bom.json).");
             var excludeDevDeprecated = new Option<bool>(new[] {"-d" }, "(Deprecated use -ed instead) Exclude development dependencies from the BOM.");
             var scanProjectDeprecated = new Option<bool>(new[] {"-r" }, "(Deprecated use -rs instead) To be used with a single project file, it will recursively scan project references of the supplied project file.");
             var outputDirectoryDeprecated = new Option<string>(new[] { "--out", }, description: "(Deprecated use -output instead) The directory to write the BOM");
-
+            var jsonDeprecated = new Option<bool>(new[] { "--json", "-j" }, "(Deprecated use `--output-format json` instead) Produce a JSON BOM instead of XML");
 
             RootCommand rootCommand = new RootCommand
             {
@@ -71,7 +77,7 @@ namespace CycloneDX
                 runtime,
                 outputDirectory,
                 outputFilename,
-                json,
+                jsonDeprecated,
                 excludeDev,
                 excludetestprojects,
                 baseUrl,
@@ -93,11 +99,14 @@ namespace CycloneDX
                 setName,
                 setVersion,
                 setType,
+                setNugetPurl,
                 outputFilenameDeprecated,
                 excludeDevDeprecated,
                 scanProjectDeprecated,
                 outputDirectoryDeprecated,
-                disableGithubLicenses
+                disableGithubLicenses,
+                excludeFilter,
+                outputFormat
             };
             rootCommand.Description = "A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.";
             rootCommand.SetHandler(async (context) =>
@@ -109,7 +118,7 @@ namespace CycloneDX
                     framework = context.ParseResult.GetValueForOption(framework),
                     outputDirectory = context.ParseResult.GetValueForOption(outputDirectory) ?? context.ParseResult.GetValueForOption(outputDirectory),
                     outputFilename = context.ParseResult.GetValueForOption(outputFilename) ?? context.ParseResult.GetValueForOption(outputFilenameDeprecated),
-                    json = context.ParseResult.GetValueForOption(json),
+                    json = context.ParseResult.GetValueForOption(jsonDeprecated),
                     excludeDev = context.ParseResult.GetValueForOption(excludeDev) | context.ParseResult.GetValueForOption(excludeDevDeprecated),
                     excludeTestProjects = context.ParseResult.GetValueForOption(excludetestprojects),
                     baseUrl = context.ParseResult.GetValueForOption(baseUrl),
@@ -130,8 +139,11 @@ namespace CycloneDX
                     setName = context.ParseResult.GetValueForOption(setName),
                     setVersion = context.ParseResult.GetValueForOption(setVersion),
                     setType = context.ParseResult.GetValueForOption(setType),
-                    includeProjectReferences = context.ParseResult.GetValueForOption(includeProjectReferences)
-                };                
+                    setNugetPurl = context.ParseResult.GetValueForOption(setNugetPurl),
+                    includeProjectReferences = context.ParseResult.GetValueForOption(includeProjectReferences),
+                    DependencyExcludeFilter = context.ParseResult.GetValueForOption(excludeFilter),
+                    outputFormat = context.ParseResult.GetValueForOption(outputFormat)
+                };
 
                 Runner runner = new Runner();
                 var taskStatus = await runner.HandleCommandAsync(options);

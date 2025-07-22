@@ -27,6 +27,8 @@ using CycloneDX.Models;
 using CycloneDX.Services;
 using System.IO.Abstractions;
 using System.Linq;
+using System.IO;
+using System.Xml.Schema;
 
 namespace CycloneDX.Tests
 {
@@ -41,16 +43,44 @@ namespace CycloneDX.Tests
                 new DotnetUtilsService(fileSystem, dotnetCommandService),
                 new PackagesFileService(fileSystem),
                 new ProjectAssetsFileService(fileSystem, () => new AssetFileReader()));
-
         }
 
         [Theory]
-        [InlineData(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.csproj", "", @"C:\github\cyclonedx-dotnet\Core\obj")]
-        [InlineData(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.csproj", @"C:\github\cyclonedx-dotnet\artifacts", @"C:\github\cyclonedx-dotnet\artifacts\obj\CycloneDX")]
-        public void GetPropertyUseProjectFileName(string projectFilePath, string baseIntermediateOutputPath, string expected)
+        [InlineData("", @"C:\Projects\Foo\obj\project.assets.json", false)] // expected file exists
+        [InlineData("", @"C:\Projects\artifacts\obj\Foo\project.assets.json", true)] // expected missing, service finds it
+        [InlineData(@"C:\build", @"C:\build\obj\Foo\project.assets.json", false)] // using baseIntermediateOutputPath        
+        public void GetProjectAssetsFilePath_CoversAllScenarios(
+            string baseOutputPath, 
+            string assetsPath,
+            bool dotnetServiceShouldBeUsed)
         {
-          string outputPath = ProjectFileService.GetProjectProperty(XFS.Path(projectFilePath), XFS.Path(baseIntermediateOutputPath));
-          Assert.Equal(XFS.Path(expected), outputPath);
+
+            baseOutputPath = XFS.Path(baseOutputPath);
+            assetsPath = XFS.Path(assetsPath);
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+                {
+                    { XFS.Path(assetsPath), "" }
+                });
+
+            string projectPath = XFS.Path(@"C:\Projects\Foo\Foo.csproj");
+            // Arrange
+            var dotnetMock = new Mock<IDotnetUtilsService>();
+            var service = new ProjectFileService(mockFileSystem, dotnetMock.Object, null, null);
+
+            dotnetMock.Setup(d => d.GetAssetsPath(projectPath))
+                .Returns(new DotnetUtilsResult<string>
+                {
+                    ErrorMessage = null,
+                    Result = assetsPath
+                });            
+
+            // Act
+            var result = service.GetProjectAssetsFilePath(projectPath, baseOutputPath);
+
+            // Assert
+            Assert.Equal(assetsPath, result);
+            dotnetMock.Verify(d => d.GetAssetsPath(It.IsAny<string>()), dotnetServiceShouldBeUsed ? Times.Once : Times.Never);            
         }
 
         [Fact]        
@@ -79,6 +109,9 @@ namespace CycloneDX.Tests
             mockDotnetUtilsService
                 .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+                 .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                 .Returns(new DotnetUtilsResult<string>() { Result = "" });
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
@@ -114,6 +147,9 @@ namespace CycloneDX.Tests
             mockDotnetUtilsService
                 .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new ApplicationException("Restore should not be called"));
+            mockDotnetUtilsService
+                .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult<string>() { Result = "" });
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
@@ -150,6 +186,9 @@ namespace CycloneDX.Tests
             mockDotnetUtilsService
                 .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+                .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult<string>() { Result = "" });
             var mockPackageFileService = new Mock<IPackagesFileService>();
             var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
             mockProjectAssetsFileService
@@ -188,6 +227,9 @@ namespace CycloneDX.Tests
             mockDotnetUtilsService
                 .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+                .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult<string>() { Result = ""});
             var mockPackageFileService = new Mock<IPackagesFileService>();
             mockPackageFileService
                 .Setup(s => s.GetDotnetDependencysAsync(It.IsAny<string>()))
@@ -228,6 +270,9 @@ namespace CycloneDX.Tests
             mockDotnetUtilsService
                 .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+             .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+             .Returns(new DotnetUtilsResult<string>() { Result = "" });
             var mockPackageFileService = new Mock<IPackagesFileService>();
             mockPackageFileService
                 .Setup(s => s.GetDotnetDependencysAsync(It.IsAny<string>()))
@@ -326,5 +371,72 @@ namespace CycloneDX.Tests
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), item),
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), item));
         }
+
+        [Fact]
+        public async Task RecursivelyGetProjectReferences_ReturnsCSAssemblyVersion()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), new MockFileData(@"<Project></Project>") },
+                { XFS.Path(@"c:\SolutionPath\Project1\Properties\AssemblyInfo.cs"), new MockFileData(@"[assembly: AssemblyVersion(""3.2.1.0"")]")}
+            });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            var projects = await projectFileService.RecursivelyGetProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj")).ConfigureAwait(true);
+
+            Assert.Equal("3.2.1.0", projects.FirstOrDefault().Version);
+        }
+
+        [Fact]
+        public async Task RecursivelyGetProjectReferences_ReturnsVBAssemblyVersion()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\SolutionPath\Project1\Project1.vbproj"), new MockFileData(@"<Project></Project>") },
+                { XFS.Path(@"c:\SolutionPath\Project1\My Project\AssemblyInfo.vb"), new MockFileData(@"<Assembly: AssemblyVersion(""3.2.1.0"")>")}
+            });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            var projects = await projectFileService.RecursivelyGetProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\Project1\Project1.vbproj")).ConfigureAwait(true);
+
+            Assert.Equal("3.2.1.0", projects.FirstOrDefault().Version);
+        }
+
+        [Fact]
+        public async Task RecursivelyGetProjectReferences_ReturnsXSharpAssemblyVersion()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\SolutionPath\Project1\Project1.xsproj"), new MockFileData(@"<Project></Project>") },
+                { XFS.Path(@"c:\SolutionPath\Project1\Properties\AssemblyInfo.prg"), new MockFileData(@"[assembly: AssemblyVersion(""3.2.1.0"")]")}
+            });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            var projects = await projectFileService.RecursivelyGetProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\Project1\Project1.xsproj")).ConfigureAwait(true);
+
+            Assert.Equal("3.2.1.0", projects.FirstOrDefault().Version);
+        }
+
     }
 }

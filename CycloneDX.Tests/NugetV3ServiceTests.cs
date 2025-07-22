@@ -188,6 +188,77 @@ namespace CycloneDX.Tests
             Assert.Null(component.Hashes);
         }
 
+        public static IEnumerable<object[]> VcsUrlNormalization
+        {
+            get
+            {
+                return new List<object[]>
+                {
+                    new object[] { null, null },                    
+
+                    // Blank
+                    new object[] { "", null },
+                    new object[] { "   ", null },
+
+                    // Leading and trailing whitespace
+                    new object[] { "  git@github.com:LordVeovis/xmlrpc.git", "https://git:@github.com/LordVeovis/xmlrpc.git" },
+                    new object[] { "git@github.com:LordVeovis/xmlrpc.git  ", "https://git:@github.com/LordVeovis/xmlrpc.git" },
+                    new object[] { "  git@github.com:LordVeovis/xmlrpc.git  ", "https://git:@github.com/LordVeovis/xmlrpc.git" },
+
+                    // Relative
+                    new object[] { "gitlab.dontcare.com:group/repo.git", "gitlab.dontcare.com:group/repo.git" },
+                    new object[] { "git@gitlab.dontcare.com:group/repo.git", "https://git:@gitlab.dontcare.com/group/repo.git" },
+
+                    // Absolute
+                    new object[] { "gitlab.dontcare.com:/group/repo.git", "gitlab.dontcare.com:/group/repo.git" },
+                    new object[] { "git@gitlab.dontcare.com:/group/repo.git", "https://git:@gitlab.dontcare.com/group/repo.git" },
+
+                    // Colon in path
+                    new object[] { "git@gitlab.dontcare.com:/group:with:colons/repo.git", "https://git:@gitlab.dontcare.com/group:with:colons/repo.git" },
+
+                    // Invalid
+                    new object[] { "  + ", null },
+                    new object[] { "user@@gitlab.com:/rooted/Thinktecture.Logging.Configuration.git", null },
+
+                    // Port number
+                    new object[] { "https://github.com:443/CycloneDX/cyclonedx-dotnet.git", "https://github.com/CycloneDX/cyclonedx-dotnet.git" },
+                    new object[] { "https://user:@github.com:443/CycloneDX/cyclonedx-dotnet.git", "https://user:@github.com/CycloneDX/cyclonedx-dotnet.git" },
+                    new object[] { "https://user:password@github.com:443/CycloneDX/cyclonedx-dotnet.git", "https://user:password@github.com/CycloneDX/cyclonedx-dotnet.git" },
+
+                    // Valid
+                    new object[] { "https://github.com/CycloneDX/cyclonedx-dotnet.git", "https://github.com/CycloneDX/cyclonedx-dotnet.git" }
+                };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(VcsUrlNormalization))]
+        public async Task GetComponent_FromCachedNuspecFile_UsesNormalizedVcsUrl(string rawVcsUrl, string normalizedVcsUrl)
+        {
+            var nuspecFileContents = $@"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <repository type=""git"" url=""{rawVcsUrl}"" />
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path($@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                new Mock<IGithubService>().Object,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Equal("testpackage", component.Name);
+            Assert.Equal(normalizedVcsUrl, component.ExternalReferences?.FirstOrDefault()?.Url);
+        }
+
         [Fact]
         public async Task GetComponentFromNugetOrgReturnsComponent()
         {
