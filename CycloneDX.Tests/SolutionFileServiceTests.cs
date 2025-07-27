@@ -184,9 +184,9 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project1\
   ""solution"": {
     ""path"": ""SolutionFile.sln"",
     ""projects"": [
-      ""Project1\\Project1.csproj"",
-      ""Project2\\Project2.csproj"",
-      ""Project3\\Project3.csproj""
+      ""Project1/Project1.csproj"",
+      ""Project2/Project2.csproj"",
+      ""Project3/Project3.csproj""
     ]
   }
 }")},
