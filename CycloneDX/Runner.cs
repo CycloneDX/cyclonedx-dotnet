@@ -23,8 +23,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using CycloneDX.Models;
 using CycloneDX.Interfaces;
+using CycloneDX.Models;
 using CycloneDX.Services;
 using static CycloneDX.Models.Component;
 using Json.Schema;
@@ -154,6 +154,8 @@ namespace CycloneDX
                 &&
                     (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)
                     ||
+                    SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnf", StringComparison.OrdinalIgnoreCase)
+                    ||
                     fileSystem.Directory.Exists(fullSolutionOrProjectFilePath)
                     ||
                     this.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase)))
@@ -165,7 +167,9 @@ namespace CycloneDX
 
             try
             {
-                if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase) || SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
+                if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase) || 
+                    SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnx", StringComparison.OrdinalIgnoreCase) ||                
+                    SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnf", StringComparison.OrdinalIgnoreCase))
                 {
                     if (!fileSystem.File.Exists(SolutionOrProjectFile))
                     {
@@ -212,7 +216,7 @@ namespace CycloneDX
                 }
                 else
                 {
-                    Console.Error.WriteLine($"Only .sln, .csproj, .fsproj, .vbproj, .xsproj, and packages.config files are supported");
+                    Console.Error.WriteLine($"Only .sln, .slnf, .csproj, .fsproj, .vbproj, .xsproj, and packages.config files are supported");
                     return (int)ExitCode.InvalidOptions;
                 }
             }

@@ -22,9 +22,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Text.Json;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
-using NuGet.Packaging;
 
 namespace CycloneDX.Services
 {
@@ -46,28 +46,95 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<HashSet<string>> GetSolutionProjectReferencesAsync(string solutionFilePath)
         {
-            var solutionFolder = _fileSystem.Path.GetDirectoryName(solutionFilePath);
-            var projects = new HashSet<string>();
-            using (var reader = _fileSystem.File.OpenText(solutionFilePath))
+            HashSet<string> projects;
+            if (solutionFilePath.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
             {
-                if (solutionFilePath.ToLowerInvariant().EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
-                {
-
-                    var ps = await ReadFromSlnx(reader, solutionFolder);
-                    projects.AddRange(ps);
-                }
-                else
-                {
-                    var ps = await ReadFromSln(reader, solutionFolder);
-                    projects.AddRange(ps);
-                }
+                projects = await GetProjectsForSolution(solutionFilePath).ConfigureAwait(false);
             }
+            else if (solutionFilePath.ToLowerInvariant().EndsWith(".slnf", StringComparison.OrdinalIgnoreCase))
+            {
+                projects = await GetProjectsForSolutionFilter(solutionFilePath).ConfigureAwait(false);
+            }
+            else
+            {
+                projects = await GetProjectsForSolutionX(solutionFilePath).ConfigureAwait(false);
+            }
+            
 
-            var projectList = new List<string>(projects);
-            foreach (var project in projectList)
+            foreach (var project in projects.ToArray())
             {
                 var projectReferences = await _projectFileService.RecursivelyGetProjectReferencesAsync(project).ConfigureAwait(false);
                 projects.UnionWith(projectReferences.Select(dep => dep.Path));
+            }
+
+            return projects;
+        }
+
+        private async Task<HashSet<string>> GetProjectsForSolutionFilter(string mainFile)
+        {
+            await using var stream = _fileSystem.File.OpenRead(mainFile);
+            var solutionFilterFile = await JsonSerializer.DeserializeAsync<SolutionFilterFileModel>(stream).ConfigureAwait(false);
+            Console.WriteLine(solutionFilterFile.Solution.Projects);
+
+            var solutionFolder = _fileSystem.Path.GetDirectoryName(mainFile);
+            var projects = new HashSet<string>();
+            foreach (string relativeProjectPath in solutionFilterFile.Solution.Projects)
+            {
+                var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
+                if (Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
+            }
+
+            return projects;
+        }
+
+        private async Task<HashSet<string>> GetProjectsForSolution(string mainFile)
+        {
+            var solutionFolder = _fileSystem.Path.GetDirectoryName(mainFile);
+            var projects = new HashSet<string>();
+            using var reader = _fileSystem.File.OpenText(mainFile);
+            string line;
+
+            while ((line = await reader.ReadLineAsync().ConfigureAwait(false)) != null)
+            {
+                if (!line.StartsWith("Project", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+                var regex = new Regex("(.*) = \"(.*?)\", \"(.*?)\"");
+                var match = regex.Match(line);
+                if (match.Success)
+                {
+                    var relativeProjectPath = match.Groups[3].Value.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
+                    var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
+                    if (Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
+                }
+            }
+
+            return projects;
+        }
+
+        private async Task<HashSet<string>> GetProjectsForSolutionX(string mainFile)
+        {
+            using var reader = _fileSystem.File.OpenText(mainFile);
+            var solutionFolder = _fileSystem.Path.GetDirectoryName(mainFile);
+
+            var projects = new HashSet<string>();
+
+            while (await reader.ReadLineAsync().ConfigureAwait(false) is { } line)
+            {
+                if (!line.Trim().StartsWith("<Project", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                var regex = new Regex("Path=\"([^\"\"]+)\"");
+                var match = regex.Match(line);
+                if (match.Success)
+                {
+                    var relativeProjectPath = match.Groups[1].Value.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
+                    var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
+                    if (Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
+                }
             }
 
             return projects;
@@ -124,51 +191,5 @@ namespace CycloneDX.Services
             return packages;
         }
 
-        private async Task<ICollection<string>> ReadFromSln(StreamReader reader, string solutionFolder)
-        {
-            var projects = new HashSet<string>();
-
-            while (await reader.ReadLineAsync().ConfigureAwait(false) is { } line)
-            {
-                if (!line.StartsWith("Project", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-                var regex = new Regex("(.*) = \"(.*?)\", \"(.*?)\"");
-                var match = regex.Match(line);
-                if (match.Success)
-                {
-                    var relativeProjectPath = match.Groups[3].Value.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
-                    var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
-                    if (Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
-                }
-            }
-
-            return projects.ToArray();
-        }
-
-        private async Task<ICollection<string>> ReadFromSlnx(StreamReader reader, string solutionFolder)
-        {
-            var projects = new HashSet<string>();
-
-            while (await reader.ReadLineAsync().ConfigureAwait(false) is { } line)
-            {
-                if (!line.Trim().StartsWith("<Project", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                var regex = new Regex("Path=\"([^\"\"]+)\"");
-                var match = regex.Match(line);
-                if (match.Success)
-                {
-                    var relativeProjectPath = match.Groups[1].Value.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
-                    var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
-                    if (Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
-                }
-            }
-
-            return projects.ToArray();
-        }
     }
 }

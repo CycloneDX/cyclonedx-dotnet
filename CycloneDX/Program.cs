@@ -15,9 +15,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
-using System;
 using System.CommandLine;
-using System.IO;
 using System.Threading.Tasks;
 using CycloneDX.Models;
 
@@ -27,7 +25,9 @@ namespace CycloneDX
     {
         public static Task<int> Main(string[] args)
         {
-            var SolutionOrProjectFile = new Argument<string>("path", description: "The path to a .sln, .slnx, .csproj, .fsproj, .vbproj, .xsproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.");
+
+
+            var SolutionOrProjectFile = new Argument<string>("path", description: "The path to a .sln, .slnf, .slnx, .csproj, .fsproj, .vbproj, .xsproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.");
             var framework = new Option<string>(new[] { "--framework", "-tfm" }, "The target framework to use. If not defined, all will be aggregated.");
             var runtime = new Option<string>(new[] { "--runtime", "-rt" }, "The runtime to use. If not defined, all will be aggregated.");
             var outputDirectory = new Option<string>(new[] { "--output", "-o" }, description: "The directory to write the BOM");
@@ -65,8 +65,8 @@ namespace CycloneDX
             //Deprecated args
             var disableGithubLicenses = new Option<bool>(new[] { "--disable-github-licenses", "-dgl" }, "(Deprecated, this is the default setting now");
             var outputFilenameDeprecated = new Option<string>(new[] { "-f" }, "(Deprecated use -fn instead) Optionally provide a filename for the BOM (default: bom.xml or bom.json).");
-            var excludeDevDeprecated = new Option<bool>(new[] {"-d" }, "(Deprecated use -ed instead) Exclude development dependencies from the BOM.");
-            var scanProjectDeprecated = new Option<bool>(new[] {"-r" }, "(Deprecated use -rs instead) To be used with a single project file, it will recursively scan project references of the supplied project file.");
+            var excludeDevDeprecated = new Option<bool>(new[] { "-d" }, "(Deprecated use -ed instead) Exclude development dependencies from the BOM.");
+            var scanProjectDeprecated = new Option<bool>(new[] { "-r" }, "(Deprecated use -rs instead) To be used with a single project file, it will recursively scan project references of the supplied project file.");
             var outputDirectoryDeprecated = new Option<string>(new[] { "--out", }, description: "(Deprecated use -output instead) The directory to write the BOM");
             var jsonDeprecated = new Option<bool>(new[] { "--json", "-j" }, "(Deprecated use `--output-format json` instead) Produce a JSON BOM instead of XML");
 
