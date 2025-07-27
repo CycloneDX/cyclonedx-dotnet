@@ -100,8 +100,14 @@ namespace CycloneDX.Services
             }
             // DOTNET_ROOT specifies the location of the .NET runtimes, if they are not installed in the default location.
             var dotnetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT");
-            return !string.IsNullOrEmpty(dotnetRoot)
-                ? Path.Combine(dotnetRoot, fileName)
+
+            if (string.IsNullOrEmpty(dotnetRoot))
+            {
+                return fileName;
+            }
+            var fileInfo = new FileInfo(Path.Combine(dotnetRoot, fileName));
+            return fileInfo.Exists
+                ? fileInfo.FullName
                 : fileName;
         }
 

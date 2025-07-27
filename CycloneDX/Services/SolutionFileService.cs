@@ -17,11 +17,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 
@@ -50,10 +51,15 @@ namespace CycloneDX.Services
             {
                 projects = await GetProjectsForSolution(solutionFilePath).ConfigureAwait(false);
             }
-            else
+            else if (solutionFilePath.ToLowerInvariant().EndsWith(".slnf", StringComparison.OrdinalIgnoreCase))
             {
                 projects = await GetProjectsForSolutionFilter(solutionFilePath).ConfigureAwait(false);
             }
+            else
+            {
+                projects = await GetProjectsForSolutionX(solutionFilePath).ConfigureAwait(false);
+            }
+            
 
             foreach (var project in projects.ToArray())
             {
@@ -99,6 +105,33 @@ namespace CycloneDX.Services
                 if (match.Success)
                 {
                     var relativeProjectPath = match.Groups[3].Value.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
+                    var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
+                    if (Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
+                }
+            }
+
+            return projects;
+        }
+
+        private async Task<HashSet<string>> GetProjectsForSolutionX(string mainFile)
+        {
+            using var reader = _fileSystem.File.OpenText(mainFile);
+            var solutionFolder = _fileSystem.Path.GetDirectoryName(mainFile);
+
+            var projects = new HashSet<string>();
+
+            while (await reader.ReadLineAsync().ConfigureAwait(false) is { } line)
+            {
+                if (!line.Trim().StartsWith("<Project", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                var regex = new Regex("Path=\"([^\"\"]+)\"");
+                var match = regex.Match(line);
+                if (match.Success)
+                {
+                    var relativeProjectPath = match.Groups[1].Value.Replace('\\', _fileSystem.Path.DirectorySeparatorChar);
                     var projectFile = _fileSystem.Path.GetFullPath(_fileSystem.Path.Combine(solutionFolder, relativeProjectPath));
                     if (Utils.IsSupportedProjectType(projectFile)) projects.Add(projectFile);
                 }
@@ -157,5 +190,6 @@ namespace CycloneDX.Services
 
             return packages;
         }
+
     }
 }

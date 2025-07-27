@@ -30,6 +30,28 @@ namespace CycloneDX.Tests
     public class SolutionFileServiceTests
     {
         [Fact]
+        public async Task GetSolutionXProjectReferences_ReturnsProjectThatExists()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\SolutionPath\SolutionFile.slnx"), new MockFileData(@"<Solution>
+  <Project Path=""Project\Project.csproj"" Type=""Classic C#"" />
+</Solution>")},
+                { XFS.Path(@"c:\SolutionPath\Project\Project.csproj"), Helpers.GetEmptyProjectFile() },
+            });
+            var mockProjectFileService = new Mock<IProjectFileService>();
+            mockProjectFileService
+                .Setup(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>());
+            var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
+
+            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.slnx")).ConfigureAwait(true);
+
+            Assert.Collection(projects,
+                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project\Project.csproj"), item));
+        }
+
+        [Fact]
         public async Task GetSolutionProjectReferences_ReturnsProjectThatExists()
         {
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>

@@ -153,19 +153,6 @@ namespace CycloneDX.Services
             return (name, version);
         }
 
-        static internal string GetProjectProperty(string projectFilePath, string baseIntermediateOutputPath)
-        {
-            if (string.IsNullOrEmpty(baseIntermediateOutputPath))
-            {
-                return Path.Combine(Path.GetDirectoryName(projectFilePath), "obj");
-            }
-            else
-            {
-                string folderName = Path.GetFileNameWithoutExtension(projectFilePath);
-                return Path.Combine(baseIntermediateOutputPath, "obj", folderName);
-            }
-        }
-
         public bool DisablePackageRestore { get; set; }
 
         /// <summary>
@@ -209,7 +196,7 @@ namespace CycloneDX.Services
                 }
             }
 
-            var assetsFilename = _fileSystem.Path.Combine(GetProjectProperty(projectFilePath, baseIntermediateOutputPath), "project.assets.json");
+            var assetsFilename = GetProjectAssetsFilePath(projectFilePath, baseIntermediateOutputPath);
             if (!_fileSystem.File.Exists(assetsFilename))
             {
                 Console.WriteLine($"File not found: \"{assetsFilename}\", \"{projectFilePath}\" ");
@@ -231,6 +218,40 @@ namespace CycloneDX.Services
             }
             return packages;
         }
+
+        internal string GetProjectAssetsFilePath(string projectFilePath, string baseIntermediateOutputPath)
+        {
+            string assetsPath;
+
+            if (string.IsNullOrEmpty(baseIntermediateOutputPath))
+            {
+                // Default to <projectDir>/obj
+                assetsPath = Path.Combine(Path.GetDirectoryName(projectFilePath), "obj", "project.assets.json");
+            }
+            else
+            {
+                // Use <baseIntermediateOutputPath>/obj/<projectName>
+                string projectName = Path.GetFileNameWithoutExtension(projectFilePath);
+                assetsPath = Path.Combine(baseIntermediateOutputPath, "obj", projectName, "project.assets.json");
+            }
+
+            if (_fileSystem.File.Exists(assetsPath))
+            {
+                Console.WriteLine($"  Found Assetsfile under {assetsPath}");
+                return assetsPath;
+            }
+
+            var result = _dotnetUtilsService.GetAssetsPath(projectFilePath);
+            if (result.Success && _fileSystem.File.Exists(result.Result))
+            {
+                Console.WriteLine($"  Found Assetsfile under {result.Result}");
+                return result.Result;
+            }
+
+            // Fall back to expected path even if file doesn't exist
+            return assetsPath;
+        }
+
 
         /// <summary>
         /// Analyzes all Project file references for NuGet package references.

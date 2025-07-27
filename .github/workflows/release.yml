@@ -18,6 +18,8 @@
 # make sure the correct branch is selected. It will default to the default
 # branch.
 name: Release
+permissions:
+  contents: write
 
 on:
   workflow_dispatch
@@ -28,16 +30,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4.1.2
+      - uses: actions/checkout@v4.2.2
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v4.3.1
         with:
           dotnet-version: |
-            8.x
+            9.x
 
       # The tests should have already been run during the PR workflow, so this is really just a sanity check
       - name: Tests
-        run: dotnet test --framework net8.0
+        run: dotnet test --framework net9.0
 
       # Build and package everything, including the Docker image
       - name: Package release
@@ -66,8 +68,8 @@ jobs:
 
       # Generate the JSON with the docker container as additional smoke test
       - name: Generate JSON SBOM
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/usr/src/project cyclonedx/cyclonedx-dotnet:${{ steps.package_release.outputs.version }} /usr/src/project/CycloneDX.sln -j -o /usr/src/project 
-        
+        run: docker run --rm -v ${GITHUB_WORKSPACE}:/usr/src/project cyclonedx/cyclonedx-dotnet:${{ steps.package_release.outputs.version }} /usr/src/project/CycloneDX.sln -j -o /usr/src/project
+
       - name: Publish package to NuGet
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

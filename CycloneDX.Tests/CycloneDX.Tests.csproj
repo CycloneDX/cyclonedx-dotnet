@@ -4,7 +4,7 @@
 
     <IsTestProject>true</IsTestProject>
     <IsPackable>false</IsPackable>
-    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -33,6 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="FunctionalTests\DependencyFiltering\netstandard.assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\DependencyFiltering\shared_dependency.assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\IPR-TwoLevelTree\project3packages.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -45,6 +51,12 @@
     <None Update="FunctionalTests\IPR-TwoLevelTree\project3csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="FunctionalTests\Issue826-ProjectFileDoesntExist\project1csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue826-ProjectFileDoesntExist\solution1sln.text">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\Issue826alt-ProjectFileDoesntExistWithAssetsFile\project2assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -54,10 +66,22 @@
     <None Update="FunctionalTests\Issue826alt-ProjectFileDoesntExistWithAssetsFile\project2csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\Issue826-ProjectFileDoesntExist\project1csproj.xml">
+    <None Update="FunctionalTests\RelaxedJsonEscaping\project1csproj.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\p1.project.assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\Issue826-ProjectFileDoesntExist\solution1sln.text">
+    <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\p2.project.assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\project2csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\project1csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\solution1sln.text">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\Issue830-rsMultipleFrameworks\project1csproj.xml">
@@ -70,6 +94,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\Issue830-rsMultipleFrameworks\project2csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue894\project1assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue894\project1csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue894\project2csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\ProjectReferencesUseAssemblyNames\project1assets.json">
@@ -88,6 +121,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\ProjectReferencesUseAssemblyNames\project2csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\solution1sln.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\TestcaseFiles\DevDependencies.json">
@@ -127,6 +163,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\metadata\cycloneDX-metadata-template.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue911-depsOnSeveralTargetFrameworks\project1csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue911-depsOnSeveralTargetFrameworks\project2csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue911-depsOnSeveralTargetFrameworks\solution1sln.text">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue911-depsOnSeveralTargetFrameworks\project1assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue911-depsOnSeveralTargetFrameworks\project2assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

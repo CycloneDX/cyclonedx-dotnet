@@ -22,6 +22,7 @@ namespace CycloneDX.Interfaces
 {
     public interface IDotnetUtilsService
     {
+        DotnetUtilsResult<string> GetAssetsPath(string projectFilePath);
         DotnetUtilsResult<List<string>> GetPackageCachePaths();
         DotnetUtilsResult Restore(string path, string framework, string runtime);
     }
