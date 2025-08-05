@@ -70,15 +70,19 @@ namespace CycloneDX.Services
             XmlDocument xmldoc = new XmlDocument();
             using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open, FileAccess.Read);
             xmldoc.Load(fileStream);
+            string namespaceUri = xmldoc.DocumentElement.NamespaceURI;
 
-            XmlElement testSdkReference = xmldoc.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.NET.Test.Sdk']") as XmlElement;
-            if (testSdkReference != null)
+            XmlNamespaceManager namespaces = new XmlNamespaceManager(xmldoc.NameTable);
+            if (!string.IsNullOrEmpty(namespaceUri))
             {
-                return true;
+                namespaces.AddNamespace("ns", namespaceUri);
             }
-            // if this is meant for old csproj file format, then it's probably not working because there is no namespace given
-            XmlElement testProjectPropertyGroup = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
-            return testProjectPropertyGroup != null;
+
+            string xpathPrefix = string.IsNullOrEmpty(namespaceUri) ? "" : "ns:";
+            XmlElement testSdkReference = xmldoc.SelectSingleNode($"/{xpathPrefix}Project/{xpathPrefix}ItemGroup/{xpathPrefix}PackageReference[@Include='Microsoft.NET.Test.Sdk']", namespaces) as XmlElement;
+            XmlElement testProjectPropertyGroup = xmldoc.SelectSingleNode($"/{xpathPrefix}Project/{xpathPrefix}PropertyGroup[{xpathPrefix}IsTestProject='true']", namespaces) as XmlElement;
+
+            return testSdkReference != null || testProjectPropertyGroup != null;
         }
 
         private (string name, string version) GetAssemblyNameAndVersion(string projectFilePath)
