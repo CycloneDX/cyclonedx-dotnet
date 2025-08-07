@@ -14,6 +14,7 @@ on:
 
 jobs:
   push:
+    environment: publish
     runs-on: windows-2022
 
     steps:
