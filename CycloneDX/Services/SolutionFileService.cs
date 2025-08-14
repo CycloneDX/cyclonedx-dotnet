@@ -59,7 +59,6 @@ namespace CycloneDX.Services
             {
                 projects = await GetProjectsForSolutionX(solutionFilePath).ConfigureAwait(false);
             }
-            
 
             foreach (var project in projects.ToArray())
             {
@@ -74,9 +73,15 @@ namespace CycloneDX.Services
         {
             await using var stream = _fileSystem.File.OpenRead(mainFile);
             var solutionFilterFile = await JsonSerializer.DeserializeAsync<SolutionFilterFileModel>(stream).ConfigureAwait(false);
-            Console.WriteLine(solutionFilterFile.Solution.Projects);
+            Console.WriteLine(string.Join(Environment.NewLine, solutionFilterFile.Solution.Projects));
 
-            var solutionFolder = _fileSystem.Path.GetDirectoryName(mainFile);
+            // Location of the solution filter file.
+            var solutionFilterFolder = _fileSystem.Path.GetDirectoryName(mainFile);
+            // Location of the solution file referenced in the solution filter file relative to it.
+            var relativeSolutionFolder = _fileSystem.Path.GetDirectoryName(solutionFilterFile.Solution.Path);
+            // Project paths in solution filter files are relative to the solution file, not to the solution filter file.
+            // Therefore, we need to combine the solution filter file location with the relative solution file location.
+            var solutionFolder = _fileSystem.Path.Combine(solutionFilterFolder, relativeSolutionFolder);
             var projects = new HashSet<string>();
             foreach (string relativeProjectPath in solutionFilterFile.Solution.Projects)
             {
