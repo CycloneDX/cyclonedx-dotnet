@@ -60,7 +60,6 @@ namespace CycloneDX.Services
                 projects = await GetProjectsForSolutionX(solutionFilePath).ConfigureAwait(false);
             }
 
-
             foreach (var project in projects.ToArray())
             {
                 var projectReferences = await _projectFileService.RecursivelyGetProjectReferencesAsync(project).ConfigureAwait(false);
