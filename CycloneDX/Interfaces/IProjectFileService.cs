@@ -30,5 +30,6 @@ namespace CycloneDX.Interfaces
         Task<HashSet<DotnetDependency>> RecursivelyGetProjectReferencesAsync(string projectFilePath);
         Component GetComponent(DotnetDependency dotnetDependency);
         bool IsTestProject(string projectFilePath);
+        string GetProjectVersion(string projectFilePath);
     }
 }
