@@ -11,6 +11,7 @@
     <ToolCommandName>dotnet-CycloneDX</ToolCommandName>
     <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+    <BuildInParallel Condition="$([MSBuild]::IsOSPlatform('Windows'))">false</BuildInParallel>
 
     <!-- Always run on the latest runtime installed. -->
     <RollForward>Major</RollForward>
