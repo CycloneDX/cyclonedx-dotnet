@@ -16,15 +16,14 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
 using System.IO.Abstractions.TestingHelpers;
+using System.Threading.Tasks;
 using CycloneDX.Interfaces;
-using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
-using Moq;
-using CycloneDX.Services;
 using CycloneDX.Models;
-using System.IO;
+using CycloneDX.Services;
+using Moq;
+using Xunit;
+using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 
 namespace CycloneDX.Tests
 {
@@ -173,6 +172,44 @@ Project(""{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"") = ""CycloneDX"", ""Project1\
             Assert.Collection(sortedProjects,
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), item),
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), item));
+        }
+
+        [Fact]
+        public async Task GetSolutionFilterProjectReferences_ReturnsListOfProjects()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+        {
+            { XFS.Path(@"c:\SolutionPath\SolutionFile.slnf"), new MockFileData(@"
+{
+  ""solution"": {
+    ""path"": ""SolutionFile.sln"",
+    ""projects"": [
+      ""Project1/Project1.csproj"",
+      ""Project2/Project2.csproj"",
+      ""Project3/Project3.csproj""
+    ]
+  }
+}")},
+            { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetEmptyProjectFile() },
+            { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), Helpers.GetEmptyProjectFile() },
+            { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), Helpers.GetEmptyProjectFile() },
+        });
+            var mockProjectFileService = new Mock<IProjectFileService>();
+            mockProjectFileService
+                .SetupSequence(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>())
+                .ReturnsAsync(new HashSet<DotnetDependency>())
+                .ReturnsAsync(new HashSet<DotnetDependency>());
+            var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
+
+            var projects = await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.slnf")).ConfigureAwait(true);
+            var sortedProjects = new List<string>(projects);
+            sortedProjects.Sort();
+
+            Assert.Collection(sortedProjects,
+                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), item),
+                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), item),
+                item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), item));
         }
     }
 }

@@ -27,6 +27,8 @@ using CycloneDX.Models;
 using CycloneDX.Services;
 using System.IO.Abstractions;
 using System.Linq;
+using System.IO;
+using System.Xml.Schema;
 
 namespace CycloneDX.Tests
 {
@@ -41,16 +43,44 @@ namespace CycloneDX.Tests
                 new DotnetUtilsService(fileSystem, dotnetCommandService),
                 new PackagesFileService(fileSystem),
                 new ProjectAssetsFileService(fileSystem, () => new AssetFileReader()));
-
         }
 
         [Theory]
-        [InlineData(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.csproj", "", @"C:\github\cyclonedx-dotnet\Core\obj")]
-        [InlineData(@"C:\github\cyclonedx-dotnet\Core\CycloneDX.csproj", @"C:\github\cyclonedx-dotnet\artifacts", @"C:\github\cyclonedx-dotnet\artifacts\obj\CycloneDX")]
-        public void GetPropertyUseProjectFileName(string projectFilePath, string baseIntermediateOutputPath, string expected)
+        [InlineData("", @"C:\Projects\Foo\obj\project.assets.json", false)] // expected file exists
+        [InlineData("", @"C:\Projects\artifacts\obj\Foo\project.assets.json", true)] // expected missing, service finds it
+        [InlineData(@"C:\build", @"C:\build\obj\Foo\project.assets.json", false)] // using baseIntermediateOutputPath        
+        public void GetProjectAssetsFilePath_CoversAllScenarios(
+            string baseOutputPath, 
+            string assetsPath,
+            bool dotnetServiceShouldBeUsed)
         {
-          string outputPath = ProjectFileService.GetProjectProperty(XFS.Path(projectFilePath), XFS.Path(baseIntermediateOutputPath));
-          Assert.Equal(XFS.Path(expected), outputPath);
+
+            baseOutputPath = XFS.Path(baseOutputPath);
+            assetsPath = XFS.Path(assetsPath);
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+                {
+                    { XFS.Path(assetsPath), "" }
+                });
+
+            string projectPath = XFS.Path(@"C:\Projects\Foo\Foo.csproj");
+            // Arrange
+            var dotnetMock = new Mock<IDotnetUtilsService>();
+            var service = new ProjectFileService(mockFileSystem, dotnetMock.Object, null, null);
+
+            dotnetMock.Setup(d => d.GetAssetsPath(projectPath))
+                .Returns(new DotnetUtilsResult<string>
+                {
+                    ErrorMessage = null,
+                    Result = assetsPath
+                });            
+
+            // Act
+            var result = service.GetProjectAssetsFilePath(projectPath, baseOutputPath);
+
+            // Assert
+            Assert.Equal(assetsPath, result);
+            dotnetMock.Verify(d => d.GetAssetsPath(It.IsAny<string>()), dotnetServiceShouldBeUsed ? Times.Once : Times.Never);            
         }
 
         [Fact]        
