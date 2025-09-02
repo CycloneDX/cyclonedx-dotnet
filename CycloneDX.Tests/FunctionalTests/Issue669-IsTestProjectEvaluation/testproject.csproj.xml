@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+
+  <Import Project="FunctionalTests/Issue669-IsTestProjectEvaluation/makeMeTestProject.props" />
+
+</Project>

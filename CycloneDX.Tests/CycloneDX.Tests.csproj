@@ -51,6 +51,15 @@
     <None Update="FunctionalTests\IPR-TwoLevelTree\project3csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="FunctionalTests\Issue669-IsTestProjectEvaluation\makeMeTestProject.props">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue669-IsTestProjectEvaluation\nontestproject.csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue669-IsTestProjectEvaluation\testproject.csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\Issue826-ProjectFileDoesntExist\project1csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
