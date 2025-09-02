@@ -1,0 +1,15 @@
+<!--
+  This file is just added for documentation. The test cases only use the assets-file.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FineGrainedDependency\FineGrainedDependency.csproj" />
+  </ItemGroup>
+
+</Project>

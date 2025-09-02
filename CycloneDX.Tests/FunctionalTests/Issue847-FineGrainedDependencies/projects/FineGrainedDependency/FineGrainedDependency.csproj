@@ -1,0 +1,26 @@
+﻿<!--
+  This file is just added for documentation. The test cases only use the assets-file.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- runtime true -->
+    <PackageReference Include="Google.Protobuf" Version="3.25.2" PrivateAssets="analyzers;build" />
+    <!-- runtime true with transitive dependencies -->
+    <PackageReference Include="log4net" Version="2.0.15" ExcludeAssets="none" />
+    <!-- runtime false, but not hidden from parent -->
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" PrivateAssets="all" />
+    <!-- runtime false, with transitive dependencies (hidden from parent) -->
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" ExcludeAssets="all" PrivateAssets="all" />
+    <!-- runtime true -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" IncludeAssets="runtime" ExcludeAssets="native;contentFiles;build" />
+    <!-- runtime true -->
+    <PackageReference Include="Serilog" Version="3.1.1" PrivateAssets="all" IncludeAssets="runtime" />
+  </ItemGroup>
+
+</Project>

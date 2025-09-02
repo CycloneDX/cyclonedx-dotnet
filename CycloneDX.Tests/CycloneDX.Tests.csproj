@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 
@@ -7,6 +7,15 @@
     <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="FunctionalTests\Issue847-FineGrainedDependencies\projects\**" />
+    <EmbeddedResource Remove="FunctionalTests\Issue847-FineGrainedDependencies\projects\**" />
+    <None Remove="FunctionalTests\Issue847-FineGrainedDependencies\projects\**" />
+    <None Include="FunctionalTests\Issue847-FineGrainedDependencies\projects\**">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
@@ -124,6 +133,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\solution1sln.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue847-FineGrainedDependencies\ReferringFineGrainedDependency.csproj.project.assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue847-FineGrainedDependencies\ReferringFineGrainedDependency.csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue847-FineGrainedDependencies\FineGrainedDependency.csproj.project.assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue847-FineGrainedDependencies\FineGrainedDependency.csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\TestcaseFiles\DevDependencies.json">

@@ -80,7 +80,7 @@
         "targetAlias": "net6.0",
         "dependencies": {
           "SonarAnalyzer.CSharp": {
-            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "include": "Build, Analyzers, BuildTransitive",
             "suppressParent": "All",
             "target": "Package",
             "version": "[9.16.0.82469, )"

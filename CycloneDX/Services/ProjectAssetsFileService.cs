@@ -17,14 +17,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
-using CycloneDX.Models;
 using System.Linq;
 using CycloneDX.Interfaces;
-using NuGet.Versioning;
+using CycloneDX.Models;
 using NuGet.LibraryModel;
 using NuGet.ProjectModel;
-using System.IO;
+using NuGet.Versioning;
 
 namespace CycloneDX.Services
 {
@@ -53,6 +53,7 @@ namespace CycloneDX.Services
                 foreach (var targetRuntime in assetsFile.Targets)
                 {
                     var runtimePackages = new HashSet<DotnetDependency>();
+
                     var targetFramework = assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
                     var dependencies = targetFramework.Dependencies;
                     var directDependencies = assetsFile.ProjectFileDependencyGroups
@@ -83,7 +84,7 @@ namespace CycloneDX.Services
                         };
 
                         // is this a test project dependency or only a development dependency
-                        if ( isTestProject)
+                        if (isTestProject)
                         {
                             package.Scope = Component.ComponentScope.Excluded;
                         }
@@ -99,6 +100,21 @@ namespace CycloneDX.Services
                     var allPackages = runtimePackages.Select(p => p.Name);
                     var packagesNotInAllPackages = allDependencies.Except(allPackages);
 
+                    var realRuntimePackages = new HashSet<DotnetDependency>();
+                    foreach (DotnetDependency dd in runtimePackages)
+                    {
+                        if (!dd.IsDirectReference)
+                        {
+                            continue;
+                        }
+
+                        ResolvedRuntimeDependencies(dd, runtimePackages, realRuntimePackages);
+                    }
+                    foreach (DotnetDependency dd in runtimePackages.Except(realRuntimePackages))
+                    {
+                        dd.IsDevDependency = true;
+                    }
+                    
                     // Check if there is an "unresolved" dependency on NetStandard                    
                     if (packagesNotInAllPackages.Any(p => p == "NETStandard.Library"))
                     {
@@ -126,7 +142,29 @@ namespace CycloneDX.Services
         }
         public bool SetIsDevDependency(LibraryDependency dependency)
         {
-            return dependency != null && dependency.SuppressParent != LibraryIncludeFlagUtils.DefaultSuppressParent;
+            return dependency != null && !HasRuntimeParts(dependency);
+        }
+
+        private static void ResolvedRuntimeDependencies(DotnetDependency dotnetDependency, HashSet<DotnetDependency> allpackages, HashSet<DotnetDependency> collectedDependencies)
+        {
+            if (dotnetDependency.IsDevDependency)
+            {
+                return;
+            }
+
+            if (!collectedDependencies.Contains(dotnetDependency))
+            {
+                collectedDependencies.Add(dotnetDependency);
+            }
+
+            foreach (KeyValuePair<string,string> child in dotnetDependency.Dependencies)
+            {
+                DotnetDependency childDependency = allpackages.FirstOrDefault(p => string.Equals(p.Name, child.Key, StringComparison.OrdinalIgnoreCase));
+                if (childDependency != null)
+                {
+                    ResolvedRuntimeDependencies(childDependency, allpackages, collectedDependencies);
+                }
+            }
         }
 
         /// <summary>
@@ -156,5 +194,34 @@ namespace CycloneDX.Services
                 }
             }
         }
+
+        private static bool HasRuntimeParts(LibraryDependency dependency)
+        {
+            if (dependency == null)
+            {
+                return false;
+            }
+
+            //all runtime parts are excluded
+            if (dependency.ReferenceType != LibraryDependencyReferenceType.Direct && runtimePartFlags.All(f => dependency.SuppressParent.HasFlag(f)))
+            {
+                return false;
+            }
+
+            //none of the runtimes are includede
+            if (!runtimePartFlags.Any(f => dependency.IncludeType.HasFlag(f)))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static readonly HashSet<LibraryIncludeFlags> runtimePartFlags = new HashSet<LibraryIncludeFlags>
+        {
+            LibraryIncludeFlags.Runtime,
+            LibraryIncludeFlags.Native,
+            LibraryIncludeFlags.ContentFiles
+        };
     }
 }
