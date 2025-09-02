@@ -64,6 +64,12 @@ namespace CycloneDX.Tests
                                 Name = "Package3",
                                 Version = "1.0.0",
                                 Dependencies = new Dictionary<string, string>(),
+                            },                            
+                            new DotnetDependency
+                            {
+                                Name = "Package4",
+                                Version = "1.0.0",
+                                Dependencies = new Dictionary<string, string>(),
                                 IsDevDependency = true
                             }
                         })
@@ -120,6 +126,16 @@ namespace CycloneDX.Tests
                                             new LockFileItem("Package3.dll")
                                         },
                                         Dependencies = new PackageDependency[0]
+                                    },
+                                    new LockFileTargetLibrary
+                                    {
+                                        Name = "Package4",
+                                        Version = new NuGet.Versioning.NuGetVersion("1.0.0"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package4.dll")
+                                        },
+                                        Dependencies = new PackageDependency[0]
                                     }
                                 }
                             },
@@ -159,6 +175,16 @@ namespace CycloneDX.Tests
                                         CompileTimeAssemblies = new[]
                                         {
                                             new LockFileItem("Package3.dll")
+                                        },
+                                        Dependencies = new PackageDependency[0]
+                                    },
+                                    new LockFileTargetLibrary
+                                    {
+                                        Name = "Package4",
+                                        Version = new NuGet.Versioning.NuGetVersion("1.0.0"),
+                                        CompileTimeAssemblies = new[]
+                                        {
+                                            new LockFileItem("Package4.dll")
                                         },
                                         Dependencies = new PackageDependency[0]
                                     }
@@ -207,6 +233,18 @@ namespace CycloneDX.Tests
                                                 VersionRange = VersionRange.Parse("1.0.0"),
                                                 TypeConstraint = LibraryDependencyTarget.Package
                                             }
+                                        },
+                                        new()
+                                        {
+                                            SuppressParent = LibraryIncludeFlags.None,
+                                            IncludeType = LibraryIncludeFlags.Build,
+                                            ReferenceType = LibraryDependencyReferenceType.Direct,
+                                            LibraryRange = new LibraryRange
+                                            {
+                                                Name = "Package4",
+                                                VersionRange = VersionRange.Parse("1.0.0"),
+                                                TypeConstraint = LibraryDependencyTarget.Package
+                                            }
                                         }
                                     }
                                 }
@@ -226,7 +264,8 @@ namespace CycloneDX.Tests
 
                             new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" }),
                             new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package2 >= 4.5.1" }),
-                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package3 >= 1.0.0" })
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package3 >= 1.0.0" }),
+                            new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package4 >= 1.0.0" })
                         }
                     };
                 });
@@ -253,6 +292,7 @@ namespace CycloneDX.Tests
                             Assert.Equal(@"Package2", dep.Key);
                             Assert.Equal(@"4.5.1", dep.Value);
                         });
+                    Assert.False(item.IsDevDependency, "Package1 was expected to be a runtime reference.");
                 },
                 item =>
                 {
@@ -260,13 +300,22 @@ namespace CycloneDX.Tests
                     Assert.Equal(@"4.5.1", item.Version);
                     Assert.True(item.IsDirectReference, "Package2 was expected to be a direct reference.");
                     Assert.Empty(item.Dependencies);
+                    Assert.False(item.IsDevDependency, "Package2 was expected to be a runtime reference.");
                 },
                 item =>
                 {
                     Assert.Equal(@"Package3", item.Name);
                     Assert.Equal(@"1.0.0", item.Version);
                     Assert.True(item.IsDirectReference, "Package3 was expected to be a direct reference.");
-                    Assert.True(item.IsDevDependency, "Package3 was expected to be a development reference.");
+                    Assert.False(item.IsDevDependency, "Package3 was expected to be a runtime reference.");
+                    Assert.Empty(item.Dependencies);
+                },
+                item =>
+                {
+                    Assert.Equal(@"Package4", item.Name);
+                    Assert.Equal(@"1.0.0", item.Version);
+                    Assert.True(item.IsDirectReference, "Package4 was expected to be a direct reference.");
+                    Assert.True(item.IsDevDependency, "Package4 was expected to be a developer reference.");
                     Assert.Empty(item.Dependencies);
                 }
                 );

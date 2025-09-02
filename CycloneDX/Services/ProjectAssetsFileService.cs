@@ -203,7 +203,7 @@ namespace CycloneDX.Services
             }
 
             //all runtime parts are excluded
-            if (runtimePartFlags.All(f => dependency.SuppressParent.HasFlag(f)))
+            if (dependency.ReferenceType != LibraryDependencyReferenceType.Direct && runtimePartFlags.All(f => dependency.SuppressParent.HasFlag(f)))
             {
                 return false;
             }

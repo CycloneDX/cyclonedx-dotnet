@@ -14,7 +14,7 @@ namespace CycloneDX.Tests.FunctionalTests
 {
     public class Issue847FineGrainedDevDependencies
     {
-        readonly string testFileFolder = "Issue847-FineGrainedDependencies";
+        readonly string testFileFolder = "Issue847-FineGrainedDependencies/projects/";
         readonly string fineGrainedProject = "c:/project2/project2.csproj";
         readonly string referringFineGrainedProjectProject = "c:/project1/project1.csproj";
 
@@ -25,19 +25,19 @@ namespace CycloneDX.Tests.FunctionalTests
                 {
                     MockUnixSupport.Path("c:/project1/obj/project.assets.json"),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "ReferringFineGrainedDependency.csproj.project.assets.json")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "ReferringFineGrainedDependency", "obj", "project.assets.json")))
                 },{
                     MockUnixSupport.Path("c:/project2/obj/project.assets.json"),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "FineGrainedDependency.csproj.project.assets.json")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "FineGrainedDependency", "obj", "project.assets.json")))
                 },{
                     MockUnixSupport.Path(referringFineGrainedProjectProject),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "ReferringFineGrainedDependency.csproj.xml")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder,"ReferringFineGrainedDependency", "ReferringFineGrainedDependency.csproj")))
                 },{
                     MockUnixSupport.Path(fineGrainedProject),
                         new MockFileData(
-                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "FineGrainedDependency.csproj.xml")))
+                            File.ReadAllText(Path.Combine("FunctionalTests", testFileFolder, "FineGrainedDependency", "FineGrainedDependency.csproj")))
                 }
             });
         }
@@ -73,7 +73,8 @@ namespace CycloneDX.Tests.FunctionalTests
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "log4net", true) == 0);
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "Newtonsoft.Json", true) == 0);
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "Serilog", true) == 0);
-            Assert.DoesNotContain(bom.Components, c => string.Compare(c.Name, "Microsoft.Extensions.Logging", true) == 0);            
+            Assert.Contains(bom.Components, c => string.Compare(c.Name, "Microsoft.Extensions.Logging", true) == 0);
+            Assert.DoesNotContain(bom.Components, c => string.Compare(c.Name, "Microsoft.Extensions.Configuration", true) == 0);
         }
 
         [Fact]
@@ -92,6 +93,5 @@ namespace CycloneDX.Tests.FunctionalTests
             Assert.DoesNotContain(bom.Components, c => string.Compare(c.Name, "Serilog", true) == 0);
             Assert.DoesNotContain(bom.Components, c => string.Compare(c.Name, "Microsoft.Extensions.Logging", true) == 0);
         }
-
     }
 }

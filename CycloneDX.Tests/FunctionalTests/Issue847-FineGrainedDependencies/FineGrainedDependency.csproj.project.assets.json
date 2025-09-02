@@ -819,24 +819,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\z001rxhc.AD005\\.nuget\\packages\\": {},
+    "C:\\Users\\z001rxhc\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\del\\FineGrainedDependency\\FineGrainedDependency\\FineGrainedDependency.csproj",
+      "projectUniqueName": "d:\\ws\\cyclonedx-dotnet\\CycloneDX.Tests\\FunctionalTests\\Issue847-FineGrainedDependencies\\projects\\FineGrainedDependency\\FineGrainedDependency.csproj",
       "projectName": "FineGrainedDependency",
-      "projectPath": "C:\\del\\FineGrainedDependency\\FineGrainedDependency\\FineGrainedDependency.csproj",
-      "packagesPath": "C:\\Users\\z001rxhc.AD005\\.nuget\\packages\\",
-      "outputPath": "C:\\del\\FineGrainedDependency\\FineGrainedDependency\\obj\\",
+      "projectPath": "d:\\ws\\cyclonedx-dotnet\\CycloneDX.Tests\\FunctionalTests\\Issue847-FineGrainedDependencies\\projects\\FineGrainedDependency\\FineGrainedDependency.csproj",
+      "packagesPath": "C:\\Users\\z001rxhc\\.nuget\\packages\\",
+      "outputPath": "d:\\ws\\cyclonedx-dotnet\\CycloneDX.Tests\\FunctionalTests\\Issue847-FineGrainedDependencies\\projects\\FineGrainedDependency\\obj\\",
       "projectStyle": "PackageReference",
+      "CentralPackageTransitivePinningEnabled": true,
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\del\\FineGrainedDependency\\NuGet.Config",
-        "C:\\Users\\z001rxhc.AD005\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "d:\\ws\\cyclonedx-dotnet\\CycloneDX.Tests\\FunctionalTests\\Issue847-FineGrainedDependencies\\projects\\NuGet.Config",
+        "d:\\ws\\cyclonedx-dotnet\\NuGet.Config",
+        "C:\\Users\\z001rxhc\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -856,7 +858,13 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -879,7 +887,6 @@
           },
           "Serilog": {
             "include": "Runtime",
-            "suppressParent": "All",
             "target": "Package",
             "version": "[3.1.1, )"
           },
@@ -904,7 +911,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

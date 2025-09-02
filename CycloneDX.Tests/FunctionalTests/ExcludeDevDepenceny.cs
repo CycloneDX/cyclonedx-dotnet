@@ -49,8 +49,8 @@ namespace CycloneDX.Tests.FunctionalTests
             };
             var bom = await FunctionalTestHelper.Test(assetsJson, options);
 
-            Assert.Equal(10, bom.Dependencies.Count);
-            Assert.Equal(9, bom.Components.Count);
+            Assert.Equal(11, bom.Dependencies.Count);
+            Assert.Equal(10, bom.Components.Count);
 
             options.excludeDev = false;
             bom = await FunctionalTestHelper.Test(assetsJson, options);

@@ -267,6 +267,23 @@
             "rid": "win"
           }
         }
+      },
+      "FineGrainedDependency/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Google.Protobuf": "3.25.2",
+          "Microsoft.Extensions.Logging": "8.0.0",
+          "Newtonsoft.Json": "13.0.3",
+          "Serilog": "3.1.1",
+          "log4net": "2.0.15"
+        },
+        "compile": {
+          "bin/placeholder/FineGrainedDependency.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/FineGrainedDependency.dll": {}
+        }
       }
     }
   },
@@ -807,35 +824,39 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "FineGrainedDependency/1.0.0": {
+      "type": "project",
+      "path": "../FineGrainedDependency/FineGrainedDependency.csproj",
+      "msbuildProject": "../FineGrainedDependency/FineGrainedDependency.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Google.Protobuf >= 3.25.2",
-      "Microsoft.Extensions.Logging >= 8.0.0",
-      "Newtonsoft.Json >= 13.0.3",
-      "Serilog >= 3.1.1",
-      "log4net >= 2.0.15"
+      "FineGrainedDependency >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\user\\.nuget\\packages\\": {},
+    "C:\\Users\\z001rxhc\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\src\\CycloneDX-847\\ConsoleApp1\\ConsoleApp1\\ConsoleApp1.csproj",
-      "projectName": "ConsoleApp1",
-      "projectPath": "E:\\src\\CycloneDX-847\\ConsoleApp1\\ConsoleApp1\\ConsoleApp1.csproj",
-      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "E:\\src\\CycloneDX-847\\ConsoleApp1\\ConsoleApp1\\obj\\",
+      "projectUniqueName": "D:\\ws\\cyclonedx-dotnet\\CycloneDX.Tests\\FunctionalTests\\Issue847-FineGrainedDependencies\\projects\\ReferringFineGrainedDependency\\ReferringFineGrainedDependency.csproj",
+      "projectName": "ReferringFineGrainedDependency",
+      "projectPath": "D:\\ws\\cyclonedx-dotnet\\CycloneDX.Tests\\FunctionalTests\\Issue847-FineGrainedDependencies\\projects\\ReferringFineGrainedDependency\\ReferringFineGrainedDependency.csproj",
+      "packagesPath": "C:\\Users\\z001rxhc\\.nuget\\packages\\",
+      "outputPath": "D:\\ws\\cyclonedx-dotnet\\CycloneDX.Tests\\FunctionalTests\\Issue847-FineGrainedDependencies\\projects\\ReferringFineGrainedDependency\\obj\\",
       "projectStyle": "PackageReference",
+      "CentralPackageTransitivePinningEnabled": true,
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "D:\\ws\\cyclonedx-dotnet\\CycloneDX.Tests\\FunctionalTests\\Issue847-FineGrainedDependencies\\projects\\NuGet.Config",
+        "D:\\ws\\cyclonedx-dotnet\\NuGet.Config",
+        "C:\\Users\\z001rxhc\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -843,51 +864,33 @@
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\ws\\cyclonedx-dotnet\\CycloneDX.Tests\\FunctionalTests\\Issue847-FineGrainedDependencies\\projects\\FineGrainedDependency\\FineGrainedDependency.csproj": {
+              "projectPath": "D:\\ws\\cyclonedx-dotnet\\CycloneDX.Tests\\FunctionalTests\\Issue847-FineGrainedDependencies\\projects\\FineGrainedDependency\\FineGrainedDependency.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
         "targetAlias": "net8.0",
-        "dependencies": {
-          "Google.Protobuf": {
-            "suppressParent": "Build, Analyzers",
-            "target": "Package",
-            "version": "[3.25.2, )"
-          },
-          "Microsoft.Extensions.Logging": {
-            "include": "None",
-            "target": "Package",
-            "version": "[8.0.0, )"
-          },
-          "Newtonsoft.Json": {
-            "include": "Runtime",
-            "target": "Package",
-            "version": "[13.0.3, )"
-          },
-          "Serilog": {
-            "include": "Runtime",
-            "suppressParent": "All",
-            "target": "Package",
-            "version": "[3.1.1, )"
-          },
-          "log4net": {
-            "target": "Package",
-            "version": "[2.0.15, )"
-          }
-        },
         "imports": [
           "net461",
           "net462",
@@ -904,7 +907,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
