@@ -69,7 +69,6 @@ Options:
   -rt, --runtime <runtime>                                                     The runtime to use. If not defined, all will be aggregated.
   -o, --output <output>                                                        The directory to write the BOM
   -fn, --filename <filename>                                                   Optionally provide a filename for the BOM (default: bom.xml or bom.json)
-  -ef, --exclude-filter <exclude-filter>                                       A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2'. Transitive dependencies will also be removed.
   -ed, --exclude-dev                                                           Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)
   -t, --exclude-test-projects                                                  Exclude test projects from the BOM
   -u, --url <url>                                                              Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json
