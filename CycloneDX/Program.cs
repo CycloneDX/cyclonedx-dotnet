@@ -16,6 +16,8 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System.CommandLine;
+using System.CommandLine.Parsing;
+using System.Linq;
 using System.Threading.Tasks;
 using CycloneDX.Models;
 
@@ -60,7 +62,10 @@ namespace CycloneDX
                 description: "Select the BOM output format: auto (default), xml, json, or unsafeJson (relaxed escaping).",
                 getDefaultValue: () => OutputFileFormat.Auto
             );
-
+            var specVersion = new Option<string>(
+                aliases: new[] { "--spec-version", "-spv" },
+                description: $"Which version of CycloneDX spec to use. [default: {SpecificationVersionHelpers.VersionString(SpecificationVersionHelpers.CurrentVersion)}]");
+            specVersion.FromAmong(Enum.GetValues<SpecificationVersion>().Select(SpecificationVersionHelpers.VersionString).ToArray());
 
             //Deprecated args
             var disableGithubLicenses = new Option<bool>(new[] { "--disable-github-licenses", "-dgl" }, "(Deprecated, this is the default setting now");
@@ -100,6 +105,7 @@ namespace CycloneDX
                 setVersion,
                 setType,
                 setNugetPurl,
+                specVersion,
                 outputFilenameDeprecated,
                 excludeDevDeprecated,
                 scanProjectDeprecated,
@@ -142,7 +148,10 @@ namespace CycloneDX
                     setNugetPurl = context.ParseResult.GetValueForOption(setNugetPurl),
                     includeProjectReferences = context.ParseResult.GetValueForOption(includeProjectReferences),
                     DependencyExcludeFilter = context.ParseResult.GetValueForOption(excludeFilter),
-                    outputFormat = context.ParseResult.GetValueForOption(outputFormat)
+                    outputFormat = context.ParseResult.GetValueForOption(outputFormat),
+                    specVersion = context.ParseResult.HasOption(specVersion)
+                        ? SpecificationVersionHelpers.Version(context.ParseResult.GetValueForOption(specVersion))
+                        : null
                 };
 
                 Runner runner = new Runner();

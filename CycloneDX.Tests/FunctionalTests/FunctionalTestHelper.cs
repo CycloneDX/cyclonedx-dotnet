@@ -117,16 +117,17 @@ namespace CycloneDX.Tests.FunctionalTests
 
             var mockBomFile = mockFileSystem.GetFile(MockUnixSupport.Path(outputFilePath));
             var mockBomFileStream = new MemoryStream(mockBomFile.Contents);
+            SpecificationVersion specVersion = options.specVersion ?? SpecificationVersionHelpers.CurrentVersion;
             ValidationResult validationResult;
             if ((options.json && options.outputFormat is not OutputFileFormat.Xml)||
                 options.outputFormat is OutputFileFormat.Json or OutputFileFormat.UnsafeJson ||
                 (options.outputFormat is OutputFileFormat.Auto && outputFilePath.EndsWith("json")))
             {
-                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, SpecificationVersion.v1_6).ConfigureAwait(false);
+                validationResult = await Json.Validator.ValidateAsync(mockBomFileStream, specVersion).ConfigureAwait(false);
             }
             else
             {
-                validationResult = Xml.Validator.Validate(mockBomFileStream, SpecificationVersion.v1_6);
+                validationResult = Xml.Validator.Validate(mockBomFileStream, specVersion);
             }
             Assert.True(validationResult.Valid);
 

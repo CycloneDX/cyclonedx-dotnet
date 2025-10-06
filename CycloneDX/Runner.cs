@@ -87,6 +87,7 @@ namespace CycloneDX
             Classification setType = options.setType;
             bool setNugetPurl = options.setNugetPurl;
             Models.OutputFileFormat outputFormat = options.outputFormat;
+            SpecificationVersion specVersion = options.specVersion ?? SpecificationVersionHelpers.CurrentVersion;
 
 
             Console.WriteLine();
@@ -244,12 +245,12 @@ namespace CycloneDX
                 return (int)ExitCode.InvalidOptions;
             }
 
-            // Remove transitive (via project references) dev-dependencies 
+            // Remove transitive (via project references) dev-dependencies
             // Dev dependencies of referenced projects are typically not included in the assets file.
             // However, if the dev-dependency is transitive—meaning another dependency of that project depends on it—
             // the dev-dependency will be listed in the assets file under targets with a version range.
             // But a corresponding entry under libraries is missing.
-            // This results in a state where there is a dependency on a package but no corresponding package.  
+            // This results in a state where there is a dependency on a package but no corresponding package.
             // To resolve this, we remove such dependencies.
             var allDependencies = packages.Where(p => p.Dependencies is not null).SelectMany(p => p.Dependencies!.Keys).ToHashSet();
             var dependenciesWithoutPackages = allDependencies.Except(packages.Select(p => p.Name)).ToHashSet();
@@ -267,13 +268,13 @@ namespace CycloneDX
                     {
                         await Console.Out.WriteLineAsync($"Removed transitive dependency {dep} from {package.Name}");
                     }
-                }                
+                }
             }
             Console.ResetColor();
 
-            
+
             await Console.Out.WriteLineAsync($"Found {packages.Count()} packages");
-            
+
 
             if (!string.IsNullOrEmpty(setName))
             {
@@ -398,6 +399,7 @@ namespace CycloneDX
             var bom = new Bom
             {
                 Version = 1,
+                SpecVersion = specVersion
             };
 
 
