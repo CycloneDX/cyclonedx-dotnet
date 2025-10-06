@@ -17,15 +17,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Xml;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
-using System.Text.RegularExpressions;
-using System.Reflection;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Locator;
 
 namespace CycloneDX.Services
 {
@@ -38,6 +39,12 @@ namespace CycloneDX.Services
 
     public class ProjectFileService : IProjectFileService
     {
+        static ProjectFileService()
+        {
+            // Register the MSBuild instance (do this once per process)
+            MSBuildLocator.RegisterDefaults();
+        }
+
         private XmlReaderSettings _xmlReaderSettings = new XmlReaderSettings
         {
             Async = true
@@ -67,18 +74,17 @@ namespace CycloneDX.Services
                 return false;
             }
 
-            XmlDocument xmldoc = new XmlDocument();
             using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open, FileAccess.Read);
-            xmldoc.Load(fileStream);
+            using var xmlReader = XmlReader.Create(fileStream);
 
-            XmlElement testSdkReference = xmldoc.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.NET.Test.Sdk']") as XmlElement;
-            if (testSdkReference != null)
-            {
-                return true;
-            }
-            // if this is meant for old csproj file format, then it's probably not working because there is no namespace given
-            XmlElement testProjectPropertyGroup = xmldoc.SelectSingleNode("/Project/PropertyGroup[IsTestProject='true']") as XmlElement;
-            return testProjectPropertyGroup != null;
+            // load the project (all imports and SDKs are processed)
+            var project = new Project(xmlReader);
+
+            // get property value after evaluation
+            string propertyValue = project.GetPropertyValue("IsTestProject");
+
+            //return is expected parsed boolean value, default false
+            return bool.TryParse(propertyValue, out bool isTestProject) && isTestProject;
         }
 
         private (string name, string version) GetAssemblyNameAndVersion(string projectFilePath)
