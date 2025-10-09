@@ -36,6 +36,7 @@
     <PackageReference Include="NuGet.ProjectModel" />
     <PackageReference Include="System.IO.Abstractions" />
     <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
   </ItemGroup>
 
   <ItemGroup>
