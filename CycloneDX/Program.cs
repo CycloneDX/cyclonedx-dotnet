@@ -67,6 +67,8 @@ namespace CycloneDX
                 aliases: new[] { "--spec-version", "-spv" },
                 description: $"Which version of CycloneDX spec to use. [default: {SpecificationVersionHelpers.VersionString(SpecificationVersionHelpers.CurrentVersion)}]");
             specVersion.FromAmong(Enum.GetValues<SpecificationVersion>().Select(SpecificationVersionHelpers.VersionString).ToArray());
+            var signingKey = new Option<string>(new[] { "--signing-key", "-sk" },
+                description: "Sign the generated BOM with the Key at the given path.");
 
             //Deprecated args
             var disableGithubLicenses = new Option<bool>(new[] { "--disable-github-licenses", "-dgl" }, "(Deprecated, this is the default setting now");
@@ -106,6 +108,7 @@ namespace CycloneDX
                 setVersion,
                 setType,
                 setNugetPurl,
+                signingKey,
                 specVersion,
                 outputFilenameDeprecated,
                 excludeDevDeprecated,
@@ -152,7 +155,8 @@ namespace CycloneDX
                     outputFormat = context.ParseResult.GetValueForOption(outputFormat),
                     specVersion = context.ParseResult.HasOption(specVersion)
                         ? SpecificationVersionHelpers.Version(context.ParseResult.GetValueForOption(specVersion))
-                        : null
+                        : null,
+                    SigningKeyPath = context.ParseResult.GetValueForOption(signingKey)
                 };
 
                 Runner runner = new Runner();

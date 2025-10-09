@@ -52,6 +52,7 @@ namespace CycloneDX.Models
         public string DependencyExcludeFilter { get; set; }
         public OutputFileFormat outputFormat { get; set; }
         public SpecificationVersion? specVersion { get; set; }
+        public string SigningKeyPath { get; set; }
 
     }
 }
