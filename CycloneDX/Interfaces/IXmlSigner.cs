@@ -4,6 +4,6 @@ namespace CycloneDX.Interfaces
 {
     public interface IXmlSigner
     {
-        public Task SignAsync(string keyFile, string bomContent);
+        public Task<string> SignAsync(string keyFile, string bomContent);
     }
 }
