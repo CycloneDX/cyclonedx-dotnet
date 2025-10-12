@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
+using System.Text;
 using CycloneDX.Interfaces;
 using System.Threading.Tasks;
 using System.Xml;
@@ -51,6 +52,7 @@ namespace CycloneDX.Services
             var envelope = new XmlDsigEnvelopedSignatureTransform();
 
             reference.AddTransform(envelope);
+            reference.AddTransform(new XmlDsigC14NTransform());
             signedBom.AddReference(reference);
             signedBom.ComputeSignature();
 
@@ -61,14 +63,22 @@ namespace CycloneDX.Services
             var signature = signedBom.GetXml();
             bom.DocumentElement!.AppendChild(bom.ImportNode(signature, true));
 
-            using var stringWriter = new StringWriter();
-            using var xmlWriter = XmlWriter.Create(stringWriter,
-                new XmlWriterSettings { Indent = true, OmitXmlDeclaration = false, Async = true});
+            var stringBuilder = new StringBuilder();
+            var xmlWriterSettings = new XmlWriterSettings
+            {
+                Indent = true,
+                IndentChars = "  ",
+                NewLineChars = "\r\n",
+                OmitXmlDeclaration = false,
+                Encoding = new UTF8Encoding(false)
+            };
 
-            bom.WriteTo(xmlWriter);
-            await xmlWriter.FlushAsync().ConfigureAwait(false);
+            using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
+            {
+                bom.Save(xmlWriter);
+            }
 
-            return stringWriter.ToString();
+            return stringBuilder.ToString();
         }
     }
 }
