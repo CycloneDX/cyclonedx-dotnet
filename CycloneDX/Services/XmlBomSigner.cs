@@ -24,7 +24,7 @@ namespace CycloneDX.Services
         }
     }
 
-    public class XmlSigner : IXmlSigner
+    public class XmlBomSigner : IBomSigner
     {
         public async Task<string> SignAsync(string keyFile, string bomContent)
         {
@@ -42,23 +42,28 @@ namespace CycloneDX.Services
 
             var bom = new XmlDocument();
             bom.PreserveWhitespace = true;
-            bom.Load(bomContent);
+            bomContent = bomContent.TrimStart('\uFEFF', '\u200B');
+            bom.LoadXml(bomContent);
 
             var signedBom = new SignedXml(bom);
             signedBom.SigningKey = rsa;
-            var reference = new Reference();
+            var reference = new Reference("");
             var envelope = new XmlDsigEnvelopedSignatureTransform();
 
             reference.AddTransform(envelope);
             signedBom.AddReference(reference);
             signedBom.ComputeSignature();
 
+            var keyInfo = new KeyInfo();
+            keyInfo.AddClause(new RSAKeyValue(rsa));
+            signedBom.KeyInfo = keyInfo;
+
             var signature = signedBom.GetXml();
             bom.DocumentElement!.AppendChild(bom.ImportNode(signature, true));
 
             using var stringWriter = new StringWriter();
             using var xmlWriter = XmlWriter.Create(stringWriter,
-                new XmlWriterSettings { Indent = true, OmitXmlDeclaration = false });
+                new XmlWriterSettings { Indent = true, OmitXmlDeclaration = false, Async = true});
 
             bom.WriteTo(xmlWriter);
             await xmlWriter.FlushAsync().ConfigureAwait(false);
