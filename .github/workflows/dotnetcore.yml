@@ -25,8 +25,10 @@ jobs:
         with:
           dotnet-version: |
             9.x
+      - name: Locked restore
+        run: dotnet restore --locked-mode
       - name: Build
-        run: dotnet build /WarnAsError
+        run: dotnet build /WarnAsError --no-restore
 
   # Fail if there are any failed tests
   #
