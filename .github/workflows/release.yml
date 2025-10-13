@@ -56,7 +56,7 @@ jobs:
           REPO=cyclonedx/cyclonedx-dotnet
           dotnet build --configuration Release --no-restore /p:Version=$VERSION
           dotnet pack CycloneDX/CycloneDX.csproj --configuration Release /p:Version=$VERSION --output $OUTPUT
-          docker build -f Dockerfile --build-arg --no-restore VERSION=$VERSION -t $REPO:$VERSION -t $REPO:latest .
+          docker build -f Dockerfile --build-arg VERSION=$VERSION -t $REPO:$VERSION -t $REPO:latest .
 
       # We install the newly generated tool as bit of a "smoke test" and to generate an SBOM for the release
       - name: Install newly generated version of CLI tool
