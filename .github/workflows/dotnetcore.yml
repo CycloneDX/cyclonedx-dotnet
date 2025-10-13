@@ -1,8 +1,6 @@
 # For details of what checks are run for PRs please refer below
 name: .NET Core CI
-
-permissions:
-  contents: read
+permissions: read-all
 
 on: [pull_request, workflow_dispatch]
 
