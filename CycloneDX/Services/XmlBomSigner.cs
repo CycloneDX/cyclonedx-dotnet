@@ -1,3 +1,20 @@
+// This file is part of CycloneDX Tool for .NET
+//
+// Licensed under the Apache License, Version 2.0 (the “License”);
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an “AS IS” BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// SPDX-License-Identifier: Apache-2.0
+// Copyright (c) OWASP Foundation. All Rights Reserved.
+
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -7,23 +24,10 @@ using CycloneDX.Interfaces;
 using System.Threading.Tasks;
 using System.Xml;
 
-
 namespace CycloneDX.Services
 {
-    public class InvalidSigningKeyException : Exception
-    {
-        public InvalidSigningKeyException() : base()
-        {
-        }
-
-        public InvalidSigningKeyException(string message) : base(message)
-        {
-        }
-
-        public InvalidSigningKeyException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-    }
+    public class InvalidSigningKeyException(string message, Exception innerException)
+        : Exception(message, innerException);
 
     public class XmlBomSigner : IBomSigner
     {
@@ -54,31 +58,35 @@ namespace CycloneDX.Services
             reference.AddTransform(envelope);
             reference.AddTransform(new XmlDsigC14NTransform());
             signedBom.AddReference(reference);
-            signedBom.ComputeSignature();
 
             var keyInfo = new KeyInfo();
             keyInfo.AddClause(new RSAKeyValue(rsa));
             signedBom.KeyInfo = keyInfo;
 
+            signedBom.ComputeSignature();
+
             var signature = signedBom.GetXml();
             bom.DocumentElement!.AppendChild(bom.ImportNode(signature, true));
 
-            var stringBuilder = new StringBuilder();
+            using var memoryStream = new MemoryStream();
             var xmlWriterSettings = new XmlWriterSettings
             {
                 Indent = true,
                 IndentChars = "  ",
                 NewLineChars = "\r\n",
                 OmitXmlDeclaration = false,
-                Encoding = new UTF8Encoding(false)
+                Encoding = new UTF8Encoding(false),
+                Async = true
             };
 
-            using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
+            using (var xmlWriter = XmlWriter.Create(memoryStream, xmlWriterSettings))
             {
                 bom.Save(xmlWriter);
+                await xmlWriter.FlushAsync();
             }
 
-            return stringBuilder.ToString();
+            var utf8String = Encoding.UTF8.GetString(memoryStream.ToArray());
+            return utf8String;
         }
     }
 }
