@@ -1,14 +1,13 @@
 # https://docs.github.com/en/actions/managing-issues-and-pull-requests/adding-labels-to-issues
 
 name: Label issues
+permissions: read-all
+
 on:
   issues:
     types:
       - reopened
       - opened
-permissions:
-  contents: read
-
 jobs:
   label_issues:
     runs-on: ubuntu-latest

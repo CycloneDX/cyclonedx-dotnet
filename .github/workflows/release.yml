@@ -18,8 +18,7 @@
 # make sure the correct branch is selected. It will default to the default
 # branch.
 name: Release
-permissions:
-  contents: write
+permissions: read-all
 
 on:
   workflow_dispatch
@@ -28,6 +27,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
