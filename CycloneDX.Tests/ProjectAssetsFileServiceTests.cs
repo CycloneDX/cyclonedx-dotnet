@@ -30,6 +30,7 @@ using NuGet.Packaging.Core;
 using NuGet.Versioning;
 using System.IO;
 using NuGet.Packaging.Signing;
+using System.Collections.Immutable;
 
 namespace CycloneDX.Tests
 {
@@ -44,7 +45,7 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
-                        new[] {
+                        [
                             new DotnetDependency
                             {
                                 Name = "Package1",
@@ -67,7 +68,7 @@ namespace CycloneDX.Tests
                                 Dependencies = new Dictionary<string, string>(),
                                 IsDevDependency = true
                             }
-                        })
+                        ])
                     },
                     { XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), new MockFileData("")
                     }
@@ -81,91 +82,91 @@ namespace CycloneDX.Tests
                     var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
                     return new LockFile
                     {
-                        Targets = new[]
-                        {
+                        Targets =
+                        [
                             new LockFileTarget
                             {
                                 TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "",
-                                Libraries = new[]
-                                {
+                                Libraries =
+                                [
                                     new LockFileTargetLibrary
                                     {
                                         Name = "Package1",
                                         Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
-                                        CompileTimeAssemblies = new[]
-                                        {
+                                        CompileTimeAssemblies =
+                                        [
                                             new LockFileItem("Package1.dll")
-                                        },
-                                        Dependencies = new[]
-                                        {
+                                        ],
+                                        Dependencies =
+                                        [
                                             new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), originalString:"[4.5, )"))
-                                        }
+                                        ]
                                     },
                                     new LockFileTargetLibrary
                                     {
                                         Name = "Package2",
                                         Version = new NuGet.Versioning.NuGetVersion("4.5.1"),
-                                        CompileTimeAssemblies = new[]
-                                        {
+                                        CompileTimeAssemblies =
+                                        [
                                             new LockFileItem("Package2.dll")
-                                        },
-                                        Dependencies = new PackageDependency[0]
+                                        ],
+                                        Dependencies = []
                                     },
                                     new LockFileTargetLibrary
                                     {
                                         Name = "Package3",
                                         Version = new NuGet.Versioning.NuGetVersion("1.0.0"),
-                                        CompileTimeAssemblies = new[]
-                                        {
+                                        CompileTimeAssemblies =
+                                        [
                                             new LockFileItem("Package3.dll")
-                                        },
-                                        Dependencies = new PackageDependency[0]
+                                        ],
+                                        Dependencies = []
                                     }
-                                }
+                                ]
                             },
                             new LockFileTarget
                             {
                                 TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "win-x64",
-                                Libraries = new[]
-                                {
+                                Libraries =
+                                [
                                     new LockFileTargetLibrary
                                     {
                                         Name = "Package1",
                                         Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
-                                        CompileTimeAssemblies = new[]
-                                        {
+                                        CompileTimeAssemblies =
+                                        [
                                             new LockFileItem("Package1.dll")
-                                        },
-                                        Dependencies = new[]
-                                        {
+                                        ],
+                                        Dependencies =
+                                        [
                                             new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), originalString:"[4.5, )"))
-                                        }
+                                        ]
                                     },
                                     new LockFileTargetLibrary
                                     {
                                         Name = "Package2",
                                         Version = new NuGet.Versioning.NuGetVersion("4.5.1"),
-                                        CompileTimeAssemblies = new[]
-                                        {
+                                        CompileTimeAssemblies =
+                                        [
                                             new LockFileItem("Package2.dll")
-                                        },
-                                        Dependencies = new PackageDependency[0]
+                                        ],
+                                        Dependencies = []
                                     },
                                     new LockFileTargetLibrary
                                     {
                                         Name = "Package3",
                                         Version = new NuGet.Versioning.NuGetVersion("1.0.0"),
-                                        CompileTimeAssemblies = new[]
-                                        {
+                                        CompileTimeAssemblies =
+                                        [
                                             new LockFileItem("Package3.dll")
-                                        },
-                                        Dependencies = new PackageDependency[0]
+                                        ],
+                                        Dependencies = []
                                     }
-                                }
+                                ]
                             }
-                        },
+                        ],
                         PackageSpec = new PackageSpec
                         {
                             TargetFrameworks =
@@ -174,8 +175,8 @@ namespace CycloneDX.Tests
                                 {
                                     FrameworkName = nuGetFramework,
                                     TargetAlias = nuGetFramework.Framework,
-                                    Dependencies = new List<LibraryDependency>
-                                    {
+                                    Dependencies =
+                                    [
                                         new()
                                         {
                                             SuppressParent = LibraryIncludeFlagUtils.DefaultSuppressParent,
@@ -209,26 +210,26 @@ namespace CycloneDX.Tests
                                                 TypeConstraint = LibraryDependencyTarget.Package
                                             }
                                         }
-                                    }
+                                    ]
                                 }
                             }
                         },
-                        Libraries = new[]
-                        {
+                        Libraries =
+                        [
                             new LockFileLibrary
                             {
                                 Name = "Package1",
                                 Version = new NuGetVersion("1.5.0"),
                                 Type = "package"
                             }
-                        },
-                        ProjectFileDependencyGroups = new[]
-                        {
+                        ],
+                        ProjectFileDependencyGroups =
+                        [
 
                             new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" }),
                             new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package2 >= 4.5.1" }),
                             new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package3 >= 1.0.0" })
-                        }
+                        ]
                     };
                 });
             mockAssetReader.Setup(m => m.ReadAllText(It.IsAny<string>())).Returns(() =>
@@ -281,7 +282,7 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
-                        new[] {
+                        [
                             new DotnetDependency
                             {
                                 Name = "Package1",
@@ -291,7 +292,7 @@ namespace CycloneDX.Tests
                                     { "Package2", "[4.5, )" },
                                 },
                             }
-                        })
+                        ])
                     },
                     { XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), new MockFileData("")
                     }
@@ -305,51 +306,51 @@ namespace CycloneDX.Tests
                     var nuGetFramework = new NuGet.Frameworks.NuGetFramework(framework, new Version(frameworkMajor, frameworkMinor, 0));
                     return new LockFile
                     {
-                        Targets = new[]
-                        {
+                        Targets =
+                        [
                             new LockFileTarget
                             {
                                 TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "",
-                                Libraries = new[]
-                                {
+                                Libraries =
+                                [
                                     new LockFileTargetLibrary
                                     {
                                         Name = "Package1",
                                         Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
-                                        CompileTimeAssemblies = new[]
-                                        {
+                                        CompileTimeAssemblies =
+                                        [
                                             new LockFileItem("Package1.dll")
-                                        },
-                                        Dependencies = new[]
-                                        {
+                                        ],
+                                        Dependencies =
+                                        [
                                             new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), originalString:"[4.5, )"))
-                                        }
+                                        ]
                                     }
-                                }
+                                ]
                             },
                             new LockFileTarget
                             {
                                 TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "win-x64",
-                                Libraries = new[]
-                                {
+                                Libraries =
+                                [
                                     new LockFileTargetLibrary
                                     {
                                         Name = "Package1",
                                         Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
-                                        CompileTimeAssemblies = new[]
-                                        {
+                                        CompileTimeAssemblies =
+                                        [
                                             new LockFileItem("Package1.dll")
-                                        },
-                                        Dependencies = new[]
-                                        {
+                                        ],
+                                        Dependencies =
+                                        [
                                             new PackageDependency("Package2", new VersionRange(minVersion: new NuGetVersion("4.5.0"), originalString:"[4.5, )"))
-                                        }
+                                        ]
                                     }
-                                }
+                                ]
                             }
-                        },
+                        ],
                         PackageSpec = new PackageSpec
                         {
                             TargetFrameworks =
@@ -358,8 +359,7 @@ namespace CycloneDX.Tests
                                 {
                                     FrameworkName = nuGetFramework,
                                     TargetAlias = nuGetFramework.Framework,
-                                    Dependencies = new List<LibraryDependency>
-                                    {
+                                    Dependencies = [
                                         new()
                                         {
                                             SuppressParent = LibraryIncludeFlagUtils.DefaultSuppressParent,
@@ -371,24 +371,24 @@ namespace CycloneDX.Tests
                                                 TypeConstraint = LibraryDependencyTarget.Package
                                             }
                                         }
-                                    }
+                                    ]
                                 }
                             }
                         },
-                        Libraries = new[]
-                        {
+                        Libraries =
+                        [
                             new LockFileLibrary
                             {
                                 Name = "Package1",
                                 Version = new NuGetVersion("1.5.0"),
                                 Type = "package"
                             }
-                        },
-                        ProjectFileDependencyGroups = new[]
-                        {
+                        ],
+                        ProjectFileDependencyGroups =
+                        [
 
                             new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" })
-                        }
+                        ]
                     };
                 });
             mockAssetReader.Setup(m => m.ReadAllText(It.IsAny<string>())).Returns(() =>
@@ -425,13 +425,13 @@ namespace CycloneDX.Tests
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
                 {
                     { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithPackageReferences(
-                        new[] {
+                        [
                             new DotnetDependency
                             {
                                 Name = "Package1",
                                 Version = "1.5.0",
                             }
-                        })
+                        ])
                     },
                     { XFS.Path(@"c:\SolutionPath\Project1\obj\project.assets.json"), new MockFileData("")
                     }
@@ -447,43 +447,43 @@ namespace CycloneDX.Tests
 
                     return new LockFile
                     {
-                        Targets = new[]
-                        {
+                        Targets =
+                        [
                             new LockFileTarget
                             {                               
                                 TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "",
-                                Libraries = new[]
-                                {
+                                Libraries =
+                                [
                                     new LockFileTargetLibrary
                                     {
                                         Name = "Package1",
                                         Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
-                                        CompileTimeAssemblies = new[]
-                                        {
+                                        CompileTimeAssemblies =
+                                        [
                                             new LockFileItem("Package1.dll")
-                                        }
+                                        ]
                                     }
-                                }
+                                ]
                             },
                             new LockFileTarget
                             {
                                 TargetFramework = nuGetFramework,
                                 RuntimeIdentifier = "win-x64",
-                                Libraries = new[]
-                                {
+                                Libraries =
+                                [
                                     new LockFileTargetLibrary
                                     {
                                         Name = "Package1",
                                         Version = new NuGet.Versioning.NuGetVersion("1.5.0"),
-                                        CompileTimeAssemblies = new[]
-                                        {
+                                        CompileTimeAssemblies =
+                                        [
                                             new LockFileItem("Package1.dll")
-                                        }
+                                        ]
                                     }
-                                }
+                                ]
                             }
-                        },
+                        ],
                         PackageSpec = new PackageSpec
                         {
                             TargetFrameworks =
@@ -492,8 +492,7 @@ namespace CycloneDX.Tests
                                 {
                                     FrameworkName = nuGetFramework,
                                     TargetAlias = nuGetFramework.Framework,
-                                    Dependencies = new List<LibraryDependency>
-                                    {
+                                    Dependencies = [
                                         new()
                                         {
                                             SuppressParent = LibraryIncludeFlagUtils.DefaultSuppressParent,
@@ -505,24 +504,25 @@ namespace CycloneDX.Tests
                                                 TypeConstraint = LibraryDependencyTarget.Package
                                             }
                                         }
-                                    }
+                                    ]
+                                    
                                 }
                             }
                         },
-                        Libraries = new[]
-                        {
+                        Libraries =
+                        [
                             new LockFileLibrary()
                             {
                                 Name = "Package1",
                                 Version = new NuGetVersion("1.5.0"),
                                 Type = "package"
                             }
-                        },
-                        ProjectFileDependencyGroups = new[]
-                        {
+                        ],
+                        ProjectFileDependencyGroups =
+                        [
 
                             new ProjectFileDependencyGroup(projectFileDependencyGroupsName, new List<string> { "Package1 >= 1.5.0" })
-                        }
+                        ]
                     };
                 });
             mockAssetReader.Setup(m => m.ReadAllText(It.IsAny<string>())).Returns(() =>
