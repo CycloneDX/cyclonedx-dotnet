@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d # v5.0.0
         with:
           dotnet-version: |
             9.x
@@ -52,20 +52,20 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Setup dotnet 9
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d # v5.0.0
         with:
           dotnet-version: '9.x'
       - name: Setup dotnet 8
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d # v5.0.0
         with:
           dotnet-version: '8.x'
       - name: Tests
         run: dotnet test --framework ${{ matrix.framework }}  --collect:"XPlat Code Coverage;Format=cobertura" --results-directory "TestResults"
       # see https://github.com/danielpalme/ReportGenerator/blob/main/.github/workflows/ci.yml
       - name: ReportGenerator
-        uses: danielpalme/ReportGenerator-GitHub-Action@v5
+        uses: danielpalme/ReportGenerator-GitHub-Action@9870ed167742d546b99962ff815fcc1098355ed8 # v5.4.17
         with:
           reports: 'TestResults/**/coverage.cobertura.xml'
           targetdir: 'coveragereport'
@@ -82,7 +82,7 @@ jobs:
         shell: bash
       - name: Upload coverage report artifact
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.framework == 'net9.0' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: CoverageReport_${{ matrix.framework }}_${{ matrix.os }}
           path: coveragereport
