@@ -25,6 +25,7 @@ namespace CycloneDX
         LocalPackageCacheError,
         DotnetRestoreFailed,
         GitHubLicenseResolutionFailed,
-        UnableToLocateDependencyBomRef
+        UnableToLocateDependencyBomRef,
+        UnsupportedSignatureFormat
     }
 }

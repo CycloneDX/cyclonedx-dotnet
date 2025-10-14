@@ -445,8 +445,16 @@ namespace CycloneDX
 
             if (!string.IsNullOrEmpty(signingKeyPath))
             {
-                IBomSigner signer = new XmlBomSigner();
-                bomContents = await signer.SignAsync(signingKeyPath, bomContents);
+                if (format == OutputFileFormat.Xml)
+                {
+                    IBomSigner signer = new XmlBomSigner();
+                    bomContents = await signer.SignAsync(signingKeyPath, bomContents);
+                }
+                else
+                {
+                    Console.WriteLine("Signing the BOM is only supported with XML BOMs at the moment.");
+                    return (int)ExitCode.UnsupportedSignatureFormat;
+                }
             }
 
 
