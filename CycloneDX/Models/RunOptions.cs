@@ -21,6 +21,7 @@ namespace CycloneDX.Models
 {
     public class RunOptions
     {
+        public string SigningKeyPath { get; set; }
         public string SolutionOrProjectFile { get; set; }
         public string runtime { get; set; }
         public string framework { get; set; }
@@ -52,6 +53,5 @@ namespace CycloneDX.Models
         public string DependencyExcludeFilter { get; set; }
         public OutputFileFormat outputFormat { get; set; }
         public SpecificationVersion? specVersion { get; set; }
-
     }
 }

@@ -88,6 +88,7 @@ namespace CycloneDX
             bool setNugetPurl = options.setNugetPurl;
             Models.OutputFileFormat outputFormat = options.outputFormat;
             SpecificationVersion specVersion = options.specVersion ?? SpecificationVersionHelpers.CurrentVersion;
+            string signingKeyPath = options.SigningKeyPath;
 
 
             Console.WriteLine();
@@ -168,8 +169,8 @@ namespace CycloneDX
 
             try
             {
-                if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase) || 
-                    SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnx", StringComparison.OrdinalIgnoreCase) ||                
+                if (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase) ||
+                    SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnx", StringComparison.OrdinalIgnoreCase) ||
                     SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnf", StringComparison.OrdinalIgnoreCase))
                 {
                     if (!fileSystem.File.Exists(SolutionOrProjectFile))
@@ -441,6 +442,21 @@ namespace CycloneDX
 
             var (format, filename) = DetermineOutputFileFormatAndFilename(outputFormat, outputFilename, json);
             var bomContents = BomService.CreateDocument(bom, format);
+
+            if (!string.IsNullOrEmpty(signingKeyPath))
+            {
+                if (format == OutputFileFormat.Xml)
+                {
+                    IBomSigner signer = new XmlBomSigner();
+                    bomContents = await signer.SignAsync(signingKeyPath, bomContents);
+                }
+                else
+                {
+                    Console.WriteLine("Signing the BOM is only supported with XML BOMs at the moment.");
+                    return (int)ExitCode.UnsupportedSignatureFormat;
+                }
+            }
+
 
             // check if the output directory exists and create it if needed
             var bomPath = this.fileSystem.Path.GetFullPath(outputDirectory);

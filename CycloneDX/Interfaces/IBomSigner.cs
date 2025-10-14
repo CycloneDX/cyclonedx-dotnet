@@ -14,18 +14,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
-namespace CycloneDX
+
+using System.Threading.Tasks;
+
+namespace CycloneDX.Interfaces
 {
-    enum ExitCode
+    public interface IBomSigner
     {
-        OK,
-        InvalidOptions,
-        InvalidGitHubApiCredentials,
-        GitHubApiRateLimitExceeded,
-        LocalPackageCacheError,
-        DotnetRestoreFailed,
-        GitHubLicenseResolutionFailed,
-        UnableToLocateDependencyBomRef,
-        UnsupportedSignatureFormat
+        public Task<string> SignAsync(string keyFile, string bomContent);
     }
 }
