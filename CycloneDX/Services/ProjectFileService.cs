@@ -85,7 +85,7 @@ namespace CycloneDX.Services
             return testSdkReference != null || testProjectPropertyGroup != null;
         }
 
-        private (string name, string version) GetAssemblyNameAndVersion(string projectFilePath)
+        public (string name, string version) GetAssemblyNameAndVersion(string projectFilePath)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
@@ -115,7 +115,7 @@ namespace CycloneDX.Services
 
             // Extract Version
             XmlElement versionElement = xmldoc.SelectSingleNode("/Project/PropertyGroup/Version") as XmlElement;
-            string version = versionElement?.Value;
+            string version = versionElement?.InnerText;
 
             if (version == null)
             {
