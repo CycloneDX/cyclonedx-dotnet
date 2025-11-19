@@ -150,6 +150,14 @@ namespace CycloneDX
 
             };
 
+            if (string.IsNullOrEmpty(setVersion) && SolutionOrProjectFile.ToLowerInvariant().EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
+            {
+                var projectVersion = projectFileService.GetProjectVersion(fullSolutionOrProjectFilePath);
+                if (!string.IsNullOrEmpty(projectVersion))
+                {
+                    topLevelComponent.Version = projectVersion;
+                }
+            }
 
             if (options.includeProjectReferences
                 &&
