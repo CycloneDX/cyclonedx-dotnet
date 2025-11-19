@@ -28,7 +28,6 @@ using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using NuGet.Common;
-using NuGet.Configuration;
 using NuGet.Packaging;
 using NuGet.Packaging.Licenses;
 using NuGet.Protocol;
@@ -59,7 +58,7 @@ namespace CycloneDX.Services
         private const string _sha512Extension = ".nupkg.sha512";
 
         public NugetV3Service(
-            NugetInputModel nugetInput,
+            SourceRepository sourceRepository,
             IFileSystem fileSystem,
             List<string> packageCachePaths,
             IGithubService githubService,
@@ -73,7 +72,7 @@ namespace CycloneDX.Services
             _disableHashComputation = disableHashComputation;
             _logger = logger;
 
-            _sourceRepository = SetupNugetRepository(nugetInput);
+            _sourceRepository = sourceRepository;
             _sourceCacheContext = new SourceCacheContext();
             _cancellationToken = CancellationToken.None;
         }
@@ -188,31 +187,6 @@ namespace CycloneDX.Services
             }
 
             return null;
-        }
-
-        private SourceRepository SetupNugetRepository(NugetInputModel nugetInput)
-        {
-            if (nugetInput == null || string.IsNullOrEmpty(nugetInput.nugetFeedUrl) ||
-                string.IsNullOrEmpty(nugetInput.nugetUsername) || string.IsNullOrEmpty(nugetInput.nugetPassword))
-            {
-                return Repository.Factory.GetCoreV3(nugetInput?.nugetFeedUrl ?? "https://api.nuget.org/v3/index.json");
-            }
-
-            var packageSource =
-                GetPackageSourceWithCredentials(nugetInput);
-            return Repository.Factory.GetCoreV3(packageSource);
-        }
-
-        private PackageSource GetPackageSourceWithCredentials(NugetInputModel nugetInput)
-        {
-            var packageSource = new PackageSource(nugetInput.nugetFeedUrl)
-            {
-                Credentials = new PackageSourceCredential(nugetInput.nugetFeedUrl, nugetInput.nugetUsername,
-                    nugetInput.nugetPassword,
-                    nugetInput.IsPasswordClearText, null)
-            };
-
-            return packageSource;
         }
 
         private static byte[] ComputeSha215Hash(Stream stream)
