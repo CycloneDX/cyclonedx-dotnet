@@ -15,8 +15,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CycloneDX.Models;
+using NuGet.Protocol.Model;
 
 namespace CycloneDX.Interfaces
 {
@@ -24,5 +26,6 @@ namespace CycloneDX.Interfaces
     {
         Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope? scope);
         Task<Component> GetComponentAsync(DotnetDependency DotnetDependency);
+        Task<IList<PackageVulnerabilityInfo>> GetVulnerabilitiesAsync(string name, string version);
     }
 }
