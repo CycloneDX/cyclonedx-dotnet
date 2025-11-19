@@ -47,7 +47,8 @@ namespace CycloneDX.Tests
                 XFS.Path(@"c:\nugetcache2"),
             };
             var mockGithubService = new Mock<IGithubService>();
-            var nugetService = new NugetV3Service(null, mockFileSystem, cachePaths, mockGithubService.Object,
+            var sourceRepo = NugetV3ServiceFactory.CreateDefaultNugetRepository(null);
+            var nugetService = new NugetV3Service(sourceRepo, mockFileSystem, cachePaths, mockGithubService.Object,
                 new NullLogger(), false);
 
             var nuspecFilename = nugetService.GetCachedNuspecFilename("TestPackage", "1.2.3");
@@ -69,11 +70,8 @@ namespace CycloneDX.Tests
                 { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
             });
 
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                new Mock<IGithubService>().Object,
-                new NullLogger(), false);
+            var mockGitHubService = new Mock<IGithubService>();
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -111,11 +109,8 @@ namespace CycloneDX.Tests
                 { XFS.Path($@"c:\nugetcache\testpackage\{normalizedVersion}\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
             });
 
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                new Mock<IGithubService>().Object,
-                new NullLogger(), false);
+            var mockGitHubService = new Mock<IGithubService>();
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var component = await nugetService.GetComponentAsync("testpackage", rawVersion, Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -141,11 +136,8 @@ namespace CycloneDX.Tests
                 { XFS.Path($@"c:\nugetcache\testpackage\{normalizedVersion}\testpackage.{normalizedVersion}.nupkg"), new MockFileData(nugetFileContent) },
             });
 
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                new Mock<IGithubService>().Object,
-                new NullLogger(), false);
+            var mockGitHubService = new Mock<IGithubService>();
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var component = await nugetService.GetComponentAsync("testpackage", $"{rawVersion}", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -176,7 +168,8 @@ namespace CycloneDX.Tests
                 { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.1.0.0.nupkg"), new MockFileData(nugetFileContent) },
             });
 
-            var nugetService = new NugetV3Service(null,
+            var sourceRepo = NugetV3ServiceFactory.CreateDefaultNugetRepository(null);
+            var nugetService = new NugetV3Service(sourceRepo,
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 new Mock<IGithubService>().Object,
@@ -247,11 +240,8 @@ namespace CycloneDX.Tests
                 { XFS.Path($@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
             });
 
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                new Mock<IGithubService>().Object,
-                new NullLogger(), false);
+            var mockGitHubService = new Mock<IGithubService>();
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -262,11 +252,8 @@ namespace CycloneDX.Tests
         [Fact]
         public async Task GetComponentFromNugetOrgReturnsComponent()
         {
-            var nugetService = new NugetV3Service(null,
-                new MockFileSystem(),
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                new Mock<IGithubService>().Object,
-                new NullLogger(), false);
+            var mockGitHubService = new Mock<IGithubService>();
+            var nugetService = CreateNugetService(new MockFileSystem(), mockGitHubService.Object);
 
             var packageName = "Newtonsoft.Json";
             var packageVersion = "13.0.1";
@@ -281,11 +268,9 @@ namespace CycloneDX.Tests
         [Fact]
         public async Task GetComponentFromNugetOrgReturnsComponent_disableHashComputation_true()
         {
-            var nugetService = new NugetV3Service(null,
-                new MockFileSystem(),
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                new Mock<IGithubService>().Object,
-                new NullLogger(), true);
+            var mockFileSystem = new MockFileSystem();
+            var mockGitHubService = new Mock<IGithubService>();
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var packageName = "Newtonsoft.Json";
             var packageVersion = "13.0.1";
@@ -315,11 +300,7 @@ namespace CycloneDX.Tests
             var mockGitHubService = new Mock<IGithubService>();
             mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
 
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                mockGitHubService.Object,
-                new NullLogger(), false);
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -346,11 +327,7 @@ namespace CycloneDX.Tests
             var mockGitHubService = new Mock<IGithubService>();
             mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
 
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                mockGitHubService.Object,
-                new NullLogger(), false);
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -377,11 +354,7 @@ namespace CycloneDX.Tests
             var mockGitHubService = new Mock<IGithubService>();
             mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url/blob/123456/licence")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
 
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                mockGitHubService.Object,
-                new NullLogger(), false);
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -408,11 +381,7 @@ namespace CycloneDX.Tests
             var mockGitHubService = new Mock<IGithubService>();
             mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
 
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                mockGitHubService.Object,
-                new NullLogger(), false);
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -440,11 +409,7 @@ namespace CycloneDX.Tests
             var mockGitHubService = new Mock<IGithubService>();
             mockGitHubService.Setup(x => x.GetLicenseAsync("https://licence.url")).Returns(Task.FromResult(new License { Id = "LicenseId" }));
 
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                mockGitHubService.Object,
-                new NullLogger(), false);
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -469,12 +434,7 @@ namespace CycloneDX.Tests
             });
 
             var mockGitHubService = new Mock<IGithubService>();
-
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                mockGitHubService.Object,
-                new NullLogger(), false);
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -493,18 +453,12 @@ namespace CycloneDX.Tests
                 </metadata>
                 </package>";
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-        {
-            { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
-        });
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
 
             var mockGitHubService = new Mock<IGithubService>();
-
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                mockGitHubService.Object,
-                new NullLogger(), false);
-
+            var nugetService = CreateNugetService(mockFileSystem, mockGitHubService.Object);
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Equal(2, component.Licenses.Count);
@@ -528,17 +482,22 @@ namespace CycloneDX.Tests
                 { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
             });
 
-            var nugetService = new NugetV3Service(null,
-                mockFileSystem,
-                new List<string> { XFS.Path(@"c:\nugetcache") },
-                null,
-                new NullLogger(), false);
+            var nugetService = CreateNugetService(mockFileSystem, null);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Single(component.Licenses);
             Assert.Equal("https://not-licence.url", component.Licenses.First().License.Url);
             Assert.Equal("Unknown - See URL", component.Licenses.First().License.Name);
+        }
+
+        static NugetV3Service CreateNugetService(MockFileSystem mockFileSystem, IGithubService github)
+        {
+            var sourceRepo = NugetV3ServiceFactory.CreateDefaultNugetRepository(null);
+            return new NugetV3Service(sourceRepo, mockFileSystem,
+                [XFS.Path(@"c:\nugetcache")],
+                github,
+                new NullLogger(), disableHashComputation: false);
         }
     }
 }
