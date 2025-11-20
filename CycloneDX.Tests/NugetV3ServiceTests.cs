@@ -21,11 +21,16 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CycloneDX.Models;
 using CycloneDX.Services;
 using Moq;
 using NuGet.Common;
+using NuGet.Protocol;
+using NuGet.Protocol.Core.Types;
+using NuGet.Protocol.Model;
+using NuGet.Versioning;
 using Xunit;
 using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 
@@ -33,6 +38,8 @@ namespace CycloneDX.Tests
 {
     public class NugetV3ServiceTests
     {
+        static readonly ILogger logger = new NullLogger();
+
         [Fact]
         public void GetCachedNuspecFilename_ReturnsFullPath()
         {
@@ -491,13 +498,66 @@ namespace CycloneDX.Tests
             Assert.Equal("Unknown - See URL", component.Licenses.First().License.Name);
         }
 
+        [Fact]
+        public async Task GetVulnerabilitiesAsync_ReturnsVulnerabilities()
+        {
+            // Arrange
+            const string packageName = nameof(packageName);
+            const string packageVersion = "1.2.3-rc-0004";
+
+            // Mock vulnerability info resource
+            var mockVulnResource = new Mock<IVulnerabilityInfoResource>();
+            var vulnerabilities = new PackageVulnerabilityInfo[]
+            {
+                new(new Uri("https://example.com/advisory"), PackageVulnerabilitySeverity.High, VersionRange.AllStable),
+            };
+            mockVulnResource
+                .Setup(r => r.GetVulnerabilityInfoAsync(It.IsAny<SourceCacheContext>(), It.IsAny<ILogger>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new GetVulnerabilityInfoResult(
+                [
+                    new Dictionary<string, IReadOnlyList<PackageVulnerabilityInfo>>()
+                    {
+                        { packageName, vulnerabilities },
+                        { "AnotherPackage", [] },
+                    }
+                ], exceptions: null));
+
+            // Mock source repository to return the vulnerability resource
+            var mockSourceRepo = new Mock<SourceRepository>(MockBehavior.Strict);
+            mockSourceRepo
+                .Setup(r => r.GetResourceAsync<IVulnerabilityInfoResource>())
+                .ReturnsAsync(mockVulnResource.Object);
+
+            // Setup other dependencies
+            var mockFileSystem = new MockFileSystem();
+            var mockGithubService = new Mock<IGithubService>();
+            var nugetService = new NugetV3Service(
+                mockSourceRepo.Object,
+                mockFileSystem,
+                packageCachePaths: [],
+                mockGithubService.Object,
+                logger,
+                false);
+
+            // Act
+            var result = await nugetService.GetVulnerabilitiesAsync(packageName, packageVersion);
+
+            // Assert
+            var actual = result.Single();
+            Assert.Equal(PackageVulnerabilitySeverity.High, actual.Severity);
+            Assert.Equal("(, )", actual.Versions.ToShortString());
+            Assert.Equal("https://example.com/advisory", actual.Url.ToString());
+
+            mockSourceRepo.VerifyAll();
+            mockVulnResource.VerifyAll();
+        }
+
         static NugetV3Service CreateNugetService(MockFileSystem mockFileSystem, IGithubService github)
         {
             var sourceRepo = NugetV3ServiceFactory.CreateDefaultNugetRepository(null);
             return new NugetV3Service(sourceRepo, mockFileSystem,
-                [XFS.Path(@"c:\nugetcache")],
-                github,
-                new NullLogger(), disableHashComputation: false);
+                [XFS.Path(@"c:\nugetcache")], github,
+                logger, disableHashComputation: false);
         }
     }
 }
