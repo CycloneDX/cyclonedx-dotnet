@@ -515,7 +515,7 @@ namespace CycloneDX.Tests
                 .Setup(r => r.GetVulnerabilityInfoAsync(It.IsAny<SourceCacheContext>(), It.IsAny<ILogger>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetVulnerabilityInfoResult(
                 [
-                    new Dictionary<string, IReadOnlyList<PackageVulnerabilityInfo>>()
+                    new Dictionary<string, IReadOnlyList<PackageVulnerabilityInfo>>
                     {
                         { packageName, vulnerabilities },
                         { "AnotherPackage", [] },
