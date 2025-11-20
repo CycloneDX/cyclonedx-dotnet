@@ -27,6 +27,9 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      id-token: write
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - name: Setup dotnet 2.1
@@ -82,11 +85,15 @@ jobs:
           json: true
           github-bearer-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: NuGet login (OIDC)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_BOT_USERNAME }}
+
       - name: Publish package to NuGet
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
-          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" ${{ steps.package_release.outputs.package_filename }}
+          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}" ${{ steps.package_release.outputs.package_filename }}
 
       - name: Publish Docker image to Docker Hub
         env:
