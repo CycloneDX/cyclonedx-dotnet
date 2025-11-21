@@ -62,7 +62,7 @@ Usage:
   dotnet-CycloneDX <path> [options]
 
 Arguments:
-  <path>  The path to a .sln, .slnf, .csproj, .fsproj, .vbproj, .xsproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.
+  <path>  The path to a .sln, .slnf, .slnx, .csproj, .fsproj, .vbproj, .xsproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.
 
 Options:
   -tfm, --framework <framework>                                                The target framework to use. If not defined, all will be aggregated.
