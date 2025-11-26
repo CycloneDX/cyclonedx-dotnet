@@ -37,13 +37,14 @@ jobs:
         with:
           dotnet-version: |
             9.x
+            10.x
 
       - name: Locked restore
         run: dotnet restore --locked-mode
 
       # The tests should have already been run during the PR workflow, so this is really just a sanity check
       - name: Tests
-        run: dotnet test --framework net9.0
+        run: dotnet test --framework net10.0
 
       # Build and package everything, including the Docker image
       - name: Package release
