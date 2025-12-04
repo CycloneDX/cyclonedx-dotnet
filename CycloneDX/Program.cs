@@ -62,14 +62,6 @@ namespace CycloneDX
             var specVersion = new Option<string>("--spec-version", "-spv") { Description = $"Which version of CycloneDX spec to use. [default: {SpecificationVersionHelpers.VersionString(SpecificationVersionHelpers.CurrentVersion)}]" };
             specVersion.AcceptOnlyFromAmong(Enum.GetValues<SpecificationVersion>().Select(SpecificationVersionHelpers.VersionString).ToArray());
 
-            //Deprecated args
-            var disableGithubLicenses = new Option<bool>("--disable-github-licenses", "-dgl") { Description = "(Deprecated, this is the default setting now)" };
-            var outputFilenameDeprecated = new Option<string>("-f", null) { Description = "(Deprecated use -fn instead) Optionally provide a filename for the BOM (default: bom.xml or bom.json)." };
-            var excludeDevDeprecated = new Option<bool>("-d", null) { Description = "(Deprecated use -ed instead) Exclude development dependencies from the BOM." };
-            var scanProjectDeprecated = new Option<bool>("-r", null) { Description = "(Deprecated use -rs instead) To be used with a single project file, it will recursively scan project references of the supplied project file." };
-            var outputDirectoryDeprecated = new Option<string>("--out", null) { Description = "(Deprecated use -output instead) The directory to write the BOM" };
-            var jsonDeprecated = new Option<bool>("--json", "-j") { Description = "(Deprecated use `--output-format json` instead) Produce a JSON BOM instead of XML" };
-
             RootCommand rootCommand = new RootCommand("A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")
             {
                 SolutionOrProjectFile,
@@ -77,7 +69,6 @@ namespace CycloneDX
                 runtime,
                 outputDirectory,
                 outputFilename,
-                jsonDeprecated,
                 excludeDev,
                 excludetestprojects,
                 baseUrl,
@@ -101,11 +92,6 @@ namespace CycloneDX
                 setType,
                 setNugetPurl,
                 specVersion,
-                outputFilenameDeprecated,
-                excludeDevDeprecated,
-                scanProjectDeprecated,
-                outputDirectoryDeprecated,
-                disableGithubLicenses,
                 excludeFilter,
                 outputFormat
             };
@@ -121,16 +107,15 @@ namespace CycloneDX
                     SolutionOrProjectFile = parseResult.GetValue(SolutionOrProjectFile),
                     runtime = parseResult.GetValue(runtime),
                     framework = parseResult.GetValue(framework),
-                    outputDirectory = parseResult.GetValue(outputDirectory) ?? parseResult.GetValue(outputDirectoryDeprecated),
-                    outputFilename = parseResult.GetValue(outputFilename) ?? parseResult.GetValue(outputFilenameDeprecated),
-                    json = parseResult.GetValue(jsonDeprecated),
-                    excludeDev = parseResult.GetValue(excludeDev) || parseResult.GetValue(excludeDevDeprecated),
+                    outputDirectory = parseResult.GetValue(outputDirectory),
+                    outputFilename = parseResult.GetValue(outputFilename),
+                    excludeDev = parseResult.GetValue(excludeDev),
                     excludeTestProjects = parseResult.GetValue(excludetestprojects),
                     baseUrl = parseResult.GetValue(baseUrl),
                     baseUrlUserName = parseResult.GetValue(baseUrlUS),
                     baseUrlUSP = parseResult.GetValue(baseUrlUSP),
                     isPasswordClearText = parseResult.GetValue(isPasswordClearText),
-                    scanProjectReferences = parseResult.GetValue(scanProjectReferences) || parseResult.GetValue(scanProjectDeprecated),
+                    scanProjectReferences = parseResult.GetValue(scanProjectReferences),
                     noSerialNumber = parseResult.GetValue(noSerialNumber),
                     githubUsername = parseResult.GetValue(githubUsername),
                     githubT = parseResult.GetValue(githubT),
