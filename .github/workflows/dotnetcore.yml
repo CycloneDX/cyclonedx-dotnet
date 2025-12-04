@@ -68,7 +68,7 @@ jobs:
         run: dotnet test --framework ${{ matrix.framework }}  --collect:"XPlat Code Coverage;Format=cobertura" --results-directory "TestResults"
       # see https://github.com/danielpalme/ReportGenerator/blob/main/.github/workflows/ci.yml
       - name: ReportGenerator
-        uses: danielpalme/ReportGenerator-GitHub-Action@9870ed167742d546b99962ff815fcc1098355ed8 # v5.4.17
+        uses: danielpalme/ReportGenerator-GitHub-Action@ee0ae774f6d3afedcbd1683c1ab21b83670bdf8e # v5.5.1
         with:
           reports: 'TestResults/**/coverage.cobertura.xml'
           targetdir: 'coveragereport'
