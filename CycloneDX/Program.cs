@@ -129,7 +129,7 @@ namespace CycloneDX
                     baseUrlUserName = parseResult.GetValue(baseUrlUS),
                     baseUrlUSP = parseResult.GetValue(baseUrlUSP),
                     isPasswordClearText = parseResult.GetValue(isPasswordClearText),
-                    scanProjectReferences = parseResult.GetValue(scanProjectReferences) | parseResult.GetValue(scanProjectDeprecated),
+                    scanProjectReferences = parseResult.GetValue(scanProjectReferences) || parseResult.GetValue(scanProjectDeprecated),
                     noSerialNumber = parseResult.GetValue(noSerialNumber),
                     githubUsername = parseResult.GetValue(githubUsername),
                     githubT = parseResult.GetValue(githubT),
