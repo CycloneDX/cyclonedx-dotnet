@@ -18,14 +18,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CycloneDX.Models;
+using CycloneDX.Services.Models;
 using NuGet.Protocol.Model;
 
 namespace CycloneDX.Interfaces
 {
     public interface INugetService
     {
-        Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope? scope);
-        Task<Component> GetComponentAsync(DotnetDependency DotnetDependency);
+        Task<NugetComponent> GetComponentAsync(string name, string version, NugetComponentScope? scope);
+        Task<NugetComponent> GetComponentAsync(DotnetDependency DotnetDependency);
         Task<IList<PackageVulnerabilityInfo>> GetVulnerabilitiesAsync(string name, string version);
     }
 }
