@@ -29,8 +29,8 @@ namespace CycloneDX
     {
         public static async Task<int> Main(string[] args)
         {
-            var SolutionOrProjectFile = new Argument<string>("path") {  Description = "The path to a .sln, .slnf, .slnx, .csproj, .fsproj, .vbproj, .xsproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files." };
-            var framework = new Option<string>("--framework", "-tfm") { Description = "The target framework to use. If not defined, all will be aggregated." };            
+            var SolutionOrProjectFile = new Argument<string>("path") { Description = "The path to a .sln, .slnf, .slnx, .csproj, .fsproj, .vbproj, .xsproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.", Arity = ArgumentArity.ZeroOrOne };
+            var framework = new Option<string>("--framework", "-tfm") { Description = "The target framework to use. If not defined, all will be aggregated." };
 
             var runtime = new Option<string>("--runtime", "-rt") { Description = "The runtime to use. If not defined, all will be aggregated." };
             var outputDirectory = new Option<string>("--output", "-o") { Description = "The directory to write the BOM" };
@@ -113,8 +113,9 @@ namespace CycloneDX
             ParseResult parseResult = rootCommand.Parse(args);
 
 
-            if (parseResult.Errors.Count == 0)
+            if (parseResult.Errors.Count == 0 && parseResult.GetValue(SolutionOrProjectFile) is string)
             {
+
                 RunOptions options = new RunOptions
                 {
                     SolutionOrProjectFile = parseResult.GetValue(SolutionOrProjectFile),
@@ -152,10 +153,13 @@ namespace CycloneDX
                         : null
                 };
 
-
                 Runner runner = new Runner();
                 var taskStatus = await runner.HandleCommandAsync(options);
                 return taskStatus;
+            }
+            else if (parseResult.Errors.Count == 0)
+            {
+                return parseResult.Invoke();
             }
             foreach (ParseError parseError in parseResult.Errors)
             {

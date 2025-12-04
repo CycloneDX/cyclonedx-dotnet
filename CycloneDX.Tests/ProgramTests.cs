@@ -30,13 +30,6 @@ namespace CycloneDX.Tests
 {
     public class ProgramTests
     {
-        [Fact]
-        public async Task CallingCycloneDX_WithoutSolutionFile_ReturnsInvalidOptions()
-        {
-            var exitCode = await Program.Main(new string[] { }).ConfigureAwait(true);
-
-            Assert.Equal((int)ExitCode.InvalidOptions, exitCode);
-        }
 
         [Fact]
         public async Task CallingCycloneDX_CreatesOutputDirectory()
