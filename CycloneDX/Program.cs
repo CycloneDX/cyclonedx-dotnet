@@ -123,7 +123,7 @@ namespace CycloneDX
                     outputDirectory = parseResult.GetValue(outputDirectory) ?? parseResult.GetValue(outputDirectoryDeprecated),
                     outputFilename = parseResult.GetValue(outputFilename) ?? parseResult.GetValue(outputFilenameDeprecated),
                     json = parseResult.GetValue(jsonDeprecated),
-                    excludeDev = parseResult.GetValue(excludeDev) | parseResult.GetValue(excludeDevDeprecated),
+                    excludeDev = parseResult.GetValue(excludeDev) || parseResult.GetValue(excludeDevDeprecated),
                     excludeTestProjects = parseResult.GetValue(excludetestprojects),
                     baseUrl = parseResult.GetValue(baseUrl),
                     baseUrlUserName = parseResult.GetValue(baseUrlUS),
