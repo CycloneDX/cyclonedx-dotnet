@@ -120,7 +120,7 @@ namespace CycloneDX
                     SolutionOrProjectFile = parseResult.GetValue(SolutionOrProjectFile),
                     runtime = parseResult.GetValue(runtime),
                     framework = parseResult.GetValue(framework),
-                    outputDirectory = parseResult.GetValue(outputDirectory) ?? parseResult.GetValue(outputDirectory),
+                    outputDirectory = parseResult.GetValue(outputDirectory) ?? parseResult.GetValue(outputDirectoryDeprecated),
                     outputFilename = parseResult.GetValue(outputFilename) ?? parseResult.GetValue(outputFilenameDeprecated),
                     json = parseResult.GetValue(jsonDeprecated),
                     excludeDev = parseResult.GetValue(excludeDev) | parseResult.GetValue(excludeDevDeprecated),
