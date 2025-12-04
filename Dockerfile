@@ -19,8 +19,14 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS final
 
 WORKDIR /work
 
-ENV DOTNET_NOLOGO=true \
+ENV DOTNET_CLI_HOME=/tmp/dotnet-home \
+    NUGET_PACKAGES=/tmp/nuget-packages \
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
+    DOTNET_NOLOGO=1 \
     DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+RUN mkdir -p /tmp/dotnet-home /tmp/nuget-packages \
+    && chmod -R 0777 /tmp/dotnet-home /tmp/nuget-packages
 
 COPY --from=build /app/publish /app
 
