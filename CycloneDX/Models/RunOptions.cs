@@ -26,7 +26,6 @@ namespace CycloneDX.Models
         public string framework { get; set; }
         public string outputDirectory { get; set; }
         public string outputFilename { get; set; }
-        public bool json { get; set; }
         public bool excludeDev { get; set; }
         public bool excludeTestProjects { get; set; }
         public bool includeProjectReferences { get; set; }

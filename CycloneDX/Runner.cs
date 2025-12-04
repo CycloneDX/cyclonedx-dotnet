@@ -70,7 +70,6 @@ namespace CycloneDX
             string framework = options.framework;
             string runtime = options.runtime;
             string outputFilename = options.outputFilename;
-            bool json = options.json;
             bool excludeDev = options.excludeDev;
             bool excludetestprojects = options.excludeTestProjects;
             bool scanProjectReferences = options.scanProjectReferences;
@@ -439,7 +438,7 @@ namespace CycloneDX
 
             LastGeneratedBom = bom;
 
-            var (format, filename) = DetermineOutputFileFormatAndFilename(outputFormat, outputFilename, json);
+            var (format, filename) = DetermineOutputFileFormatAndFilename(outputFormat, outputFilename);
             var bomContents = BomService.CreateDocument(bom, format);
 
             // check if the output directory exists and create it if needed
@@ -461,18 +460,11 @@ namespace CycloneDX
 
         (OutputFileFormat format, string outputFileName) DetermineOutputFileFormatAndFilename(
             OutputFileFormat selectedFormat,
-            string userProvidedFilename,
-            bool legacyJsonFlag
+            string userProvidedFilename
         )
         {
             OutputFileFormat resolvedFormat = selectedFormat;
             string filename = userProvidedFilename ?? string.Empty;
-
-            // Legacy --json support
-            if (legacyJsonFlag && selectedFormat == OutputFileFormat.Auto)
-            {
-                resolvedFormat = OutputFileFormat.Json;
-            }
 
             // Auto deduction based on filename
             if (resolvedFormat == OutputFileFormat.Auto)

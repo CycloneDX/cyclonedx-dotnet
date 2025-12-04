@@ -48,7 +48,7 @@ namespace CycloneDX.Tests
             {
                 SolutionOrProjectFile = XFS.Path(@"c:\ProjectPath\Project.csproj"),
                 outputDirectory = XFS.Path(@"c:\NewDirectory"),
-                json = fileFormat == "json",
+                outputFormat = fileFormat == "json" ? OutputFileFormat.Json : OutputFileFormat.Xml,
                 enableGithubLicenses = !disableGitHubLicenses,
             };
 

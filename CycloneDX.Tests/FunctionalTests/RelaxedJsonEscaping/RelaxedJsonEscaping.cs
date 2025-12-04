@@ -71,18 +71,16 @@ namespace CycloneDX.Tests.FunctionalTests
         public static IEnumerable<object[]> FormatResolutionTestData =>
             new List<object[]>
             {
-        // Format, filename, legacyFlag, expectedFormat, expectedOutputFilename
-        new object[] { OutputFileFormat.Auto, null, false, OutputFileFormat.Xml, "bom.xml" },
-        new object[] { OutputFileFormat.Auto, null, true, OutputFileFormat.Json, "bom.json" },
-        new object[] { OutputFileFormat.Auto, "bom.json", false, OutputFileFormat.Json, "bom.json" },
-        new object[] { OutputFileFormat.Auto, "bom.xml", false, OutputFileFormat.Xml, "bom.xml" },
-        new object[] { OutputFileFormat.Auto, "strange.output", false, OutputFileFormat.Xml, "strange.output" },
-        new object[] { OutputFileFormat.Xml, "strange.output", false, OutputFileFormat.Xml, "strange.output" },
-        new object[] { OutputFileFormat.Json, "strange.output", false, OutputFileFormat.Json, "strange.output" },
-        new object[] { OutputFileFormat.Json, null, false, OutputFileFormat.Json, "bom.json" },
-        new object[] { OutputFileFormat.Xml, null, false, OutputFileFormat.Xml, "bom.xml" },
-        new object[] { OutputFileFormat.Xml, null, true, OutputFileFormat.Xml, "bom.xml" },
-        new object[] { OutputFileFormat.UnsafeJson, null, false, OutputFileFormat.UnsafeJson, "bom.json" },        
+        // Format, filename, expectedFormat, expectedOutputFilename
+        new object[] { OutputFileFormat.Auto, null, OutputFileFormat.Xml, "bom.xml" },
+        new object[] { OutputFileFormat.Auto, "bom.json", OutputFileFormat.Json, "bom.json" },
+        new object[] { OutputFileFormat.Auto, "bom.xml", OutputFileFormat.Xml, "bom.xml" },
+        new object[] { OutputFileFormat.Auto, "strange.output", OutputFileFormat.Xml, "strange.output" },
+        new object[] { OutputFileFormat.Xml, "strange.output", OutputFileFormat.Xml, "strange.output" },
+        new object[] { OutputFileFormat.Json, "strange.output", OutputFileFormat.Json, "strange.output" },
+        new object[] { OutputFileFormat.Json, null, OutputFileFormat.Json, "bom.json" },
+        new object[] { OutputFileFormat.Xml, null, OutputFileFormat.Xml, "bom.xml" },
+        new object[] { OutputFileFormat.UnsafeJson, null, OutputFileFormat.UnsafeJson, "bom.json" },        
             };
 
         [Theory(Timeout = 15000)]
@@ -90,7 +88,6 @@ namespace CycloneDX.Tests.FunctionalTests
         public async Task FormatAndFilenameResolution(
             OutputFileFormat inputFormat,
             string inputFilename,
-            bool legacyJsonFlag,
             OutputFileFormat expectedFormat,
             string expectedOutputFilename)
         {
@@ -109,7 +106,6 @@ namespace CycloneDX.Tests.FunctionalTests
                 outputFilename = inputFilename,
                 outputDirectory = MockUnixSupport.Path("c:/project1/"),
                 SolutionOrProjectFile = MockUnixSupport.Path("c:/project1/project1.csproj"),
-                json = legacyJsonFlag
             };
 
             var bom = await FunctionalTestHelper.Test(options, mockFS);

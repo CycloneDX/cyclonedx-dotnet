@@ -18,7 +18,7 @@ public class DependencyFilteringTest
 
         var options = new RunOptions
         {
-            DependencyExcludeFilter = "NETStandard.Library@1.6.0", json = true
+            DependencyExcludeFilter = "NETStandard.Library@1.6.0", outputFormat = OutputFileFormat.Json
         };
         var bom = await FunctionalTestHelper.Test(assetContents, options);
 
@@ -40,7 +40,7 @@ public class DependencyFilteringTest
 
         var options = new RunOptions
         {
-            DependencyExcludeFilter = "NETStandard.Library@1.6.0,NLog@5.4.0", json = true
+            DependencyExcludeFilter = "NETStandard.Library@1.6.0,NLog@5.4.0", outputFormat = OutputFileFormat.Json
         };
         var bom = await FunctionalTestHelper.Test(assetContents, options);
 
@@ -60,7 +60,7 @@ public class DependencyFilteringTest
 
         var options = new RunOptions
         {
-            DependencyExcludeFilter = "NETStandard.Library", json = true
+            DependencyExcludeFilter = "NETStandard.Library", outputFormat = OutputFileFormat.Json
         };
         var bom = await FunctionalTestHelper.Test(assetContents, options, ExitCode.InvalidOptions);
         Assert.Null(bom);
@@ -80,7 +80,7 @@ public class DependencyFilteringTest
 
         var options = new RunOptions
         {
-            DependencyExcludeFilter = "Microsoft.Extensions.Configuration.Abstractions@9.0.4", json = true
+            DependencyExcludeFilter = "Microsoft.Extensions.Configuration.Abstractions@9.0.4", outputFormat = OutputFileFormat.Json
         };
         var bom = await FunctionalTestHelper.Test(assetContents, options);
 
