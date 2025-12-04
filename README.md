@@ -44,7 +44,7 @@ dotnet-CycloneDX <path> -o <OUTPUT_DIRECTORY>
 #### Execution via Docker
 
 ```bash
-docker run cyclonedx/cyclonedx-dotnet [OPTIONS] <path>
+docker run --rm cyclonedx/cyclonedx-dotnet [OPTIONS] <path>
 ```
 
 #### Options
