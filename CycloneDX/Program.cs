@@ -63,7 +63,7 @@ namespace CycloneDX
             specVersion.AcceptOnlyFromAmong(Enum.GetValues<SpecificationVersion>().Select(SpecificationVersionHelpers.VersionString).ToArray());
 
             //Deprecated args
-            var disableGithubLicenses = new Option<bool>("--disable-github-licenses", "-dgl") { Description = "(Deprecated, this is the default setting now" };
+            var disableGithubLicenses = new Option<bool>("--disable-github-licenses", "-dgl") { Description = "(Deprecated, this is the default setting now)" };
             var outputFilenameDeprecated = new Option<string>("-f", null) { Description = "(Deprecated use -fn instead) Optionally provide a filename for the BOM (default: bom.xml or bom.json)." };
             var excludeDevDeprecated = new Option<bool>("-d", null) { Description = "(Deprecated use -ed instead) Exclude development dependencies from the BOM." };
             var scanProjectDeprecated = new Option<bool>("-r", null) { Description = "(Deprecated use -rs instead) To be used with a single project file, it will recursively scan project references of the supplied project file." };
