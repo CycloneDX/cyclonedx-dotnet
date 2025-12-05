@@ -26,8 +26,10 @@ using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using CycloneDX.Services;
+using CycloneDX.Services.Models;
 using static CycloneDX.Models.Component;
 using Json.Schema;
+using CycloneDX.Models.Vulnerabilities;
 
 namespace CycloneDX
 {
@@ -294,6 +296,7 @@ namespace CycloneDX
 
 
             // get all the components and dependency graph from the NuGet packages
+            List<Vulnerability> vulnerabilities = new List<Vulnerability>();
             var components = new HashSet<Component>();
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
@@ -307,7 +310,31 @@ namespace CycloneDX
                     Component component = null;
                     if (package.DependencyType == DependencyType.Package)
                     {
-                        component = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
+                        var nugetComponent = await nugetService.GetComponentAsync(package).ConfigureAwait(false);
+                        component = MapNugetComponentToComponent(nugetComponent);
+                        if (nugetComponent.Vulnerabilities != null)
+                        {
+                            vulnerabilities.AddRange(nugetComponent.Vulnerabilities.Select(v => new Vulnerability
+                            {
+                                Source = new Source { Name = "NuGet", Url = v.AdvisoryUrl },    
+                                Ratings = new List<Rating>
+                                {
+                                    new Rating
+                                    {
+                                        Severity = MapSeverity(v.Severity),
+                                        Method = VulnerabilityAssessmentMethod.NVD,
+                                        Score = 0.0m // NuGet does not provide a score, only severity
+                                    }
+                                },                                                          
+                                Affects = new List<Affects>
+                                {
+                                    new Affects
+                                    {
+                                        Ref = component.BomRef
+                                    }
+                                }
+                            }));
+                        }
                     }
                     else if (package.DependencyType == DependencyType.Project)
                     {
@@ -435,6 +462,11 @@ namespace CycloneDX
             directDependencies.Ref = bom.Metadata.Component.BomRef;
             bom.Dependencies.Add(directDependencies);
             bom.Dependencies.Sort((x, y) => string.Compare(x.Ref, y.Ref, StringComparison.InvariantCultureIgnoreCase));
+
+            if (vulnerabilities.Any())
+            {
+                bom.Vulnerabilities = vulnerabilities;
+            }
 
             LastGeneratedBom = bom;
 
@@ -614,6 +646,92 @@ namespace CycloneDX
             {
                 bom.Metadata.Tools.Tools[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
+        }
+
+        private Component MapNugetComponentToComponent(NugetComponent nugetComponent)
+        {
+            if (nugetComponent == null) return null;
+
+            var component = new Component
+            {
+                Name = nugetComponent.Name,
+                Version = nugetComponent.Version,
+                Purl = nugetComponent.Purl,
+                BomRef = nugetComponent.BomRef,
+                Copyright = nugetComponent.Copyright,
+                Description = nugetComponent.Description
+            };
+
+            if (nugetComponent.Scope.HasValue)
+            {
+                component.Scope = nugetComponent.Scope.Value switch
+                {
+                    NugetComponentScope.Required => Component.ComponentScope.Required,
+                    NugetComponentScope.Optional => Component.ComponentScope.Optional,
+                    NugetComponentScope.Excluded => Component.ComponentScope.Excluded,
+                    _ => Component.ComponentScope.Required
+                };
+            }
+
+            component.Type = nugetComponent.Type switch
+            {
+                NugetComponentType.Library => Component.Classification.Library,
+                _ => Component.Classification.Library
+            };
+
+            if (nugetComponent.Hashes != null)
+            {
+                component.Hashes = nugetComponent.Hashes.Select(h => new Hash
+                {
+                    Alg = h.Algorithm == "SHA-512" ? Hash.HashAlgorithm.SHA_512 : Hash.HashAlgorithm.SHA_512,
+                    Content = h.Content
+                }).ToList();
+            }
+
+            if (nugetComponent.Licenses != null)
+            {
+                component.Licenses = nugetComponent.Licenses.Select(l => new LicenseChoice
+                {
+                    License = new License
+                    {
+                        Id = l.Id,
+                        Name = l.Name,
+                        Url = l.Url
+                    }
+                }).ToList();
+            }
+
+            if (nugetComponent.Authors != null)
+            {
+                component.Authors = nugetComponent.Authors.Select(a => new OrganizationalContact
+                {
+                    Name = a.Name,
+                    Email = a.Email,
+                    Phone = a.Phone
+                }).ToList();
+            }
+
+            if (nugetComponent.ExternalReferences != null)
+            {
+                component.ExternalReferences = nugetComponent.ExternalReferences.Select(e => new ExternalReference
+                {
+                    Url = e.Url,
+                    Type = e.Type switch
+                    {
+                        NugetExternalReferenceType.Website => ExternalReference.ExternalReferenceType.Website,
+                        NugetExternalReferenceType.Vcs => ExternalReference.ExternalReferenceType.Vcs,
+                        NugetExternalReferenceType.Chat => ExternalReference.ExternalReferenceType.Chat,
+                        NugetExternalReferenceType.Documentation => ExternalReference.ExternalReferenceType.Documentation,
+                        NugetExternalReferenceType.Support => ExternalReference.ExternalReferenceType.Support,
+                        NugetExternalReferenceType.Distribution => ExternalReference.ExternalReferenceType.Distribution,
+                        NugetExternalReferenceType.License => ExternalReference.ExternalReferenceType.License,
+                        NugetExternalReferenceType.Other => ExternalReference.ExternalReferenceType.Other,
+                        _ => ExternalReference.ExternalReferenceType.Other
+                    }
+                }).ToList();
+            }
+
+            return component;
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using CycloneDX.Services;
+using CycloneDX.Services.Models;
 using Moq;
 using Xunit;
 using static CycloneDX.Models.Component;
@@ -23,13 +24,13 @@ namespace CycloneDX.Tests.FunctionalTests
             mockNugetService.Setup(s => s.GetComponentAsync(
                     It.IsAny<DotnetDependency>()))
                 .Returns((DotnetDependency dep) => Task.FromResult
-                    (new Component
+                    (new NugetComponent
                     {
                         Name = dep.Name,
                         Version = dep.Version,
-                        Type = Classification.Library,
+                        Type = NugetComponentType.Library,
                         BomRef = $"pkg:nuget/{dep.Name}@{dep.Version}",
-                        Scope = dep.Scope
+                        Scope = dep.Scope == ComponentScope.Required ? NugetComponentScope.Required : (dep.Scope == ComponentScope.Excluded ? NugetComponentScope.Excluded : NugetComponentScope.Optional)
                     }));
 
             var nugetService = mockNugetService.Object;
