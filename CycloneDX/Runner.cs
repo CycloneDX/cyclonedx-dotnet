@@ -317,7 +317,16 @@ namespace CycloneDX
                         {
                             vulnerabilities.AddRange(nugetComponent.Vulnerabilities.Select(v => new Vulnerability
                             {
-                                Source = new Source { Name = "NuGet", Url = v.AdvisoryUrl },                                                              
+                                Source = new Source { Name = "NuGet", Url = v.AdvisoryUrl },    
+                                Ratings = new List<Rating>
+                                {
+                                    new Rating
+                                    {
+                                        Severity = MapSeverity(v.Severity),
+                                        Method = VulnerabilityAssessmentMethod.NVD,
+                                        Score = 0.0m // NuGet does not provide a score, only severity
+                                    }
+                                },                                                          
                                 Affects = new List<Affects>
                                 {
                                     new Affects
