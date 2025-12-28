@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -363,6 +364,7 @@ namespace CycloneDX.Services
             var title = nuspecModel.nuspecReader.GetTitle();
             var summary = nuspecModel.nuspecReader.GetSummary();
             var description = nuspecModel.nuspecReader.GetDescription();
+            var owner = nuspecModel.nuspecReader.GetOwners();
             if (!string.IsNullOrEmpty(summary))
             {
                 component.Description = summary;
@@ -375,7 +377,84 @@ namespace CycloneDX.Services
             {
                 component.Description = title;
             }
+            if (!string.IsNullOrEmpty(owner))
+            {
+                component.Publisher = owner;
+            }
+            else
+            {
+                component.Publisher = component.Author;
+            }
 
+            var releaseNoteType = "internal";
+            var version = nuspecModel.nuspecReader.GetVersion();
+            if (version.IsPrerelease)
+            {
+                releaseNoteType = "pre-release";
+            }
+            else if (version.Minor == 0 && version.Patch == 0)
+            {
+                releaseNoteType = "major";
+            }
+            else if (version.Minor != 0 && version.Patch == 0)
+            {
+                releaseNoteType = "minor";
+            }
+            else if (version.Patch != 0)
+            {
+                releaseNoteType = "patch";
+            }
+            component.ReleaseNotes = new ReleaseNotes
+            {
+                Type = releaseNoteType,
+                Title = version.ToString(),
+                Tags = nuspecModel.nuspecReader.GetTags().Split(",").ToList(),
+                Notes = new List<Note>
+                {
+                    new Note
+                    {
+                        Text = new AttachedText{
+                            Content = nuspecModel.nuspecReader.GetReleaseNotes()
+                        }
+                    }
+                }
+            };
+
+            var properties = new List<Property>
+            {
+                new Property
+                {
+                    Name = "language",
+                    Value = nuspecModel.nuspecReader.GetLanguage()
+                },
+                new Property
+                {
+                    Name = "minclientVersion",
+                    Value = nuspecModel.nuspecReader.GetMinClientVersion().Version.ToString(),
+                },
+                new Property
+                {
+                    Name = "gitBranch",
+                    Value = nuspecModel.nuspecReader.GetRepositoryMetadata().Branch
+                },
+                new Property
+                {
+                    Name = "gitCommit",
+                    Value = nuspecModel.nuspecReader.GetRepositoryMetadata().Commit
+                },
+                new Property
+                {
+                    Name = "gitRepositoryType",
+                    Value = nuspecModel.nuspecReader.GetRepositoryMetadata().Type
+                },
+                new Property
+                {
+                    Name = "licenceAcceptanceRequired",
+                    Value = nuspecModel.nuspecReader.GetRequireLicenseAcceptance().ToString()
+                }
+
+            };
+            component.Properties = properties;
             return component;
         }
 
