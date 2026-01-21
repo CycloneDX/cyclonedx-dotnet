@@ -256,7 +256,36 @@ namespace CycloneDX.Services
             return assetsPath;
         }
 
+        /// <summary>
+        /// Retrieves the version number from the specified project file.
+        /// </summary>
+        /// <remarks>The method searches for version information in the elements "Version", "AssemblyVersion", "ProjectVersion", or "PackageVersion" at the start of the project file.
+        /// <param name="projectFilePath">The full path to the project file from which to read the version. The file must exist and be accessible.</param>
+        /// <returns>A string containing the version number found in the project file. Returns "0.0.0" if the file does not exist or if no version information is found.</returns>
+        public async Task<string> GetProjectVersionAsync(string projectFilePath)
+        {
+            if (!_fileSystem.File.Exists(projectFilePath))
+            {
+                Console.Error.WriteLine($"Project file \"{projectFilePath}\" does not exist");
+                return "0.0.0";
+            }
 
+            using (StreamReader fileReader = _fileSystem.File.OpenText(projectFilePath))
+            {
+                using (XmlReader reader = XmlReader.Create(fileReader, _xmlReaderSettings))
+                {
+                    string[] version_options = { "Version", "AssemblyVersion", "ProjectVersion", "PackageVersion" };
+                    while (await reader.ReadAsync().ConfigureAwait(false))
+                    {
+                        if (reader.IsStartElement() && version_options.Contains(reader.Name))
+                        {
+                            return reader.ReadElementContentAsString();
+                        }
+                    }
+                }
+                return "0.0.0";
+            }
+        }
         /// <summary>
         /// Analyzes all Project file references for NuGet package references.
         /// </summary>
