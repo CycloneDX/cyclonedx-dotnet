@@ -151,7 +151,7 @@ namespace CycloneDX
             // If generating from a project file and setVersion is not provided, get version from project file
             if (string.IsNullOrEmpty(setVersion) && Utils.IsSupportedProjectType(SolutionOrProjectFile) && fileSystem.File.Exists(SolutionOrProjectFile))
             {
-                var (projName, projVersion) = projectFileService.GetAssemblyNameAndVersion(SolutionOrProjectFile);
+                var projVersion = await projectFileService.GetProjectVersionAsync(SolutionOrProjectFile);
                 if (!string.IsNullOrEmpty(projVersion))
                 {
                     topLevelComponent.Version = projVersion;
