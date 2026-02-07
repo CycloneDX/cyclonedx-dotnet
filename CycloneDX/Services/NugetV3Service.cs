@@ -29,6 +29,7 @@ using CycloneDX.Models;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Packaging;
+using NuGet.Packaging.Core;
 using NuGet.Packaging.Licenses;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
@@ -78,24 +79,27 @@ namespace CycloneDX.Services
 
         internal string GetCachedNuspecFilename(string name, string version)
         {
+            return GetCachedNupkgFilename(name, version, name.ToLowerInvariant() + _nuspecExtension);
+        }
+
+        internal string GetCachedNupkgFilename(string name, string version, string fileName)
+        {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) { return null; }
 
             var lowerName = name.ToLowerInvariant();
             var lowerVersion = version.ToLowerInvariant();
-            string nuspecFilename = null;
 
             foreach (var packageCachePath in _packageCachePaths)
             {
                 var currentDirectory = _fileSystem.Path.Combine(packageCachePath, lowerName, NormalizeVersion(lowerVersion));
-                var currentFilename = _fileSystem.Path.Combine(currentDirectory, lowerName + _nuspecExtension);
+                var currentFilename = _fileSystem.Path.Combine(currentDirectory, fileName);
                 if (_fileSystem.File.Exists(currentFilename))
                 {
-                    nuspecFilename = currentFilename;
-                    break;
+                    return currentFilename;
                 }
             }
 
-            return nuspecFilename;
+            return null;
         }
 
         /// <summary>
@@ -272,9 +276,19 @@ namespace CycloneDX.Services
             }
             else if (_githubService == null)
             {
-                var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
-                var license = new License { Name = "Unknown - See URL", Url = licenseUrl?.Trim() };
-                component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
+                License license = await TryGetLicenseFileAsync(licenseMetadata, name, version).ConfigureAwait(false);
+
+                if (license == null)
+                {
+                    var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
+                    license = new License { Name = "Unknown - See URL", Url = licenseUrl?.Trim() };
+                }
+
+                if (license != null)
+                {
+                    component.Licenses ??= new List<LicenseChoice>();
+                    component.Licenses.Add(new LicenseChoice { License = license });
+                }
             }
             else
             {
@@ -308,6 +322,11 @@ namespace CycloneDX.Services
                     {
                         license = await _githubService.GetLicenseAsync(project).ConfigureAwait(false);
                     }
+                }
+
+                if (license == null)
+                {
+                    license = await TryGetLicenseFileAsync(licenseMetadata, name, version).ConfigureAwait(false);
                 }
 
                 if (license != null)
@@ -348,6 +367,48 @@ namespace CycloneDX.Services
             }
 
             return component;
+        }
+
+        private async Task<License> TryGetLicenseFileAsync(LicenseMetadata licenseMetadata, string name, string version)
+        {
+            if (licenseMetadata == null || licenseMetadata.Type != LicenseType.File || string.IsNullOrEmpty(licenseMetadata.License))
+            {
+                return null;
+            }
+
+            string licensePath = GetCachedNupkgFilename(name, version, licenseMetadata.License);
+
+            if (licensePath == null)
+            {
+                return null;
+            }
+
+            if (!_fileSystem.File.Exists(licensePath))
+            {
+                return null;
+            }
+
+            string extension = _fileSystem.Path.GetExtension(licensePath)?.ToLowerInvariant();
+
+            string contentType =  extension switch
+            {
+                ".md" => "text/markdown",
+                ".txt" or "" or null => "text/plain",
+                _  => "appliation/octet-stream",
+            };
+
+            byte[] licenseContent = await _fileSystem.File.ReadAllBytesAsync(licensePath).ConfigureAwait(false);
+
+            return new License()
+            {
+                Name = _fileSystem.Path.GetFileName(licenseMetadata.License),
+                Text = new AttachedText()
+                {
+                    ContentType = contentType,
+                    Encoding = "base64",
+                    Content = Convert.ToBase64String(licenseContent),
+                }
+            };
         }
 
         private static Component SetupComponentProperties(Component component, NuspecModel nuspecModel)
