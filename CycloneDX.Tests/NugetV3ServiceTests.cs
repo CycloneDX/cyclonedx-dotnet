@@ -451,7 +451,7 @@ namespace CycloneDX.Tests
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Single(component.Licenses);
-            Assert.Equal("LICENSE.MD", component.Licenses.First().License.Name);
+            Assert.Equal("testpackage License", component.Licenses.First().License.Name);
             Assert.Equal(Convert.ToBase64String(licenseContents), component.Licenses.First().License.Text.Content);
             Assert.Equal("base64", component.Licenses.First().License.Text.Encoding);
             Assert.Equal("text/markdown", component.Licenses.First().License.Text.ContentType);
@@ -606,7 +606,7 @@ namespace CycloneDX.Tests
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
             Assert.Single(component.Licenses);
-            Assert.Equal("LICENSE.MD", component.Licenses.First().License.Name);
+            Assert.Equal("testpackage License", component.Licenses.First().License.Name);
             Assert.Equal(Convert.ToBase64String(licenseContents), component.Licenses.First().License.Text.Content);
             Assert.Equal("base64", component.Licenses.First().License.Text.Encoding);
             Assert.Equal("text/markdown", component.Licenses.First().License.Text.ContentType);

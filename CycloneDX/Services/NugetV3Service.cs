@@ -401,7 +401,7 @@ namespace CycloneDX.Services
 
             return new License
             {
-                Name = _fileSystem.Path.GetFileName(licenseMetadata.License),
+                Name = $"{name} License",
                 Text = new AttachedText
                 {
                     ContentType = contentType,
