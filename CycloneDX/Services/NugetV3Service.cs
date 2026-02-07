@@ -399,10 +399,10 @@ namespace CycloneDX.Services
 
             byte[] licenseContent = await _fileSystem.File.ReadAllBytesAsync(licensePath).ConfigureAwait(false);
 
-            return new License()
+            return new License
             {
                 Name = _fileSystem.Path.GetFileName(licenseMetadata.License),
-                Text = new AttachedText()
+                Text = new AttachedText
                 {
                     ContentType = contentType,
                     Encoding = "base64",
