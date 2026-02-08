@@ -64,6 +64,7 @@ namespace CycloneDX
 
             //Deprecated args for backward compatibility
             var outputDirectoryDeprecated = new Option<string>("--out", null) { Description = "(Deprecated use --output instead) The directory to write the BOM" };
+            var jsonDeprecated = new Option<bool>("--json", null) { Description = "(Deprecated use --output-format instead) Output in JSON format" };
 
             RootCommand rootCommand = new RootCommand("A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")
             {
@@ -97,7 +98,8 @@ namespace CycloneDX
                 specVersion,
                 excludeFilter,
                 outputFormat,
-                outputDirectoryDeprecated
+                outputDirectoryDeprecated,
+                jsonDeprecated
             };
 
             ParseResult parseResult = rootCommand.Parse(args);
@@ -136,7 +138,7 @@ namespace CycloneDX
                     setNugetPurl = parseResult.GetValue(setNugetPurl),
                     includeProjectReferences = parseResult.GetValue(includeProjectReferences),
                     DependencyExcludeFilter = parseResult.GetValue(excludeFilter),
-                    outputFormat = parseResult.GetValue(outputFormat),
+                    outputFormat = parseResult.GetValue(jsonDeprecated) ? OutputFileFormat.Json : parseResult.GetValue(outputFormat),
                     specVersion = parseResult.GetValue(specVersion) != null
                         ? SpecificationVersionHelpers.Version(parseResult.GetValue(specVersion))
                         : null

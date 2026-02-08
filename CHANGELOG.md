@@ -79,6 +79,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - If both `--output` and `--out` are provided, `--output` takes precedence
   - Prevents breaking existing automation while encouraging migration to the new flag
 
+- **Restore `--json` parameter for backward compatibility**
+  - Reintroduced `--json` flag as a deprecated alias for `--output-format json` to maintain compatibility with existing GitHub Actions and CI/CD pipelines
+  - The parameter is marked as deprecated with a message directing users to use `--output-format` instead
+  - If `--json` is provided, it sets the output format to JSON
+  - Prevents breaking existing automation while encouraging migration to the new flag
+
 - **Missing using statement** (161766f)
   - Added missing `using System;` directive in Program.cs
 
