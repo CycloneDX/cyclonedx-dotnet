@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Reintroduce deprecated `--out` parameter for backward compatibility**
+  - Restored `--out` flag as an alias for `--output`/`-o` to maintain compatibility with existing GitHub Actions and CI/CD pipelines
+  - The parameter is marked as deprecated with a message directing users to use `--output` instead
+  - If both `--output` and `--out` are provided, `--output` takes precedence
+  - This change prevents breaking existing automation that was affected by the removal in v6.0.0
+
 ## [6.0.0] - 2026-02-08
 
 > **⚠️ WARNING: This is a MAJOR release with breaking changes.**

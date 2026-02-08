@@ -62,6 +62,9 @@ namespace CycloneDX
             var specVersion = new Option<string>("--spec-version", "-spv") { Description = $"Which version of CycloneDX spec to use. [default: {SpecificationVersionHelpers.VersionString(SpecificationVersionHelpers.CurrentVersion)}]" };
             specVersion.AcceptOnlyFromAmong(Enum.GetValues<SpecificationVersion>().Select(SpecificationVersionHelpers.VersionString).ToArray());
 
+            //Deprecated args for backward compatibility
+            var outputDirectoryDeprecated = new Option<string>("--out", null) { Description = "(Deprecated use --output instead) The directory to write the BOM" };
+
             RootCommand rootCommand = new RootCommand("A .NET Core global tool which creates CycloneDX Software Bill-of-Materials (SBOM) from .NET projects.")
             {
                 SolutionOrProjectFile,
@@ -93,7 +96,8 @@ namespace CycloneDX
                 setNugetPurl,
                 specVersion,
                 excludeFilter,
-                outputFormat
+                outputFormat,
+                outputDirectoryDeprecated
             };
 
             ParseResult parseResult = rootCommand.Parse(args);
@@ -107,7 +111,7 @@ namespace CycloneDX
                     SolutionOrProjectFile = parseResult.GetValue(SolutionOrProjectFile),
                     runtime = parseResult.GetValue(runtime),
                     framework = parseResult.GetValue(framework),
-                    outputDirectory = parseResult.GetValue(outputDirectory),
+                    outputDirectory = parseResult.GetValue(outputDirectory) ?? parseResult.GetValue(outputDirectoryDeprecated),
                     outputFilename = parseResult.GetValue(outputFilename),
                     excludeDev = parseResult.GetValue(excludeDev),
                     excludeTestProjects = parseResult.GetValue(excludetestprojects),
