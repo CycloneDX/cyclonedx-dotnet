@@ -7,14 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- **Reintroduce deprecated `--out` parameter for backward compatibility**
-  - Restored `--out` flag as an alias for `--output`/`-o` to maintain compatibility with existing GitHub Actions and CI/CD pipelines
-  - The parameter is marked as deprecated with a message directing users to use `--output` instead
-  - If both `--output` and `--out` are provided, `--output` takes precedence
-  - This change prevents breaking existing automation that was affected by the removal in v6.0.0
-
 ## [6.0.0] - 2026-02-08
 
 > **⚠️ WARNING: This is a MAJOR release with breaking changes.**
@@ -35,11 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed `-f` flag (replaced by `-fn`/`--filename`)
   - Removed `-d` flag (replaced by `-ed`/`--exclude-dev`)
   - Removed `-r` flag (replaced by `-rs`/`--scan-project-references`)
-  - Removed `--out` flag (replaced by `-o`/`--output`)
   - Removed `--disable-github-licenses`/`-dgl` flag (already default behavior)
   - Removed `json` property from `RunOptions` model
   - Updated all tests to use `outputFormat` enum instead of boolean `json` flag
   - Cleaned up legacy flag handling logic in `Program.cs` and `Runner.cs`
+  - **Note:** `--out` flag was restored before release for backward compatibility (see Fixed section below)
 
 - **Upgraded System.CommandLine to v2.0.0** (#989, e11f8e7)
   - Upgraded from `2.0.0-beta4.22272.1` to `2.0.0` (stable release)
@@ -80,6 +72,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - danielpalme/ReportGenerator-GitHub-Action (version bump) (#992)
 
 ### Fixed
+
+- **Restore `--out` parameter for backward compatibility**
+  - Reintroduced `--out` flag as a deprecated alias for `--output`/`-o` to maintain compatibility with existing GitHub Actions and CI/CD pipelines
+  - The parameter is marked as deprecated with a message directing users to use `--output` instead
+  - If both `--output` and `--out` are provided, `--output` takes precedence
+  - Prevents breaking existing automation while encouraging migration to the new flag
 
 - **Missing using statement** (161766f)
   - Added missing `using System;` directive in Program.cs
