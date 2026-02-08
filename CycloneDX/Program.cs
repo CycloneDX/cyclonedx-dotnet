@@ -57,7 +57,7 @@ namespace CycloneDX
             var includeProjectReferences = new Option<bool>("--include-project-references", "-ipr") { Description = "Include project references as components (can only be used with project files)." };
             var setType = new Option<Component.Classification>("--set-type", "-st") { Description = "Override the default BOM metadata component type (defaults to application).", DefaultValueFactory = _ => Component.Classification.Application };
             var setNugetPurl = new Option<bool>("--set-nuget-purl", null) { Description = "Override the default BOM metadata component bom ref and PURL as NuGet package." };
-            var excludeFilter = new Option<string>("--exclude-filter", "-ef") { Description = "A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2'. Transitive dependencies will also be removed." };
+            var excludeFilter = new Option<string>("--exclude-filter", "-ef") { Description = "A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2' or 'name1,name2' (to exclude all versions). Transitive dependencies will also be removed." };
             var outputFormat = new Option<OutputFileFormat>("--output-format", "-F") { Description = "Select the BOM output format: auto (default), xml, json, or unsafeJson (relaxed escaping)." };
             var specVersion = new Option<string>("--spec-version", "-spv") { Description = $"Which version of CycloneDX spec to use. [default: {SpecificationVersionHelpers.VersionString(SpecificationVersionHelpers.CurrentVersion)}]" };
             specVersion.AcceptOnlyFromAmong(Enum.GetValues<SpecificationVersion>().Select(SpecificationVersionHelpers.VersionString).ToArray());

@@ -28,10 +28,11 @@ namespace CycloneDX
         /// </summary>
         /// <param name="packages">The set of dependencies to filter.</param>
         /// <param name="excludeFilter">
-        /// A comma-separated string of package identifiers in the format 'name@version' to exclude.
+        /// A comma-separated string of package identifiers in the format 'name@version' or 'name' to exclude.
+        /// When only the name is provided, all versions of that package will be excluded.
         /// </param>
         /// <exception cref="ArgumentException">
-        /// Thrown if any package identifier in the filter does not follow the 'name@version' format.
+        /// Thrown if any package identifier in the filter is empty or invalid.
         /// </exception>
         internal static void ExcludePackages(HashSet<DotnetDependency> packages, string excludeFilter)
         {
@@ -39,14 +40,28 @@ namespace CycloneDX
             foreach (var packageKey in packagesToExclude)
             {
                 var packageKeyParts = packageKey.Split('@');
-                if (packageKeyParts.Length != 2)
+                if (packageKeyParts.Length == 1)
                 {
-                    throw new ArgumentException("All packages to exclude must have name and version ('name@version').",
+                    // Exclude all versions of the package
+                    var packageName = packageKeyParts[0];
+                    if (string.IsNullOrWhiteSpace(packageName))
+                    {
+                        throw new ArgumentException("Package name cannot be empty.",
+                            nameof(excludeFilter));
+                    }
+                    packages.RemoveWhere(p => p.Name == packageName);
+                }
+                else if (packageKeyParts.Length == 2)
+                {
+                    // Exclude specific version of the package
+                    var packageToExclude = new DotnetDependency { Name = packageKeyParts[0], Version = packageKeyParts[1] };
+                    packages.Remove(packageToExclude);
+                }
+                else
+                {
+                    throw new ArgumentException("Package identifier must be in format 'name' or 'name@version'.",
                         nameof(excludeFilter));
                 }
-
-                var packageToExclude = new DotnetDependency { Name = packageKeyParts[0], Version = packageKeyParts[1] };
-                packages.Remove(packageToExclude);
             }
         }
 
