@@ -18,3 +18,5 @@ TestResults/
 CycloneDX/Properties/launchSettings.json
 *.binlog
 MSBuild_Logs/
+/.agent/
+bom.xml

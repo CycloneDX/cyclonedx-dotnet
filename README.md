@@ -47,6 +47,26 @@ dotnet-CycloneDX <path> -o <OUTPUT_DIRECTORY>
 docker run --rm cyclonedx/cyclonedx-dotnet [OPTIONS] <path>
 ```
 
+##### Examples
+
+Linux / macOS / Git Bash:
+
+``` bash
+docker run --rm \
+  -v "$PWD:/work" \
+  cyclonedx/cyclonedx-dotnet \
+  /work/CycloneDX/CycloneDX.csproj
+```
+
+PowerShell (Windows)
+
+``` powershell
+docker run --rm `
+  -v "${PWD}:/work" `
+  cyclonedx/cyclonedx-dotnet `
+  /work/CycloneDX/CycloneDX.csproj
+```
+
 #### Options
 
 ```text
