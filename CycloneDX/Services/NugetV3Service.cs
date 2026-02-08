@@ -262,12 +262,25 @@ namespace CycloneDX.Services
             {
                 Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
                 {
+                    var identifier = nugetLicense?.Identifier?.Trim();
                     var license = new License();
-                    license.Id = nugetLicense.Identifier;
-                    license.Name = license.Id == null ? nugetLicense.Identifier : null;
+
+                    // UNLICENSED is not a valid SPDX license id, so emit as name instead.
+                    // (Avoids generating invalid CycloneDX output like <id>UNLICENSED</id>.)
+                    if (!string.IsNullOrEmpty(identifier) &&
+                        string.Equals(identifier, "UNLICENSED", StringComparison.OrdinalIgnoreCase))
+                    {
+                        license.Name = "UNLICENSED";
+                    }
+                    else
+                    {
+                        license.Id = identifier;
+                    }
+
                     component.Licenses ??= new List<LicenseChoice>();
                     component.Licenses.Add(new LicenseChoice { License = license });
                 };
+
                 licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
             }
             else if (_githubService == null)
