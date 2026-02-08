@@ -39,22 +39,25 @@ namespace CycloneDX
             var packagesToExclude = excludeFilter.Split(',');
             foreach (var packageKey in packagesToExclude)
             {
-                var packageKeyParts = packageKey.Split('@');
+                var trimmedKey = packageKey.Trim();
+                if (string.IsNullOrWhiteSpace(trimmedKey))
+                {
+                    throw new ArgumentException("Package identifier cannot be empty.",
+                        nameof(excludeFilter));
+                }
+
+                var packageKeyParts = trimmedKey.Split('@');
+                var packageName = packageKeyParts[0];
+                
                 if (packageKeyParts.Length == 1)
                 {
                     // Exclude all versions of the package
-                    var packageName = packageKeyParts[0];
-                    if (string.IsNullOrWhiteSpace(packageName))
-                    {
-                        throw new ArgumentException("Package name cannot be empty.",
-                            nameof(excludeFilter));
-                    }
                     packages.RemoveWhere(p => p.Name == packageName);
                 }
                 else if (packageKeyParts.Length == 2)
                 {
                     // Exclude specific version of the package
-                    var packageToExclude = new DotnetDependency { Name = packageKeyParts[0], Version = packageKeyParts[1] };
+                    var packageToExclude = new DotnetDependency { Name = packageName, Version = packageKeyParts[1] };
                     packages.Remove(packageToExclude);
                 }
                 else

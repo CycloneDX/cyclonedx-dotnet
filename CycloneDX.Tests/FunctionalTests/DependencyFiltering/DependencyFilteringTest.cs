@@ -114,4 +114,21 @@ public class DependencyFilteringTest
         Assert.Equal(4, bom.Components.Count);
         Assert.Contains(bom.Components, x => x.Name == "Microsoft.Extensions.Primitives" && x.Version == "9.0.4");
     }
+
+    /// <summary>
+    /// An exclude filter with empty package identifiers should be rejected.
+    /// </summary>
+    [Fact]
+    public async Task TestExceptionForEmptyPackageIdentifier()
+    {
+        var assetContents =
+            await File.ReadAllTextAsync(Path.Combine("FunctionalTests", "DependencyFiltering", "netstandard.assets.json"));
+
+        var options = new RunOptions
+        {
+            DependencyExcludeFilter = "NETStandard.Library, ,NLog", outputFormat = OutputFileFormat.Json
+        };
+        var bom = await FunctionalTestHelper.Test(assetContents, options, ExitCode.InvalidOptions);
+        Assert.Null(bom);
+    }
 }
