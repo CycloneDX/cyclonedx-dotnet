@@ -152,10 +152,9 @@ namespace CycloneDX
 
             if (options.includeProjectReferences
                 &&
-                    (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase)
-                    ||
-                    SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnf", StringComparison.OrdinalIgnoreCase)
-                    ||
+                    (SolutionOrProjectFile.ToLowerInvariant().EndsWith(".sln", StringComparison.OrdinalIgnoreCase) ||
+                    SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnx", StringComparison.OrdinalIgnoreCase) ||
+                    SolutionOrProjectFile.ToLowerInvariant().EndsWith(".slnf", StringComparison.OrdinalIgnoreCase) ||
                     fileSystem.Directory.Exists(fullSolutionOrProjectFilePath)
                     ||
                     this.fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase)))
@@ -216,7 +215,7 @@ namespace CycloneDX
                 }
                 else
                 {
-                    Console.Error.WriteLine($"Only .sln, .slnf, .csproj, .fsproj, .vbproj, .xsproj, and packages.config files are supported");
+                    Console.Error.WriteLine($"Only .sln, .slnx, .slnf, .csproj, .fsproj, .vbproj, .xsproj, and packages.config files are supported");
                     return (int)ExitCode.InvalidOptions;
                 }
             }
