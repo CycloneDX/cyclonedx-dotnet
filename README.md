@@ -10,7 +10,7 @@
 [![shield_twitter-follow]][link_twitter]
 
 [shield_nuget-version]: https://img.shields.io/nuget/v/CycloneDX?label=NuGet&logo=nuget&logoColor=white "NuGet Version"
-[shield_docker-version]: https://img.shields.io/docker/v/cyclonedx/cyclonedx-dotnet?label=Docker&logo=docker&logoColor=white&label=docker "docker"
+[shield_docker-version]: https://img.shields.io/docker/v/cyclonedx/cyclonedx-dotnet?label=Docker&logo=docker&logoColor=white "docker"
 [shield_github_ci]: https://img.shields.io/github/actions/workflow/status/CycloneDX/cyclonedx-dotnet/dotnetcore.yml?branch=master&logo=github&logoColor=white "Build Status"
 [shield_coverage]: https://img.shields.io/codacy/coverage/xxxx?logo=Codacy&logoColor=white "test coverage"
 [shield_license]: https://img.shields.io/github/license/CycloneDX/cyclonedx-dotnet?logo=open%20source%20initiative&logoColor=white "license"
