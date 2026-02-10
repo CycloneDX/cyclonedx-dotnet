@@ -39,7 +39,7 @@ This module runs on
 
 ## Usage
 
-CycloneDX for .NET is distributed via NuGet and Docker Hub. 
+CycloneDX for .NET is distributed via [NuGet][link_nuget] and [Docker Hub][link_docker]. 
 
 #### Installing via NuGet
 
