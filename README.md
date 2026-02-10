@@ -1,14 +1,32 @@
 # CycloneDX module for .NET
 
-[![Build Status](https://github.com/CycloneDX/cyclonedx-dotnet/workflows/.NET%20Core%20CI/badge.svg)](https://github.com/CycloneDX/cyclonedx-dotnet/actions/workflows/dotnetcore.yml)
-[![Docker Image](https://img.shields.io/badge/docker-image-brightgreen?style=flat&logo=docker)](https://hub.docker.com/r/cyclonedx/cyclonedx-dotnet)
-[![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)][License]
-[![NuGet Version](https://img.shields.io/nuget/v/CycloneDX.svg)](https://www.nuget.org/packages/CycloneDX/)
-![Nuget](https://img.shields.io/nuget/dt/CycloneDX.svg)  
-[![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
-[![Slack Invite](https://img.shields.io/badge/Slack-Join-blue?logo=slack&labelColor=393939)](https://cyclonedx.org/slack/invite)
-[![Group Discussion](https://img.shields.io/badge/discussion-groups.io-blue.svg)](https://groups.io/g/CycloneDX)
-[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/CycloneDX_Spec)
+[![shield_nuget-version]][link_nuget]
+[![shield_docker-version]][link_docker]
+[![shield_github_ci]][link_github_ci]
+[![shield_license]][License]  
+[![shield_website]][link_website]
+[![shield_slack]][link_slack]
+[![shield_groups]][link_discussion]
+[![shield_twitter-follow]][link_twitter]
+
+[shield_nuget-version]: https://img.shields.io/nuget/v/CycloneDX?label=NuGet&logo=nuget&logoColor=white "NuGet Version"
+[shield_docker-version]: https://img.shields.io/docker/v/cyclonedx/cyclonedx-dotnet?label=Docker&logo=docker&logoColor=white "docker"
+[shield_github_ci]: https://img.shields.io/github/actions/workflow/status/CycloneDX/cyclonedx-dotnet/dotnetcore.yml?branch=master&logo=github&logoColor=white "Build Status"
+[shield_coverage]: https://img.shields.io/codacy/coverage/xxxx?logo=Codacy&logoColor=white "test coverage"
+[shield_license]: https://img.shields.io/github/license/CycloneDX/cyclonedx-dotnet?logo=open%20source%20initiative&logoColor=white "license"
+[shield_website]: https://img.shields.io/badge/https://-cyclonedx.org-blue.svg "homepage"
+[shield_slack]: https://img.shields.io/badge/slack-join-blue?logo=Slack&logoColor=white "slack join"
+[shield_groups]: https://img.shields.io/badge/discussion-groups.io-blue.svg "groups discussion"
+[shield_twitter-follow]: https://img.shields.io/badge/Twitter-follow-blue?logo=Twitter&logoColor=white "twitter follow"
+
+[link_nuget]: https://www.nuget.org/packages/CycloneDX/
+[link_docker]: https://hub.docker.com/r/cyclonedx/cyclonedx-dotnet
+[link_github_ci]: https://github.com/CycloneDX/cyclonedx-dotnet/actions/workflows/dotnetcore.yml
+[link_codacy]: https://app.codacy.com/gh/CycloneDX/cyclonedx-dotnet
+[link_website]: https://cyclonedx.org/
+[link_slack]: https://cyclonedx.org/slack/invite
+[link_discussion]: https://groups.io/g/CycloneDX
+[link_twitter]: https://twitter.com/CycloneDX_Spec
 
 ----
 
