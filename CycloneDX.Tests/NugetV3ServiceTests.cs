@@ -422,6 +422,42 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task GetComponent_GitHubLicenseLookup_FallsBackToLicenseFile()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">subdir/LICENSE.MD</license>
+                </metadata>
+                </package>";
+
+            byte[] licenseContents = Encoding.UTF8.GetBytes("The license");
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\subdir\LICENSE.MD"), new MockFileData(licenseContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Single(component.Licenses);
+            Assert.Equal("testpackage License", component.Licenses.First().License.Name);
+            Assert.Equal(Convert.ToBase64String(licenseContents), component.Licenses.First().License.Text.Content);
+            Assert.Equal("base64", component.Licenses.First().License.Text.Encoding);
+            Assert.Equal("text/markdown", component.Licenses.First().License.Text.ContentType);
+        }
+
+        [Fact]
         public async Task GetComponent_GitHubLicenseLookup_FromRepository_WhenLicenseInvalid_ReturnsComponent()
         {
             var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
@@ -513,7 +549,7 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
-        public async Task GetComponent_WhenGitHubServiceIsNull_UsesLicenseUrl()
+        public async Task GetComponent_WhenGitHubServiceIsNullAndHasNoLicenseFile_UsesLicenseUrl()
         {
             var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
@@ -539,6 +575,41 @@ namespace CycloneDX.Tests
             Assert.Single(component.Licenses);
             Assert.Equal("https://not-licence.url", component.Licenses.First().License.Url);
             Assert.Equal("Unknown - See URL", component.Licenses.First().License.Name);
+        }
+
+        [Fact]
+        public async Task GetComponent_WhenGitHubServiceIsNull_UsesLicenseFile()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">subdir/LICENSE.MD</license>
+                    <repository url=""https://licence.url"" />
+                </metadata>
+                </package>";
+
+            byte[] licenseContents = Encoding.UTF8.GetBytes("The license");
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\subdir\LICENSE.MD"), new MockFileData(licenseContents) },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Single(component.Licenses);
+            Assert.Equal("testpackage License", component.Licenses.First().License.Name);
+            Assert.Equal(Convert.ToBase64String(licenseContents), component.Licenses.First().License.Text.Content);
+            Assert.Equal("base64", component.Licenses.First().License.Text.Encoding);
+            Assert.Equal("text/markdown", component.Licenses.First().License.Text.ContentType);
         }
     }
 }
