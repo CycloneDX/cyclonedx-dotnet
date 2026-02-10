@@ -50,10 +50,10 @@ public class DependencyFilteringTest
     }
 
     /// <summary>
-    /// An exclude filter containing a package name without a version number is not supported.
+    /// An exclude filter containing only a package name (without version) should exclude all versions of that package.
     /// </summary>
     [Fact]
-    public async Task TestExceptionForMissingVersion()
+    public async Task TestExcludeAllVersionsOfPackage()
     {
         var assetContents =
             await File.ReadAllTextAsync(Path.Combine("FunctionalTests", "DependencyFiltering", "netstandard.assets.json"));
@@ -62,8 +62,35 @@ public class DependencyFilteringTest
         {
             DependencyExcludeFilter = "NETStandard.Library", outputFormat = OutputFileFormat.Json
         };
-        var bom = await FunctionalTestHelper.Test(assetContents, options, ExitCode.InvalidOptions);
-        Assert.Null(bom);
+        var bom = await FunctionalTestHelper.Test(assetContents, options);
+        
+        // NETStandard.Library should be excluded regardless of version
+        Assert.Equal(2, bom.Components.Count);
+        Assert.Equal("Antlr3.Runtime", bom.Components[0].Name);
+        Assert.Equal("3.5.1", bom.Components[0].Version);
+        Assert.Equal("NLog", bom.Components[1].Name);
+        Assert.Equal("5.4.0", bom.Components[1].Version);
+    }
+
+    /// <summary>
+    /// Test mixing version-specific and version-less exclude filters.
+    /// </summary>
+    [Fact]
+    public async Task TestMixedExcludeFilters()
+    {
+        var assetContents =
+            await File.ReadAllTextAsync(Path.Combine("FunctionalTests", "DependencyFiltering", "netstandard.assets.json"));
+
+        var options = new RunOptions
+        {
+            DependencyExcludeFilter = "NETStandard.Library,NLog@5.4.0", outputFormat = OutputFileFormat.Json
+        };
+        var bom = await FunctionalTestHelper.Test(assetContents, options);
+
+        // NETStandard.Library (all versions) and NLog@5.4.0 should be excluded
+        Assert.Single(bom.Components);
+        Assert.Equal("Antlr3.Runtime", bom.Components[0].Name);
+        Assert.Equal("3.5.1", bom.Components[0].Version);
     }
 
     /// <summary>
@@ -86,5 +113,22 @@ public class DependencyFilteringTest
 
         Assert.Equal(4, bom.Components.Count);
         Assert.Contains(bom.Components, x => x.Name == "Microsoft.Extensions.Primitives" && x.Version == "9.0.4");
+    }
+
+    /// <summary>
+    /// An exclude filter with empty package identifiers should be rejected.
+    /// </summary>
+    [Fact]
+    public async Task TestExceptionForEmptyPackageIdentifier()
+    {
+        var assetContents =
+            await File.ReadAllTextAsync(Path.Combine("FunctionalTests", "DependencyFiltering", "netstandard.assets.json"));
+
+        var options = new RunOptions
+        {
+            DependencyExcludeFilter = "NETStandard.Library, ,NLog", outputFormat = OutputFileFormat.Json
+        };
+        var bom = await FunctionalTestHelper.Test(assetContents, options, ExitCode.InvalidOptions);
+        Assert.Null(bom);
     }
 }
