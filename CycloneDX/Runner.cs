@@ -146,8 +146,17 @@ namespace CycloneDX
                 // name is set below
                 Version = string.IsNullOrEmpty(setVersion) ? "0.0.0" : setVersion,
                 Type = setType == Component.Classification.Null ? Component.Classification.Application : setType
-
             };
+
+            // If generating from a project file and setVersion is not provided, get version from project file
+            if (string.IsNullOrEmpty(setVersion) && Utils.IsSupportedProjectType(SolutionOrProjectFile) && fileSystem.File.Exists(SolutionOrProjectFile))
+            {
+                var projVersion = await projectFileService.GetProjectVersionAsync(SolutionOrProjectFile);
+                if (!string.IsNullOrEmpty(projVersion))
+                {
+                    topLevelComponent.Version = projVersion;
+                }
+            }
 
 
             if (options.includeProjectReferences
