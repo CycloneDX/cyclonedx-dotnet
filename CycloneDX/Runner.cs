@@ -403,14 +403,14 @@ namespace CycloneDX
 
             if (!string.IsNullOrEmpty(importMetadataPath))
             {
-                if (!File.Exists(importMetadataPath))
+                if (!fileSystem.File.Exists(importMetadataPath))
                 {
                     Console.Error.WriteLine($"Metadata template '{importMetadataPath}' does not exist.");
                     return (int)ExitCode.InvalidOptions;
                 }
                 else
                 {
-                    bom = ReadMetaDataFromFile(bom, importMetadataPath);
+                    bom = ReadMetaDataFromFile(bom, fileSystem, importMetadataPath);
                 }
             }
             SetMetadataComponentIfNecessary(bom, topLevelComponent, setNugetPurl);
@@ -572,11 +572,11 @@ namespace CycloneDX
 
         }
 
-        internal static Bom ReadMetaDataFromFile(Bom bom, string templatePath)
+        internal static Bom ReadMetaDataFromFile(Bom bom, IFileSystem fileSystem, string templatePath)
         {
             try
             {
-                return Xml.Serializer.Deserialize(File.ReadAllText(templatePath));
+                return Xml.Serializer.Deserialize(fileSystem.File.ReadAllText(templatePath));
             }
             catch (IOException ex)
             {
@@ -592,26 +592,37 @@ namespace CycloneDX
 
             bom.Metadata ??= new Metadata();
             bom.Metadata.Tools ??= new ToolChoices();
-#pragma warning disable CS0618 // Type or member is obsolete
-            bom.Metadata.Tools.Tools ??= new List<Tool>();
-#pragma warning restore CS0618 // Type or member is obsolete
 
-            var index = bom.Metadata.Tools.Tools.FindIndex(p => p.Name == toolname);
+            if (bom.Metadata.Tools.Components == null)
+            {
+                if(bom.Metadata.Tools.Services != null)
+                {
+                    Console.WriteLine("Cannot add CycloneDX as test component because there is already a service-collection (components and services are exclusive)");
+                    return;
+                }
+                bom.Metadata.Tools.Components = new List<Component>();
+            }
+
+            var index = bom.Metadata.Tools.Components.FindIndex(p => p.Name == toolname);
             if (index == -1)
             {
-#pragma warning disable CS0618 // Type or member is obsolete
-                bom.Metadata.Tools.Tools.Add(new Tool
+                bom.Metadata.Tools.Components.Add(
+                new Component
                 {
+                    Type = Component.Classification.Application,
                     Name = toolname,
-                    Vendor = "CycloneDX",
-                    Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
-                }
-                );
-#pragma warning restore CS0618 // Type or member is obsolete
+                    Author = "CycloneDX",
+                    Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                    ExternalReferences = new List<ExternalReference> {
+                        new ExternalReference {
+                            Type = ExternalReference.ExternalReferenceType.Website,
+                            Url = "https://github.com/CycloneDX/cyclonedx-dotnet"
+                    }}});
+
             }
             else
             {
-                bom.Metadata.Tools.Tools[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                bom.Metadata.Tools.Components[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
     }
