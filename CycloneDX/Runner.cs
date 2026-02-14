@@ -187,6 +187,14 @@ namespace CycloneDX
                     }
                     packages = await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
+                    if (string.IsNullOrEmpty(setVersion))
+                    {
+                        var (_, projectVersion) = projectFileService.GetAssemblyNameAndVersion(fullSolutionOrProjectFilePath);
+                        if (!string.IsNullOrEmpty(projectVersion))
+                        {
+                            topLevelComponent.Version = projectVersion;
+                        }
+                    }
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
@@ -197,6 +205,14 @@ namespace CycloneDX
                     }
                     packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
+                    if (string.IsNullOrEmpty(setVersion))
+                    {
+                        var (_, projectVersion) = projectFileService.GetAssemblyNameAndVersion(fullSolutionOrProjectFilePath);
+                        if (!string.IsNullOrEmpty(projectVersion))
+                        {
+                            topLevelComponent.Version = projectVersion;
+                        }
+                    }
                 }
                 else if (fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {
