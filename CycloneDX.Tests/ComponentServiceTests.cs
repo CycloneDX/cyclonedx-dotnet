@@ -22,6 +22,7 @@ using CycloneDX.Interfaces;
 using Xunit;
 using CycloneDX.Models;
 using CycloneDX.Services;
+using CycloneDX.Services.Models;
 using Moq;
 
 namespace CycloneDX.Tests
@@ -34,9 +35,9 @@ namespace CycloneDX.Tests
             var mockNugetService = new Mock<INugetService>();
             mockNugetService
                 .SetupSequence(service => service.GetComponentAsync(It.IsAny<DotnetDependency>()))
-                .ReturnsAsync(new Component { Name = "Package1", Version = "1.0.0" })
-                .ReturnsAsync(new Component { Name = "Package2", Version = "1.0.0" })
-                .ReturnsAsync(new Component { Name = "Package3", Version = "1.0.0" });
+                .ReturnsAsync(new NugetComponent { Name = "Package1", Version = "1.0.0" })
+                .ReturnsAsync(new NugetComponent { Name = "Package2", Version = "1.0.0" })
+                .ReturnsAsync(new NugetComponent { Name = "Package3", Version = "1.0.0" });
             var nugetService = mockNugetService.Object;
             var componentService = new ComponentService(nugetService);
             var DotnetDependencys = new List<DotnetDependency>

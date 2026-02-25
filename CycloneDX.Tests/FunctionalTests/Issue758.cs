@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
 using CycloneDX.Services;
+using CycloneDX.Services.Models;
 using Moq;
 using Xunit;
 using static CycloneDX.Models.Component;
@@ -23,10 +24,10 @@ namespace CycloneDX.Tests.FunctionalTests
                         dep.Name == "User.Dependent" &&
                         dep.Version == "1.0.0")))
                 .Returns(Task.FromResult
-                    (new Component {
+                    (new NugetComponent {
                         Name = "User.Dependent",
                         Version = "1.0.0",
-                        Type = Classification.Library,
+                        Type = NugetComponentType.Library,
                         BomRef = "pkg:nuget/User.Dependent@1.0.0"
                     }));
 

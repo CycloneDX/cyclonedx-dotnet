@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
+using CycloneDX.Services.Models;
 
 namespace CycloneDX.Services
 {
@@ -36,9 +37,9 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<Component>> RecursivelyGetComponentsAsync(IEnumerable<DotnetDependency> nugetPackges)
+        public async Task<HashSet<NugetComponent>> RecursivelyGetComponentsAsync(IEnumerable<DotnetDependency> nugetPackges)
         {
-            var components = new HashSet<Component>();
+            var components = new HashSet<NugetComponent>();
 
             // Initialize the queue with the current packages
             var packages = new Queue<DotnetDependency>(nugetPackges);

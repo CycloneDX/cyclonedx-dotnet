@@ -20,18 +20,20 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
+using CycloneDX.Services.Models;
 using NuGet.Common;
-using NuGet.Configuration;
 using NuGet.Packaging;
 using NuGet.Packaging.Licenses;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
+using NuGet.Protocol.Model;
 using NuGet.Versioning;
 
 namespace CycloneDX.Services
@@ -57,7 +59,7 @@ namespace CycloneDX.Services
         private const string _sha512Extension = ".nupkg.sha512";
 
         public NugetV3Service(
-            NugetInputModel nugetInput,
+            SourceRepository sourceRepository,
             IFileSystem fileSystem,
             List<string> packageCachePaths,
             IGithubService githubService,
@@ -71,7 +73,7 @@ namespace CycloneDX.Services
             _disableHashComputation = disableHashComputation;
             _logger = logger;
 
-            _sourceRepository = SetupNugetRepository(nugetInput);
+            _sourceRepository = sourceRepository;
             _sourceCacheContext = new SourceCacheContext();
             _cancellationToken = CancellationToken.None;
         }
@@ -188,31 +190,6 @@ namespace CycloneDX.Services
             return null;
         }
 
-        private SourceRepository SetupNugetRepository(NugetInputModel nugetInput)
-        {
-            if (nugetInput == null || string.IsNullOrEmpty(nugetInput.nugetFeedUrl) ||
-                string.IsNullOrEmpty(nugetInput.nugetUsername) || string.IsNullOrEmpty(nugetInput.nugetPassword))
-            {
-                return Repository.Factory.GetCoreV3(nugetInput?.nugetFeedUrl ?? "https://api.nuget.org/v3/index.json");
-            }
-
-            var packageSource =
-                GetPackageSourceWithCredentials(nugetInput);
-            return Repository.Factory.GetCoreV3(packageSource);
-        }
-
-        private PackageSource GetPackageSourceWithCredentials(NugetInputModel nugetInput)
-        {
-            var packageSource = new PackageSource(nugetInput.nugetFeedUrl)
-            {
-                Credentials = new PackageSourceCredential(nugetInput.nugetFeedUrl, nugetInput.nugetUsername,
-                    nugetInput.nugetPassword,
-                    nugetInput.IsPasswordClearText, null)
-            };
-
-            return packageSource;
-        }
-
         private static byte[] ComputeSha215Hash(Stream stream)
         {
             using (SHA512 sha = SHA512.Create())
@@ -221,22 +198,22 @@ namespace CycloneDX.Services
             }
         }
 
-        private Component SetupComponent(string name, string version, Component.ComponentScope? scope)
+        private NugetComponent SetupComponent(string name, string version, NugetComponentScope? scope)
         {
-            var component = new Component
+            var component = new NugetComponent
             {
                 Name = name,
                 Version = version,
                 Scope = scope,
                 Purl = Utils.GeneratePackageUrl(name, version),
-                Type = Component.Classification.Library
+                Type = NugetComponentType.Library
             };
 
             component.BomRef = component.Purl;
             return component;
         }
 
-        public async Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope? scope)
+        public async Task<NugetComponent> GetComponentAsync(string name, string version, NugetComponentScope? scope)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(version)) { return null; }
 
@@ -249,8 +226,8 @@ namespace CycloneDX.Services
             if (nuspecModel.hashBytes != null)
             {
                 var hex = BitConverter.ToString(nuspecModel.hashBytes).Replace("-", string.Empty);
-                Hash h = new Hash { Alg = Hash.HashAlgorithm.SHA_512, Content = hex };
-                component.Hashes = new List<Hash> { h };
+                NugetHash h = new NugetHash { Algorithm = "SHA-512", Content = hex };
+                component.Hashes = new List<NugetHash> { h };
             }
 
             if (nuspecModel.nuspecReader == null) { return component; }
@@ -262,19 +239,19 @@ namespace CycloneDX.Services
             {
                 Action<NuGetLicense> licenseProcessor = delegate (NuGetLicense nugetLicense)
                 {
-                    var license = new License();
+                    var license = new NugetLicense();
                     license.Id = nugetLicense.Identifier;
                     license.Name = license.Id == null ? nugetLicense.Identifier : null;
-                    component.Licenses ??= new List<LicenseChoice>();
-                    component.Licenses.Add(new LicenseChoice { License = license });
+                    component.Licenses ??= new List<NugetLicense>();
+                    component.Licenses.Add(license);
                 };
                 licenseMetadata.LicenseExpression.OnEachLeafNode(licenseProcessor, null);
             }
             else if (_githubService == null)
             {
                 var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
-                var license = new License { Name = "Unknown - See URL", Url = licenseUrl?.Trim() };
-                component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
+                var license = new NugetLicense { Name = "Unknown - See URL", Url = licenseUrl?.Trim() };
+                component.Licenses = new List<NugetLicense> { license };
             }
             else
             {
@@ -312,19 +289,25 @@ namespace CycloneDX.Services
 
                 if (license != null)
                 {
-                    component.Licenses = new List<LicenseChoice> { new LicenseChoice { License = license } };
+                    var nugetLicense = new NugetLicense
+                    {
+                        Id = license.Id,
+                        Name = license.Name,
+                        Url = license.Url
+                    };
+                    component.Licenses = new List<NugetLicense> { nugetLicense };
                 }
             }
 
             var projectUrl = nuspecModel.nuspecReader.GetProjectUrl();
             if (!string.IsNullOrEmpty(projectUrl))
             {
-                var externalReference = new ExternalReference
+                var externalReference = new NugetExternalReference
                 {
-                    Type = ExternalReference.ExternalReferenceType.Website,
+                    Type = NugetExternalReferenceType.Website,
                     Url = projectUrl
                 };
-                component.ExternalReferences = new List<ExternalReference> { externalReference };
+                component.ExternalReferences = new List<NugetExternalReference> { externalReference };
             }
 
             // Source: https://docs.microsoft.com/de-de/nuget/reference/nuspec#repository
@@ -332,14 +315,14 @@ namespace CycloneDX.Services
             var vcsUrl = NormalizeUri(repoMeta?.Url);
             if (!string.IsNullOrEmpty(vcsUrl))
             {
-                var externalReference = new ExternalReference
+                var externalReference = new NugetExternalReference
                 {
-                    Type = ExternalReference.ExternalReferenceType.Vcs,
+                    Type = NugetExternalReferenceType.Vcs,
                     Url = vcsUrl
                 };
                 if (null == component.ExternalReferences)
                 {
-                    component.ExternalReferences = new List<ExternalReference> { externalReference };
+                    component.ExternalReferences = new List<NugetExternalReference> { externalReference };
                 }
                 else
                 {
@@ -347,12 +330,21 @@ namespace CycloneDX.Services
                 }
             }
 
+            var vulnerabilities = await GetVulnerabilitiesAsync(name, version);
+            var vulnerabilityDescriptions = vulnerabilities.OrderBy(v => v.Severity).Select(v => v.ToJson()).ToArray();
+            component.Description = string.Join(',', vulnerabilityDescriptions);
+            component.Vulnerabilities = vulnerabilities?.Select(v => new NugetVulnerability
+            {
+                AdvisoryUrl = v.Url.ToString(),
+                Severity = (int)v.Severity
+            }).ToList();
+
             return component;
         }
 
-        private static Component SetupComponentProperties(Component component, NuspecModel nuspecModel)
+        private static NugetComponent SetupComponentProperties(NugetComponent component, NuspecModel nuspecModel)
         {
-            component.Authors = new List<OrganizationalContact> { new OrganizationalContact { Name = nuspecModel.nuspecReader.GetAuthors() } };
+            component.Authors = new List<NugetContact> { new NugetContact { Name = nuspecModel.nuspecReader.GetAuthors() } };
             component.Copyright = nuspecModel.nuspecReader.GetCopyright();
             // this prevents empty copyright values in the JSON BOM
             if (string.IsNullOrEmpty(component.Copyright))
@@ -442,11 +434,38 @@ namespace CycloneDX.Services
             return nuspecModel;
         }
 
-        public async Task<Component> GetComponentAsync(DotnetDependency DotnetDependency)
+        public async Task<NugetComponent> GetComponentAsync(DotnetDependency DotnetDependency)
         {
             Contract.Requires(DotnetDependency != null);
-            return await GetComponentAsync(DotnetDependency.Name, DotnetDependency.Version, DotnetDependency.Scope)
+            NugetComponentScope? scope = null;
+            if (DotnetDependency.Scope == Component.ComponentScope.Required) scope = NugetComponentScope.Required;
+            else if (DotnetDependency.Scope == Component.ComponentScope.Optional) scope = NugetComponentScope.Optional;
+            else if (DotnetDependency.Scope == Component.ComponentScope.Excluded) scope = NugetComponentScope.Excluded;
+
+            return await GetComponentAsync(DotnetDependency.Name, DotnetDependency.Version, scope)
                 .ConfigureAwait(false);
+        }
+
+        public async Task<IList<PackageVulnerabilityInfo>> GetVulnerabilitiesAsync(string packageName, string packageVersion)
+        {
+            var vulnerabilityResource = await _sourceRepository.GetResourceAsync<IVulnerabilityInfoResource>();
+
+            var result = await vulnerabilityResource.GetVulnerabilityInfoAsync(
+                _sourceCacheContext,
+                _logger,
+                _cancellationToken);
+
+            // The outer IReadOnlyList represents the number of files the package source split the vulnerability data into.
+            // The IReadOnlyDictionary's key is the package ID.
+            var packageId = packageName;
+            var packageVulnerabilities = result.KnownVulnerabilities
+                .SelectMany(kvps => kvps.Where(kvp => kvp.Key.Equals(packageId, StringComparison.OrdinalIgnoreCase))
+                    .SelectMany(kvp => kvp.Value));
+
+            var version = NuGetVersion.Parse(packageVersion);
+            var packageVulnerabilitiesAffectingVersion = packageVulnerabilities
+                .Where(vuln => vuln.Versions.Satisfies(version)).ToList();
+            return packageVulnerabilitiesAffectingVersion;
         }
     }
 }
