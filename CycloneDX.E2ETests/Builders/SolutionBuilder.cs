@@ -161,7 +161,7 @@ namespace CycloneDX.E2ETests.Builders
                 // dotnet restore
                 var (exitCode, stdOut, stdErr) = await ToolFixture.RunProcessAsync(
                     "dotnet",
-                    $"restore \"{slnPath}\" --no-cache",
+                    $"restore \"{slnPath}\" --no-cache /nodeReuse:false",
                     workingDir: dir.Path
                 ).ConfigureAwait(false);
 

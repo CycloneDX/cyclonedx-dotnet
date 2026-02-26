@@ -4,11 +4,12 @@
     <IsTestProject>true</IsTestProject>
     <IsPackable>false</IsPackable>
     <!-- E2E tests require a real dotnet SDK + Docker; single TFM is sufficient -->
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <!-- Disable central PackAsTool inheritance for this test project -->
     <PackAsTool>false</PackAsTool>
     <!-- Longer default timeout for E2E tests that spin up containers -->
+    <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
     <PackageReference Include="Testcontainers" />
     <PackageReference Include="Verify.XunitV3" />
   </ItemGroup>
+
 
   <ItemGroup>
     <None Update="xunit.runner.json">

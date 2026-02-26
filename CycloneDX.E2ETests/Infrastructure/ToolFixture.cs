@@ -47,7 +47,7 @@ namespace CycloneDX.E2ETests.Infrastructure
 
             var result = await RunProcessAsync(
                 "dotnet",
-                $"publish \"{csprojPath}\" -c Release -f {tfm} -o \"{_publishDir.Path}\" /p:PackAsTool=false",
+                $"publish \"{csprojPath}\" -c Release -f {tfm} -o \"{_publishDir.Path}\" /p:PackAsTool=false /nodeReuse:false",
                 workingDir: solutionRoot
             ).ConfigureAwait(false);
 

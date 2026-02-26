@@ -31,7 +31,7 @@
       <description>Test package TestPkg.A</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">{scrubbed-hash}531C6F999C3D7E54935AF23D43D1F34E34F13C64</hash>
+        <hash alg="SHA-512">{scrubbed-hash}1101BAD65973EEC0F4518BE2484DCB42D7D74F88</hash>
       </hashes>
       <licenses>
         <license>
@@ -51,7 +51,7 @@
       <description>Test package TestPkg.C</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">{scrubbed-hash}4404F2F30EF98F8B90397BAC9D0F93926F6F3D3B</hash>
+        <hash alg="SHA-512">{scrubbed-hash}275E29109AA4C615DF4753A0789E5C34472C2821</hash>
       </hashes>
       <licenses>
         <license>

@@ -154,7 +154,7 @@ namespace CycloneDX.E2ETests.Tests
                 });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-            Assert.Contains("version=\"1.4\"", result.BomContent);
+            Assert.Contains("cyclonedx.org/schema/bom/1.4", result.BomContent);
         }
 
         [Fact]
@@ -178,7 +178,7 @@ namespace CycloneDX.E2ETests.Tests
                 });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-            Assert.Contains("version=\"1.6\"", result.BomContent);
+            Assert.Contains("cyclonedx.org/schema/bom/1.6", result.BomContent);
         }
     }
 }

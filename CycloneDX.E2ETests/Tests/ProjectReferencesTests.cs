@@ -41,8 +41,9 @@ namespace CycloneDX.E2ETests.Tests
         [Fact]
         public async Task ProjectReference_NotIncludedByDefault()
         {
-            // By default, scanning a single project should NOT pull in packages
-            // from its project references (the tool targets the named project only)
+            // By default, packages from project references are promoted as direct dependencies
+            // of the referencing project. The project reference itself (MyLib) is NOT added as
+            // a BOM component — only its NuGet packages are.
             using var solution = await new SolutionBuilder("ProjRefDefaultSln")
                 .AddProject("MyLib", p => p
                     .WithTargetFramework("net8.0")
@@ -63,14 +64,17 @@ namespace CycloneDX.E2ETests.Tests
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
             Assert.Contains("TestPkg.A", result.BomContent);
-            // TestPkg.C comes from MyLib — not expected without the flag
-            Assert.DoesNotContain("TestPkg.C", result.BomContent);
+            // TestPkg.C comes from MyLib — it IS included because its packages are promoted
+            Assert.Contains("TestPkg.C", result.BomContent);
+            // But the MyLib project itself should NOT appear as a component
+            Assert.DoesNotContain("MyLib", result.BomContent);
         }
 
         [Fact]
         public async Task ProjectReference_IncludedWithFlag()
         {
-            // With --include-project-references the referenced project's packages appear
+            // With --include-project-references the referenced project itself appears as a
+            // BOM component in addition to its NuGet packages.
             using var solution = await new SolutionBuilder("ProjRefIncludeSln")
                 .AddProject("MyLib", p => p
                     .WithTargetFramework("net8.0")
@@ -95,6 +99,8 @@ namespace CycloneDX.E2ETests.Tests
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
             Assert.Contains("TestPkg.A", result.BomContent);
             Assert.Contains("TestPkg.C", result.BomContent);
+            // With the flag the MyLib project itself should appear as a component
+            Assert.Contains("MyLib", result.BomContent);
 
             await Verify(result.BomContent);
         }
