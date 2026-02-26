@@ -15,7 +15,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
-using System;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -24,15 +23,9 @@ namespace CycloneDX.E2ETests.Infrastructure
 {
     /// <summary>
     /// Builds minimal valid .nupkg files in memory.
-    /// A .nupkg is a ZIP containing a .nuspec and optionally content files.
-    /// We add a small text file so the package has a real (stable) hash.
     /// </summary>
     internal static class NupkgBuilder
     {
-        /// <summary>
-        /// Creates a .nupkg byte array for a package with the given id, version,
-        /// optional dependencies, and a stable content file so SHA-512 hashing works.
-        /// </summary>
         public static byte[] Build(
             string id,
             string version,
@@ -46,17 +39,21 @@ namespace CycloneDX.E2ETests.Infrastructure
             using var ms = new MemoryStream();
             using (var archive = new ZipArchive(ms, ZipArchiveMode.Create, leaveOpen: true))
             {
-                // .nuspec entry
+                // .nuspec
                 var nuspecEntry = archive.CreateEntry($"{id}.nuspec", CompressionLevel.Optimal);
                 using (var writer = new StreamWriter(nuspecEntry.Open(), Encoding.UTF8))
                     writer.Write(nuspec);
 
-                // Stable content file — gives the package a real, reproducible hash
-                var contentEntry = archive.CreateEntry($"content/marker.txt", CompressionLevel.Optimal);
-                using (var writer = new StreamWriter(contentEntry.Open(), Encoding.UTF8))
-                    writer.Write($"{id}@{version}");
+                // Placeholder lib assemblies — required for dotnet restore to resolve the package
+                foreach (var tfm in new[] { "net8.0", "net9.0", "net10.0" })
+                {
+                    var dllEntry = archive.CreateEntry($"lib/{tfm}/{id}.dll", CompressionLevel.Optimal);
+                    using var dllStream = dllEntry.Open();
+                    var placeholder = Encoding.UTF8.GetBytes($"placeholder-{id}-{version}");
+                    dllStream.Write(placeholder, 0, placeholder.Length);
+                }
 
-                // Minimal [Content_Types].xml required by NuGet clients
+                // [Content_Types].xml
                 var contentTypesEntry = archive.CreateEntry("[Content_Types].xml", CompressionLevel.Optimal);
                 using (var writer = new StreamWriter(contentTypesEntry.Open(), Encoding.UTF8))
                     writer.Write(ContentTypesXml);
@@ -83,10 +80,13 @@ namespace CycloneDX.E2ETests.Infrastructure
             if (dependencies != null && dependencies.Length > 0)
             {
                 sb.AppendLine("    <dependencies>");
-                sb.AppendLine("      <group targetFramework=\"net8.0\">");
-                foreach (var dep in dependencies)
-                    sb.AppendLine($"        <dependency id=\"{dep.Id}\" version=\"{dep.Version}\" />");
-                sb.AppendLine("      </group>");
+                foreach (var tfm in new[] { "net8.0", "net9.0", "net10.0" })
+                {
+                    sb.AppendLine($"      <group targetFramework=\"{tfm}\">");
+                    foreach (var dep in dependencies)
+                        sb.AppendLine($"        <dependency id=\"{dep.Id}\" version=\"{dep.Version}\" />");
+                    sb.AppendLine("      </group>");
+                }
                 sb.AppendLine("    </dependencies>");
             }
 
@@ -99,7 +99,7 @@ namespace CycloneDX.E2ETests.Infrastructure
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
             "<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">" +
             "<Default Extension=\"nuspec\" ContentType=\"application/octet\" />" +
-            "<Default Extension=\"txt\" ContentType=\"text/plain\" />" +
+            "<Default Extension=\"dll\" ContentType=\"application/octet\" />" +
             "</Types>";
     }
 

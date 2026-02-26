@@ -12,7 +12,9 @@ namespace CycloneDX.Tests.FunctionalTests
 {
     public class ExcludeDevDepenceny
     {
+        // E2E counterpart: CycloneDX.E2ETests.DevDependencyTests
         [Fact]
+        [Trait("Status", "MigratedToE2E")]
         public async Task DevDependenciesNormalyGoIntoTheBom()
         {
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies.json"));
@@ -28,7 +30,9 @@ namespace CycloneDX.Tests.FunctionalTests
 
         }
 
+        // E2E counterpart: CycloneDX.E2ETests.DevDependencyTests
         [Fact]
+        [Trait("Status", "MigratedToE2E")]
         public async Task DevDependenciesAreExcludedWithExcludeDevDependencies()
         {
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies.json"));

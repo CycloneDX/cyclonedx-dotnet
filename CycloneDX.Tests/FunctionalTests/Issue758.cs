@@ -44,7 +44,9 @@ namespace CycloneDX.Tests.FunctionalTests
         }
 
 
+        // E2E counterpart: CycloneDX.E2ETests.ProjectReferencesTests
         [Fact(Timeout = 15000)]
+        [Trait("Status", "MigratedToE2E")]
         public async Task Issue758_BaseCase()
         {
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "Issue-758.json"));
@@ -59,7 +61,9 @@ namespace CycloneDX.Tests.FunctionalTests
             Assert.DoesNotContain(bom.Components, c => string.Compare(c.Name, "User.Dependency", true) == 0 );
         }
 
+        // E2E counterpart: CycloneDX.E2ETests.ProjectReferencesTests
         [Fact(Timeout = 15000)]
+        [Trait("Status", "MigratedToE2E")]
         public async Task Issue758_IPR()
         {
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "Issue-758.json"));

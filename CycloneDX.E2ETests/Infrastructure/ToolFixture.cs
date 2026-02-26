@@ -42,9 +42,12 @@ namespace CycloneDX.E2ETests.Infrastructure
             var solutionRoot = FindSolutionRoot();
             var csprojPath = Path.Combine(solutionRoot, "CycloneDX", "CycloneDX.csproj");
 
+            // Use whatever TFM matches the currently running runtime — it is guaranteed to be installed.
+            var tfm = $"net{Environment.Version.Major}.{Environment.Version.Minor}";
+
             var result = await RunProcessAsync(
                 "dotnet",
-                $"publish \"{csprojPath}\" -c Release -o \"{_publishDir.Path}\" -f net8.0 /p:PackAsTool=false",
+                $"publish \"{csprojPath}\" -c Release -f {tfm} -o \"{_publishDir.Path}\" /p:PackAsTool=false",
                 workingDir: solutionRoot
             ).ConfigureAwait(false);
 

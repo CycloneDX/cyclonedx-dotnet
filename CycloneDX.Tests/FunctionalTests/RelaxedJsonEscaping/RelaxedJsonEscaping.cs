@@ -31,7 +31,9 @@ namespace CycloneDX.Tests.FunctionalTests
             });
         }
 
+        // E2E counterpart: CycloneDX.E2ETests.OutputFormatTests
         [Fact(Timeout = 15000)]
+        [Trait("Status", "MigratedToE2E")]
         public async Task OutputFormat_UnsafeJson()
         {
             var mockFS = getMockFS();
@@ -49,7 +51,9 @@ namespace CycloneDX.Tests.FunctionalTests
             Assert.Contains(payload, json); // unescaped payload should be visible
         }
 
+        // E2E counterpart: CycloneDX.E2ETests.OutputFormatTests
         [Fact(Timeout = 15000)]
+        [Trait("Status", "MigratedToE2E")]
         public async Task OutputFormat_Json()
         {
             var mockFS = getMockFS();
@@ -83,8 +87,10 @@ namespace CycloneDX.Tests.FunctionalTests
         new object[] { OutputFileFormat.UnsafeJson, null, OutputFileFormat.UnsafeJson, "bom.json" },        
             };
 
+        // E2E counterpart: CycloneDX.E2ETests.OutputFormatTests
         [Theory(Timeout = 15000)]
         [MemberData(nameof(FormatResolutionTestData))]
+        [Trait("Status", "MigratedToE2E")]
         public async Task FormatAndFilenameResolution(
             OutputFileFormat inputFormat,
             string inputFilename,

@@ -36,7 +36,9 @@ namespace CycloneDX.Tests.FunctionalTests
         }
 
 
+        // E2E counterpart: CycloneDX.E2ETests.ProjectReferencesTests
         [Fact]
+        [Trait("Status", "MigratedToE2E")]
         public async Task BaseLineWithoutIPR()
         {
             var options = new RunOptions
@@ -51,7 +53,9 @@ namespace CycloneDX.Tests.FunctionalTests
             FunctionalTestHelper.AssertHasDependencyWithChild(bom, "project1@0.0.0", "pkg:nuget/log4net@2.0.15");
         }
 
+        // E2E counterpart: CycloneDX.E2ETests.ProjectReferencesTests
         [Fact]
+        [Trait("Status", "MigratedToE2E")]
         public async Task DependencyGraph()
         {
             var options = new RunOptions

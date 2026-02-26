@@ -185,7 +185,7 @@ namespace CycloneDX.E2ETests.Builders
                 <configuration>
                   <packageSources>
                     <clear />
-                    <add key="bagetter" value="{feedUrl}" />
+                    <add key="bagetter" value="{feedUrl}" allowInsecureConnections="true" />
                   </packageSources>
                 </configuration>
                 """;

@@ -16,10 +16,7 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
@@ -32,38 +29,35 @@ namespace CycloneDX.E2ETests.Infrastructure
     /// </summary>
     internal sealed class NuGetServerFixture : IAsyncDisposable
     {
-        private const int BaGetterPort = 5000;
-        private const string BaGetterImage = "loicsharma/bagetter:latest";
-        private const string ApiKey = "cdx-e2e-test-key";
+        private const int BaGetterPort = 8080;
+        private const string BaGetterImage = "bagetter/bagetter:latest";
+        public const string ApiKey = "cdx-e2e-test-key";
 
         private IContainer _container;
         private HttpClient _http;
-        private int _mappedPort;
 
-        public string FeedUrl => $"http://localhost:{_mappedPort}/v3/index.json";
-        public string PushUrl => $"http://localhost:{_mappedPort}/api/v2/package";
+        public string FeedUrl => $"http://{_container.Hostname}:{_container.GetMappedPublicPort(BaGetterPort)}/v3/index.json";
+        public string PushUrl => $"http://{_container.Hostname}:{_container.GetMappedPublicPort(BaGetterPort)}/api/v2/package";
 
         public async Task StartAsync()
         {
-            _container = new ContainerBuilder()
-                .WithImage(BaGetterImage)
+            _container = new ContainerBuilder(BaGetterImage)
                 .WithPortBinding(BaGetterPort, assignRandomHostPort: true)
                 .WithEnvironment("ApiKey", ApiKey)
                 .WithEnvironment("Storage__Type", "FileSystem")
                 .WithEnvironment("Storage__Path", "/data")
                 .WithEnvironment("Database__Type", "Sqlite")
-                .WithEnvironment("Database__ConnectionString", "Data Source=/data/db/bagetter.db")
+                .WithEnvironment("Database__ConnectionString", "Data Source=/data/bagetter.db")
                 .WithEnvironment("Search__Type", "Database")
                 .WithWaitStrategy(
                     Wait.ForUnixContainer()
                         .UntilHttpRequestIsSucceeded(r => r
-                            .ForPath("/healthz")
-                            .ForPort(BaGetterPort)))
+                            .ForPort(BaGetterPort)
+                            .ForPath("/v3/index.json")))
                 .Build();
 
             await _container.StartAsync().ConfigureAwait(false);
 
-            _mappedPort = _container.GetMappedPublicPort(BaGetterPort);
             _http = new HttpClient();
         }
 
@@ -72,18 +66,21 @@ namespace CycloneDX.E2ETests.Infrastructure
         /// </summary>
         public async Task PushPackageAsync(byte[] nupkgBytes)
         {
-            using var content = new MultipartFormDataContent();
-            using var fileContent = new ByteArrayContent(nupkgBytes);
-            fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-            content.Add(fileContent, "package", "package.nupkg");
+            using var content = new ByteArrayContent(nupkgBytes);
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
 
-            var request = new HttpRequestMessage(HttpMethod.Put, PushUrl)
+            using var request = new HttpRequestMessage(HttpMethod.Put, PushUrl)
             {
                 Headers = { { "X-NuGet-ApiKey", ApiKey } },
                 Content = content
             };
 
             var response = await _http.SendAsync(request).ConfigureAwait(false);
+
+            // 409 Conflict = package already exists (idempotent)
+            if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+                return;
+
             response.EnsureSuccessStatusCode();
         }
 

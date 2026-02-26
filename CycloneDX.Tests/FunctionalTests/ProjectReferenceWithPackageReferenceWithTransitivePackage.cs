@@ -16,7 +16,9 @@ namespace CycloneDX.Tests.FunctionalTests
         readonly RunOptions options = new RunOptions
         {};
 
+        // E2E counterpart: CycloneDX.E2ETests.ProjectReferencesTests
         [Fact(Timeout = 15000)]
+        [Trait("Status", "MigratedToE2E")]
         public async Task ProjectReferenceWithPackageReferenceWithTransitivePackage_BaseCase()
         {
             var bom = await FunctionalTestHelper.Test(assetsJson, options);
@@ -25,7 +27,9 @@ namespace CycloneDX.Tests.FunctionalTests
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "Castle.Core", true) == 0 && c.Version == "5.1.1");
         }
 
+        // E2E counterpart: CycloneDX.E2ETests.ProjectReferencesTests
         [Fact(Timeout = 15000)]
+        [Trait("Status", "MigratedToE2E")]
         public async Task ProjectReferenceWithPackageReferenceWithTransitivePackage_includeProjectReferences()
         {
             options.includeProjectReferences = true;

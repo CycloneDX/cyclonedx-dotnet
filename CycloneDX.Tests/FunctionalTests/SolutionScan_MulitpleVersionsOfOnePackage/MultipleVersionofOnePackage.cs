@@ -42,7 +42,9 @@ namespace CycloneDX.Tests.FunctionalTests
             });
         }
 
+        // E2E counterpart: CycloneDX.E2ETests.SolutionScanTests
         [Fact]
+        [Trait("Status", "MigratedToE2E")]
         public async Task GivenASolutionWithTwoIndependentProjectEachIncludingTheSameLibraryInAnotherVersion_WhenCreatingABomOnTheSolution_BothVersionAreInTheSbom()
         {
             var options = new RunOptions

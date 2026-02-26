@@ -8,7 +8,9 @@ namespace CycloneDX.Tests.FunctionalTests
 {
     public class SimpleNET6_0Library
     {
+        // E2E counterpart: CycloneDX.E2ETests.SimpleProjectTests
         [Fact(Timeout = 15000)]
+        [Trait("Status", "MigratedToE2E")]
         public async Task TestSimpleNET6_0Library()
         {
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "SimpleNET6.0Library.json"));            
