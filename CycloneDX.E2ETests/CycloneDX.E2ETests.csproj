@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+    <IsPackable>false</IsPackable>
+    <!-- E2E tests require a real dotnet SDK + Docker; single TFM is sufficient -->
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <!-- Disable central PackAsTool inheritance for this test project -->
+    <PackAsTool>false</PackAsTool>
+    <!-- Longer default timeout for E2E tests that spin up containers -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Testcontainers" />
+    <PackageReference Include="Verify.XunitV3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
