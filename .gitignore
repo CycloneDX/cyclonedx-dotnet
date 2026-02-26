@@ -20,3 +20,4 @@ CycloneDX/Properties/launchSettings.json
 MSBuild_Logs/
 /.agent/
 bom.xml
+AGENTS.md
