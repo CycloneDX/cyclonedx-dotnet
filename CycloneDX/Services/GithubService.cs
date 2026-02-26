@@ -201,10 +201,11 @@ namespace CycloneDX.Services
             // Send HTTP request and handle its response
             var githubResponse = await _httpClient.SendAsync(githubLicenseRequestMessage).ConfigureAwait(false);
             
-            if (githubResponse.StatusCode == System.Net.HttpStatusCode.MovedPermanently && githubResponse.Headers.Location != null) 
+            if (githubResponse.StatusCode == System.Net.HttpStatusCode.MovedPermanently && githubResponse.Headers.Location != null)
             {
-                // Authorization header won't be sent in redirect requests
-                githubLicenseRequestMessage = ConfigureGithubRequestMessage(githubResponse.Headers.Location.ToString());
+                var redirectUri = githubResponse.Headers.Location;
+                ValidateRedirectIsToGithub(redirectUri);
+                githubLicenseRequestMessage = ConfigureGithubRequestMessage(redirectUri.ToString());
                 githubResponse = await _httpClient.SendAsync(githubLicenseRequestMessage).ConfigureAwait(false);
             }
             if (githubResponse.IsSuccessStatusCode)
@@ -243,5 +244,29 @@ namespace CycloneDX.Services
 
             return githubRequestMessage;
 	    }
+
+        /// <summary>
+        /// Validates that a redirect URI still points to GitHub: it must use HTTPS and point to a
+        /// GitHub-owned host so that the Authorization header is never forwarded elsewhere.
+        /// </summary>
+        private static void ValidateRedirectIsToGithub(Uri redirectUri)
+        {
+            if (!string.Equals(redirectUri.Scheme, "https", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new GitHubLicenseResolutionException(
+                    $"Redirect to non-HTTPS URL rejected: {redirectUri}");
+            }
+
+            var isGitHubHost =
+                redirectUri.Host.Equals("api.github.com", StringComparison.OrdinalIgnoreCase) ||
+                redirectUri.Host.EndsWith(".github.com", StringComparison.OrdinalIgnoreCase) ||
+                redirectUri.Host.EndsWith(".githubusercontent.com", StringComparison.OrdinalIgnoreCase);
+
+            if (!isGitHubHost)
+            {
+                throw new GitHubLicenseResolutionException(
+                    $"Redirect to non-GitHub URL rejected: {redirectUri}");
+            }
+        }
     }
 }

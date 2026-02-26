@@ -15,7 +15,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using CycloneDX.Services;
 using RichardSzalay.MockHttp;
@@ -498,5 +500,43 @@ namespace CycloneDX.Tests
             Assert.Null(license.Id);
             Assert.Equal("https://licenceurl.com/", license.Url);
         }
+        [Fact]
+        public async Task GitLicense_Redirect301ToHttpUrl_ThrowsGitHubLicenseResolutionException()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp
+                .When("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet/license")
+                .Respond(_ =>
+                {
+                    var response = new HttpResponseMessage(HttpStatusCode.MovedPermanently);
+                    response.Headers.Location = new Uri("http://api.github.com/repos/CycloneDX/cyclonedx-dotnet/license");
+                    return response;
+                });
+            var client = mockHttp.ToHttpClient();
+            var githubService = new GithubService(client);
+
+            await Assert.ThrowsAsync<GitHubLicenseResolutionException>(
+                () => githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet")).ConfigureAwait(true);
+        }
+
+        [Fact]
+        public async Task GitLicense_Redirect301ToForeignDomain_ThrowsGitHubLicenseResolutionException()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp
+                .When("https://api.github.com/repos/CycloneDX/cyclonedx-dotnet/license")
+                .Respond(_ =>
+                {
+                    var response = new HttpResponseMessage(HttpStatusCode.MovedPermanently);
+                    response.Headers.Location = new Uri("https://attacker.example.com/steal-credentials");
+                    return response;
+                });
+            var client = mockHttp.ToHttpClient();
+            var githubService = new GithubService(client);
+
+            await Assert.ThrowsAsync<GitHubLicenseResolutionException>(
+                () => githubService.GetLicenseAsync("https://github.com/CycloneDX/cyclonedx-dotnet")).ConfigureAwait(true);
+        }
+
     }
 }
