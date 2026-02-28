@@ -62,8 +62,10 @@ jobs:
 
       # We install the newly generated tool as bit of a "smoke test" and to generate an SBOM for the release
       - name: Install newly generated version of CLI tool
+        env:
+          VERSION: ${{ steps.package_release.outputs.version }}
         run: |
-          dotnet tool install --global CycloneDX --version ${{ steps.package_release.outputs.version }} --add-source ./nupkgs
+          dotnet tool install --global CycloneDX --version "$VERSION" --add-source ./nupkgs
 
       - name: Generate XML SBOM
         uses: CycloneDX/gh-dotnet-generate-sbom@cff1b6c92f4bdf75f2c4e152aa000f3c056ff281 # master
@@ -73,22 +75,26 @@ jobs:
 
       # Generate the JSON with the docker container as additional smoke test
       - name: Generate JSON SBOM
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/usr/src/project cyclonedx/cyclonedx-dotnet:${{ steps.package_release.outputs.version }} /usr/src/project/CycloneDX.sln --output-format json -o /usr/src/project
+        env:
+          VERSION: ${{ steps.package_release.outputs.version }}
+        run: docker run --rm -v ${GITHUB_WORKSPACE}:/usr/src/project cyclonedx/cyclonedx-dotnet:"$VERSION" /usr/src/project/CycloneDX.sln --output-format json -o /usr/src/project
 
       - name: Publish package to NuGet
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          PACKAGE_FILENAME: ${{ steps.package_release.outputs.package_filename }}
         run: |
-          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" ${{ steps.package_release.outputs.package_filename }}
+          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" "$PACKAGE_FILENAME"
 
       - name: Publish Docker image to Docker Hub
         env:
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+          VERSION: ${{ steps.package_release.outputs.version }}
         run: |
           REPO=cyclonedx/cyclonedx-dotnet
           docker login --username coderpatros --password "$DOCKER_TOKEN"
           docker push $REPO:latest
-          docker push $REPO:${{ steps.package_release.outputs.version }}
+          docker push $REPO:"$VERSION"
 
       - name: Create github release and git tag for release
         id: create_release

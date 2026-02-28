@@ -65,7 +65,9 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: Tests
-        run: dotnet test CycloneDX.Tests --framework ${{ matrix.framework }}  --collect:"XPlat Code Coverage;Format=cobertura" --results-directory "TestResults"
+        env:
+          FRAMEWORK: ${{ matrix.framework }}
+        run: dotnet test CycloneDX.Tests --framework "$FRAMEWORK" --collect:"XPlat Code Coverage;Format=cobertura" --results-directory "TestResults"
       # see https://github.com/danielpalme/ReportGenerator/blob/main/.github/workflows/ci.yml
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@ee0ae774f6d3afedcbd1683c1ab21b83670bdf8e # v5.5.1
