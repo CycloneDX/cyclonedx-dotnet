@@ -44,7 +44,9 @@ namespace CycloneDX.E2ETests.Infrastructure
             try
             {
                 if (Directory.Exists(Path))
+                {
                     Directory.Delete(Path, recursive: true);
+                }
             }
             catch
             {

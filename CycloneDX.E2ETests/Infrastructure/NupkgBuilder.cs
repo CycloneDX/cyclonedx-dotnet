@@ -84,7 +84,9 @@ namespace CycloneDX.E2ETests.Infrastructure
                 {
                     sb.AppendLine($"      <group targetFramework=\"{tfm}\">");
                     foreach (var dep in dependencies)
+                    {
                         sb.AppendLine($"        <dependency id=\"{dep.Id}\" version=\"{dep.Version}\" />");
+                    }
                     sb.AppendLine("      </group>");
                 }
                 sb.AppendLine("    </dependencies>");

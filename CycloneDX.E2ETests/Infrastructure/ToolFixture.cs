@@ -52,8 +52,10 @@ namespace CycloneDX.E2ETests.Infrastructure
             ).ConfigureAwait(false);
 
             if (result.ExitCode != 0)
+            {
                 throw new InvalidOperationException(
                     $"dotnet publish failed (exit {result.ExitCode}):\n{result.StdErr}\n{result.StdOut}");
+            }
 
             ToolDllPath = Path.Combine(_publishDir.Path, "CycloneDX.dll");
             if (!File.Exists(ToolDllPath))
@@ -67,7 +69,9 @@ namespace CycloneDX.E2ETests.Infrastructure
             while (dir != null)
             {
                 if (File.Exists(Path.Combine(dir, "CycloneDX.sln")))
+                {
                     return dir;
+                }
                 dir = Path.GetDirectoryName(dir);
             }
             throw new DirectoryNotFoundException("Could not find solution root (CycloneDX.sln).");

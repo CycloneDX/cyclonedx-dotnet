@@ -67,8 +67,8 @@ namespace CycloneDX.E2ETests.Infrastructure
                     // Auto-detect: tool defaults to bom.xml or bom.json
                     var xmlPath = Path.Combine(outputDir, "bom.xml");
                     var jsonPath = Path.Combine(outputDir, "bom.json");
-                    if (File.Exists(xmlPath)) outputFilePath = xmlPath;
-                    else if (File.Exists(jsonPath)) outputFilePath = jsonPath;
+                    if (File.Exists(xmlPath)) { outputFilePath = xmlPath; }
+                    else if (File.Exists(jsonPath)) { outputFilePath = jsonPath; }
                 }
                 else
                 {
@@ -89,52 +89,84 @@ namespace CycloneDX.E2ETests.Infrastructure
             sb.Append($" --output \"{outputDir}\"");
 
             if (options.OutputFilename != null)
+            {
                 sb.Append($" --filename \"{options.OutputFilename}\"");
+            }
 
             if (options.OutputFormat != null)
+            {
                 sb.Append($" --output-format {options.OutputFormat}");
+            }
 
             if (options.ExcludeDev)
+            {
                 sb.Append(" --exclude-dev");
+            }
 
             if (options.ExcludeTestProjects)
+            {
                 sb.Append(" --exclude-test-projects");
+            }
 
             if (options.IncludeProjectReferences)
+            {
                 sb.Append(" --include-project-references");
+            }
 
             if (options.Recursive)
+            {
                 sb.Append(" --recursive");
+            }
 
             if (options.NoSerialNumber)
+            {
                 sb.Append(" --no-serial-number");
+            }
 
             if (options.DisableHashComputation)
+            {
                 sb.Append(" --disable-hash-computation");
+            }
 
             if (options.NuGetFeedUrl != null)
+            {
                 sb.Append($" --url \"{options.NuGetFeedUrl}\"");
+            }
 
             if (options.SetName != null)
+            {
                 sb.Append($" --set-name \"{options.SetName}\"");
+            }
 
             if (options.SetVersion != null)
+            {
                 sb.Append($" --set-version \"{options.SetVersion}\"");
+            }
 
             if (options.SetType != null)
+            {
                 sb.Append($" --set-type \"{options.SetType}\"");
+            }
 
             if (options.SpecVersion != null)
+            {
                 sb.Append($" --spec-version {options.SpecVersion}");
+            }
 
             if (options.ExcludeFilter != null)
+            {
                 sb.Append($" --exclude-filter \"{options.ExcludeFilter}\"");
+            }
 
             if (options.Framework != null)
+            {
                 sb.Append($" --framework {options.Framework}");
+            }
 
             if (options.AdditionalArgs != null)
+            {
                 sb.Append($" {options.AdditionalArgs}");
+            }
 
             return sb.ToString();
         }

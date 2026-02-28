@@ -79,7 +79,9 @@ namespace CycloneDX.E2ETests.Infrastructure
 
             // 409 Conflict = package already exists (idempotent)
             if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
                 return;
+            }
 
             response.EnsureSuccessStatusCode();
         }
@@ -116,7 +118,9 @@ namespace CycloneDX.E2ETests.Infrastructure
         {
             _http?.Dispose();
             if (_container != null)
+            {
                 await _container.DisposeAsync().ConfigureAwait(false);
+            }
         }
     }
 }

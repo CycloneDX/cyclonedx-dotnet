@@ -153,7 +153,9 @@ namespace CycloneDX.E2ETests.Builders
 
                 // Write each project
                 foreach (var proj in _projects)
+                {
                     WriteProject(dir.Path, proj);
+                }
 
                 // Write solution file if there is more than one project or we always want a .sln
                 var slnPath = WriteSolution(dir.Path);
@@ -166,8 +168,10 @@ namespace CycloneDX.E2ETests.Builders
                 ).ConfigureAwait(false);
 
                 if (exitCode != 0)
+                {
                     throw new InvalidOperationException(
                         $"dotnet restore failed (exit {exitCode}):\n{stdErr}\n{stdOut}");
+                }
 
                 return new BuiltSolution(dir, slnPath, _projects.Select(p => p.Name).ToList());
             }
@@ -202,7 +206,9 @@ namespace CycloneDX.E2ETests.Builders
             sb.AppendLine("  <PropertyGroup>");
             sb.AppendLine($"    <TargetFramework>{proj.TargetFramework}</TargetFramework>");
             if (proj.IsTestProject)
+            {
                 sb.AppendLine("    <IsTestProject>true</IsTestProject>");
+            }
             sb.AppendLine("  </PropertyGroup>");
 
             if (proj.Packages.Count > 0)
@@ -222,12 +228,16 @@ namespace CycloneDX.E2ETests.Builders
             {
                 sb.AppendLine("  <ItemGroup>");
                 foreach (var pref in proj.ProjectReferences)
+                {
                     sb.AppendLine($"    <ProjectReference Include=\"{pref}\" />");
+                }
                 sb.AppendLine("  </ItemGroup>");
             }
 
             if (!string.IsNullOrWhiteSpace(proj.RawXmlBlocks))
+            {
                 sb.AppendLine(proj.RawXmlBlocks);
+            }
 
             sb.AppendLine("</Project>");
 
