@@ -212,8 +212,4 @@ And build warnings will break the build.
 If you are having trouble debugging a test that is failing for a platform you
 don't have access to please let us know.
 
-Thanks to [Gitpod](https://gitpod.io/) there is a really easy way of creating
-a ready to go development environment with VS Code. You can open a Gitpod
-hosted development environment in your browser.
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/CycloneDX/cyclonedx-dotnet)
+The included devcontainer configuration provides a ready-to-go development environment with VS Code and GitHub Codespaces.
