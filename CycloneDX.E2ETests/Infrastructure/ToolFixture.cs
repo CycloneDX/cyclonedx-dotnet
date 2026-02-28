@@ -79,7 +79,7 @@ namespace CycloneDX.E2ETests.Infrastructure
                 throw new InvalidOperationException("Published DLL path escapes the publish directory.");
             }
 
-            ToolDllPath = expectedDllPath;
+            ToolDllPath = expectedDllPath; // codeql[cs/path-injection]
             if (!File.Exists(ToolDllPath))
             {
                 throw new FileNotFoundException($"Published tool not found at: {ToolDllPath}");
@@ -115,7 +115,7 @@ namespace CycloneDX.E2ETests.Infrastructure
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
-                WorkingDirectory = resolvedWorkingDir
+                WorkingDirectory = resolvedWorkingDir // codeql[cs/uncontrolled-command-line]
             };
 
             foreach (var arg in arguments)

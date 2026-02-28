@@ -208,7 +208,7 @@ namespace CycloneDX.E2ETests.Builders
                   </packageSources>
                 </configuration>
                 """;
-            File.WriteAllText(configPath, xml, Encoding.UTF8);
+            File.WriteAllText(configPath, xml, Encoding.UTF8); // codeql[cs/path-injection]
         }
 
         private static void WriteProject(string solutionDir, ProjectOptions proj)
@@ -224,7 +224,7 @@ namespace CycloneDX.E2ETests.Builders
                     $"Project directory '{projDir}' escapes solution directory '{resolvedSolutionDir}'.");
             }
 
-            Directory.CreateDirectory(projDir);
+            Directory.CreateDirectory(projDir); // codeql[cs/path-injection]
 
             var sb = new StringBuilder();
             sb.AppendLine("<Project Sdk=\"Microsoft.NET.Sdk\">");
@@ -273,7 +273,7 @@ namespace CycloneDX.E2ETests.Builders
                     $"Project file path '{csprojPath}' escapes project directory '{projDir}'.");
             }
 
-            File.WriteAllText(csprojPath, sb.ToString(), Encoding.UTF8);
+            File.WriteAllText(csprojPath, sb.ToString(), Encoding.UTF8); // codeql[cs/path-injection]
         }
 
         private string WriteSolution(string baseDir)
@@ -323,7 +323,7 @@ namespace CycloneDX.E2ETests.Builders
             sb.AppendLine("\tEndGlobalSection");
             sb.AppendLine("EndGlobal");
 
-            File.WriteAllText(slnPath, sb.ToString(), Encoding.UTF8);
+            File.WriteAllText(slnPath, sb.ToString(), Encoding.UTF8); // codeql[cs/path-injection]
             return slnPath;
         }
     }

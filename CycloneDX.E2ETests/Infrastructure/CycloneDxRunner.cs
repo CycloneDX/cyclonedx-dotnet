@@ -71,11 +71,11 @@ namespace CycloneDX.E2ETests.Infrastructure
                     // Use GetFullPath + boundary check to ensure we stay within outputDir.
                     var xmlPath = Path.GetFullPath(Path.Combine(resolvedOutputDir, "bom.xml"));
                     var jsonPath = Path.GetFullPath(Path.Combine(resolvedOutputDir, "bom.json"));
-                    if (xmlPath.StartsWith(resolvedOutputDir, StringComparison.Ordinal) && File.Exists(xmlPath))
+                    if (xmlPath.StartsWith(resolvedOutputDir, StringComparison.Ordinal) && File.Exists(xmlPath)) // codeql[cs/path-injection]
                     {
                         outputFilePath = xmlPath;
                     }
-                    else if (jsonPath.StartsWith(resolvedOutputDir, StringComparison.Ordinal) && File.Exists(jsonPath))
+                    else if (jsonPath.StartsWith(resolvedOutputDir, StringComparison.Ordinal) && File.Exists(jsonPath)) // codeql[cs/path-injection]
                     {
                         outputFilePath = jsonPath;
                     }

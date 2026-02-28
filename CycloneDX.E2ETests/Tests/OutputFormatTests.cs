@@ -63,7 +63,7 @@ namespace CycloneDX.E2ETests.Tests
                 throw new InvalidOperationException("bom.xml path escapes the output directory.");
             }
 
-            Assert.True(File.Exists(bomXmlPath), "Expected bom.xml to be created by default");
+            Assert.True(File.Exists(bomXmlPath), "Expected bom.xml to be created by default"); // codeql[cs/path-injection]
             Assert.StartsWith("<?xml", result.BomContent.TrimStart());
         }
 
@@ -126,7 +126,7 @@ namespace CycloneDX.E2ETests.Tests
                 throw new InvalidOperationException($"Custom filename '{customName}' escapes the output directory.");
             }
 
-            Assert.True(File.Exists(customFilePath), $"Expected output file '{customName}'");
+            Assert.True(File.Exists(customFilePath), $"Expected output file '{customName}'"); // codeql[cs/path-injection]
         }
 
         [Fact]

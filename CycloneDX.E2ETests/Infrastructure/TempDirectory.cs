@@ -26,8 +26,6 @@ namespace CycloneDX.E2ETests.Infrastructure
     /// </summary>
     internal sealed class TempDirectory : IDisposable
     {
-        private readonly string _baseTempPath;
-
         public string Path { get; }
 
         public TempDirectory()
@@ -35,10 +33,10 @@ namespace CycloneDX.E2ETests.Infrastructure
             // Build the path exclusively from GetTempPath() and GetRandomFileName() —
             // no external input is involved.  GetFullPath canonicalises the result so
             // that CodeQL's taint-tracking sees a fully-resolved, anchor-validated path.
-            _baseTempPath = System.IO.Path.GetFullPath(System.IO.Path.GetTempPath());
+            var baseTempPath = System.IO.Path.GetFullPath(System.IO.Path.GetTempPath());
             var name = "cdx-e2e-" + System.IO.Path.GetRandomFileName();
-            Path = System.IO.Path.GetFullPath(System.IO.Path.Combine(_baseTempPath, name));
-            Directory.CreateDirectory(Path);
+            Path = System.IO.Path.GetFullPath(System.IO.Path.Combine(baseTempPath, name));
+            Directory.CreateDirectory(Path); // codeql[cs/path-injection]
         }
 
         /// <summary>
@@ -61,9 +59,9 @@ namespace CycloneDX.E2ETests.Infrastructure
         {
             try
             {
-                if (Directory.Exists(Path))
+                if (Directory.Exists(Path)) // codeql[cs/path-injection]
                 {
-                    Directory.Delete(Path, recursive: true);
+                    Directory.Delete(Path, recursive: true); // codeql[cs/path-injection]
                 }
             }
             catch
