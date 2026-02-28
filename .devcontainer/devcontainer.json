@@ -4,7 +4,8 @@
     "features": {
         "ghcr.io/devcontainers/features/dotnet:2": {
             "version": "10.0"
-        }
+        },
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
     },
     "customizations": {
         "vscode": {
