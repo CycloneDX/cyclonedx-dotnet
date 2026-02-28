@@ -26,7 +26,7 @@
       <description>Test package TestPkg.A</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">{scrubbed-hash}531C6F999C3D7E54935AF23D43D1F34E34F13C64</hash>
+        <hash alg="SHA-512">{scrubbed-hash}</hash>
       </hashes>
       <licenses>
         <license>
