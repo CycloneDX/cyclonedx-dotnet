@@ -291,7 +291,7 @@ namespace CycloneDX.Services
                     var repository = nuspecModel.nuspecReader.GetRepositoryMetadata();
                     if (repository != null && !string.IsNullOrWhiteSpace(repository.Url))
                     {
-                        if (!string.IsNullOrWhiteSpace(repository.Commit))
+                        if (!string.IsNullOrWhiteSpace(repository.Commit) && IsSafeCommitRef(repository.Commit))
                         {
                             license = await _githubService.GetLicenseAsync($"{repository.Url}/blob/{repository.Commit}/licence").ConfigureAwait(false);
                         }
@@ -447,6 +447,24 @@ namespace CycloneDX.Services
             Contract.Requires(DotnetDependency != null);
             return await GetComponentAsync(DotnetDependency.Name, DotnetDependency.Version, DotnetDependency.Scope)
                 .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Returns true if <paramref name="commitRef"/> contains only characters that are safe to
+        /// interpolate into a URL path segment (hex digits, letters, digits, hyphens, underscores
+        /// and dots). This rejects values that contain URL metacharacters such as '?', '#', '%',
+        /// '@', ':', '/', or whitespace that could be used to inject query strings or path
+        /// traversal sequences into downstream HTTP requests.
+        /// </summary>
+        internal static bool IsSafeCommitRef(string commitRef)
+        {
+            if (string.IsNullOrEmpty(commitRef)) return false;
+            foreach (var c in commitRef)
+            {
+                if (!char.IsLetterOrDigit(c) && c != '-' && c != '_' && c != '.')
+                    return false;
+            }
+            return true;
         }
     }
 }

@@ -184,15 +184,21 @@ namespace CycloneDX.Services
         /// <returns></returns>
         private async Task<GithubLicenseRoot> GetGithubLicenseAsync(string repositoryId, string refSpec)
         {
+            // Encode each path segment of the repositoryId separately so that metacharacters
+            // such as '?', '#', '%', or '@' that may have been captured from an untrusted URL
+            // cannot inject query strings or path traversal sequences into the API URL.
+            var encodedRepositoryId = string.Join("/",
+                Array.ConvertAll(repositoryId.Split('/'), Uri.EscapeDataString));
+
             string githubLicenseUrl;
             if (string.IsNullOrWhiteSpace(refSpec))
             {
-                githubLicenseUrl = $"{_baseUrl}repos/{repositoryId}/license";
+                githubLicenseUrl = $"{_baseUrl}repos/{encodedRepositoryId}/license";
                 Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} - URL: {githubLicenseUrl}");
             }
             else
             {
-                githubLicenseUrl = $"{_baseUrl}repos/{repositoryId}/license?ref={refSpec}";
+                githubLicenseUrl = $"{_baseUrl}repos/{encodedRepositoryId}/license?ref={Uri.EscapeDataString(refSpec)}";
                 Console.WriteLine($"Retrieving GitHub license for repository {repositoryId} and ref {refSpec} - URL: {githubLicenseUrl}");
             }
 

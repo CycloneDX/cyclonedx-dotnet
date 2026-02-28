@@ -520,6 +520,42 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task GitLicense_RepositoryIdWithQueryInjection_DoesNotCallInjectedUrl()
+        {
+            // If the repositoryId captured from a GitHub URL contains URL metacharacters
+            // (e.g. '?'), they must be percent-encoded before being interpolated into the
+            // GitHub API URL so they cannot inject extra query parameters.
+            //
+            // The GitHub regex captures repositoryId with [^\/]+\/[^\/]+ which allows '?'.
+            // For a URL whose repo slug already contains a percent-encoded '?' (%3F), after
+            // the fix the service must further encode '%' to '%25', producing '%253F' in the
+            // API path — ensuring the literal character never acts as a query delimiter.
+            //
+            // We verify this by checking that the mock HTTP handler — which only matches the
+            // safe, doubly-encoded URL — is satisfied (meaning the unsafe raw-? URL was not hit).
+            var mockResponseContent = @"{
+                ""license"": {
+                    ""spdx_id"": ""MIT"",
+                    ""name"": ""MIT License""
+                }
+            }";
+            var mockHttp = new MockHttpMessageHandler();
+            // The encoded URL: %3F in the repo slug is re-encoded to %253F by EscapeDataString
+            mockHttp.When("https://api.github.com/repos/owner/repo%253Ffoo%253Dbar/license")
+                .Respond("application/json", mockResponseContent);
+            var client = mockHttp.ToHttpClient();
+            var githubService = new GithubService(client);
+
+            // Input URL has a percent-encoded '?' in the repository slug
+            var license = await githubService.GetLicenseAsync(
+                "https://github.com/owner/repo%3Ffoo%3Dbar").ConfigureAwait(true);
+
+            // The mock only matches the safely-encoded URL; if the raw '?' or wrong encoding
+            // were used the mock would throw, causing the test to fail.
+            Assert.Equal("MIT", license?.Id);
+        }
+
+        [Fact]
         public async Task GitLicense_Redirect301ToForeignDomain_ThrowsGitHubLicenseResolutionException()
         {
             var mockHttp = new MockHttpMessageHandler();

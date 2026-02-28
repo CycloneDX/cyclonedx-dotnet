@@ -513,6 +513,71 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task GetComponent_GitHubLicenseLookup_MaliciousCommitWithQueryString_DoesNotCallGitHub()
+        {
+            // A nuspec from an untrusted feed could carry a commit value containing URL
+            // metacharacters designed to inject query parameters into a downstream HTTP call.
+            // The service must reject such values rather than interpolating them verbatim.
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <repository url=""https://github.com/owner/repo"" commit=""master?injected=evil"" />
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            // Must never pass a URL containing the raw injected query string to GitHub
+            mockGitHubService.Verify(
+                x => x.GetLicenseAsync(It.Is<string>(url => url.Contains("injected=evil"))),
+                Times.Never);
+        }
+
+        [Fact]
+        public async Task GetComponent_GitHubLicenseLookup_MaliciousCommitWithFragment_DoesNotCallGitHub()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <repository url=""https://github.com/owner/repo"" commit=""abc#../../etc/passwd"" />
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            // Must never pass a URL containing the injected fragment to GitHub
+            mockGitHubService.Verify(
+                x => x.GetLicenseAsync(It.Is<string>(url => url.Contains("etc/passwd"))),
+                Times.Never);
+        }
+
+        [Fact]
         public async Task GetComponent_WhenGitHubServiceIsNull_UsesLicenseUrl()
         {
             var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
