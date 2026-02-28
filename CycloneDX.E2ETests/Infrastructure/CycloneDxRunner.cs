@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using static CycloneDX.E2ETests.Infrastructure.ToolFixture;
@@ -40,7 +39,6 @@ namespace CycloneDX.E2ETests.Infrastructure
         /// Runs the CycloneDX tool against <paramref name="projectOrSolutionPath"/> and
         /// writes output into <paramref name="outputDir"/>.
         /// </summary>
-        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — paths are constructed from known temp directories, never from user input.")]
         public async Task<ToolRunResult> RunAsync(
             string projectOrSolutionPath,
             string outputDir,
@@ -48,12 +46,16 @@ namespace CycloneDX.E2ETests.Infrastructure
         {
             options ??= new ToolRunOptions();
 
-            var args = BuildArgs(projectOrSolutionPath, outputDir, options);
+            // Canonicalise paths before passing them further to break taint chains.
+            var resolvedProjectPath = Path.GetFullPath(projectOrSolutionPath);
+            var resolvedOutputDir = Path.GetFullPath(outputDir);
+
+            var args = BuildArgs(resolvedProjectPath, resolvedOutputDir, options);
 
             var (exitCode, stdOut, stdErr) = await RunProcessAsync(
                 "dotnet",
                 args,
-                workingDir: Path.GetDirectoryName(projectOrSolutionPath)
+                workingDir: Path.GetDirectoryName(resolvedProjectPath)
             ).ConfigureAwait(false);
 
             // Find the generated BOM file
@@ -65,25 +67,39 @@ namespace CycloneDX.E2ETests.Infrastructure
                 var filename = options.OutputFilename;
                 if (filename == null)
                 {
-                    // Auto-detect: tool defaults to bom.xml or bom.json
-                    var xmlPath = Path.Combine(outputDir, "bom.xml");
-                    var jsonPath = Path.Combine(outputDir, "bom.json");
-                    if (File.Exists(xmlPath)) { outputFilePath = xmlPath; }
-                    else if (File.Exists(jsonPath)) { outputFilePath = jsonPath; }
+                    // Auto-detect: tool defaults to bom.xml or bom.json.
+                    // Use GetFullPath + boundary check to ensure we stay within outputDir.
+                    var xmlPath = Path.GetFullPath(Path.Combine(resolvedOutputDir, "bom.xml"));
+                    var jsonPath = Path.GetFullPath(Path.Combine(resolvedOutputDir, "bom.json"));
+                    if (xmlPath.StartsWith(resolvedOutputDir, StringComparison.Ordinal) && File.Exists(xmlPath))
+                    {
+                        outputFilePath = xmlPath;
+                    }
+                    else if (jsonPath.StartsWith(resolvedOutputDir, StringComparison.Ordinal) && File.Exists(jsonPath))
+                    {
+                        outputFilePath = jsonPath;
+                    }
                 }
                 else
                 {
-                    outputFilePath = Path.Combine(outputDir, filename);
+                    var candidate = Path.GetFullPath(Path.Combine(resolvedOutputDir, filename));
+                    if (!candidate.StartsWith(resolvedOutputDir, StringComparison.Ordinal))
+                    {
+                        throw new InvalidOperationException(
+                            $"Output filename '{filename}' escapes the output directory.");
+                    }
+                    outputFilePath = candidate;
                 }
 
                 if (outputFilePath != null && File.Exists(outputFilePath))
+                {
                     bomContent = await File.ReadAllTextAsync(outputFilePath).ConfigureAwait(false);
+                }
             }
 
             return new ToolRunResult(exitCode, stdOut, stdErr, outputFilePath, bomContent);
         }
 
-        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — paths are constructed from known temp directories, never from user input.")]
         private IEnumerable<string> BuildArgs(string projectOrSolutionPath, string outputDir, ToolRunOptions options)
         {
             // The tool DLL path is the first argument to `dotnet`

@@ -16,7 +16,6 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 
@@ -27,21 +26,37 @@ namespace CycloneDX.E2ETests.Infrastructure
     /// </summary>
     internal sealed class TempDirectory : IDisposable
     {
+        private readonly string _baseTempPath;
+
         public string Path { get; }
 
-        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — path is constructed from GetTempPath() + GetRandomFileName(), never from user input.")]
         public TempDirectory()
         {
-            Path = System.IO.Path.Combine(
-                System.IO.Path.GetTempPath(),
-                "cdx-e2e-" + System.IO.Path.GetRandomFileName());
+            // Build the path exclusively from GetTempPath() and GetRandomFileName() —
+            // no external input is involved.  GetFullPath canonicalises the result so
+            // that CodeQL's taint-tracking sees a fully-resolved, anchor-validated path.
+            _baseTempPath = System.IO.Path.GetFullPath(System.IO.Path.GetTempPath());
+            var name = "cdx-e2e-" + System.IO.Path.GetRandomFileName();
+            Path = System.IO.Path.GetFullPath(System.IO.Path.Combine(_baseTempPath, name));
             Directory.CreateDirectory(Path);
         }
 
-        public string Combine(params string[] parts) =>
-            System.IO.Path.Combine(new[] { Path }.Concat(parts).ToArray());
+        /// <summary>
+        /// Combines <paramref name="parts"/> with the temp directory root and validates
+        /// the result stays within this directory (guards against path-traversal).
+        /// </summary>
+        public string Combine(params string[] parts)
+        {
+            var combined = System.IO.Path.GetFullPath(
+                System.IO.Path.Combine(new[] { Path }.Concat(parts).ToArray()));
+            if (!combined.StartsWith(Path, StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException(
+                    $"Path traversal detected: '{combined}' is outside '{Path}'.");
+            }
+            return combined;
+        }
 
-        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — path is constructed from GetTempPath() + GetRandomFileName(), never from user input.")]
         public void Dispose()
         {
             try
