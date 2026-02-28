@@ -30,38 +30,22 @@ namespace CycloneDX.E2ETests.Infrastructure
 
         public TempDirectory()
         {
-            // Build the path exclusively from GetTempPath() and GetRandomFileName() —
-            // no external input is involved.  GetFullPath canonicalises the result so
-            // that CodeQL's taint-tracking sees a fully-resolved, anchor-validated path.
-            var baseTempPath = System.IO.Path.GetFullPath(System.IO.Path.GetTempPath());
-            var name = "cdx-e2e-" + System.IO.Path.GetRandomFileName();
-            Path = System.IO.Path.GetFullPath(System.IO.Path.Combine(baseTempPath, name));
-            Directory.CreateDirectory(Path); // codeql[cs/path-injection]
+            Path = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                "cdx-e2e-" + System.IO.Path.GetRandomFileName());
+            Directory.CreateDirectory(Path);
         }
 
-        /// <summary>
-        /// Combines <paramref name="parts"/> with the temp directory root and validates
-        /// the result stays within this directory (guards against path-traversal).
-        /// </summary>
-        public string Combine(params string[] parts)
-        {
-            var combined = System.IO.Path.GetFullPath(
-                System.IO.Path.Combine(new[] { Path }.Concat(parts).ToArray()));
-            if (!combined.StartsWith(Path, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException(
-                    $"Path traversal detected: '{combined}' is outside '{Path}'.");
-            }
-            return combined;
-        }
+        public string Combine(params string[] parts) =>
+            System.IO.Path.Combine(new[] { Path }.Concat(parts).ToArray());
 
         public void Dispose()
         {
             try
             {
-                if (Directory.Exists(Path)) // codeql[cs/path-injection]
+                if (Directory.Exists(Path))
                 {
-                    Directory.Delete(Path, recursive: true); // codeql[cs/path-injection]
+                    Directory.Delete(Path, recursive: true);
                 }
             }
             catch

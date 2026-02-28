@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using static CycloneDX.E2ETests.Infrastructure.ToolFixture;
 
@@ -46,16 +47,12 @@ namespace CycloneDX.E2ETests.Infrastructure
         {
             options ??= new ToolRunOptions();
 
-            // Canonicalise paths before passing them further to break taint chains.
-            var resolvedProjectPath = Path.GetFullPath(projectOrSolutionPath);
-            var resolvedOutputDir = Path.GetFullPath(outputDir);
-
-            var args = BuildArgs(resolvedProjectPath, resolvedOutputDir, options);
+            var args = BuildArgs(projectOrSolutionPath, outputDir, options);
 
             var (exitCode, stdOut, stdErr) = await RunProcessAsync(
                 "dotnet",
-                args,
-                workingDir: Path.GetDirectoryName(resolvedProjectPath)
+                $"\"{_toolDllPath}\" {args}",
+                workingDir: Path.GetDirectoryName(projectOrSolutionPath)
             ).ConfigureAwait(false);
 
             // Find the generated BOM file
@@ -67,135 +64,111 @@ namespace CycloneDX.E2ETests.Infrastructure
                 var filename = options.OutputFilename;
                 if (filename == null)
                 {
-                    // Auto-detect: tool defaults to bom.xml or bom.json.
-                    // Use GetFullPath + boundary check to ensure we stay within outputDir.
-                    var xmlPath = Path.GetFullPath(Path.Combine(resolvedOutputDir, "bom.xml"));
-                    var jsonPath = Path.GetFullPath(Path.Combine(resolvedOutputDir, "bom.json"));
-                    if (xmlPath.StartsWith(resolvedOutputDir, StringComparison.Ordinal) && File.Exists(xmlPath)) // codeql[cs/path-injection]
-                    {
-                        outputFilePath = xmlPath;
-                    }
-                    else if (jsonPath.StartsWith(resolvedOutputDir, StringComparison.Ordinal) && File.Exists(jsonPath)) // codeql[cs/path-injection]
-                    {
-                        outputFilePath = jsonPath;
-                    }
+                    // Auto-detect: tool defaults to bom.xml or bom.json
+                    var xmlPath = Path.Combine(outputDir, "bom.xml");
+                    var jsonPath = Path.Combine(outputDir, "bom.json");
+                    if (File.Exists(xmlPath)) { outputFilePath = xmlPath; }
+                    else if (File.Exists(jsonPath)) { outputFilePath = jsonPath; }
                 }
                 else
                 {
-                    var candidate = Path.GetFullPath(Path.Combine(resolvedOutputDir, filename));
-                    if (!candidate.StartsWith(resolvedOutputDir, StringComparison.Ordinal))
-                    {
-                        throw new InvalidOperationException(
-                            $"Output filename '{filename}' escapes the output directory.");
-                    }
-                    outputFilePath = candidate;
+                    outputFilePath = Path.Combine(outputDir, filename);
                 }
 
                 if (outputFilePath != null && File.Exists(outputFilePath))
-                {
                     bomContent = await File.ReadAllTextAsync(outputFilePath).ConfigureAwait(false);
-                }
             }
 
             return new ToolRunResult(exitCode, stdOut, stdErr, outputFilePath, bomContent);
         }
 
-        private IEnumerable<string> BuildArgs(string projectOrSolutionPath, string outputDir, ToolRunOptions options)
+        private static string BuildArgs(string projectOrSolutionPath, string outputDir, ToolRunOptions options)
         {
-            // The tool DLL path is the first argument to `dotnet`
-            yield return _toolDllPath;
-            yield return projectOrSolutionPath;
-            yield return "--output";
-            yield return outputDir;
+            var sb = new StringBuilder();
+            sb.Append($"\"{projectOrSolutionPath}\"");
+            sb.Append($" --output \"{outputDir}\"");
 
             if (options.OutputFilename != null)
             {
-                yield return "--filename";
-                yield return options.OutputFilename;
+                sb.Append($" --filename \"{options.OutputFilename}\"");
             }
 
             if (options.OutputFormat != null)
             {
-                yield return "--output-format";
-                yield return options.OutputFormat;
+                sb.Append($" --output-format {options.OutputFormat}");
             }
 
             if (options.ExcludeDev)
             {
-                yield return "--exclude-dev";
+                sb.Append(" --exclude-dev");
             }
 
             if (options.ExcludeTestProjects)
             {
-                yield return "--exclude-test-projects";
+                sb.Append(" --exclude-test-projects");
             }
 
             if (options.IncludeProjectReferences)
             {
-                yield return "--include-project-references";
+                sb.Append(" --include-project-references");
             }
 
             if (options.Recursive)
             {
-                yield return "--recursive";
+                sb.Append(" --recursive");
             }
 
             if (options.NoSerialNumber)
             {
-                yield return "--no-serial-number";
+                sb.Append(" --no-serial-number");
             }
 
             if (options.DisableHashComputation)
             {
-                yield return "--disable-hash-computation";
+                sb.Append(" --disable-hash-computation");
             }
 
             if (options.NuGetFeedUrl != null)
             {
-                yield return "--url";
-                yield return options.NuGetFeedUrl;
+                sb.Append($" --url \"{options.NuGetFeedUrl}\"");
             }
 
             if (options.SetName != null)
             {
-                yield return "--set-name";
-                yield return options.SetName;
+                sb.Append($" --set-name \"{options.SetName}\"");
             }
 
             if (options.SetVersion != null)
             {
-                yield return "--set-version";
-                yield return options.SetVersion;
+                sb.Append($" --set-version \"{options.SetVersion}\"");
             }
 
             if (options.SetType != null)
             {
-                yield return "--set-type";
-                yield return options.SetType;
+                sb.Append($" --set-type \"{options.SetType}\"");
             }
 
             if (options.SpecVersion != null)
             {
-                yield return "--spec-version";
-                yield return options.SpecVersion;
+                sb.Append($" --spec-version {options.SpecVersion}");
             }
 
             if (options.ExcludeFilter != null)
             {
-                yield return "--exclude-filter";
-                yield return options.ExcludeFilter;
+                sb.Append($" --exclude-filter \"{options.ExcludeFilter}\"");
             }
 
             if (options.Framework != null)
             {
-                yield return "--framework";
-                yield return options.Framework;
+                sb.Append($" --framework {options.Framework}");
             }
 
             if (options.AdditionalArgs != null)
             {
-                yield return options.AdditionalArgs;
+                sb.Append($" {options.AdditionalArgs}");
             }
+
+            return sb.ToString();
         }
     }
 

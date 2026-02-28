@@ -16,7 +16,6 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -41,28 +40,14 @@ namespace CycloneDX.E2ETests.Infrastructure
 
             // Find the solution root — go up from the test assembly location
             var solutionRoot = FindSolutionRoot();
-            var csprojPath = Path.GetFullPath(Path.Combine(solutionRoot, "CycloneDX", "CycloneDX.csproj"));
-
-            // Validate csprojPath stays within solutionRoot to satisfy path-taint analysis.
-            if (!csprojPath.StartsWith(Path.GetFullPath(solutionRoot), StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException("Unexpected project path outside solution root.");
-            }
+            var csprojPath = Path.Combine(solutionRoot, "CycloneDX", "CycloneDX.csproj");
 
             // Use whatever TFM matches the currently running runtime — it is guaranteed to be installed.
             var tfm = $"net{Environment.Version.Major}.{Environment.Version.Minor}";
 
             var result = await RunProcessAsync(
                 "dotnet",
-                new[]
-                {
-                    "publish", csprojPath,
-                    "-c", "Release",
-                    "-f", tfm,
-                    "-o", _publishDir.Path,
-                    "/p:PackAsTool=false",
-                    "/nodeReuse:false"
-                },
+                $"publish \"{csprojPath}\" -c Release -f {tfm} -o \"{_publishDir.Path}\" /p:PackAsTool=false /nodeReuse:false",
                 workingDir: solutionRoot
             ).ConfigureAwait(false);
 
@@ -72,18 +57,9 @@ namespace CycloneDX.E2ETests.Infrastructure
                     $"dotnet publish failed (exit {result.ExitCode}):\n{result.StdErr}\n{result.StdOut}");
             }
 
-            // Canonicalise and validate the DLL path stays inside _publishDir.
-            var expectedDllPath = Path.GetFullPath(Path.Combine(_publishDir.Path, "CycloneDX.dll"));
-            if (!expectedDllPath.StartsWith(_publishDir.Path, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException("Published DLL path escapes the publish directory.");
-            }
-
-            ToolDllPath = expectedDllPath; // codeql[cs/path-injection]
+            ToolDllPath = Path.Combine(_publishDir.Path, "CycloneDX.dll");
             if (!File.Exists(ToolDllPath))
-            {
                 throw new FileNotFoundException($"Published tool not found at: {ToolDllPath}");
-            }
         }
 
         private static string FindSolutionRoot()
@@ -103,27 +79,16 @@ namespace CycloneDX.E2ETests.Infrastructure
 
         internal static async Task<(int ExitCode, string StdOut, string StdErr)> RunProcessAsync(
             string executable,
-            IEnumerable<string> arguments,
+            string arguments,
             string workingDir = null)
         {
-            var resolvedWorkingDir = workingDir != null
-                ? Path.GetFullPath(workingDir)
-                : Path.GetFullPath(Directory.GetCurrentDirectory());
-
-            var psi = new ProcessStartInfo(executable)
+            var psi = new ProcessStartInfo(executable, arguments)
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
-                WorkingDirectory = resolvedWorkingDir // codeql[cs/uncontrolled-command-line]
+                WorkingDirectory = workingDir ?? Directory.GetCurrentDirectory()
             };
-
-            foreach (var arg in arguments)
-            {
-                // Each argument is added individually to ArgumentList, which ensures
-                // proper quoting/escaping and prevents shell injection.
-                psi.ArgumentList.Add(arg ?? string.Empty);
-            }
 
             using var process = new Process { StartInfo = psi };
             process.Start();

@@ -15,7 +15,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using CycloneDX.E2ETests.Builders;
@@ -54,16 +53,8 @@ namespace CycloneDX.E2ETests.Tests
                 new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-
-            // Canonicalise and boundary-check before using the path.
-            var resolvedOutputDir = Path.GetFullPath(outputDir.Path);
-            var bomXmlPath = Path.GetFullPath(Path.Combine(resolvedOutputDir, "bom.xml"));
-            if (!bomXmlPath.StartsWith(resolvedOutputDir, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException("bom.xml path escapes the output directory.");
-            }
-
-            Assert.True(File.Exists(bomXmlPath), "Expected bom.xml to be created by default"); // codeql[cs/path-injection]
+            Assert.True(File.Exists(Path.Combine(outputDir.Path, "bom.xml")),
+                "Expected bom.xml to be created by default");
             Assert.StartsWith("<?xml", result.BomContent.TrimStart());
         }
 
@@ -117,16 +108,8 @@ namespace CycloneDX.E2ETests.Tests
                 });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-
-            // Canonicalise and boundary-check before using the path.
-            var resolvedOutputDir = Path.GetFullPath(outputDir.Path);
-            var customFilePath = Path.GetFullPath(Path.Combine(resolvedOutputDir, customName));
-            if (!customFilePath.StartsWith(resolvedOutputDir, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException($"Custom filename '{customName}' escapes the output directory.");
-            }
-
-            Assert.True(File.Exists(customFilePath), $"Expected output file '{customName}'"); // codeql[cs/path-injection]
+            Assert.True(File.Exists(Path.Combine(outputDir.Path, customName)),
+                $"Expected output file '{customName}'");
         }
 
         [Fact]

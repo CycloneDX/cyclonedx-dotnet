@@ -57,15 +57,7 @@ namespace CycloneDX.E2ETests.Builders
 
         public ProjectOptions(string name)
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            // Reject names that contain path separators to prevent directory traversal.
-            if (name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0
-                || name.Contains(Path.DirectorySeparatorChar)
-                || name.Contains(Path.AltDirectorySeparatorChar))
-            {
-                throw new ArgumentException($"Project name '{name}' contains invalid characters.", nameof(name));
-            }
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         public ProjectOptions WithTargetFramework(string tfm)
@@ -165,13 +157,13 @@ namespace CycloneDX.E2ETests.Builders
                     WriteProject(dir.Path, proj);
                 }
 
-                // Write solution file
+                // Write solution file if there is more than one project or we always want a .sln
                 var slnPath = WriteSolution(dir.Path);
 
                 // dotnet restore
                 var (exitCode, stdOut, stdErr) = await ToolFixture.RunProcessAsync(
                     "dotnet",
-                    new[] { "restore", slnPath, "--no-cache", "/nodeReuse:false" },
+                    $"restore \"{slnPath}\" --no-cache /nodeReuse:false",
                     workingDir: dir.Path
                 ).ConfigureAwait(false);
 
@@ -190,15 +182,8 @@ namespace CycloneDX.E2ETests.Builders
             }
         }
 
-        private static void WriteNuGetConfig(string baseDir, string feedUrl)
+        private static void WriteNuGetConfig(string dir, string feedUrl)
         {
-            var configPath = Path.GetFullPath(Path.Combine(baseDir, "NuGet.Config"));
-            // Ensure the config file stays within baseDir (guards against traversal).
-            if (!configPath.StartsWith(Path.GetFullPath(baseDir), StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException("NuGet.Config path escapes the base directory.");
-            }
-
             var xml = $"""
                 <?xml version="1.0" encoding="utf-8"?>
                 <configuration>
@@ -208,23 +193,13 @@ namespace CycloneDX.E2ETests.Builders
                   </packageSources>
                 </configuration>
                 """;
-            File.WriteAllText(configPath, xml, Encoding.UTF8); // codeql[cs/path-injection]
+            File.WriteAllText(Path.Combine(dir, "NuGet.Config"), xml, Encoding.UTF8);
         }
 
         private static void WriteProject(string solutionDir, ProjectOptions proj)
         {
-            // proj.Name is already validated to contain no path separators in the constructor.
-            var resolvedSolutionDir = Path.GetFullPath(solutionDir);
-            var projDir = Path.GetFullPath(Path.Combine(resolvedSolutionDir, proj.Name));
-
-            // Boundary check: project directory must be directly inside the solution directory.
-            if (!projDir.StartsWith(resolvedSolutionDir, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException(
-                    $"Project directory '{projDir}' escapes solution directory '{resolvedSolutionDir}'.");
-            }
-
-            Directory.CreateDirectory(projDir); // codeql[cs/path-injection]
+            var projDir = Path.Combine(solutionDir, proj.Name);
+            Directory.CreateDirectory(projDir);
 
             var sb = new StringBuilder();
             sb.AppendLine("<Project Sdk=\"Microsoft.NET.Sdk\">");
@@ -266,28 +241,15 @@ namespace CycloneDX.E2ETests.Builders
 
             sb.AppendLine("</Project>");
 
-            var csprojPath = Path.GetFullPath(Path.Combine(projDir, $"{proj.Name}.csproj"));
-            if (!csprojPath.StartsWith(projDir, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException(
-                    $"Project file path '{csprojPath}' escapes project directory '{projDir}'.");
-            }
-
-            File.WriteAllText(csprojPath, sb.ToString(), Encoding.UTF8); // codeql[cs/path-injection]
+            File.WriteAllText(
+                Path.Combine(projDir, $"{proj.Name}.csproj"),
+                sb.ToString(),
+                Encoding.UTF8);
         }
 
-        private string WriteSolution(string baseDir)
+        private string WriteSolution(string dir)
         {
-            var resolvedBaseDir = Path.GetFullPath(baseDir);
-            var slnPath = Path.GetFullPath(Path.Combine(resolvedBaseDir, $"{_solutionName}.sln"));
-
-            // Boundary check.
-            if (!slnPath.StartsWith(resolvedBaseDir, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException(
-                    $"Solution path '{slnPath}' escapes base directory '{resolvedBaseDir}'.");
-            }
-
+            var slnPath = Path.Combine(dir, $"{_solutionName}.sln");
             var slnGuid = Guid.NewGuid().ToString("B").ToUpperInvariant();
 
             var sb = new StringBuilder();
@@ -323,7 +285,7 @@ namespace CycloneDX.E2ETests.Builders
             sb.AppendLine("\tEndGlobalSection");
             sb.AppendLine("EndGlobal");
 
-            File.WriteAllText(slnPath, sb.ToString(), Encoding.UTF8); // codeql[cs/path-injection]
+            File.WriteAllText(slnPath, sb.ToString(), Encoding.UTF8);
             return slnPath;
         }
     }
@@ -341,17 +303,8 @@ namespace CycloneDX.E2ETests.Builders
         public IReadOnlyList<string> ProjectNames { get; }
 
         /// <summary>Returns the path to a specific project's .csproj file.</summary>
-        public string ProjectFile(string projectName)
-        {
-            var resolvedRoot = Path.GetFullPath(_dir.Path);
-            var csprojPath = Path.GetFullPath(Path.Combine(resolvedRoot, projectName, $"{projectName}.csproj"));
-            if (!csprojPath.StartsWith(resolvedRoot, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException(
-                    $"Project file path '{csprojPath}' escapes solution root '{resolvedRoot}'.");
-            }
-            return csprojPath;
-        }
+        public string ProjectFile(string projectName) =>
+            Path.Combine(_dir.Path, projectName, $"{projectName}.csproj");
 
         /// <summary>A fresh temp output directory for BOM output (caller must dispose separately).</summary>
         public TempDirectory CreateOutputDir() => new();
