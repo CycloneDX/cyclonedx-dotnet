@@ -65,7 +65,7 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: Tests
-        run: dotnet test --framework ${{ matrix.framework }}  --collect:"XPlat Code Coverage;Format=cobertura" --results-directory "TestResults"
+        run: dotnet test --project CycloneDX.Tests --framework ${{ matrix.framework }}  --collect:"XPlat Code Coverage;Format=cobertura" --results-directory "TestResults"
       # see https://github.com/danielpalme/ReportGenerator/blob/main/.github/workflows/ci.yml
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@ee0ae774f6d3afedcbd1683c1ab21b83670bdf8e # v5.5.1
@@ -89,3 +89,20 @@ jobs:
         with:
           name: CoverageReport_${{ matrix.framework }}_${{ matrix.os }}
           path: coveragereport
+
+  # E2E tests require Docker (Testcontainers) and only target net10.0.
+  # Run exclusively on ubuntu-latest where Docker is available on the runner.
+  e2e-test:
+    name: E2E Tests (ubuntu-latest, net10.0)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - name: Setup dotnet 10
+        uses: actions/setup-dotnet@2016bd2012dba4e32de620c46fe006a3ac9f0602 # v5.0.1
+        with:
+          dotnet-version: '10.x'
+      - name: Locked restore
+        run: dotnet restore --locked-mode
+      - name: E2E Tests
+        run: dotnet test --project CycloneDX.E2ETests --framework net10.0 --results-directory "TestResults"
