@@ -15,6 +15,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using CycloneDX.E2ETests.Builders;
@@ -37,6 +38,7 @@ namespace CycloneDX.E2ETests.Tests
         }
 
         [Fact]
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — path is constructed from a known temp directory and a hardcoded filename.")]
         public async Task DefaultOutput_IsXml()
         {
             using var solution = await new SolutionBuilder("DefaultFmtSln")
@@ -86,6 +88,7 @@ namespace CycloneDX.E2ETests.Tests
         }
 
         [Fact]
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — path is constructed from a known temp directory and a hardcoded filename.")]
         public async Task CustomFilename_CreatesCorrectFile()
         {
             using var solution = await new SolutionBuilder("CustomFilenameSln")

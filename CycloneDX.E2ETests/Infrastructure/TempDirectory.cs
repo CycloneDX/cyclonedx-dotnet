@@ -16,6 +16,7 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 
@@ -28,6 +29,7 @@ namespace CycloneDX.E2ETests.Infrastructure
     {
         public string Path { get; }
 
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — path is constructed from GetTempPath() + GetRandomFileName(), never from user input.")]
         public TempDirectory()
         {
             Path = System.IO.Path.Combine(
@@ -39,6 +41,7 @@ namespace CycloneDX.E2ETests.Infrastructure
         public string Combine(params string[] parts) =>
             System.IO.Path.Combine(new[] { Path }.Concat(parts).ToArray());
 
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — path is constructed from GetTempPath() + GetRandomFileName(), never from user input.")]
         public void Dispose()
         {
             try

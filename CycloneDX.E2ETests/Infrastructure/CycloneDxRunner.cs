@@ -17,8 +17,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using static CycloneDX.E2ETests.Infrastructure.ToolFixture;
 
@@ -40,6 +40,7 @@ namespace CycloneDX.E2ETests.Infrastructure
         /// Runs the CycloneDX tool against <paramref name="projectOrSolutionPath"/> and
         /// writes output into <paramref name="outputDir"/>.
         /// </summary>
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — paths are constructed from known temp directories, never from user input.")]
         public async Task<ToolRunResult> RunAsync(
             string projectOrSolutionPath,
             string outputDir,
@@ -51,7 +52,7 @@ namespace CycloneDX.E2ETests.Infrastructure
 
             var (exitCode, stdOut, stdErr) = await RunProcessAsync(
                 "dotnet",
-                $"\"{_toolDllPath}\" {args}",
+                args,
                 workingDir: Path.GetDirectoryName(projectOrSolutionPath)
             ).ConfigureAwait(false);
 
@@ -82,93 +83,103 @@ namespace CycloneDX.E2ETests.Infrastructure
             return new ToolRunResult(exitCode, stdOut, stdErr, outputFilePath, bomContent);
         }
 
-        private static string BuildArgs(string projectOrSolutionPath, string outputDir, ToolRunOptions options)
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — paths are constructed from known temp directories, never from user input.")]
+        private IEnumerable<string> BuildArgs(string projectOrSolutionPath, string outputDir, ToolRunOptions options)
         {
-            var sb = new StringBuilder();
-            sb.Append($"\"{projectOrSolutionPath}\"");
-            sb.Append($" --output \"{outputDir}\"");
+            // The tool DLL path is the first argument to `dotnet`
+            yield return _toolDllPath;
+            yield return projectOrSolutionPath;
+            yield return "--output";
+            yield return outputDir;
 
             if (options.OutputFilename != null)
             {
-                sb.Append($" --filename \"{options.OutputFilename}\"");
+                yield return "--filename";
+                yield return options.OutputFilename;
             }
 
             if (options.OutputFormat != null)
             {
-                sb.Append($" --output-format {options.OutputFormat}");
+                yield return "--output-format";
+                yield return options.OutputFormat;
             }
 
             if (options.ExcludeDev)
             {
-                sb.Append(" --exclude-dev");
+                yield return "--exclude-dev";
             }
 
             if (options.ExcludeTestProjects)
             {
-                sb.Append(" --exclude-test-projects");
+                yield return "--exclude-test-projects";
             }
 
             if (options.IncludeProjectReferences)
             {
-                sb.Append(" --include-project-references");
+                yield return "--include-project-references";
             }
 
             if (options.Recursive)
             {
-                sb.Append(" --recursive");
+                yield return "--recursive";
             }
 
             if (options.NoSerialNumber)
             {
-                sb.Append(" --no-serial-number");
+                yield return "--no-serial-number";
             }
 
             if (options.DisableHashComputation)
             {
-                sb.Append(" --disable-hash-computation");
+                yield return "--disable-hash-computation";
             }
 
             if (options.NuGetFeedUrl != null)
             {
-                sb.Append($" --url \"{options.NuGetFeedUrl}\"");
+                yield return "--url";
+                yield return options.NuGetFeedUrl;
             }
 
             if (options.SetName != null)
             {
-                sb.Append($" --set-name \"{options.SetName}\"");
+                yield return "--set-name";
+                yield return options.SetName;
             }
 
             if (options.SetVersion != null)
             {
-                sb.Append($" --set-version \"{options.SetVersion}\"");
+                yield return "--set-version";
+                yield return options.SetVersion;
             }
 
             if (options.SetType != null)
             {
-                sb.Append($" --set-type \"{options.SetType}\"");
+                yield return "--set-type";
+                yield return options.SetType;
             }
 
             if (options.SpecVersion != null)
             {
-                sb.Append($" --spec-version {options.SpecVersion}");
+                yield return "--spec-version";
+                yield return options.SpecVersion;
             }
 
             if (options.ExcludeFilter != null)
             {
-                sb.Append($" --exclude-filter \"{options.ExcludeFilter}\"");
+                yield return "--exclude-filter";
+                yield return options.ExcludeFilter;
             }
 
             if (options.Framework != null)
             {
-                sb.Append($" --framework {options.Framework}");
+                yield return "--framework";
+                yield return options.Framework;
             }
 
             if (options.AdditionalArgs != null)
             {
-                sb.Append($" {options.AdditionalArgs}");
+                yield return options.AdditionalArgs;
             }
-
-            return sb.ToString();
         }
     }
 

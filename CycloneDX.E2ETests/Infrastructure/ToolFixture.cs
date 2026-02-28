@@ -16,7 +16,9 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -34,6 +36,7 @@ namespace CycloneDX.E2ETests.Infrastructure
         /// </summary>
         public string ToolDllPath { get; private set; }
 
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — all paths are constructed from known locations, never from user input.")]
         public async Task PublishAsync()
         {
             _publishDir = new TempDirectory();
@@ -47,7 +50,15 @@ namespace CycloneDX.E2ETests.Infrastructure
 
             var result = await RunProcessAsync(
                 "dotnet",
-                $"publish \"{csprojPath}\" -c Release -f {tfm} -o \"{_publishDir.Path}\" /p:PackAsTool=false /nodeReuse:false",
+                new[]
+                {
+                    "publish", csprojPath,
+                    "-c", "Release",
+                    "-f", tfm,
+                    "-o", _publishDir.Path,
+                    "/p:PackAsTool=false",
+                    "/nodeReuse:false"
+                },
                 workingDir: solutionRoot
             ).ConfigureAwait(false);
 
@@ -77,18 +88,23 @@ namespace CycloneDX.E2ETests.Infrastructure
             throw new DirectoryNotFoundException("Could not find solution root (CycloneDX.sln).");
         }
 
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — paths are fully controlled by the test harness.")]
         internal static async Task<(int ExitCode, string StdOut, string StdErr)> RunProcessAsync(
             string executable,
-            string arguments,
+            IEnumerable<string> arguments,
             string workingDir = null)
         {
-            var psi = new ProcessStartInfo(executable, arguments)
+            var psi = new ProcessStartInfo(executable)
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 WorkingDirectory = workingDir ?? Directory.GetCurrentDirectory()
             };
+            foreach (var arg in arguments)
+            {
+                psi.ArgumentList.Add(arg);
+            }
 
             using var process = new Process { StartInfo = psi };
             process.Start();

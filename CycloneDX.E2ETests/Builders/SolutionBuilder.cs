@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -140,6 +141,7 @@ namespace CycloneDX.E2ETests.Builders
         /// Writes all project files to a new temp directory, restores packages,
         /// and returns a <see cref="BuiltSolution"/> ready for tool invocation.
         /// </summary>
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — paths are constructed from known temp directories and hardcoded filenames, never from user input.")]
         public async Task<BuiltSolution> BuildAsync(string nugetFeedUrl = null)
         {
             var feedUrl = nugetFeedUrl ?? _nugetFeedUrl
@@ -163,7 +165,7 @@ namespace CycloneDX.E2ETests.Builders
                 // dotnet restore
                 var (exitCode, stdOut, stdErr) = await ToolFixture.RunProcessAsync(
                     "dotnet",
-                    $"restore \"{slnPath}\" --no-cache /nodeReuse:false",
+                    new[] { "restore", slnPath, "--no-cache", "/nodeReuse:false" },
                     workingDir: dir.Path
                 ).ConfigureAwait(false);
 
@@ -196,6 +198,7 @@ namespace CycloneDX.E2ETests.Builders
             File.WriteAllText(Path.Combine(dir, "NuGet.Config"), xml, Encoding.UTF8);
         }
 
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — paths are constructed from known temp directories and hardcoded filenames, never from user input.")]
         private static void WriteProject(string solutionDir, ProjectOptions proj)
         {
             var projDir = Path.Combine(solutionDir, proj.Name);
@@ -247,6 +250,7 @@ namespace CycloneDX.E2ETests.Builders
                 Encoding.UTF8);
         }
 
+        [SuppressMessage("Security", "CA3003", Justification = "Test infrastructure — paths are constructed from known temp directories and hardcoded filenames, never from user input.")]
         private string WriteSolution(string dir)
         {
             var slnPath = Path.Combine(dir, $"{_solutionName}.sln");
