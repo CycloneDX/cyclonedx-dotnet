@@ -133,7 +133,7 @@ namespace CycloneDX.Tests.FunctionalTests
             return runner.LastGeneratedBom;
         }
 
-        private const string CsprojContents =
+        public const string CsprojContents =
         "<Project Sdk=\"Microsoft.NET.Sdk\">\n\n  " +
             "<PropertyGroup>\n    " +
                 "<OutputType>Exe</OutputType>\n    " +

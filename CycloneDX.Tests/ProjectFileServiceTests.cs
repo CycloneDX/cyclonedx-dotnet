@@ -529,5 +529,122 @@ namespace CycloneDX.Tests
             Assert.DoesNotContain("Consider removing --recursive", capturedError.ToString());
         }
 
+        // -----------------------------------------------------------------------
+        // GetAssemblyNameAndVersion — version property chain
+        // -----------------------------------------------------------------------
+
+        private ProjectFileService CreateProjectFileService(MockFileSystem mockFileSystem)
+        {
+            return new ProjectFileService(
+                mockFileSystem,
+                new Mock<IDotnetUtilsService>().Object,
+                new Mock<IPackagesFileService>().Object,
+                new Mock<IProjectAssetsFileService>().Object);
+        }
+
+        [Fact]
+        public void GetAssemblyNameAndVersion_ReturnsVersionElement()
+        {
+            var csproj = "<Project><PropertyGroup><Version>1.2.3</Version></PropertyGroup></Project>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\P\P.csproj"), new MockFileData(csproj) }
+            });
+            var svc = CreateProjectFileService(mockFileSystem);
+
+            var (_, version) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+
+            Assert.Equal("1.2.3", version);
+        }
+
+        [Fact]
+        public void GetAssemblyNameAndVersion_FallsBackToAssemblyVersion()
+        {
+            var csproj = "<Project><PropertyGroup><AssemblyVersion>2.3.4</AssemblyVersion></PropertyGroup></Project>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\P\P.csproj"), new MockFileData(csproj) }
+            });
+            var svc = CreateProjectFileService(mockFileSystem);
+
+            var (_, version) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+
+            Assert.Equal("2.3.4", version);
+        }
+
+        [Fact]
+        public void GetAssemblyNameAndVersion_FallsBackToProjectVersion()
+        {
+            var csproj = "<Project><PropertyGroup><ProjectVersion>3.4.5</ProjectVersion></PropertyGroup></Project>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\P\P.csproj"), new MockFileData(csproj) }
+            });
+            var svc = CreateProjectFileService(mockFileSystem);
+
+            var (_, version) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+
+            Assert.Equal("3.4.5", version);
+        }
+
+        [Fact]
+        public void GetAssemblyNameAndVersion_FallsBackToPackageVersion()
+        {
+            var csproj = "<Project><PropertyGroup><PackageVersion>4.5.6</PackageVersion></PropertyGroup></Project>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\P\P.csproj"), new MockFileData(csproj) }
+            });
+            var svc = CreateProjectFileService(mockFileSystem);
+
+            var (_, version) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+
+            Assert.Equal("4.5.6", version);
+        }
+
+        [Fact]
+        public void GetAssemblyNameAndVersion_VersionTakesPriorityOverAssemblyVersion()
+        {
+            var csproj = "<Project><PropertyGroup><Version>1.0.0</Version><AssemblyVersion>9.9.9</AssemblyVersion></PropertyGroup></Project>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\P\P.csproj"), new MockFileData(csproj) }
+            });
+            var svc = CreateProjectFileService(mockFileSystem);
+
+            var (_, version) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+
+            Assert.Equal("1.0.0", version);
+        }
+
+        [Fact]
+        public void GetAssemblyNameAndVersion_AssemblyVersionTakesPriorityOverProjectVersion()
+        {
+            var csproj = "<Project><PropertyGroup><AssemblyVersion>2.0.0</AssemblyVersion><ProjectVersion>9.9.9</ProjectVersion></PropertyGroup></Project>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\P\P.csproj"), new MockFileData(csproj) }
+            });
+            var svc = CreateProjectFileService(mockFileSystem);
+
+            var (_, version) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+
+            Assert.Equal("2.0.0", version);
+        }
+
+        [Fact]
+        public void GetAssemblyNameAndVersion_ReturnsNullVersionWhenNoVersionProperty()
+        {
+            var csproj = "<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\P\P.csproj"), new MockFileData(csproj) }
+            });
+            var svc = CreateProjectFileService(mockFileSystem);
+
+            var (_, version) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+
+            Assert.Null(version);
+        }
     }
 }

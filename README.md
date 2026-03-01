@@ -149,31 +149,14 @@ dotnet-CycloneDX /path/to/project/MyProject.csproj -o /output/path -ef NETStanda
 
 
 
-Project [metadata](https://cyclonedx.org/docs/1.2/#type_metadata) **template example**
+#### BOM metadata
+The BOM `<metadata>` block is populated from three sources in priority order:
+CLI arguments (`--set-name`, `--set-version`, `--set-type`) override a template
+file (`--import-metadata-path`), which in turn overrides the automatic fallback
+derived from the scanned project name.
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serialNumber="urn:uuid:087d0712-f591-4995-ba76-03f1c5c48884" version="1" xmlns="http://cyclonedx.org/schema/bom/1.2">
-  <metadata>
-    <component type="application" bom-ref="pkg:nuget/CycloneDX@1.3.0">
-      <name>CycloneDX</name>
-      <version>1.3.0</version>
-      <description>
-        <![CDATA[The [CycloneDX module](https://github.com/CycloneDX/cyclonedx-dotnet) for .NET creates a valid CycloneDX bill-of-material document containing an aggregate of all project dependencies. CycloneDX is a lightweight BOM specification that is easily created, human readable, and simple to parse.]]>
-      </description>
-      <licenses>
-        <license>
-          <name>Apache License 2.0</name>
-          <id>Apache-2.0</id>
-        </license>
-      </licenses>
-      <purl>pkg:nuget/CycloneDX@1.3.0</purl>
-    </component>
-  </metadata>
-</bom>
-``` 
-
-_Update the data and import it within a build pipeline e.g. create the file using a script and add also dynamic data (version, timestamp, ...)_ 
+See **[docs/bom-metadata.md](docs/bom-metadata.md)** for the full reference:
+template file format, precedence rules, and common CI patterns.
 
 #### Credentials via environment variables
 
