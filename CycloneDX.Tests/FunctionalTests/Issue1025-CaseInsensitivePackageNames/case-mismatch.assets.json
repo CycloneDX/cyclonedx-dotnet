@@ -1,0 +1,102 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "BadlyDesigned.Package/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "newtonsoft.Json": "13.0.1"
+        },
+        "compile": {
+          "lib/net8.0/BadlyDesigned.Package.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/BadlyDesigned.Package.dll": {}
+        }
+      },
+      "Newtonsoft.Json/13.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BadlyDesigned.Package/1.0.0": {
+      "sha512": "abc123",
+      "type": "package",
+      "path": "badlydesigned.package/1.0.0",
+      "files": [
+        "lib/net8.0/BadlyDesigned.Package.dll"
+      ]
+    },
+    "Newtonsoft.Json/13.0.1": {
+      "sha512": "def456",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.1",
+      "files": [
+        "lib/net8.0/Newtonsoft.Json.dll"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "BadlyDesigned.Package >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\user\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\ProjectPath\\Project.csproj",
+      "projectName": "Project",
+      "projectPath": "C:\\ProjectPath\\Project.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "C:\\ProjectPath\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {}
+        }
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "dependencies": {
+          "BadlyDesigned.Package": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          }
+        },
+        "imports": [],
+        "assetTargetFallback": false,
+        "warn": false,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": ""
+      }
+    }
+  }
+}
