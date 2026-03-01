@@ -1,13 +1,14 @@
 # BOM metadata: sources, precedence, and options
 
 CycloneDX .NET populates the `<metadata>` block of the generated BOM from up to
-three sources.  They are applied in priority order — highest first:
+four sources.  They are applied in priority order — highest first:
 
 | Priority | Source | How to use it |
 |---|---|---|
 | 1 (highest) | CLI arguments | `--set-name`, `--set-version`, `--set-type` |
 | 2 | Metadata template file | `--import-metadata-path <file.xml>` |
-| 3 (lowest) | Scanned project | Name derived from the `.sln`/`.csproj` filename; version defaults to `0.0.0` |
+| 3 | Project file `<Version>` | Read automatically from `.csproj`/`.fsproj`/`.vbproj` |
+| 4 (lowest) | Hardcoded defaults | Name from filename; version `0.0.0`; type `Application` |
 
 ---
 
@@ -81,9 +82,22 @@ Two fields are always managed automatically by the tool:
 
 ---
 
-## Source 3 — Scanned project (automatic fallback)
+## Source 3 — Project file version (automatic, `.csproj` only)
 
-When no template file is given and no `--set-*` flags are used:
+When scanning a `.csproj`, `.fsproj`, or `.vbproj` file and `--set-version` is
+not provided, the tool reads the `<Version>` element from the project file and
+uses it as the metadata component version.  If the project file has no
+`<Version>` element, the fallback `0.0.0` is used.
+
+This means for most .NET projects you get the correct version automatically
+without any extra flags or template files.
+
+---
+
+## Source 4 — Hardcoded defaults (automatic fallback)
+
+When no template file is given and no `--set-*` flags are used, and the project
+file contains no `<Version>`:
 
 - **Name** is derived from the scanned file name without its extension
   (e.g. `MySolution` from `MySolution.sln`).
@@ -96,17 +110,18 @@ When no template file is given and no `--set-*` flags are used:
 
 When both a template file and CLI arguments are provided, the merge rules are:
 
-| Field | CLI arg provided? | Template has value? | Result |
-|---|---|---|---|
-| name | yes | any | CLI arg wins |
-| name | no | yes | template value kept |
-| name | no | no/empty | derived from project filename |
-| version | yes | any | CLI arg wins |
-| version | no | yes | template value kept |
-| version | no | no/empty | `0.0.0` |
-| type | yes (non-default) | any | CLI arg wins |
-| type | no | yes | template value kept |
-| type | no | no/null | `Application` |
+| Field | CLI arg provided? | Template has value? | Project file has value? | Result |
+|---|---|---|---|---|
+| name | yes | any | any | CLI arg wins |
+| name | no | yes | any | template value kept |
+| name | no | no/empty | any | derived from project filename |
+| version | yes | any | any | CLI arg wins |
+| version | no | yes | any | template value kept |
+| version | no | no/empty | yes (csproj) | project file `<Version>` |
+| version | no | no/empty | no | `0.0.0` |
+| type | yes (non-default) | any | any | CLI arg wins |
+| type | no | yes | any | template value kept |
+| type | no | no/null | any | `Application` |
 
 All other metadata fields (description, licenses, authors, purl, bom-ref, etc.)
 are always taken entirely from the template file; there are no CLI args to
@@ -115,6 +130,15 @@ override them individually.
 ---
 
 ## Common usage patterns
+
+**Let the project file supply the version automatically**
+
+```bash
+dotnet-CycloneDX MyLib.csproj -o ./bom
+```
+
+If `MyLib.csproj` contains `<Version>1.2.3</Version>`, the BOM metadata
+component version will be `1.2.3` without any extra flags.
 
 **Pin the version in CI without a template file**
 
