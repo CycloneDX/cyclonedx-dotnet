@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serialNumber="urn:uuid:{scrubbed}" version="1" xmlns="http://cyclonedx.org/schema/bom/1.6">
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serialNumber="urn:uuid:{scrubbed}" version="1" xmlns="http://cyclonedx.org/schema/bom/1.7">
   <metadata>
     <timestamp>{scrubbed-timestamp}</timestamp>
     <tools>
@@ -26,7 +26,7 @@
       <description>Test package TestPkg.A</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">{scrubbed-hash}531C6F999C3D7E54935AF23D43D1F34E34F13C64</hash>
+        <hash alg="SHA-512">{scrubbed-hash}</hash>
       </hashes>
       <licenses>
         <license>
@@ -46,7 +46,7 @@
       <description>Test package TestPkg.C</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">{scrubbed-hash}4404F2F30EF98F8B90397BAC9D0F93926F6F3D3B</hash>
+        <hash alg="SHA-512">{scrubbed-hash}</hash>
       </hashes>
       <licenses>
         <license>
