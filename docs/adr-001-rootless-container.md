@@ -31,15 +31,12 @@ fails with `Permission denied` on the `obj/` directory.
 
 ### Option 1: Dedicated non-root user baked into the image (rejected — breaking)
 
-Create a `cyclonedx` user (UID 1001) in the image and set `USER cyclonedx`. Callers who do
-not pass `--user` would run as UID 1001, which does not match the host volume owner, causing
-`dotnet restore` to fail. This is a silent breaking change for all existing pipelines.
+Create a non-root user in the image and set `USER` to it. Callers who do not pass `--user`
+would run as that UID, which does not match the host volume owner, causing `dotnet restore`
+to fail with `Permission denied` on the `obj/` directory. This is a silent breaking change
+for all existing pipelines regardless of which non-root UID is chosen.
 
-The base image (`mcr.microsoft.com/dotnet/sdk:10.0`, Ubuntu-based) already has a `ubuntu`
-user at UID/GID 1000, so using that instead of a new user was also considered, but the same
-volume ownership problem applies regardless of which non-root UID is used.
-
-### Option 2: Require `--user $(id -u):$(id -g)` (recommended interim approach)
+### Option 2: Require `--user $(id -u):$(id -g)` (chosen)
 
 Leave the image running as root by default to preserve backward compatibility. Document that
 callers should pass `--user $(id -u):$(id -g)` to run as their own UID. This means the
@@ -48,13 +45,6 @@ permission errors, and output files are owned by the calling user.
 
 This is not enforced by the image, but it is safe for all callers who adopt it, and it is
 the standard pattern for Docker tools that write back to mounted volumes.
-
-### Option 3: Redirect `obj/` via `--base-intermediate-output-path` (rejected — too complex)
-
-The tool exposes a `-biop` flag that redirects the `obj/` folder to a custom path. A
-caller could point this at a writable location inside the container (e.g. `/tmp`). However,
-this requires every caller to know about and pass an extra flag, makes the command more
-complex, and does not address output file ownership. Not suitable as a default behaviour.
 
 ## Decision
 
