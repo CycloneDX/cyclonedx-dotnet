@@ -110,6 +110,15 @@ namespace CycloneDX.E2ETests.Infrastructure
             // TestPkg.Dev 1.0.0 — intended to be used as a dev/build dependency
             await PushPackageAsync(NupkgBuilder.Build("TestPkg.Dev", "1.0.0")).ConfigureAwait(false);
 
+            // TestPkg.DevTransitive 1.0.0 — a package that is pulled in transitively by TestPkg.DevWithDep
+            await PushPackageAsync(NupkgBuilder.Build("TestPkg.DevTransitive", "1.0.0")).ConfigureAwait(false);
+
+            // TestPkg.DevWithDep 1.0.0 — dev/build dependency that itself has a transitive dep
+            await PushPackageAsync(NupkgBuilder.Build(
+                "TestPkg.DevWithDep", "1.0.0",
+                dependencies: new[] { new NupkgDependency("TestPkg.DevTransitive", "1.0.0") }
+            )).ConfigureAwait(false);
+
             // TestPkg.Transitive 1.0.0 — used only as a transitive dep
             await PushPackageAsync(NupkgBuilder.Build("TestPkg.Transitive", "1.0.0")).ConfigureAwait(false);
         }
