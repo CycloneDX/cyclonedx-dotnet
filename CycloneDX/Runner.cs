@@ -250,8 +250,8 @@ namespace CycloneDX
             // But a corresponding entry under libraries is missing.
             // This results in a state where there is a dependency on a package but no corresponding package.
             // To resolve this, we remove such dependencies.
-            var allDependencies = packages.Where(p => p.Dependencies is not null).SelectMany(p => p.Dependencies!.Keys).ToHashSet();
-            var dependenciesWithoutPackages = allDependencies.Except(packages.Select(p => p.Name)).ToHashSet();
+            var allDependencies = packages.Where(p => p.Dependencies is not null).SelectMany(p => p.Dependencies!.Keys).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var dependenciesWithoutPackages = allDependencies.Except(packages.Select(p => p.Name), StringComparer.OrdinalIgnoreCase).ToHashSet(StringComparer.OrdinalIgnoreCase);
             Console.ForegroundColor = ConsoleColor.Yellow;
             foreach (var package in packages)
             {

@@ -180,6 +180,9 @@
     <None Update="FunctionalTests\Issue911-depsOnSeveralTargetFrameworks\project2assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="FunctionalTests\Issue1025-CaseInsensitivePackageNames\case-mismatch.assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
