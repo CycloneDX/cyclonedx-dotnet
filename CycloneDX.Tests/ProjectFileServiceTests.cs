@@ -438,5 +438,96 @@ namespace CycloneDX.Tests
             Assert.Equal("3.2.1.0", projects.FirstOrDefault().Version);
         }
 
+        [Fact]
+        public async Task RecursivelyGetProjectDotnetDependencys_WithAssetsFile_WritesRecursiveWarning()
+        {
+            // Arrange – root project has an obj/project.assets.json, which means NuGet already
+            // recorded the full package closure. The warning should be written to stderr.
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\Project\Project.csproj"), new MockFileData(@"<Project Sdk=""Microsoft.NET.Sdk"" />") },
+                { XFS.Path(@"c:\Project\obj\project.assets.json"), new MockFileData("{}") },
+            });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            mockDotnetUtilsService
+                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+                .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult<string> { Result = "" });
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            mockProjectAssetsFileService
+                .Setup(s => s.GetDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Returns(new HashSet<DotnetDependency>());
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            var originalError = Console.Error;
+            using var capturedError = new StringWriter();
+            Console.SetError(capturedError);
+            try
+            {
+                await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(
+                    XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "").ConfigureAwait(true);
+            }
+            finally
+            {
+                Console.SetError(originalError);
+            }
+
+            Assert.Contains("Consider removing --recursive", capturedError.ToString());
+        }
+
+        [Fact]
+        public async Task RecursivelyGetProjectDotnetDependencys_WithoutAssetsFile_DoesNotWriteRecursiveWarning()
+        {
+            // Arrange – root project has no project.assets.json (e.g. packages.config style).
+            // No warning should be written.
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\Project\Project.csproj"), new MockFileData(@"<Project Sdk=""Microsoft.NET.Sdk"" />") },
+                { XFS.Path(@"c:\Project\packages.config"), new MockFileData("") },
+            });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            mockDotnetUtilsService
+                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+                .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult<string> { Result = "" });
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            mockPackageFileService
+                .Setup(s => s.GetDotnetDependencysAsync(It.IsAny<string>()))
+                .ReturnsAsync(new HashSet<DotnetDependency>());
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            mockProjectAssetsFileService
+                .Setup(s => s.GetDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Returns(new HashSet<DotnetDependency>());
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            var originalError = Console.Error;
+            using var capturedError = new StringWriter();
+            Console.SetError(capturedError);
+            try
+            {
+                await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(
+                    XFS.Path(@"c:\Project\Project.csproj"), "", false, "", "").ConfigureAwait(true);
+            }
+            finally
+            {
+                Console.SetError(originalError);
+            }
+
+            Assert.DoesNotContain("Consider removing --recursive", capturedError.ToString());
+        }
+
     }
 }

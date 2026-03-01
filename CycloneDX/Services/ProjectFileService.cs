@@ -270,14 +270,29 @@ namespace CycloneDX.Services
                 item.IsDirectReference = true;
             }
 
+            // If the root project has a project.assets.json it is SDK-style (PackageReference).
+            // NuGet already writes the full transitive closure — including packages from all
+            // ProjectReference projects — into that single file, so --recursive adds no value
+            // for package discovery. Suggest the user drop the flag.
+            var assetsFilePath = GetProjectAssetsFilePath(projectFilePath, baseIntermediateOutputPath);
+            if (_fileSystem.File.Exists(assetsFilePath))
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Error.WriteLine(
+                    "Consider removing --recursive: the root project.assets.json already contains " +
+                    "the full NuGet package closure for SDK-style (PackageReference) projects. " +
+                    "--recursive is only needed when a referenced project uses packages.config, " +
+                    "or when combined with --include-project-references (-ipr) to list " +
+                    "referenced projects as BOM components.");
+                Console.ResetColor();
+            }
+
             var projectReferences = await RecursivelyGetProjectReferencesAsync(projectFilePath).ConfigureAwait(false);
 
             //Remove root-project, it will be added to the metadata
             var rootProject = projectReferences.FirstOrDefault(p => p.Path == projectFilePath);
             projectReferences.Where(p => rootProject.Dependencies.ContainsKey(p.Name)).ToList().ForEach(p => p.IsDirectReference = true);
             projectReferences.Remove(rootProject);
-
-            var extraPackagesFound = false;
 
             foreach (var project in projectReferences)
             {
@@ -296,27 +311,12 @@ namespace CycloneDX.Services
                     project.Dependencies.Add(dependency.Name, dependency.Version);
                 }
 
-                var countBefore = dotnetDependencys.Count;
                 dotnetDependencys.UnionWith(projectDotnetDependencys);
-                if (dotnetDependencys.Count > countBefore)
-                    extraPackagesFound = true;
             }
 
             //When there is a project.assets.json, the project references are already added, so check before adding
             var allAddedDepedencyNames = dotnetDependencys.Select(dep => dep.Name);
             dotnetDependencys.UnionWith(projectReferences.Where(pr => !allAddedDepedencyNames.Contains(pr.Name)));
-
-            if (!extraPackagesFound && projectReferences.Count > 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Error.WriteLine(
-                    "Consider removing --recursive: all NuGet packages from referenced projects " +
-                    "were already present in the root project.assets.json. " +
-                    "--recursive is only needed when a referenced project uses packages.config, " +
-                    "or when combined with --include-project-references (-ipr) to list " +
-                    "referenced projects as BOM components.");
-                Console.ResetColor();
-            }
 
             return dotnetDependencys;
         }
