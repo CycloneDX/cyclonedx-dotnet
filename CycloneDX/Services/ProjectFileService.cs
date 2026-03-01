@@ -281,9 +281,7 @@ namespace CycloneDX.Services
                 Console.Error.WriteLine(
                     "Consider removing --recursive: the root project.assets.json already contains " +
                     "the full NuGet package closure for SDK-style (PackageReference) projects. " +
-                    "--recursive is only needed when a referenced project uses packages.config, " +
-                    "or when combined with --include-project-references (-ipr) to list " +
-                    "referenced projects as BOM components.");
+                    "--recursive is only needed when a referenced project uses packages.config.");
                 Console.ResetColor();
             }
 

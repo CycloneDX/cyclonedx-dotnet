@@ -53,9 +53,11 @@ package.
 
 ### 2. You also want project nodes as BOM components (`--include-project-references`)
 
-`--recursive` is a prerequisite for `--include-project-references`. Without it,
-there are no project-reference nodes in the working set for `-ipr` to promote
-into BOM components. See the next section.
+`--include-project-references` works **independently** of `--recursive`. The root
+`project.assets.json` already contains the referenced project nodes (as
+`DependencyType.Project` entries), so `-ipr` can promote them into BOM components
+without needing the recursive walker. `--recursive` is only needed alongside `-ipr`
+if one of those referenced projects uses `packages.config`.
 
 ---
 
@@ -87,7 +89,8 @@ directory, or `packages.config` path is a hard error.
 |---|---|
 | Modern SDK-style project, you want all NuGet packages | _(none needed)_ |
 | Referenced project uses `packages.config` | `--recursive` |
-| You want referenced projects listed as BOM components | `--recursive --include-project-references` |
+| You want referenced projects listed as BOM components | `--include-project-references` |
+| Referenced project uses `packages.config` + want project nodes | `--recursive --include-project-references` |
 | Solution file input | _(none; solution path already aggregates all projects) _ |
 
 ---
@@ -96,7 +99,6 @@ directory, or `packages.config` path is a hard error.
 
 - The root `project.assets.json` already captures all NuGet packages from the
   full `<ProjectReference>` closure for SDK-style projects. No flags needed.
-- `--recursive` is only meaningful when a referenced project uses `packages.config`,
-  or when combined with `--include-project-references`.
+- `--recursive` is only meaningful when a referenced project uses `packages.config`.
 - `--include-project-references` controls whether project nodes appear as BOM
-  components. It does not affect which NuGet packages are included.
+  components. It works independently of `--recursive` for SDK-style projects.
