@@ -73,7 +73,7 @@ jobs:
 
       # Generate the JSON with the docker container as additional smoke test
       - name: Generate JSON SBOM
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/usr/src/project cyclonedx/cyclonedx-dotnet:${{ steps.package_release.outputs.version }} /usr/src/project/CycloneDX.sln --output-format json -o /usr/src/project
+        run: docker run --rm --user $(id -u):$(id -g) -v ${GITHUB_WORKSPACE}:/usr/src/project cyclonedx/cyclonedx-dotnet:${{ steps.package_release.outputs.version }} /usr/src/project/CycloneDX.sln --output-format json -o /usr/src/project
 
       - name: Publish package to NuGet
         env:

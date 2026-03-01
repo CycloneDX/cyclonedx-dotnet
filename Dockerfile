@@ -6,6 +6,7 @@ WORKDIR /src
 COPY ["CycloneDX.sln", "nuget.config", "Directory.Build.props", "Directory.Build.targets", "Directory.Packages.props", "./"]
 COPY ["CycloneDX/CycloneDX.csproj", "CycloneDX/"]
 COPY ["CycloneDX.Tests/CycloneDX.Tests.csproj", "CycloneDX.Tests/"]
+COPY ["CycloneDX.E2ETests/CycloneDX.E2ETests.csproj", "CycloneDX.E2ETests/"]
 
 RUN dotnet restore
 
@@ -26,7 +27,7 @@ ENV DOTNET_CLI_HOME=/tmp/dotnet-home \
     DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 RUN mkdir -p /tmp/dotnet-home /tmp/nuget-packages \
-    && chmod -R 0755 /tmp/dotnet-home /tmp/nuget-packages
+    && chmod -R 1777 /tmp/dotnet-home /tmp/nuget-packages
 
 COPY --from=build /app/publish /app
 

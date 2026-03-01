@@ -67,6 +67,19 @@ dotnet-CycloneDX <path> -o <OUTPUT_DIRECTORY>
 docker run --rm cyclonedx/cyclonedx-dotnet [OPTIONS] <path>
 ```
 
+> **Security note:** The container image currently runs as root by default. To run
+> rootless, pass your host user and group IDs with `--user`. This also ensures that
+> output files written back to a mounted volume are owned by you rather than root:
+>
+> ```bash
+> docker run --rm --user $(id -u):$(id -g) \
+>   -v $(pwd):/work \
+>   cyclonedx/cyclonedx-dotnet /work/YourSolution.sln -o /work
+> ```
+>
+> A future major release will make non-root the default. See
+> [docs/adr-001-rootless-container.md](docs/adr-001-rootless-container.md) for background.
+
 #### Options
 
 ```text
