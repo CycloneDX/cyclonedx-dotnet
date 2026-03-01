@@ -246,6 +246,30 @@ namespace CycloneDX.Tests
             Assert.Matches("1.2.0", bom.Metadata.Tools.Tools[0].Version);
         }
 
+        [Fact]
+        public void AddMetadataTool_AddsToolAsComponent()
+        {
+            var bom = new Bom();
+            Runner.AddMetadataTool(bom);
+            Assert.NotNull(bom.Metadata.Tools.Components);
+            Assert.Single(bom.Metadata.Tools.Components);
+            var component = bom.Metadata.Tools.Components[0];
+            Assert.Equal(Component.Classification.Application, component.Type);
+            Assert.Equal("CycloneDX module for .NET", component.Name);
+            Assert.Single(component.Authors);
+            Assert.Equal("CycloneDX", component.Authors[0].Name);
+            Assert.NotNull(component.Version);
+        }
+
+        [Fact]
+        public void AddMetadataTool_CalledTwice_UpdatesVersionNotDuplicates()
+        {
+            var bom = new Bom();
+            Runner.AddMetadataTool(bom);
+            Runner.AddMetadataTool(bom);
+            Assert.Single(bom.Metadata.Tools.Components);
+        }
+
         [Theory]
         [InlineData(@"c:\SolutionPath\SolutionFile.sln", false)]
         [InlineData(@"c:\SolutionPath\ProjectFile.csproj", false)]

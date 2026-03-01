@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serialNumber="urn:uuid:{scrubbed}" version="1" xmlns="http://cyclonedx.org/schema/bom/1.7">
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serialNumber="urn:uuid:{scrubbed}" version="1" xmlns="http://cyclonedx.org/schema/bom/1.6">
   <metadata>
     <timestamp>{scrubbed-timestamp}</timestamp>
     <tools>
@@ -20,17 +20,12 @@
         </component>
       </components>
     </tools>
-    <component type="application" bom-ref="MyApp@0.0.0">
-      <name>MyApp</name>
+    <component type="application" bom-ref="ToolMetaSln@0.0.0">
+      <name>ToolMetaSln</name>
       <version>{scrubbed-version}</version>
     </component>
   </metadata>
   <components>
-    <component type="library" bom-ref="MyLib@1.0.0">
-      <name>MyLib</name>
-      <version>{scrubbed-version}</version>
-      <scope>required</scope>
-    </component>
     <component type="library" bom-ref="pkg:nuget/TestPkg.A@1.0.0">
       <authors>
         <author>
@@ -42,7 +37,7 @@
       <description>Test package TestPkg.A</description>
       <scope>required</scope>
       <hashes>
-        <hash alg="SHA-512">{scrubbed-hash}</hash>
+        <hash alg="SHA-512">{scrubbed-hash}531C6F999C3D7E54935AF23D43D1F34E34F13C64</hash>
       </hashes>
       <licenses>
         <license>
@@ -51,36 +46,11 @@
       </licenses>
       <purl>pkg:nuget/TestPkg.A@1.0.0</purl>
     </component>
-    <component type="library" bom-ref="pkg:nuget/TestPkg.C@1.0.0">
-      <authors>
-        <author>
-          <name>CycloneDX E2E Tests</name>
-        </author>
-      </authors>
-      <name>TestPkg.C</name>
-      <version>{scrubbed-version}</version>
-      <description>Test package TestPkg.C</description>
-      <scope>required</scope>
-      <hashes>
-        <hash alg="SHA-512">{scrubbed-hash}</hash>
-      </hashes>
-      <licenses>
-        <license>
-          <name>Unknown - See URL</name>
-        </license>
-      </licenses>
-      <purl>pkg:nuget/TestPkg.C@1.0.0</purl>
-    </component>
   </components>
   <dependencies>
-    <dependency ref="MyApp@0.0.0">
-      <dependency ref="pkg:nuget/TestPkg.A@1.0.0" />
-      <dependency ref="MyLib@1.0.0" />
-    </dependency>
-    <dependency ref="MyLib@1.0.0">
-      <dependency ref="pkg:nuget/TestPkg.C@1.0.0" />
-    </dependency>
     <dependency ref="pkg:nuget/TestPkg.A@1.0.0" />
-    <dependency ref="pkg:nuget/TestPkg.C@1.0.0" />
+    <dependency ref="ToolMetaSln@0.0.0">
+      <dependency ref="pkg:nuget/TestPkg.A@1.0.0" />
+    </dependency>
   </dependencies>
 </bom>

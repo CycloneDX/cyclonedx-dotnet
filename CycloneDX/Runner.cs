@@ -621,26 +621,30 @@ namespace CycloneDX
 
             bom.Metadata ??= new Metadata();
             bom.Metadata.Tools ??= new ToolChoices();
-#pragma warning disable CS0618 // Type or member is obsolete
-            bom.Metadata.Tools.Tools ??= new List<Tool>();
-#pragma warning restore CS0618 // Type or member is obsolete
+            bom.Metadata.Tools.Components ??= new List<Component>();
 
-            var index = bom.Metadata.Tools.Tools.FindIndex(p => p.Name == toolname);
+            var index = bom.Metadata.Tools.Components.FindIndex(p => p.Name == toolname);
             if (index == -1)
             {
-#pragma warning disable CS0618 // Type or member is obsolete
-                bom.Metadata.Tools.Tools.Add(new Tool
+                bom.Metadata.Tools.Components.Add(new Component
                 {
+                    Type = Component.Classification.Application,
                     Name = toolname,
-                    Vendor = "CycloneDX",
-                    Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
-                }
-                );
-#pragma warning restore CS0618 // Type or member is obsolete
+                    Authors = new List<OrganizationalContact> { new OrganizationalContact { Name = "CycloneDX" } },
+                    Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                    ExternalReferences = new List<ExternalReference>
+                    {
+                        new ExternalReference
+                        {
+                            Type = ExternalReference.ExternalReferenceType.Website,
+                            Url = "https://github.com/CycloneDX/cyclonedx-dotnet"
+                        }
+                    }
+                });
             }
             else
             {
-                bom.Metadata.Tools.Tools[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                bom.Metadata.Tools.Components[index].Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
     }

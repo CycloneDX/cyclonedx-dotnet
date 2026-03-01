@@ -3,11 +3,22 @@
   <metadata>
     <timestamp>{scrubbed-timestamp}</timestamp>
     <tools>
-      <tool>
-        <vendor>CycloneDX</vendor>
-        <name>CycloneDX module for .NET</name>
-        <version>{scrubbed-version}</version>
-      </tool>
+      <components>
+        <component type="application">
+          <authors>
+            <author>
+              <name>CycloneDX</name>
+            </author>
+          </authors>
+          <name>CycloneDX module for .NET</name>
+          <version>{scrubbed-version}</version>
+          <externalReferences>
+            <reference type="website">
+              <url>https://github.com/CycloneDX/cyclonedx-dotnet</url>
+            </reference>
+          </externalReferences>
+        </component>
+      </components>
     </tools>
     <component type="application" bom-ref="TwoProjSln@0.0.0">
       <name>TwoProjSln</name>
