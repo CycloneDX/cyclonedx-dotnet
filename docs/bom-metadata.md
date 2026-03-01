@@ -85,12 +85,21 @@ Two fields are always managed automatically by the tool:
 ## Source 3 — Project file version (automatic, `.csproj` only)
 
 When scanning a `.csproj`, `.fsproj`, or `.vbproj` file and `--set-version` is
-not provided, the tool reads the `<Version>` element from the project file and
-uses it as the metadata component version.  If the project file has no
-`<Version>` element, the fallback `0.0.0` is used.
+not provided, the tool reads the version from the project file and uses it as
+the metadata component version.  It checks the following XML properties in
+priority order, using the first one that has a value:
 
-This means for most .NET projects you get the correct version automatically
-without any extra flags or template files.
+| Priority | Property | Typical use |
+|---|---|---|
+| 1 | `<Version>` | Standard SDK-style version |
+| 2 | `<AssemblyVersion>` | Assembly-level version (may include revision) |
+| 3 | `<ProjectVersion>` | Custom MSBuild property |
+| 4 | `<PackageVersion>` | NuGet package version (may differ from assembly) |
+
+If none of these properties is present in the project file, the tool falls back
+to checking the legacy `AssemblyInfo.cs` / `AssemblyInfo.vb` / `AssemblyInfo.prg`
+file for an `[assembly: AssemblyVersion(...)]` attribute.  If that is also
+absent, the final fallback is `0.0.0`.
 
 ---
 
