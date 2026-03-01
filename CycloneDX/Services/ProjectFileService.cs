@@ -277,6 +277,7 @@ namespace CycloneDX.Services
             projectReferences.Where(p => rootProject.Dependencies.ContainsKey(p.Name)).ToList().ForEach(p => p.IsDirectReference = true);
             projectReferences.Remove(rootProject);
 
+            var extraPackagesFound = false;
 
             foreach (var project in projectReferences)
             {
@@ -295,12 +296,27 @@ namespace CycloneDX.Services
                     project.Dependencies.Add(dependency.Name, dependency.Version);
                 }
 
+                var countBefore = dotnetDependencys.Count;
                 dotnetDependencys.UnionWith(projectDotnetDependencys);
+                if (dotnetDependencys.Count > countBefore)
+                    extraPackagesFound = true;
             }
 
             //When there is a project.assets.json, the project references are already added, so check before adding
             var allAddedDepedencyNames = dotnetDependencys.Select(dep => dep.Name);
             dotnetDependencys.UnionWith(projectReferences.Where(pr => !allAddedDepedencyNames.Contains(pr.Name)));
+
+            if (!extraPackagesFound && projectReferences.Count > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Error.WriteLine(
+                    "Consider removing --recursive: all NuGet packages from referenced projects " +
+                    "were already present in the root project.assets.json. " +
+                    "--recursive is only needed when a referenced project uses packages.config, " +
+                    "or when combined with --include-project-references (-ipr) to list " +
+                    "referenced projects as BOM components.");
+                Console.ResetColor();
+            }
 
             return dotnetDependencys;
         }
