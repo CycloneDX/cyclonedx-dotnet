@@ -84,14 +84,14 @@ Options:
   -ed, --exclude-dev                                                           Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)
   -t, --exclude-test-projects                                                  Exclude test projects from the BOM
   -u, --url <url>                                                              Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json
-  -us, --baseUrlUsername <baseUrlUsername>                                     Alternative NuGet repository username
-  -usp, --baseUrlUserPassword <baseUrlUserPassword>                            Alternative NuGet repository username password/apikey
+  -us, --baseUrlUsername <baseUrlUsername>                                     Alternative NuGet repository username (env: CYCLONEDX_NUGET_USERNAME)
+  -usp, --baseUrlUserPassword <baseUrlUserPassword>                            Alternative NuGet repository username password/apikey (env: CYCLONEDX_NUGET_PASSWORD)
   -uspct, --isBaseUrlPasswordClearText                                         Alternative NuGet repository password is cleartext
   -rs, --recursive                                                             To be used with a single project file, it will recursively scan project references of the supplied project file
   -ns, --no-serial-number                                                      Optionally omit the serial number from the resulting BOM
-  -gu, --github-username <github-username>                                     Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token
-  -gt, --github-token <github-token>                                           Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username
-  -gbt, --github-bearer-token <github-bearer-token>                            Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions
+  -gu, --github-username <github-username>                                     Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token (env: CYCLONEDX_GITHUB_USERNAME)
+  -gt, --github-token <github-token>                                           Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username (env: CYCLONEDX_GITHUB_TOKEN)
+  -gbt, --github-bearer-token <github-bearer-token>                            Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions (env: CYCLONEDX_GITHUB_BEARER_TOKEN, GITHUB_TOKEN)
   -egl, --enable-github-licenses                                               Enables GitHub license resolution
   -dpr, --disable-package-restore                                              Optionally disable package restore
   -dhc, --disable-hash-computation                                             Optionally disable hash computation for packages
@@ -167,6 +167,23 @@ Project [metadata](https://cyclonedx.org/docs/1.2/#type_metadata) **template exa
 ``` 
 
 _Update the data and import it within a build pipeline e.g. create the file using a script and add also dynamic data (version, timestamp, ...)_ 
+
+#### Credentials via environment variables
+
+All credential options can be supplied through environment variables instead of
+command-line arguments. This avoids exposing secrets in process listings, shell
+history, and CI logs.
+
+| Environment variable | Equivalent CLI flag | Description |
+|---|---|---|
+| `CYCLONEDX_NUGET_USERNAME` | `-us` / `--baseUrlUsername` | NuGet feed username |
+| `CYCLONEDX_NUGET_PASSWORD` | `-usp` / `--baseUrlUserPassword` | NuGet feed password or API key |
+| `CYCLONEDX_GITHUB_USERNAME` | `-gu` / `--github-username` | GitHub username for Basic auth |
+| `CYCLONEDX_GITHUB_TOKEN` | `-gt` / `--github-token` | GitHub personal access token |
+| `CYCLONEDX_GITHUB_BEARER_TOKEN` | `-gbt` / `--github-bearer-token` | GitHub bearer token |
+| `GITHUB_TOKEN` | `-gbt` / `--github-bearer-token` | GitHub bearer token (standard Actions variable, used as fallback for `CYCLONEDX_GITHUB_BEARER_TOKEN`) |
+
+When both a CLI argument and an environment variable are set, the CLI argument takes precedence.
 
 #### GitHub License Resolution
 

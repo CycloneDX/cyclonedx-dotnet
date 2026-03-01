@@ -28,6 +28,155 @@ using XFS = System.IO.Abstractions.TestingHelpers.MockUnixSupport;
 
 namespace CycloneDX.Tests
 {
+    public class ResolveCredentialTests
+    {
+        [Fact]
+        public void WarnIfCredentialPassedAsCLIArg_WritesToStderr_WhenValueProvided()
+        {
+            var originalErr = Console.Error;
+            using var sw = new StringWriter();
+            Console.SetError(sw);
+            try
+            {
+                Program.WarnIfCredentialPassedAsCLIArg("secret", "--some-flag", "SOME_ENV_VAR");
+                Assert.Contains("WARNING", sw.ToString());
+                Assert.Contains("--some-flag", sw.ToString());
+                Assert.Contains("SOME_ENV_VAR", sw.ToString());
+            }
+            finally
+            {
+                Console.SetError(originalErr);
+            }
+        }
+
+        [Fact]
+        public void WarnIfCredentialPassedAsCLIArg_WritesNothing_WhenValueIsNull()
+        {
+            var originalErr = Console.Error;
+            using var sw = new StringWriter();
+            Console.SetError(sw);
+            try
+            {
+                Program.WarnIfCredentialPassedAsCLIArg(null, "--some-flag", "SOME_ENV_VAR");
+                Assert.Empty(sw.ToString());
+            }
+            finally
+            {
+                Console.SetError(originalErr);
+            }
+        }
+
+        [Fact]
+        public void WarnIfCredentialPassedAsCLIArg_WritesNothing_WhenValueIsEmpty()
+        {
+            var originalErr = Console.Error;
+            using var sw = new StringWriter();
+            Console.SetError(sw);
+            try
+            {
+                Program.WarnIfCredentialPassedAsCLIArg(string.Empty, "--some-flag", "SOME_ENV_VAR");
+                Assert.Empty(sw.ToString());
+            }
+            finally
+            {
+                Console.SetError(originalErr);
+            }
+        }
+
+        [Fact]
+        public void ResolveCredential_ReturnsCliValue_WhenProvided()
+        {
+            var result = Program.ResolveCredential("cli-value", "SOME_ENV_VAR");
+            Assert.Equal("cli-value", result);
+        }
+
+        [Fact]
+        public void ResolveCredential_ReturnsEnvVar_WhenCliValueIsNull()
+        {
+            Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_1", "env-value");
+            try
+            {
+                var result = Program.ResolveCredential(null, "CYCLONEDX_TEST_CRED_1");
+                Assert.Equal("env-value", result);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_1", null);
+            }
+        }
+
+        [Fact]
+        public void ResolveCredential_ReturnsEnvVar_WhenCliValueIsEmpty()
+        {
+            Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_2", "env-value");
+            try
+            {
+                var result = Program.ResolveCredential(string.Empty, "CYCLONEDX_TEST_CRED_2");
+                Assert.Equal("env-value", result);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_2", null);
+            }
+        }
+
+        [Fact]
+        public void ResolveCredential_PrefersCliValue_OverEnvVar()
+        {
+            Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_3", "env-value");
+            try
+            {
+                var result = Program.ResolveCredential("cli-value", "CYCLONEDX_TEST_CRED_3");
+                Assert.Equal("cli-value", result);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_3", null);
+            }
+        }
+
+        [Fact]
+        public void ResolveCredential_ReturnsNull_WhenNeitherCliNorEnvVarSet()
+        {
+            Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_4", null);
+            var result = Program.ResolveCredential(null, "CYCLONEDX_TEST_CRED_4");
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void ResolveCredential_FallsBackToSecondEnvVar_WhenFirstIsAbsent()
+        {
+            Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_5A", null);
+            Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_5B", "fallback-value");
+            try
+            {
+                var result = Program.ResolveCredential(null, "CYCLONEDX_TEST_CRED_5A", "CYCLONEDX_TEST_CRED_5B");
+                Assert.Equal("fallback-value", result);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_5B", null);
+            }
+        }
+
+        [Fact]
+        public void ResolveCredential_PrefersFirstEnvVar_OverSecond()
+        {
+            Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_6A", "primary-value");
+            Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_6B", "secondary-value");
+            try
+            {
+                var result = Program.ResolveCredential(null, "CYCLONEDX_TEST_CRED_6A", "CYCLONEDX_TEST_CRED_6B");
+                Assert.Equal("primary-value", result);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_6A", null);
+                Environment.SetEnvironmentVariable("CYCLONEDX_TEST_CRED_6B", null);
+            }
+        }
+    }
+
     public class ProgramTests
     {
 

@@ -27,6 +27,38 @@ namespace CycloneDX
 {
     public static class Program
     {
+        /// <summary>
+        /// Writes a deprecation warning to stderr when a credential was supplied as a
+        /// CLI argument, nudging the caller to use the environment variable instead.
+        /// </summary>
+        internal static void WarnIfCredentialPassedAsCLIArg(string cliValue, string flagName, string envVarName)
+        {
+            if (!string.IsNullOrEmpty(cliValue))
+            {
+                Console.Error.WriteLine(
+                    $"WARNING: Passing credentials via the '{flagName}' argument is discouraged as it " +
+                    $"may expose secrets in process listings and shell history. " +
+                    $"Consider using the '{envVarName}' environment variable instead.");
+            }
+        }
+
+        /// <summary>
+        /// Returns the credential value, preferring the CLI argument when provided,
+        /// then falling back through each environment variable name in order.
+        /// </summary>
+        internal static string ResolveCredential(string cliValue, params string[] envVarNames)
+        {
+            if (!string.IsNullOrEmpty(cliValue))
+                return cliValue;
+            foreach (var name in envVarNames)
+            {
+                var value = Environment.GetEnvironmentVariable(name);
+                if (!string.IsNullOrEmpty(value))
+                    return value;
+            }
+            return null;
+        }
+
         public static async Task<int> Main(string[] args)
         {
             var SolutionOrProjectFile = new Argument<string>("path") { Description = "The path to a .sln, .slnf, .slnx, .csproj, .fsproj, .vbproj, .xsproj, or packages.config file or the path to a directory which will be recursively analyzed for packages.config files.", Arity = ArgumentArity.ZeroOrOne };
@@ -38,14 +70,14 @@ namespace CycloneDX
             var excludeDev = new Option<bool>("--exclude-dev", "-ed") { Description = "Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)" };
             var excludetestprojects = new Option<bool>("--exclude-test-projects", "-t") { Description = "Exclude test projects from the BOM" };
             var baseUrl = new Option<string>("--url", "-u") { Description = "Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json" };
-            var baseUrlUS = new Option<string>("--baseUrlUsername", "-us") { Description = "Alternative NuGet repository username" };
-            var baseUrlUSP = new Option<string>("--baseUrlUserPassword", "-usp") { Description = "Alternative NuGet repository username password/apikey" };
+            var baseUrlUS = new Option<string>("--baseUrlUsername", "-us") { Description = "Alternative NuGet repository username. Falls back to the CYCLONEDX_NUGET_USERNAME environment variable." };
+            var baseUrlUSP = new Option<string>("--baseUrlUserPassword", "-usp") { Description = "Alternative NuGet repository username password/apikey. Falls back to the CYCLONEDX_NUGET_PASSWORD environment variable." };
             var isPasswordClearText = new Option<bool>("--isBaseUrlPasswordClearText", "-uspct") { Description = "Alternative NuGet repository password is cleartext" };
             var scanProjectReferences = new Option<bool>("--recursive", "-rs") { Description = "To be used with a single project file, it will recursively scan project references of the supplied project file" };
             var noSerialNumber = new Option<bool>("--no-serial-number", "-ns") { Description = "Optionally omit the serial number from the resulting BOM" };
-            var githubUsername = new Option<string>("--github-username", "-gu") { Description = "Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token" };
-            var githubT = new Option<string>("--github-token", "-gt") { Description = "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username" };
-            var githubBT = new Option<string>("--github-bearer-token", "-gbt") { Description = "Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions" };
+            var githubUsername = new Option<string>("--github-username", "-gu") { Description = "Optionally provide a GitHub username for license resolution. If set you also need to provide a GitHub personal access token. Falls back to the CYCLONEDX_GITHUB_USERNAME environment variable." };
+            var githubT = new Option<string>("--github-token", "-gt") { Description = "Optionally provide a GitHub personal access token for license resolution. If set you also need to provide a GitHub username. Falls back to the CYCLONEDX_GITHUB_TOKEN environment variable." };
+            var githubBT = new Option<string>("--github-bearer-token", "-gbt") { Description = "Optionally provide a GitHub bearer token for license resolution. This is useful in GitHub actions. Falls back to the CYCLONEDX_GITHUB_BEARER_TOKEN or GITHUB_TOKEN environment variables." };
             var enableGithubLicenses = new Option<bool>("--enable-github-licenses", "-egl") { Description = "Enables GitHub license resolution" };
             var disablePackageRestore = new Option<bool>("--disable-package-restore", "-dpr") { Description = "Optionally disable package restore" };
             var disableHashComputation = new Option<bool>("--disable-hash-computation", "-dhc") { Description = "Optionally disable hash computation for packages" };
@@ -118,14 +150,14 @@ namespace CycloneDX
                     excludeDev = parseResult.GetValue(excludeDev),
                     excludeTestProjects = parseResult.GetValue(excludetestprojects),
                     baseUrl = parseResult.GetValue(baseUrl),
-                    baseUrlUserName = parseResult.GetValue(baseUrlUS),
-                    baseUrlUSP = parseResult.GetValue(baseUrlUSP),
+                    baseUrlUserName = ResolveCredential(parseResult.GetValue(baseUrlUS), "CYCLONEDX_NUGET_USERNAME"),
+                    baseUrlUSP = ResolveCredential(parseResult.GetValue(baseUrlUSP), "CYCLONEDX_NUGET_PASSWORD"),
                     isPasswordClearText = parseResult.GetValue(isPasswordClearText),
                     scanProjectReferences = parseResult.GetValue(scanProjectReferences),
                     noSerialNumber = parseResult.GetValue(noSerialNumber),
-                    githubUsername = parseResult.GetValue(githubUsername),
-                    githubT = parseResult.GetValue(githubT),
-                    githubBT = parseResult.GetValue(githubBT),
+                    githubUsername = ResolveCredential(parseResult.GetValue(githubUsername), "CYCLONEDX_GITHUB_USERNAME"),
+                    githubT = ResolveCredential(parseResult.GetValue(githubT), "CYCLONEDX_GITHUB_TOKEN"),
+                    githubBT = ResolveCredential(parseResult.GetValue(githubBT), "CYCLONEDX_GITHUB_BEARER_TOKEN", "GITHUB_TOKEN"),
                     enableGithubLicenses = parseResult.GetValue(enableGithubLicenses),
                     disablePackageRestore = parseResult.GetValue(disablePackageRestore),
                     disableHashComputation = parseResult.GetValue(disableHashComputation),
@@ -143,6 +175,12 @@ namespace CycloneDX
                         ? SpecificationVersionHelpers.Version(parseResult.GetValue(specVersion))
                         : null
                 };
+
+                WarnIfCredentialPassedAsCLIArg(parseResult.GetValue(baseUrlUS),       "--baseUrlUsername",       "CYCLONEDX_NUGET_USERNAME");
+                WarnIfCredentialPassedAsCLIArg(parseResult.GetValue(baseUrlUSP),      "--baseUrlUserPassword",   "CYCLONEDX_NUGET_PASSWORD");
+                WarnIfCredentialPassedAsCLIArg(parseResult.GetValue(githubUsername),  "--github-username",       "CYCLONEDX_GITHUB_USERNAME");
+                WarnIfCredentialPassedAsCLIArg(parseResult.GetValue(githubT),         "--github-token",          "CYCLONEDX_GITHUB_TOKEN");
+                WarnIfCredentialPassedAsCLIArg(parseResult.GetValue(githubBT),        "--github-bearer-token",   "CYCLONEDX_GITHUB_BEARER_TOKEN");
 
                 Runner runner = new Runner();
                 var taskStatus = await runner.HandleCommandAsync(options);
