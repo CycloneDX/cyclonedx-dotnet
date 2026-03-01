@@ -70,10 +70,24 @@ namespace CycloneDX.E2ETests.Infrastructure
                     @"(<version>)\d+\.\d+\.\d+(?:\.\d+)?(?:-[^<]+)?(</version>)",
                     "$1{scrubbed-version}$2");
 
-                // SHA-512 hashes (base64, ~88 chars ending in ==)
+                // Hex-encoded hash values as emitted by CycloneDX in <hash> elements.
+                // SHA-512 = 128 hex chars, SHA-256 = 64, SHA-1 = 40, MD5 = 32.
+                // Match uppercase or lowercase hex strings of those lengths (longest first).
                 line = Regex.Replace(
                     line,
-                    @"(?:[A-Za-z0-9+/]{86,88}={0,2})",
+                    @"\b[0-9A-Fa-f]{128}\b",
+                    "{scrubbed-hash}");
+                line = Regex.Replace(
+                    line,
+                    @"\b[0-9A-Fa-f]{64}\b",
+                    "{scrubbed-hash}");
+                line = Regex.Replace(
+                    line,
+                    @"\b[0-9A-Fa-f]{40}\b",
+                    "{scrubbed-hash}");
+                line = Regex.Replace(
+                    line,
+                    @"\b[0-9A-Fa-f]{32}\b",
                     "{scrubbed-hash}");
 
                 return line;
