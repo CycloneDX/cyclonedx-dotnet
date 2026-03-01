@@ -185,8 +185,14 @@ namespace CycloneDX
                         Console.Error.WriteLine($"No file found at path {SolutionOrProjectFile}");
                         return (int)ExitCode.InvalidOptions;
                     }
-                    packages = await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
+                     packages = await projectFileService.RecursivelyGetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
+                    if (string.IsNullOrEmpty(setVersion))
+                    {
+                        var (_, projVersion) = projectFileService.GetAssemblyNameAndVersion(fullSolutionOrProjectFilePath);
+                        if (!string.IsNullOrEmpty(projVersion) && projVersion != "undefined")
+                            topLevelComponent.Version = projVersion;
+                    }
                 }
                 else if (Utils.IsSupportedProjectType(SolutionOrProjectFile))
                 {
@@ -197,6 +203,12 @@ namespace CycloneDX
                     }
                     packages = await projectFileService.GetProjectDotnetDependencysAsync(fullSolutionOrProjectFilePath, baseIntermediateOutputPath, excludetestprojects, framework, runtime).ConfigureAwait(false);
                     topLevelComponent.Name = fileSystem.Path.GetFileNameWithoutExtension(SolutionOrProjectFile);
+                    if (string.IsNullOrEmpty(setVersion))
+                    {
+                        var (_, projVersion) = projectFileService.GetAssemblyNameAndVersion(fullSolutionOrProjectFilePath);
+                        if (!string.IsNullOrEmpty(projVersion) && projVersion != "undefined")
+                            topLevelComponent.Version = projVersion;
+                    }
                 }
                 else if (fileSystem.Path.GetFileName(SolutionOrProjectFile).ToLowerInvariant().Equals("packages.config", StringComparison.OrdinalIgnoreCase))
                 {
