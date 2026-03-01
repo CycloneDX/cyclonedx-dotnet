@@ -298,7 +298,53 @@ namespace CycloneDX
                 {
                     item.Scope = ComponentScope.Excluded;
                 }
-                await Console.Out.WriteLineAsync($"{packages.Where(p => p.IsDevDependency).Count()} packages being excluded as DevDependencies");
+
+                // BFS: propagate dev exclusion to transitive deps that are not reachable
+                // from any non-dev (runtime) package.
+                //
+                // Step 1 – build a name-keyed lookup (case-insensitive) for fast traversal.
+                var packageByName = new Dictionary<string, DotnetDependency>(StringComparer.OrdinalIgnoreCase);
+                foreach (var pkg in packages)
+                {
+                    packageByName[pkg.Name] = pkg;
+                }
+
+                // Step 2 – BFS from every non-dev *direct* reference to find all packages
+                // reachable via the runtime dependency graph. Only seed direct references so
+                // that purely transitive packages are not incorrectly treated as runtime roots.
+                var runtimeReachable = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                var bfsQueue = new Queue<DotnetDependency>(
+                    packages.Where(p => p.IsDirectReference && p.Scope != ComponentScope.Excluded));
+                while (bfsQueue.Count > 0)
+                {
+                    var current = bfsQueue.Dequeue();
+                    if (!runtimeReachable.Add(current.Name))
+                        continue; // already visited
+                    if (current.Dependencies == null)
+                        continue;
+                    foreach (var depName in current.Dependencies.Keys)
+                    {
+                        if (packageByName.TryGetValue(depName, out var depPkg)
+                            && !runtimeReachable.Contains(depPkg.Name))
+                        {
+                            bfsQueue.Enqueue(depPkg);
+                        }
+                    }
+                }
+
+                // Step 3 – any package not in runtimeReachable is only reachable through
+                // dev deps; mark it Excluded too.
+                int transitivelyExcluded = 0;
+                foreach (var pkg in packages.Where(p => p.Scope != ComponentScope.Excluded
+                                                        && !runtimeReachable.Contains(p.Name)))
+                {
+                    pkg.Scope = ComponentScope.Excluded;
+                    transitivelyExcluded++;
+                }
+
+                await Console.Out.WriteLineAsync(
+                    $"{packages.Where(p => p.IsDevDependency).Count()} packages being excluded as DevDependencies" +
+                    (transitivelyExcluded > 0 ? $", {transitivelyExcluded} additional packages excluded as transitive dev-only dependencies" : ""));
             }
 
 
@@ -306,6 +352,7 @@ namespace CycloneDX
 
             // get all the components and dependency graph from the NuGet packages
             var components = new HashSet<Component>();
+            var devComponents = new List<Component>();
             var dependencies = new List<Dependency>();
             var directDependencies = new Dependency { Dependencies = new List<Dependency>() };
             var transitiveDependencies = new HashSet<string>();
@@ -332,6 +379,11 @@ namespace CycloneDX
                             (options.includeProjectReferences || package.DependencyType == DependencyType.Package))
                         {
                             components.Add(component);
+                        }
+                        else if (excludeDev && component.Scope == Component.ComponentScope.Excluded
+                            && (options.includeProjectReferences || package.DependencyType == DependencyType.Package))
+                        {
+                            devComponents.Add(component);
                         }
                         packageToComponent[package] = component;
                         bomRefLookup[(component.Name.ToLower(CultureInfo.InvariantCulture), (component.Version.ToLower(CultureInfo.InvariantCulture)))] = component.BomRef;
@@ -446,6 +498,20 @@ namespace CycloneDX
             directDependencies.Ref = bom.Metadata.Component.BomRef;
             bom.Dependencies.Add(directDependencies);
             bom.Dependencies.Sort((x, y) => string.Compare(x.Ref, y.Ref, StringComparison.InvariantCultureIgnoreCase));
+
+            if (devComponents.Count > 0)
+            {
+                devComponents.Sort((x, y) =>
+                {
+                    if (x.Name == y.Name)
+                        return string.Compare(x.Version, y.Version, StringComparison.InvariantCultureIgnoreCase);
+                    return string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase);
+                });
+                bom.Formulation = new List<Formula>
+                {
+                    new Formula { Components = devComponents }
+                };
+            }
 
             LastGeneratedBom = bom;
 

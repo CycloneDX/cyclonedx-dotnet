@@ -3,25 +3,14 @@
   <metadata>
     <timestamp>{scrubbed-timestamp}</timestamp>
     <tools>
-      <components>
-        <component type="application">
-          <authors>
-            <author>
-              <name>CycloneDX</name>
-            </author>
-          </authors>
-          <name>CycloneDX module for .NET</name>
-          <version>{scrubbed-version}</version>
-          <externalReferences>
-            <reference type="website">
-              <url>https://github.com/CycloneDX/cyclonedx-dotnet</url>
-            </reference>
-          </externalReferences>
-        </component>
-      </components>
+      <tool>
+        <vendor>CycloneDX</vendor>
+        <name>CycloneDX module for .NET</name>
+        <version>{scrubbed-version}</version>
+      </tool>
     </tools>
-    <component type="application" bom-ref="DevDepExcludeSln@0.0.0">
-      <name>DevDepExcludeSln</name>
+    <component type="application" bom-ref="DevDepFormulationSln@0.0.0">
+      <name>DevDepFormulationSln</name>
       <version>{scrubbed-version}</version>
     </component>
   </metadata>
@@ -48,7 +37,7 @@
     </component>
   </components>
   <dependencies>
-    <dependency ref="DevDepExcludeSln@0.0.0">
+    <dependency ref="DevDepFormulationSln@0.0.0">
       <dependency ref="pkg:nuget/TestPkg.A@1.0.0" />
     </dependency>
     <dependency ref="pkg:nuget/TestPkg.A@1.0.0" />
