@@ -19,14 +19,12 @@ using System.Threading.Tasks;
 using CycloneDX.E2ETests.Builders;
 using CycloneDX.E2ETests.Infrastructure;
 using Xunit;
-using static VerifyXunit.Verifier;
 
 namespace CycloneDX.E2ETests.Tests
 {
     /// <summary>
     /// Tests for dev/build-only dependencies (PrivateAssets="all").
-    /// Verifies that <c>--exclude-dev</c> omits packages that are exclusively
-    /// consumed at build time and not shipped with the application.
+    /// Dev dependencies are always included in the BOM with scope="excluded".
     /// </summary>
     [Collection("E2E")]
     public sealed class DevDependencyTests
@@ -39,9 +37,9 @@ namespace CycloneDX.E2ETests.Tests
         }
 
         [Fact]
-        public async Task DevDependency_IncludedByDefault()
+        public async Task DevDependency_IncludedWithScopeExcluded()
         {
-            // Without --exclude-dev, dev dependencies SHOULD appear in the BOM
+            // Dev dependencies must appear in <components> with <scope>excluded</scope>
             using var solution = await new SolutionBuilder("DevDepDefaultSln")
                 .AddProject("MyApp", p => p
                     .WithTargetFramework("net8.0")
@@ -57,15 +55,45 @@ namespace CycloneDX.E2ETests.Tests
                 new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-            Assert.Contains("TestPkg.Dev", result.BomContent);
             Assert.Contains("TestPkg.A", result.BomContent);
+            Assert.Contains("TestPkg.Dev", result.BomContent);
+            // Dev dep must appear with scope=excluded
+            Assert.Contains("<scope>excluded</scope>", result.BomContent);
+            // No formulation — dev deps stay in components
+            Assert.DoesNotContain("<formulation>", result.BomContent);
         }
 
         [Fact]
-        public async Task DevDependency_ExcludedWithFlag()
+        public async Task DevDependency_ScopeExcluded_RuntimePackage_ScopeRequired()
         {
-            // With --exclude-dev, packages marked PrivateAssets="all" should be absent
-            using var solution = await new SolutionBuilder("DevDepExcludeSln")
+            // Runtime packages must be scope=required; dev deps scope=excluded
+            using var solution = await new SolutionBuilder("DevDepScopeSln")
+                .AddProject("MyApp", p => p
+                    .WithTargetFramework("net8.0")
+                    .AddPackage("TestPkg.A", "1.0.0")
+                    .AddPackage("TestPkg.Dev", "1.0.0", devDependency: true))
+                .BuildAsync(_fixture.NuGetFeedUrl);
+
+            using var outputDir = solution.CreateOutputDir();
+
+            var result = await _fixture.Runner.RunAsync(
+                solution.SolutionFile,
+                outputDir.Path,
+                new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
+
+            Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
+
+            // TestPkg.A (runtime) must appear before scope=required; TestPkg.Dev before scope=excluded.
+            // The simplest check: both scope values are present in the BOM.
+            Assert.Contains("<scope>required</scope>", result.BomContent);
+            Assert.Contains("<scope>excluded</scope>", result.BomContent);
+        }
+
+        [Fact]
+        public async Task ExcludeDevFlag_IsDeprecatedAndHasNoEffect()
+        {
+            // --exclude-dev is deprecated; passing it must not change the output
+            using var solution = await new SolutionBuilder("DevDepFlagSln")
                 .AddProject("MyApp", p => p
                     .WithTargetFramework("net8.0")
                     .AddPackage("TestPkg.A", "1.0.0")
@@ -84,20 +112,22 @@ namespace CycloneDX.E2ETests.Tests
                 });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-            Assert.Contains("TestPkg.A", result.BomContent);
-            Assert.DoesNotContain("TestPkg.Dev", result.BomContent);
-
-            await Verify(result.BomContent);
+            // Dev dep must still be present with scope=excluded, not omitted
+            Assert.Contains("TestPkg.Dev", result.BomContent);
+            Assert.Contains("<scope>excluded</scope>", result.BomContent);
+            Assert.DoesNotContain("<formulation>", result.BomContent);
         }
 
         [Fact]
-        public async Task OnlyDevDependencies_ExcludeDevProducesEmptyComponents()
+        public async Task TransitiveOfDevDependency_IncludedInComponents()
         {
-            // A project with only dev deps + --exclude-dev → no components section (or empty)
-            using var solution = await new SolutionBuilder("OnlyDevDepSln")
+            // A transitive dependency pulled in only through a dev dep must also
+            // appear in <components> (the BFS exclusion logic has been removed).
+            using var solution = await new SolutionBuilder("TransitiveDevDepSln")
                 .AddProject("MyApp", p => p
                     .WithTargetFramework("net8.0")
-                    .AddPackage("TestPkg.Dev", "1.0.0", devDependency: true))
+                    .AddPackage("TestPkg.A", "1.0.0")
+                    .AddPackage("TestPkg.DevWithDep", "1.0.0", devDependency: true))
                 .BuildAsync(_fixture.NuGetFeedUrl);
 
             using var outputDir = solution.CreateOutputDir();
@@ -105,14 +135,13 @@ namespace CycloneDX.E2ETests.Tests
             var result = await _fixture.Runner.RunAsync(
                 solution.SolutionFile,
                 outputDir.Path,
-                new ToolRunOptions
-                {
-                    NuGetFeedUrl = _fixture.NuGetFeedUrl,
-                    ExcludeDev = true
-                });
+                new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-            Assert.DoesNotContain("TestPkg.Dev", result.BomContent);
+            Assert.Contains("TestPkg.A", result.BomContent);
+            Assert.Contains("TestPkg.DevWithDep", result.BomContent);
+            Assert.Contains("TestPkg.DevTransitive", result.BomContent);
+            Assert.DoesNotContain("<formulation>", result.BomContent);
         }
     }
 }

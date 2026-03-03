@@ -1,0 +1,95 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0": {
+      "SonarAnalyzer.CSharp/9.16.0.82469": {
+        "type": "package",
+        "dependencies": {
+          "Google.Protobuf": "3.21.9"
+        }
+      },
+      "Newtonsoft.Json/13.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Google.Protobuf": "3.21.9"
+        }
+      },
+      "Google.Protobuf/3.21.9": {
+        "type": "package"
+      }
+    }
+  },
+  "libraries": {
+    "SonarAnalyzer.CSharp/9.16.0.82469": {
+      "sha512": "abc123==",
+      "type": "package",
+      "path": "sonaranalyzer.csharp/9.16.0.82469",
+      "files": []
+    },
+    "Newtonsoft.Json/13.0.1": {
+      "sha512": "ghi789==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.1",
+      "files": []
+    },
+    "Google.Protobuf/3.21.9": {
+      "sha512": "def456==",
+      "type": "package",
+      "path": "google.protobuf/3.21.9",
+      "files": []
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net6.0": [
+      "SonarAnalyzer.CSharp >= 9.16.0.82469",
+      "Newtonsoft.Json >= 13.0.1"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\user\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\src\\TestProject\\TestProject.csproj",
+      "projectName": "TestProject",
+      "projectPath": "C:\\src\\TestProject\\TestProject.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "C:\\src\\TestProject\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [],
+      "originalTargetFrameworks": [ "net6.0" ],
+      "sources": { "https://api.nuget.org/v3/index.json": {} },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "projectReferences": {}
+        }
+      }
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "dependencies": {
+          "SonarAnalyzer.CSharp": {
+            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[9.16.0.82469, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.1, )"
+          }
+        },
+        "imports": [],
+        "assetTargetFallback": false,
+        "warn": false,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": { "privateAssets": "all" }
+        },
+        "runtimeIdentifierGraphPath": ""
+      }
+    }
+  }
+}
