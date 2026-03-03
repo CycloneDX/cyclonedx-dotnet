@@ -294,11 +294,70 @@ namespace CycloneDX
 
             if (excludeDev)
             {
-                foreach (var item in packages.Where(p => p.IsDevDependency))
+                await Console.Out.WriteLineAsync("Warning: --exclude-dev is deprecated and has no effect. Dev dependencies are always included in the BOM with scope=\"excluded\".");
+            }
+
+            // BFS to determine which packages are reachable exclusively through dev/test
+            // dependencies — those get scope=Excluded.
+            //
+            // Algorithm:
+            //   1. Seed with direct runtime references (IsDirectReference=true, not a dev dep,
+            //      not already excluded by the test-project pass). When no package has
+            //      IsDirectReference set (e.g. packages.config, which has no graph) every
+            //      non-dev package is treated as a direct reference.
+            //   2. BFS through DotnetDependency.Dependencies. A package reached via a runtime
+            //      path is marked runtime-reachable and its children are queued.
+            //      Dev-dep children are NOT queued (they are build-time roots, not runtime
+            //      propagation paths) — unless the child is also reachable from a runtime path.
+            //   3. Any package that is never reached by the BFS gets scope=Excluded.
+            {
+                var packageLookup = packages
+                    .Where(p => p.Name != null && p.Version != null)
+                    .ToLookup(
+                        p => (p.Name.ToLower(CultureInfo.InvariantCulture),
+                              p.Version.ToLower(CultureInfo.InvariantCulture)));
+
+                var runtimeReachable = new HashSet<DotnetDependency>();
+                var bfsQueue = new Queue<DotnetDependency>();
+
+                bool anyDirectReference = packages.Any(p => p.IsDirectReference);
+
+                // Seed: direct runtime packages are runtime roots.
+                foreach (var pkg in packages)
                 {
-                    item.Scope = ComponentScope.Excluded;
+                    bool isRuntimeSeed = anyDirectReference
+                        ? pkg.IsDirectReference && !pkg.IsDevDependency && pkg.Scope != Component.ComponentScope.Excluded
+                        : !pkg.IsDevDependency && pkg.Scope != Component.ComponentScope.Excluded;
+
+                    if (isRuntimeSeed && runtimeReachable.Add(pkg))
+                        bfsQueue.Enqueue(pkg);
                 }
-                await Console.Out.WriteLineAsync($"{packages.Where(p => p.IsDevDependency).Count()} packages being excluded as DevDependencies");
+
+                // BFS: follow Dependencies of runtime-reachable packages.
+                while (bfsQueue.Count > 0)
+                {
+                    var current = bfsQueue.Dequeue();
+                    foreach (var dep in current.Dependencies ?? [])
+                    {
+                        var key = (dep.Key.ToLower(CultureInfo.InvariantCulture),
+                                   dep.Value?.ToLower(CultureInfo.InvariantCulture) ?? "");
+                        foreach (var child in packageLookup[key])
+                        {
+                            if (runtimeReachable.Add(child))
+                                bfsQueue.Enqueue(child);
+                        }
+                    }
+                }
+
+                // Any package not reached by the BFS is only reachable through dev/test
+                // paths — mark it excluded.
+                foreach (var pkg in packages)
+                {
+                    if (!runtimeReachable.Contains(pkg))
+                    {
+                        pkg.Scope = Component.ComponentScope.Excluded;
+                    }
+                }
             }
 
 
@@ -327,9 +386,7 @@ namespace CycloneDX
 
                     if (component != null)
                     {
-                        if ((component.Scope != Component.ComponentScope.Excluded || !excludeDev)
-                            &&
-                            (options.includeProjectReferences || package.DependencyType == DependencyType.Package))
+                        if (options.includeProjectReferences || package.DependencyType == DependencyType.Package)
                         {
                             components.Add(component);
                         }
@@ -343,7 +400,7 @@ namespace CycloneDX
                 }
 
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
-                foreach (var package in packages.Where(p => !excludeDev || packageToComponent[p].Scope != Component.ComponentScope.Excluded))
+                foreach (var package in packages)
                 {
                     var packageDependencies = new Dependency
                     {

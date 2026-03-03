@@ -88,7 +88,7 @@ Options:
   -rt, --runtime <runtime>                                                     The runtime to use. If not defined, all will be aggregated.
   -o, --output <output>                                                        The directory to write the BOM
   -fn, --filename <filename>                                                   Optionally provide a filename for the BOM (default: bom.xml or bom.json)
-  -ed, --exclude-dev                                                           Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)
+  -ed, --exclude-dev                                                           (Deprecated, has no effect) Dev dependencies are always included in the BOM with scope="excluded".
   -t, --exclude-test-projects                                                  Exclude test projects from the BOM
   -u, --url <url>                                                              Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json
   -us, --baseUrlUsername <baseUrlUsername>                                     Alternative NuGet repository username (env: CYCLONEDX_NUGET_USERNAME)

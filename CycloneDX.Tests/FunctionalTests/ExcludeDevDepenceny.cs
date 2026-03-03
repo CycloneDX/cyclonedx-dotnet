@@ -15,25 +15,25 @@ namespace CycloneDX.Tests.FunctionalTests
         // E2E counterpart: CycloneDX.E2ETests.DevDependencyTests
         [Fact]
         [Trait("Status", "MigratedToE2E")]
-        public async Task DevDependenciesNormalyGoIntoTheBom()
+        public async Task DevDependenciesAreIncludedWithScopeExcluded()
         {
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies.json"));
             var options = new RunOptions
             {
             };
 
-
             var bom = await FunctionalTestHelper.Test(assetsJson, options);
 
             Assert.True(bom.Components.Count == 1);
-            Assert.Contains(bom.Components, c => string.Compare(c.Name, "SonarAnalyzer.CSharp", true) == 0 && c.Version == "9.16.0.82469");
-
+            var devDep = bom.Components.FirstOrDefault(c => string.Compare(c.Name, "SonarAnalyzer.CSharp", true) == 0 && c.Version == "9.16.0.82469");
+            Assert.NotNull(devDep);
+            Assert.Equal(Component.ComponentScope.Excluded, devDep.Scope);
         }
 
         // E2E counterpart: CycloneDX.E2ETests.DevDependencyTests
         [Fact]
         [Trait("Status", "MigratedToE2E")]
-        public async Task DevDependenciesAreExcludedWithExcludeDevDependencies()
+        public async Task ExcludeDevFlag_IsDeprecatedAndHasNoEffect()
         {
             var assetsJson = File.ReadAllText(Path.Combine("FunctionalTests", "TestcaseFiles", "DevDependencies.json"));
             var options = new RunOptions
@@ -41,13 +41,13 @@ namespace CycloneDX.Tests.FunctionalTests
                 excludeDev = true
             };
 
-
             var bom = await FunctionalTestHelper.Test(assetsJson, options);
 
-            Assert.True(bom.Components.Count == 0);
-            Assert.True(bom.Dependencies.Count == 1); // only the meta component
-
-
+            // flag is deprecated; dev dep must still appear with scope=excluded
+            Assert.True(bom.Components.Count == 1);
+            var devDep = bom.Components.FirstOrDefault(c => string.Compare(c.Name, "SonarAnalyzer.CSharp", true) == 0 && c.Version == "9.16.0.82469");
+            Assert.NotNull(devDep);
+            Assert.Equal(Component.ComponentScope.Excluded, devDep.Scope);
         }
     }
 }

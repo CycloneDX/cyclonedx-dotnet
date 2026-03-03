@@ -82,8 +82,11 @@ namespace CycloneDX.Services
                             Path = Path.Combine(Path.GetDirectoryName(projectFilePath), library?.Path ?? "")
                         };
 
-                        // is this a test project dependency or only a development dependency
-                        if ( isTestProject)
+                        // Test-project packages are always excluded (whole-project decision).
+                        // Dev dependency scope is resolved later in Runner via BFS so that
+                        // transitive packages reachable through both a dev dep and a runtime
+                        // dep are correctly kept as scope=Required.
+                        if (isTestProject)
                         {
                             package.Scope = Component.ComponentScope.Excluded;
                         }

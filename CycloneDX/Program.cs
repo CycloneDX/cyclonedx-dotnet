@@ -67,7 +67,7 @@ namespace CycloneDX
             var runtime = new Option<string>("--runtime", "-rt") { Description = "The runtime to use. If not defined, all will be aggregated." };
             var outputDirectory = new Option<string>("--output", "-o") { Description = "The directory to write the BOM" };
             var outputFilename = new Option<string>("--filename", "-fn") { Description = "Optionally provide a filename for the BOM (default: bom.xml or bom.json)" };
-            var excludeDev = new Option<bool>("--exclude-dev", "-ed") { Description = "Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)" };
+            var excludeDev = new Option<bool>("--exclude-dev", "-ed") { Description = "(Deprecated, has no effect) Dev dependencies are always included in the BOM with scope=\"excluded\"." };
             var excludetestprojects = new Option<bool>("--exclude-test-projects", "-t") { Description = "Exclude test projects from the BOM" };
             var baseUrl = new Option<string>("--url", "-u") { Description = "Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json" };
             var baseUrlUS = new Option<string>("--baseUrlUsername", "-us") { Description = "Alternative NuGet repository username. Falls back to the CYCLONEDX_NUGET_USERNAME environment variable." };
