@@ -483,6 +483,38 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task GetComponent_UnlicensedLicenseExpression_MapsToLicenseName()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""expression"">UNLICENSED</license>
+                </metadata>
+                </package>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Single(component.Licenses);
+            Assert.Equal("UNLICENSED", component.Licenses.First().License.Name);
+            Assert.True(string.IsNullOrEmpty(component.Licenses.First().License.Id));
+        }
+
+
+
+        [Fact]
         public async Task GetComponent_MultiLicenseExpression_ReturnsComponent()
         {
             var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
