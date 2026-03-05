@@ -29,6 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write  # needed GitHub OIDC token issuance
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -75,11 +76,18 @@ jobs:
       - name: Generate JSON SBOM
         run: docker run --rm --user $(id -u):$(id -g) -v ${GITHUB_WORKSPACE}:/usr/src/project cyclonedx/cyclonedx-dotnet:${{ steps.package_release.outputs.version }} /usr/src/project/CycloneDX.sln --output-format json -o /usr/src/project
 
+      # Get a short-lived NuGet API key
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Publish package to NuGet
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
-          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" ${{ steps.package_release.outputs.package_filename }}
+          dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{steps.login.outputs.NUGET_API_KEY}} ${{ steps.package_release.outputs.package_filename }}
 
       - name: Publish Docker image to Docker Hub
         env:
