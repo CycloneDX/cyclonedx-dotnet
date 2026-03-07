@@ -67,32 +67,31 @@
           "System.Diagnostics.EventLog": "6.0.0"
         }
       },
-      "JetBrains.Annotations": {
+      "Humanizer.Core": {
         "type": "Transitive",
-        "resolved": "2021.2.0",
-        "contentHash": "kKSyoVfndMriKHLfYGmr0uzQuI4jcc3TKGyww7buJFCYeHb/X0kodYBPL7n9454q7v6ASiRmDgpPGaDGerg/Hg=="
+        "resolved": "3.0.1",
+        "contentHash": "scB3+KcxNmEjZK5V8rKCW2gIiL8m8KH91w14FuuExyhi9xTyAJ+jr+DDxGdy12mHmioe2uvjxTfMgM7WmSUFlw=="
       },
       "Json.More.Net": {
         "type": "Transitive",
-        "resolved": "1.9.0",
-        "contentHash": "MMjd2dOh32hLbcZg9YyA+7aEH9gu2cMTEAWrQY17in4+aEsPg2NtYTcwgWHJS9Tt2WUx+4iN1mNegR2uiEwsVQ=="
+        "resolved": "3.0.0",
+        "contentHash": "+kj2dE04clW9+Bw4GoEVBFdLSiOKwLEkiiGbX+CK860DbytCtpD0QA68cEQISMnIrxyxQPw5gQAra22WCnRPUA=="
       },
       "JsonPointer.Net": {
         "type": "Transitive",
-        "resolved": "3.0.3",
-        "contentHash": "mCGQc15lHLp1R2CVhWiipnZurHXm93+LbPPAT/vXQm5PdHt6WQuYLhaEF8VZ+aXL9P2I6bGND6pDTEfqFs6gig==",
+        "resolved": "7.0.0",
+        "contentHash": "jdnFo5huuJDB3ASWIkD0F9Ntf+9nOtRbsIp4VqRlHbTW9LxpBBMRKQhQJxPtIFAhNVS55aAsMb78TB+LK29CqQ==",
         "dependencies": {
-          "Json.More.Net": "1.8.0"
+          "Humanizer.Core": "3.0.1",
+          "Json.More.Net": "3.0.0"
         }
       },
       "JsonSchema.Net": {
         "type": "Transitive",
-        "resolved": "5.3.1",
-        "contentHash": "1Ox9kMtire1U1O+obAKGbO8i8MAWbRTKDBda1GpNaEN6sxQUFD7h9laBZ1WmXFVbsv9grTBFfYJi/I/5zoPvsQ==",
+        "resolved": "9.1.1",
+        "contentHash": "WWUFdqByMmgDxo4UQ70bf1ORTqZuzFLxk6fdLlOrMwuLjGjn4ugtidS79qNcjtzkZ6u4sLoEKvGMp6Siwax6tA==",
         "dependencies": {
-          "JetBrains.Annotations": "2021.2.0",
-          "Json.More.Net": "1.9.0",
-          "JsonPointer.Net": "3.0.3"
+          "JsonPointer.Net": "7.0.0"
         }
       },
       "Microsoft.CodeCoverage": {
@@ -178,16 +177,16 @@
       },
       "protobuf-net": {
         "type": "Transitive",
-        "resolved": "3.2.45",
-        "contentHash": "5UZ/ukUHcGbFSl7vNMrHsfjqdxusdd9w7w0fCEXzf3UUtsrGNVCzV5SmF+sCHAbnRV2qPcD1ixiDP7Aj8lX/HA==",
+        "resolved": "3.2.56",
+        "contentHash": "4IPJeTYAMNewlN8MDaFkcmR/9hLhJeo9eARnTh104zh7mf+vXT2gu5MUfUnkSQU+CH578Q6vcdU7LQDQPG6eaw==",
         "dependencies": {
-          "protobuf-net.Core": "3.2.45"
+          "protobuf-net.Core": "3.2.56"
         }
       },
       "protobuf-net.Core": {
         "type": "Transitive",
-        "resolved": "3.2.45",
-        "contentHash": "PMWatW2NrT1uTXD7etJ4VdQ0wWZLFrIfdRGppD2QX7nzZ0+kIzqhq551u6ZiXJHWJgG4hWFEkSnUnt2aB6posg=="
+        "resolved": "3.2.56",
+        "contentHash": "d6QOukTpDzs7zZv9tPnBZMtvHDNeHJQXUhMx54g4urUQsXK3oo9U70H9HvklYq7hlQ4A7AHJl7EVEqyCXXIl8Q=="
       },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
@@ -277,7 +276,7 @@
       "cyclonedx": {
         "type": "Project",
         "dependencies": {
-          "CycloneDX.Core": "[11.0.0, )",
+          "CycloneDX.Core": "[12.0.1, )",
           "NuGet.ProjectModel": "[7.0.1, )",
           "NuGet.Protocol": "[7.0.1, )",
           "System.CommandLine": "[2.0.0, )",
@@ -286,12 +285,12 @@
       },
       "CycloneDX.Core": {
         "type": "CentralTransitive",
-        "requested": "[11.0.0, )",
-        "resolved": "11.0.0",
-        "contentHash": "7W4Eo9p3hGYZm3nniT3aSOdE4OZmDtKbWKs6oHEP09x+yjbp1IJaXDhmzGstvN6TaQy+MDjI4/WcVHricog1sQ==",
+        "requested": "[12.0.1, )",
+        "resolved": "12.0.1",
+        "contentHash": "m2N2iD7LCX6JJ8iyAM9mkb1DwuxztriEhfnzBf7PKN/OmqboWCbjmfh0Wn+XsD5DeWN19K0mOCS8mwYIn0Ohbw==",
         "dependencies": {
-          "JsonSchema.Net": "5.3.1",
-          "protobuf-net": "3.2.45"
+          "JsonSchema.Net": "9.1.1",
+          "protobuf-net": "3.2.56"
         }
       },
       "NuGet.ProjectModel": {
@@ -395,32 +394,31 @@
           "System.Diagnostics.EventLog": "6.0.0"
         }
       },
-      "JetBrains.Annotations": {
+      "Humanizer.Core": {
         "type": "Transitive",
-        "resolved": "2021.2.0",
-        "contentHash": "kKSyoVfndMriKHLfYGmr0uzQuI4jcc3TKGyww7buJFCYeHb/X0kodYBPL7n9454q7v6ASiRmDgpPGaDGerg/Hg=="
+        "resolved": "2.14.1",
+        "contentHash": "lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw=="
       },
       "Json.More.Net": {
         "type": "Transitive",
-        "resolved": "1.9.0",
-        "contentHash": "MMjd2dOh32hLbcZg9YyA+7aEH9gu2cMTEAWrQY17in4+aEsPg2NtYTcwgWHJS9Tt2WUx+4iN1mNegR2uiEwsVQ=="
+        "resolved": "3.0.0",
+        "contentHash": "+kj2dE04clW9+Bw4GoEVBFdLSiOKwLEkiiGbX+CK860DbytCtpD0QA68cEQISMnIrxyxQPw5gQAra22WCnRPUA=="
       },
       "JsonPointer.Net": {
         "type": "Transitive",
-        "resolved": "3.0.3",
-        "contentHash": "mCGQc15lHLp1R2CVhWiipnZurHXm93+LbPPAT/vXQm5PdHt6WQuYLhaEF8VZ+aXL9P2I6bGND6pDTEfqFs6gig==",
+        "resolved": "7.0.0",
+        "contentHash": "jdnFo5huuJDB3ASWIkD0F9Ntf+9nOtRbsIp4VqRlHbTW9LxpBBMRKQhQJxPtIFAhNVS55aAsMb78TB+LK29CqQ==",
         "dependencies": {
-          "Json.More.Net": "1.8.0"
+          "Humanizer.Core": "2.14.1",
+          "Json.More.Net": "3.0.0"
         }
       },
       "JsonSchema.Net": {
         "type": "Transitive",
-        "resolved": "5.3.1",
-        "contentHash": "1Ox9kMtire1U1O+obAKGbO8i8MAWbRTKDBda1GpNaEN6sxQUFD7h9laBZ1WmXFVbsv9grTBFfYJi/I/5zoPvsQ==",
+        "resolved": "9.1.1",
+        "contentHash": "WWUFdqByMmgDxo4UQ70bf1ORTqZuzFLxk6fdLlOrMwuLjGjn4ugtidS79qNcjtzkZ6u4sLoEKvGMp6Siwax6tA==",
         "dependencies": {
-          "JetBrains.Annotations": "2021.2.0",
-          "Json.More.Net": "1.9.0",
-          "JsonPointer.Net": "3.0.3"
+          "JsonPointer.Net": "7.0.0"
         }
       },
       "Microsoft.Bcl.Cryptography": {
@@ -514,16 +512,16 @@
       },
       "protobuf-net": {
         "type": "Transitive",
-        "resolved": "3.2.45",
-        "contentHash": "5UZ/ukUHcGbFSl7vNMrHsfjqdxusdd9w7w0fCEXzf3UUtsrGNVCzV5SmF+sCHAbnRV2qPcD1ixiDP7Aj8lX/HA==",
+        "resolved": "3.2.56",
+        "contentHash": "4IPJeTYAMNewlN8MDaFkcmR/9hLhJeo9eARnTh104zh7mf+vXT2gu5MUfUnkSQU+CH578Q6vcdU7LQDQPG6eaw==",
         "dependencies": {
-          "protobuf-net.Core": "3.2.45"
+          "protobuf-net.Core": "3.2.56"
         }
       },
       "protobuf-net.Core": {
         "type": "Transitive",
-        "resolved": "3.2.45",
-        "contentHash": "PMWatW2NrT1uTXD7etJ4VdQ0wWZLFrIfdRGppD2QX7nzZ0+kIzqhq551u6ZiXJHWJgG4hWFEkSnUnt2aB6posg=="
+        "resolved": "3.2.56",
+        "contentHash": "d6QOukTpDzs7zZv9tPnBZMtvHDNeHJQXUhMx54g4urUQsXK3oo9U70H9HvklYq7hlQ4A7AHJl7EVEqyCXXIl8Q=="
       },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
@@ -622,7 +620,7 @@
       "cyclonedx": {
         "type": "Project",
         "dependencies": {
-          "CycloneDX.Core": "[11.0.0, )",
+          "CycloneDX.Core": "[12.0.1, )",
           "NuGet.ProjectModel": "[7.0.1, )",
           "NuGet.Protocol": "[7.0.1, )",
           "System.CommandLine": "[2.0.0, )",
@@ -631,12 +629,12 @@
       },
       "CycloneDX.Core": {
         "type": "CentralTransitive",
-        "requested": "[11.0.0, )",
-        "resolved": "11.0.0",
-        "contentHash": "7W4Eo9p3hGYZm3nniT3aSOdE4OZmDtKbWKs6oHEP09x+yjbp1IJaXDhmzGstvN6TaQy+MDjI4/WcVHricog1sQ==",
+        "requested": "[12.0.1, )",
+        "resolved": "12.0.1",
+        "contentHash": "m2N2iD7LCX6JJ8iyAM9mkb1DwuxztriEhfnzBf7PKN/OmqboWCbjmfh0Wn+XsD5DeWN19K0mOCS8mwYIn0Ohbw==",
         "dependencies": {
-          "JsonSchema.Net": "5.3.1",
-          "protobuf-net": "3.2.45"
+          "JsonSchema.Net": "9.1.1",
+          "protobuf-net": "3.2.56"
         }
       },
       "NuGet.ProjectModel": {
@@ -740,32 +738,31 @@
           "System.Diagnostics.EventLog": "6.0.0"
         }
       },
-      "JetBrains.Annotations": {
+      "Humanizer.Core": {
         "type": "Transitive",
-        "resolved": "2021.2.0",
-        "contentHash": "kKSyoVfndMriKHLfYGmr0uzQuI4jcc3TKGyww7buJFCYeHb/X0kodYBPL7n9454q7v6ASiRmDgpPGaDGerg/Hg=="
+        "resolved": "3.0.1",
+        "contentHash": "scB3+KcxNmEjZK5V8rKCW2gIiL8m8KH91w14FuuExyhi9xTyAJ+jr+DDxGdy12mHmioe2uvjxTfMgM7WmSUFlw=="
       },
       "Json.More.Net": {
         "type": "Transitive",
-        "resolved": "1.9.0",
-        "contentHash": "MMjd2dOh32hLbcZg9YyA+7aEH9gu2cMTEAWrQY17in4+aEsPg2NtYTcwgWHJS9Tt2WUx+4iN1mNegR2uiEwsVQ=="
+        "resolved": "3.0.0",
+        "contentHash": "+kj2dE04clW9+Bw4GoEVBFdLSiOKwLEkiiGbX+CK860DbytCtpD0QA68cEQISMnIrxyxQPw5gQAra22WCnRPUA=="
       },
       "JsonPointer.Net": {
         "type": "Transitive",
-        "resolved": "3.0.3",
-        "contentHash": "mCGQc15lHLp1R2CVhWiipnZurHXm93+LbPPAT/vXQm5PdHt6WQuYLhaEF8VZ+aXL9P2I6bGND6pDTEfqFs6gig==",
+        "resolved": "7.0.0",
+        "contentHash": "jdnFo5huuJDB3ASWIkD0F9Ntf+9nOtRbsIp4VqRlHbTW9LxpBBMRKQhQJxPtIFAhNVS55aAsMb78TB+LK29CqQ==",
         "dependencies": {
-          "Json.More.Net": "1.8.0"
+          "Humanizer.Core": "3.0.1",
+          "Json.More.Net": "3.0.0"
         }
       },
       "JsonSchema.Net": {
         "type": "Transitive",
-        "resolved": "5.3.1",
-        "contentHash": "1Ox9kMtire1U1O+obAKGbO8i8MAWbRTKDBda1GpNaEN6sxQUFD7h9laBZ1WmXFVbsv9grTBFfYJi/I/5zoPvsQ==",
+        "resolved": "9.1.1",
+        "contentHash": "WWUFdqByMmgDxo4UQ70bf1ORTqZuzFLxk6fdLlOrMwuLjGjn4ugtidS79qNcjtzkZ6u4sLoEKvGMp6Siwax6tA==",
         "dependencies": {
-          "JetBrains.Annotations": "2021.2.0",
-          "Json.More.Net": "1.9.0",
-          "JsonPointer.Net": "3.0.3"
+          "JsonPointer.Net": "7.0.0"
         }
       },
       "Microsoft.CodeCoverage": {
@@ -851,16 +848,16 @@
       },
       "protobuf-net": {
         "type": "Transitive",
-        "resolved": "3.2.45",
-        "contentHash": "5UZ/ukUHcGbFSl7vNMrHsfjqdxusdd9w7w0fCEXzf3UUtsrGNVCzV5SmF+sCHAbnRV2qPcD1ixiDP7Aj8lX/HA==",
+        "resolved": "3.2.56",
+        "contentHash": "4IPJeTYAMNewlN8MDaFkcmR/9hLhJeo9eARnTh104zh7mf+vXT2gu5MUfUnkSQU+CH578Q6vcdU7LQDQPG6eaw==",
         "dependencies": {
-          "protobuf-net.Core": "3.2.45"
+          "protobuf-net.Core": "3.2.56"
         }
       },
       "protobuf-net.Core": {
         "type": "Transitive",
-        "resolved": "3.2.45",
-        "contentHash": "PMWatW2NrT1uTXD7etJ4VdQ0wWZLFrIfdRGppD2QX7nzZ0+kIzqhq551u6ZiXJHWJgG4hWFEkSnUnt2aB6posg=="
+        "resolved": "3.2.56",
+        "contentHash": "d6QOukTpDzs7zZv9tPnBZMtvHDNeHJQXUhMx54g4urUQsXK3oo9U70H9HvklYq7hlQ4A7AHJl7EVEqyCXXIl8Q=="
       },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
@@ -950,7 +947,7 @@
       "cyclonedx": {
         "type": "Project",
         "dependencies": {
-          "CycloneDX.Core": "[11.0.0, )",
+          "CycloneDX.Core": "[12.0.1, )",
           "NuGet.ProjectModel": "[7.0.1, )",
           "NuGet.Protocol": "[7.0.1, )",
           "System.CommandLine": "[2.0.0, )",
@@ -959,12 +956,12 @@
       },
       "CycloneDX.Core": {
         "type": "CentralTransitive",
-        "requested": "[11.0.0, )",
-        "resolved": "11.0.0",
-        "contentHash": "7W4Eo9p3hGYZm3nniT3aSOdE4OZmDtKbWKs6oHEP09x+yjbp1IJaXDhmzGstvN6TaQy+MDjI4/WcVHricog1sQ==",
+        "requested": "[12.0.1, )",
+        "resolved": "12.0.1",
+        "contentHash": "m2N2iD7LCX6JJ8iyAM9mkb1DwuxztriEhfnzBf7PKN/OmqboWCbjmfh0Wn+XsD5DeWN19K0mOCS8mwYIn0Ohbw==",
         "dependencies": {
-          "JsonSchema.Net": "5.3.1",
-          "protobuf-net": "3.2.45"
+          "JsonSchema.Net": "9.1.1",
+          "protobuf-net": "3.2.56"
         }
       },
       "NuGet.ProjectModel": {
