@@ -102,6 +102,7 @@ namespace CycloneDX.Services
 
             string name = (xmldoc.SelectSingleNode("/Project/PropertyGroup/AssemblyName") as XmlElement)?.InnerText;
             name ??= (xmldoc.SelectSingleNode("/Project/PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.InnerText;
+            name ??= (xmldoc.SelectSingleNode("/msbuild:Project/msbuild:PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.InnerText;
                 
 
             if (name?.Contains("$(MSBuildProjectName)") == true)
