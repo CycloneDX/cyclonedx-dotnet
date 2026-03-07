@@ -163,6 +163,11 @@ namespace CycloneDX.E2ETests.Infrastructure
                 sb.Append($" --framework {options.Framework}");
             }
 
+            if (options.Configuration != null)
+            {
+                sb.Append($" --configuration {options.Configuration}");
+            }
+
             if (options.AdditionalArgs != null)
             {
                 sb.Append($" {options.AdditionalArgs}");
@@ -190,6 +195,7 @@ namespace CycloneDX.E2ETests.Infrastructure
         public string SpecVersion { get; set; }
         public string ExcludeFilter { get; set; }
         public string Framework { get; set; }
+        public string Configuration { get; set; }
         /// <summary>Appended verbatim to the command line for exotic scenarios.</summary>
         public string AdditionalArgs { get; set; }
     }
