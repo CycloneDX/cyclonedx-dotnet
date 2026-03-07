@@ -36,9 +36,14 @@ namespace CycloneDX.E2ETests.Infrastructure
         [ModuleInitializer]
         public static void Initialize()
         {
-            // Auto-accept snapshots when they don't exist yet (first run).
-            // Set VERIFY_DISABLE_CLIP=1 in CI to prevent clipboard usage.
-            VerifierSettings.AutoVerify();
+            // Auto-accept snapshots locally so the first run creates them without failing.
+            // In CI (detected via the CI environment variable) snapshots must already match;
+            // any divergence is a real test failure.
+            var isCI = !string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("CI"));
+            if (!isCI)
+            {
+                VerifierSettings.AutoVerify();
+            }
 
             // Store snapshots in the Snapshots/ subfolder of the project directory
             Verifier.DerivePathInfo(
