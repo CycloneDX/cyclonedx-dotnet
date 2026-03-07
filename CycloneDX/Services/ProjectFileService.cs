@@ -168,7 +168,7 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
+        public async Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime, string configuration = null)
         {
             if (!_fileSystem.File.Exists(projectFilePath))
             {
@@ -190,7 +190,7 @@ namespace CycloneDX.Services
             if (!DisablePackageRestore)
             {
                 Console.WriteLine("  Attempting to restore packages");
-                var restoreResult = _dotnetUtilsService.Restore(projectFilePath, framework, runtime);
+                var restoreResult = _dotnetUtilsService.Restore(projectFilePath, framework, runtime, configuration);
 
                 if (restoreResult.Success)
                 {
@@ -266,9 +266,9 @@ namespace CycloneDX.Services
         /// </summary>
         /// <param name="projectFilePath"></param>
         /// <returns></returns>
-        public async Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
+        public async Task<HashSet<DotnetDependency>> RecursivelyGetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime, string configuration = null)
         {
-            var dotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
+            var dotnetDependencys = await GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, configuration).ConfigureAwait(false);
             foreach (var item in dotnetDependencys)
             {
                 item.IsDirectReference = true;
@@ -300,7 +300,7 @@ namespace CycloneDX.Services
 
             foreach (var project in projectReferences)
             {
-                var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project.Path, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
+                var projectDotnetDependencys = await GetProjectDotnetDependencysAsync(project.Path, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, configuration).ConfigureAwait(false);
 
                 //Add dependencies for dependency graph
                 foreach (var dependency in projectDotnetDependencys)
