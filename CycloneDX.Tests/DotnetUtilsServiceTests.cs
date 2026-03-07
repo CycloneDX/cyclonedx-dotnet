@@ -168,5 +168,41 @@ namespace CycloneDX.Tests
                 cachePaths.Result,
                 path => Assert.Equal(XFS.Path(@"c:\user\.nuget\packages"), path));
         }
+
+        [Fact]
+        public void Restore_WithoutConfiguration_DoesNotPassConfigurationProperty()
+        {
+            string capturedArguments = null;
+            var dotnetCommandService = new Mock<IDotnetCommandService>();
+            dotnetCommandService
+                .Setup(m => m.Run(It.IsAny<string>()))
+                .Callback<string>(args => capturedArguments = args)
+                .Returns(new DotnetCommandResult { ExitCode = 0, StdOut = "" });
+
+            var dotnetUtilsService = new DotnetUtilsService(
+                new MockFileSystem(), dotnetCommandService.Object);
+
+            dotnetUtilsService.Restore(XFS.Path(@"c:\Project\Project.csproj"), null, null, null);
+
+            Assert.DoesNotContain("-p:Configuration=", capturedArguments);
+        }
+
+        [Fact]
+        public void Restore_WithConfiguration_PassesConfigurationPropertyToDotnetRestore()
+        {
+            string capturedArguments = null;
+            var dotnetCommandService = new Mock<IDotnetCommandService>();
+            dotnetCommandService
+                .Setup(m => m.Run(It.IsAny<string>()))
+                .Callback<string>(args => capturedArguments = args)
+                .Returns(new DotnetCommandResult { ExitCode = 0, StdOut = "" });
+
+            var dotnetUtilsService = new DotnetUtilsService(
+                new MockFileSystem(), dotnetCommandService.Object);
+
+            dotnetUtilsService.Restore(XFS.Path(@"c:\Project\Project.csproj"), null, null, "Release");
+
+            Assert.Contains("-p:Configuration=Release", capturedArguments);
+        }
     }
 }
