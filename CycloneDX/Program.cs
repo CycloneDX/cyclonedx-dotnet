@@ -92,6 +92,7 @@ namespace CycloneDX
             var excludeFilter = new Option<string>("--exclude-filter", "-ef") { Description = "A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2' or 'name1,name2' (to exclude all versions). Transitive dependencies will also be removed." };
             var outputFormat = new Option<OutputFileFormat>("--output-format", "-F") { Description = "Select the BOM output format: auto (default), xml, json, or unsafeJson (relaxed escaping)." };
             var specVersion = new Option<string>("--spec-version", "-spv") { Description = $"Which version of CycloneDX spec to use. [default: {SpecificationVersionHelpers.VersionString(SpecificationVersionHelpers.CurrentVersion)}]" };
+            var configuration = new Option<string>("--configuration", "-c") { Description = "The MSBuild configuration to use when restoring packages (e.g. Debug, Release). When set, the configuration is passed to dotnet restore so that conditional PackageReferences (e.g. Condition=\"'$(Configuration)' == 'Debug'\") are evaluated correctly." };
             specVersion.AcceptOnlyFromAmong(Enum.GetValues<SpecificationVersion>().Select(SpecificationVersionHelpers.VersionString).ToArray());
 
             //Deprecated args for backward compatibility
@@ -130,6 +131,7 @@ namespace CycloneDX
                 specVersion,
                 excludeFilter,
                 outputFormat,
+                configuration,
                 outputDirectoryDeprecated,
                 jsonDeprecated
             };
@@ -171,6 +173,7 @@ namespace CycloneDX
                     includeProjectReferences = parseResult.GetValue(includeProjectReferences),
                     DependencyExcludeFilter = parseResult.GetValue(excludeFilter),
                     outputFormat = parseResult.GetValue(jsonDeprecated) ? OutputFileFormat.Json : parseResult.GetValue(outputFormat),
+                    configuration = parseResult.GetValue(configuration),
                     specVersion = parseResult.GetValue(specVersion) != null
                         ? SpecificationVersionHelpers.Version(parseResult.GetValue(specVersion))
                         : null
