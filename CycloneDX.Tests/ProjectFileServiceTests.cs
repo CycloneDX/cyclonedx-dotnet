@@ -646,5 +646,56 @@ namespace CycloneDX.Tests
 
             Assert.Null(version);
         }
+
+        /// <summary>
+        /// Classic .NET Framework .csproj files declare a default XML namespace on the root
+        /// &lt;Project&gt; element:
+        ///   xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+        ///
+        /// When that namespace is present every element — including &lt;Project&gt; itself — lives
+        /// in the msbuild namespace.  The XPath query must therefore prefix *all* path segments
+        /// with the namespace alias, i.e.:
+        ///   /msbuild:Project/msbuild:PropertyGroup/msbuild:AssemblyName
+        ///
+        /// Without PR #1051 only the mixed forms
+        ///   /Project/PropertyGroup/AssemblyName
+        ///   /Project/PropertyGroup/msbuild:AssemblyName
+        /// were tried; both fail when the root &lt;Project&gt; element also carries the namespace,
+        /// because its local name is qualified and the bare /Project selector won't match.
+        /// The code therefore fell back to the filename, which is wrong when the
+        /// &lt;AssemblyName&gt; element holds a different value.
+        /// </summary>
+        [Fact]
+        public void GetAssemblyNameAndVersion_ClassicNetFrameworkProject_ReturnsAssemblyNameFromXmlWithDefaultNamespace()
+        {
+            // The <AssemblyName> inside the XML is intentionally different from the
+            // .csproj filename so that the filename-fallback path produces a different
+            // value, making the test sensitive to whether the XPath query works or not.
+            //
+            // Classic .NET Framework .csproj – ALL elements are in the msbuild namespace
+            // because of the xmlns on <Project>.
+            const string csproj = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<Project ToolsVersion=""12.0"" DefaultTargets=""Build""
+         xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
+  <PropertyGroup>
+    <AssemblyName>MyClassicLibrary</AssemblyName>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+</Project>";
+
+            // The file is stored under a DIFFERENT name than the AssemblyName value.
+            // Without the fix the XPath returns null and the code falls back to
+            // "ClassicProject" (the filename stem).  With the fix it correctly returns
+            // "MyClassicLibrary" from the XML.
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\P\ClassicProject.csproj"), new MockFileData(csproj) }
+            });
+            var svc = CreateProjectFileService(mockFileSystem);
+
+            var (name, _) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\ClassicProject.csproj"));
+
+            Assert.Equal("MyClassicLibrary", name);
+        }
     }
 }
