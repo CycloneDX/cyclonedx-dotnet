@@ -265,6 +265,7 @@ namespace CycloneDX.Services
                     var license = new License();
                     license.Id = nugetLicense.Identifier;
                     license.Name = license.Id == null ? nugetLicense.Identifier : null;
+                    license.Url = licenseMetadata.LicenseUrl?.ToString().Trim();
                     component.Licenses ??= new List<LicenseChoice>();
                     component.Licenses.Add(new LicenseChoice { License = license });
                 };
