@@ -394,7 +394,7 @@ namespace CycloneDX.Services
             {
                 ".md" => "text/markdown",
                 ".txt" or "" or null => "text/plain",
-                _  => "appliation/octet-stream",
+                _  => "application/octet-stream",
             };
 
             byte[] licenseContent = await _fileSystem.File.ReadAllBytesAsync(licensePath).ConfigureAwait(false);
