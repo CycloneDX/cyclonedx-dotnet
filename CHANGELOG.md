@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.0]
+
+### Added
+
+- **CycloneDX spec 1.7 support** — upgraded CycloneDX.Core from 11.0.0 to 12.0.1; generated BOMs now use the `bom/1.7` schema namespace
+- **Allow credentials via environment variables** (#1036) — NuGet feed credentials can now be passed through environment variables
+- **Allow exclude filter without version specifier** (#1014) — the `--exclude` filter no longer requires a version to be specified
+- **Recursive scan warning** (#1037) — a warning is now emitted when scanning project references recursively to make the behavior more visible
+- **End-to-end test suite** (#1032) — added E2E tests using Testcontainers and Verify snapshots
+
+### Fixed
+
+- **Fix project name resolution for classic .NET Framework projects** (#1051) — correctly resolve `AssemblyName` in projects using the default XML namespace
+- **Fix case-insensitive comparison when pruning transitive deps** (#1025, #1040) — package names are now compared case-insensitively when removing unresolved transitive dependencies
+- **Fix metadata import overrides** (#1041) — metadata values imported from project properties are no longer incorrectly overridden
+- **Use `tools/components` instead of deprecated `tools/tool`** (#1043) — BOM metadata now uses the non-deprecated CycloneDX structure for recording tool information
+- **Validate GitHub API redirect destination** (#1030) — redirect URLs from the GitHub API are now validated before following
+
+### Security
+
+- **Sanitize untrusted URL inputs from NuGet feed metadata** (#1033) — URLs from NuGet package metadata are now sanitized before use
+- **Rootless container** (#1035) — Docker image now runs as a non-root user by default
+- **Trusted publishing for .NET tool package** (#1054) — NuGet package publishing now uses trusted publishing
+
+### Changed
+
+- **Upgrade CycloneDX.Core from 10.0.1 to 12.0.1** (#1042) — via intermediate upgrade to 11.0.0; enables CycloneDX spec 1.7 output
+- **Dependency updates**
+  - actions/checkout: 6.0.1 → 6.0.2 (#1008, #1045)
+  - actions/setup-dotnet: 5.0.1 → 5.2.0 (#1003, #1052)
+  - actions/upload-artifact: 5.0.0 → 7.0.0 (#1031)
+
+### Documentation
+
+- Add security trust model (#1029)
+- Move threat model and add architecture reference (#1034)
+- Link NuGet and Docker Hub in README (#1019)
+- Streamline README shields and links (#1018)
+- Fix CI link in README (#1015)
+
 ## [6.0.0] - 2026-02-08
 
 > **⚠️ WARNING: This is a MAJOR release with breaking changes.**
