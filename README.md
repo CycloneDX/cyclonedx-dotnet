@@ -114,6 +114,7 @@ Options:
   -ef, --exclude-filter <exclude-filter>                                       A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2' or 'name1,name2' (to exclude all versions). Transitive dependencies will also be removed.
   -F, --output-format <Auto|Json|UnsafeJson|Xml>                               Select the BOM output format: auto (default), xml, json, or unsafeJson (relaxed escaping). [default: Auto]                            
   --set-nuget-purl                                                             Override the default BOM metadata component bom ref and PURL as NuGet package.
+  -spv, --spec-version <1.0|1.1|1.2|1.3|1.4|1.5|1.6|1.7>                    Which version of CycloneDX spec to use. [default: 1.7]
   --version                                                                    Show version information
   -?, -h, --help                                                               Show help and usage information
 ```
