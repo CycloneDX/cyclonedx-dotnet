@@ -31,21 +31,21 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Setup dotnet 2.1
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '2.1.x'
       - name: Setup dotnet 3.1
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '3.1.x'
       - name: Setup dotnet 5
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '5.x'
       - name: Setup dotnet 6
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '6.x'
 
@@ -106,7 +106,7 @@ jobs:
 
       - name: Create github release and git tag for release
         id: create_release
-        uses: actions/create-release@v1.1.4
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -116,7 +116,7 @@ jobs:
           prerelease: false
 
       - name: Upload package to github release
-        uses: actions/upload-release-asset@v1.0.2
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -126,7 +126,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Upload XML SBOM to github release
-        uses: actions/upload-release-asset@v1.0.2
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -136,7 +136,7 @@ jobs:
           asset_content_type: application/xml
 
       - name: Upload JSON SBOM to github release
-        uses: actions/upload-release-asset@v1.0.2
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Artifactory
         uses: devolutions/actions/nuget-artifactory-setup@v1
@@ -27,7 +27,7 @@ jobs:
           artifactory_password: ${{ secrets.ARTIFACTORY_PASSWORD }}
           artifactory_username: ${{ secrets.ARTIFACTORY_USERNAME }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
@@ -47,6 +47,6 @@ jobs:
           working_directory: release
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4.3.6
+        uses: actions/upload-artifact@v7
         with:
           path: release
