@@ -112,6 +112,23 @@ namespace CycloneDX.E2ETests.Infrastructure
 
             // TestPkg.Transitive 1.0.0 — used only as a transitive dep
             await PushPackageAsync(NupkgBuilder.Build("TestPkg.Transitive", "1.0.0")).ConfigureAwait(false);
+
+            // --- PR #903 / version-range bom-ref scenario ---
+            // TestPkg.Shared 1.0.0 — low-level package referenced via exact range [1.0.0, 1.0.0]
+            await PushPackageAsync(NupkgBuilder.Build("TestPkg.Shared", "1.0.0")).ConfigureAwait(false);
+
+            // TestPkg.Shared 2.0.0 — a second version of the same package, directly referenced by
+            // another project in the solution (creates ambiguity for the name-only fallback)
+            await PushPackageAsync(NupkgBuilder.Build("TestPkg.Shared", "2.0.0")).ConfigureAwait(false);
+
+            // TestPkg.Consumer 1.0.0 — declares its dep on TestPkg.Shared using exact-range notation
+            // ([1.0.0, 1.0.0]) as dotnet pack emits for packages with a fixed lower/upper bound.
+            // When NuGet resolves this alongside TestPkg.Shared 2.0.0 in another project, the
+            // project.assets.json stores the dep as "[1.0.0, 1.0.0]" which the tool must resolve.
+            await PushPackageAsync(NupkgBuilder.Build(
+                "TestPkg.Consumer", "1.0.0",
+                dependencies: new[] { new NupkgDependency("TestPkg.Shared", "[1.0.0, 1.0.0]") }
+            )).ConfigureAwait(false);
         }
 
         public async ValueTask DisposeAsync()

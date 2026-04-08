@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Fix crash when a nuspec declares an exact-range version constraint across multiple projects** (#1071) — when a package's nuspec dependency uses an exact version range (e.g. `[1.0.0]`) and multiple versions of that package are present in a multi-project solution, the tool no longer crashes with "Unable to locate valid bom ref"; the dependency edge is resolved to the version that satisfies the range
+
 ## [6.1.0]
 
 ### Added

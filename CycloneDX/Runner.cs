@@ -28,6 +28,7 @@ using CycloneDX.Models;
 using CycloneDX.Services;
 using static CycloneDX.Models.Component;
 using Json.Schema;
+using NuGet.Versioning;
 
 namespace CycloneDX
 {
@@ -360,6 +361,23 @@ namespace CycloneDX
                             if (packageNameMatch.Count == 1)
                             {
                                 lookupKey = packageNameMatch.First().Key;
+                            }
+                            else if (packageNameMatch.Count > 1
+                                && VersionRange.TryParse(dep.Value, out var versionRange))
+                            {
+                                // dep.Value is a version range stored verbatim from the nuspec (e.g. "[1.0.0]").
+                                // ResolveDependencyVersionRanges couldn't resolve it within this project's
+                                // assets because the satisfying version only exists in another project's assets.
+                                // Use the range to pick the correct candidate from the merged BOM.
+                                var rangeMatch = packageNameMatch.SingleOrDefault(
+                                    x => NuGetVersion.TryParse(x.Key.Item2, out var v) && versionRange.Satisfies(v));
+                                if (rangeMatch.Key != default)
+                                    lookupKey = rangeMatch.Key;
+                                else
+                                {
+                                    Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value}");
+                                    return (int)ExitCode.UnableToLocateDependencyBomRef;
+                                }
                             }
                             else
                             {
