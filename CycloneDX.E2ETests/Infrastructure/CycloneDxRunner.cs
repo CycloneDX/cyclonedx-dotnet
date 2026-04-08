@@ -128,6 +128,11 @@ namespace CycloneDX.E2ETests.Infrastructure
                 sb.Append(" --disable-hash-computation");
             }
 
+            if (options.IncludeLicenseText)
+            {
+                sb.Append(" --include-license-text");
+            }
+
             if (options.NuGetFeedUrl != null)
             {
                 sb.Append($" --url \"{options.NuGetFeedUrl}\"");
@@ -183,6 +188,7 @@ namespace CycloneDX.E2ETests.Infrastructure
         public bool Recursive { get; set; }
         public bool NoSerialNumber { get; set; }
         public bool DisableHashComputation { get; set; }
+        public bool IncludeLicenseText { get; set; }
         public string NuGetFeedUrl { get; set; }
         public string SetName { get; set; }
         public string SetVersion { get; set; }

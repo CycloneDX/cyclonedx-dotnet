@@ -446,7 +446,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 mockGitHubService.Object,
-                new NullLogger(), false);
+                new NullLogger(), false, includeLicenseText: true);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -666,7 +666,7 @@ namespace CycloneDX.Tests
                 mockFileSystem,
                 new List<string> { XFS.Path(@"c:\nugetcache") },
                 null,
-                new NullLogger(), false);
+                new NullLogger(), false, includeLicenseText: true);
 
             var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
 
@@ -675,6 +675,370 @@ namespace CycloneDX.Tests
             Assert.Equal(Convert.ToBase64String(licenseContents), component.Licenses.First().License.Text.Content);
             Assert.Equal("base64", component.Licenses.First().License.Text.Encoding);
             Assert.Equal("text/markdown", component.Licenses.First().License.Text.ContentType);
+        }
+
+        // -----------------------------------------------------------------------------------------
+        // Target behavior tests — these expect the new --include-license-text parameter
+        // (7th constructor argument). They will fail until the implementation is in place.
+        // -----------------------------------------------------------------------------------------
+
+        [Fact]
+        public async Task GetComponent_LicenseFile_WithoutFlag_NoGitHub_EmitsNoLicense()
+        {
+            // Phase 3 inactive (flag off): a <license type="file"> package with no <licenseUrl>
+            // should produce no license entry at all — not a null-URL stub.
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE.txt</license>
+                </metadata>
+                </package>";
+
+            byte[] licenseContents = Encoding.UTF8.GetBytes("The license");
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE.txt"), new MockFileData(licenseContents) },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false, includeLicenseText: false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Null(component.Licenses);
+        }
+
+        [Fact]
+        public async Task GetComponent_LicenseFile_WithFlag_NoGitHub_EmbedsText()
+        {
+            // Phase 3 active, no GitHub: <license type="file"> with --include-license-text
+            // should embed the file content as base64.
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE.txt</license>
+                </metadata>
+                </package>";
+
+            byte[] licenseContents = Encoding.UTF8.GetBytes("The license");
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE.txt"), new MockFileData(licenseContents) },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false, includeLicenseText: true);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Single(component.Licenses);
+            Assert.Equal("testpackage License", component.Licenses.First().License.Name);
+            Assert.Equal(Convert.ToBase64String(licenseContents), component.Licenses.First().License.Text.Content);
+            Assert.Equal("base64", component.Licenses.First().License.Text.Encoding);
+            Assert.Equal("text/plain", component.Licenses.First().License.Text.ContentType);
+        }
+
+        [Fact]
+        public async Task GetComponent_LicenseFile_WithFlag_GitHubMisses_EmbedsText()
+        {
+            // Phase 3 active, GitHub enabled but finds nothing: should fall through to the
+            // license file and embed it.
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE.md</license>
+                </metadata>
+                </package>";
+
+            byte[] licenseContents = Encoding.UTF8.GetBytes("The license");
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE.md"), new MockFileData(licenseContents) },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+            // GitHub returns null for all URLs (non-GitHub or missing)
+            mockGitHubService.Setup(x => x.GetLicenseAsync(It.IsAny<string>())).Returns(Task.FromResult<License>(null));
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false, includeLicenseText: true);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Single(component.Licenses);
+            Assert.Equal("testpackage License", component.Licenses.First().License.Name);
+            Assert.Equal(Convert.ToBase64String(licenseContents), component.Licenses.First().License.Text.Content);
+            Assert.Equal("base64", component.Licenses.First().License.Text.Encoding);
+            Assert.Equal("text/markdown", component.Licenses.First().License.Text.ContentType);
+        }
+
+        [Fact]
+        public async Task GetComponent_LicenseFile_WithFlag_FileNotInCache_FallsBackToLicenseUrl()
+        {
+            // Phase 3 active but file missing from cache: should fall through to phase 4
+            // and use <licenseUrl> if present.
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE.txt</license>
+                    <licenseUrl>https://example.com/license</licenseUrl>
+                </metadata>
+                </package>";
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                // LICENSE.txt deliberately absent from cache
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false, includeLicenseText: true);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Single(component.Licenses);
+            Assert.Equal("Unknown - See URL", component.Licenses.First().License.Name);
+            Assert.Equal("https://example.com/license", component.Licenses.First().License.Url);
+            Assert.Null(component.Licenses.First().License.Text);
+        }
+
+        [Fact]
+        public async Task GetComponent_NoLicenseInfo_EmitsNoLicense()
+        {
+            // Phase 4 fix: a package with no license metadata at all should produce no
+            // license entry — not a null-URL stub.
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                </metadata>
+                </package>";
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false, includeLicenseText: false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Null(component.Licenses);
+        }
+
+        [Fact]
+        public async Task GetComponent_LicenseUrlOnly_EmitsUrlFallback()
+        {
+            // Phase 4: <licenseUrl> present, no file metadata → should still emit the URL entry.
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <licenseUrl>https://example.com/license</licenseUrl>
+                </metadata>
+                </package>";
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false, includeLicenseText: false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Single(component.Licenses);
+            Assert.Equal("Unknown - See URL", component.Licenses.First().License.Name);
+            Assert.Equal("https://example.com/license", component.Licenses.First().License.Url);
+        }
+
+        [Fact]
+        public async Task GetComponent_LicenseFile_WithFlag_TxtExtension_UsesTextPlainContentType()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE.txt</license>
+                </metadata>
+                </package>";
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE.txt"), new MockFileData("The license") },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false, includeLicenseText: true);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Equal("text/plain", component.Licenses.First().License.Text.ContentType);
+        }
+
+        [Fact]
+        public async Task GetComponent_LicenseFile_WithFlag_NoExtension_UsesTextPlainContentType()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE</license>
+                </metadata>
+                </package>";
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE"), new MockFileData("The license") },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false, includeLicenseText: true);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Equal("text/plain", component.Licenses.First().License.Text.ContentType);
+        }
+
+        [Fact]
+        public async Task GetComponent_LicenseFile_WithFlag_UnknownExtension_UsesOctetStreamContentType()
+        {
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE.rtf</license>
+                </metadata>
+                </package>";
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE.rtf"), new MockFileData("The license") },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false, includeLicenseText: true);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Equal("application/octet-stream", component.Licenses.First().License.Text.ContentType);
+        }
+
+        // -----------------------------------------------------------------------------------------
+        // aka.ms/deprecateLicenseUrl — NuGet auto-inserts this URL for <license type="file"> packs.
+        // It is a dead redirect, not an actual license URL, so it must never appear in the BOM.
+        // -----------------------------------------------------------------------------------------
+
+        [Fact]
+        public async Task GetComponent_FileLicense_AkaMsDeprecatedUrl_WithoutFlag_EmitsNoLicense()
+        {
+            // When a package has <license type="file"> NuGet auto-inserts
+            // <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>.
+            // Without --include-license-text, Phase 3 is inactive and Phase 4 must NOT fall back
+            // to this known-useless redirect URL — the component should have no license entry.
+            //
+            // This test FAILS until the aka.ms guard is implemented.
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE.txt</license>
+                    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+                </metadata>
+                </package>";
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE.txt"), new MockFileData("The license") },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false, includeLicenseText: false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Null(component.Licenses);
+        }
+
+        [Fact]
+        public async Task GetComponent_FileLicense_AkaMsDeprecatedUrl_WithFlag_EmbedsFile()
+        {
+            // When --include-license-text is on, Phase 3 should embed the file and Phase 4
+            // (aka.ms URL) must never be reached. This confirms Phase 3 takes priority.
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE.txt</license>
+                    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+                </metadata>
+                </package>";
+
+            byte[] licenseContents = Encoding.UTF8.GetBytes("The license");
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE.txt"), new MockFileData(licenseContents) },
+            });
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                null,
+                new NullLogger(), false, includeLicenseText: true);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Single(component.Licenses);
+            Assert.Equal(Convert.ToBase64String(licenseContents), component.Licenses.First().License.Text.Content);
+            Assert.DoesNotContain("aka.ms", component.Licenses.First().License.Url ?? "");
         }
     }
 }

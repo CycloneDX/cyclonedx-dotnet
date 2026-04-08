@@ -41,6 +41,7 @@ namespace CycloneDX.Models
         public bool enableGithubLicenses { get; set; }
         public bool disablePackageRestore { get; set; }
         public bool disableHashComputation { get; set; }
+        public bool includeLicenseText { get; set; }
         public int dotnetCommandTimeout { get; set; } = 30000;
         public string baseIntermediateOutputPath { get; set; }
         public string importMetadataPath { get; set; }
