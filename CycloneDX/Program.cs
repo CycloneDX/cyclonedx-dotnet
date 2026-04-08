@@ -81,6 +81,7 @@ namespace CycloneDX
             var enableGithubLicenses = new Option<bool>("--enable-github-licenses", "-egl") { Description = "Enables GitHub license resolution" };
             var disablePackageRestore = new Option<bool>("--disable-package-restore", "-dpr") { Description = "Optionally disable package restore" };
             var disableHashComputation = new Option<bool>("--disable-hash-computation", "-dhc") { Description = "Optionally disable hash computation for packages" };
+            var includeLicenseText = new Option<bool>("--include-license-text", "-ilt") { Description = "Embed license file contents as base64-encoded text in the BOM for packages that declare a license file in their package (via <license type=\"file\"> in the nuspec)" };
             var dotnetCommandTimeout = new Option<int>("--dotnet-command-timeout", "-dct") { Description = "dotnet command timeout in milliseconds (primarily used for long dotnet restore operations)", DefaultValueFactory = _ => 300000 };
             var baseIntermediateOutputPath = new Option<string>("--base-intermediate-output-path", "-biop") { Description = "Optionally provide a folder for customized build environment. Required if folder 'obj' is relocated." };
             var importMetadataPath = new Option<string>("--import-metadata-path", "-imp") { Description = "Optionally provide a metadata template which has project specific details." };
@@ -119,6 +120,7 @@ namespace CycloneDX
                 enableGithubLicenses,
                 disablePackageRestore,
                 disableHashComputation,
+                includeLicenseText,
                 dotnetCommandTimeout,
                 baseIntermediateOutputPath,
                 importMetadataPath,
@@ -161,6 +163,7 @@ namespace CycloneDX
                     enableGithubLicenses = parseResult.GetValue(enableGithubLicenses),
                     disablePackageRestore = parseResult.GetValue(disablePackageRestore),
                     disableHashComputation = parseResult.GetValue(disableHashComputation),
+                    includeLicenseText = parseResult.GetValue(includeLicenseText),
                     dotnetCommandTimeout = parseResult.GetValue(dotnetCommandTimeout),
                     baseIntermediateOutputPath = parseResult.GetValue(baseIntermediateOutputPath),
                     importMetadataPath = parseResult.GetValue(importMetadataPath),

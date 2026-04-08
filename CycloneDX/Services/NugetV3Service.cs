@@ -51,6 +51,7 @@ namespace CycloneDX.Services
         private readonly IFileSystem _fileSystem;
         private readonly List<string> _packageCachePaths;
         private readonly bool _disableHashComputation;
+        private readonly bool _includeLicenseText;
 
         // Used in local files
         private const string _nuspecExtension = ".nuspec";
@@ -63,13 +64,15 @@ namespace CycloneDX.Services
             List<string> packageCachePaths,
             IGithubService githubService,
             ILogger logger,
-            bool disableHashComputation
+            bool disableHashComputation,
+            bool includeLicenseText = false
         )
         {
             _fileSystem = fileSystem;
             _packageCachePaths = packageCachePaths;
             _githubService = githubService;
             _disableHashComputation = disableHashComputation;
+            _includeLicenseText = includeLicenseText;
             _logger = logger;
 
             _sourceRepository = SetupNugetRepository(nugetInput);
@@ -276,12 +279,20 @@ namespace CycloneDX.Services
             }
             else if (_githubService == null)
             {
-                License license = await TryGetLicenseFileAsync(licenseMetadata, name, version).ConfigureAwait(false);
+                License license = null;
+
+                if (_includeLicenseText)
+                {
+                    license = await TryGetLicenseFileAsync(licenseMetadata, name, version).ConfigureAwait(false);
+                }
 
                 if (license == null)
                 {
                     var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
-                    license = new License { Name = "Unknown - See URL", Url = licenseUrl?.Trim() };
+                    if (!string.IsNullOrEmpty(licenseUrl))
+                    {
+                        license = new License { Name = "Unknown - See URL", Url = licenseUrl.Trim() };
+                    }
                 }
 
                 if (license != null)
@@ -324,7 +335,7 @@ namespace CycloneDX.Services
                     }
                 }
 
-                if (license == null)
+                if (license == null && _includeLicenseText)
                 {
                     license = await TryGetLicenseFileAsync(licenseMetadata, name, version).ConfigureAwait(false);
                 }
@@ -379,11 +390,6 @@ namespace CycloneDX.Services
             string licensePath = GetCachedNupkgFilename(name, version, licenseMetadata.License);
 
             if (licensePath == null)
-            {
-                return null;
-            }
-
-            if (!_fileSystem.File.Exists(licensePath))
             {
                 return null;
             }
