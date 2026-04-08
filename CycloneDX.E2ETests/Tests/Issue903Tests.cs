@@ -15,6 +15,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CycloneDX.E2ETests.Builders;
 using CycloneDX.E2ETests.Infrastructure;
@@ -54,21 +55,33 @@ namespace CycloneDX.E2ETests.Tests
         {
             // Reproduces the exact topology reported in PR #903 / issue comment by @ilehtoranta:
             //
-            //   ProjectA  — directly references TestPkg.Shared 2.0.0
+            //   ProjectB  — directly references TestPkg.Shared 1.0.0
+            //   ProjectA  — ProjectReference to ProjectB
+            //             — directly references TestPkg.Shared 2.0.0
             //             — directly references TestPkg.Consumer 1.0.0
             //   TestPkg.Consumer — depends on TestPkg.Shared [1.0.0, 1.0.0]  (exact-range notation)
             //
-            // After restore, ProjectA's project.assets.json contains two targets entries for
-            // TestPkg.Shared (1.0.0 and 2.0.0) and one dep entry under TestPkg.Consumer that
-            // reads "[1.0.0, 1.0.0]" instead of "1.0.0".
+            // After restore:
+            //   ProjectA's assets: NuGet resolves TestPkg.Shared to 2.0.0 (direct ref wins).
+            //     TestPkg.Consumer's dep is stored as "[1.0.0]" in project.assets.json.
+            //     ResolveDependencyVersionRanges cannot resolve it because 2.0.0 does not
+            //     satisfy the exact range [1.0.0]. Range string is left unresolved.
+            //   ProjectB's assets: resolves TestPkg.Shared/1.0.0.
+            //
+            // The tool merges both projects' packages into one BOM → both Shared 1.0.0 and 2.0.0
+            // are present. The name-only fallback in Runner.cs finds two candidates → crash.
             //
             // Before the fix: "Unable to locate valid bom ref for TestPkg.Shared [1.0.0, 1.0.0]"
             // After the fix:  tool succeeds and both versions appear in the BOM.
             using var solution = await new SolutionBuilder("Issue903Sln")
+                .AddProject("ProjectB", p => p
+                    .WithTargetFramework("net8.0")
+                    .AddPackage("TestPkg.Shared", "1.0.0"))
                 .AddProject("ProjectA", p => p
                     .WithTargetFramework("net8.0")
                     .AddPackage("TestPkg.Shared", "2.0.0")
-                    .AddPackage("TestPkg.Consumer", "1.0.0"))
+                    .AddPackage("TestPkg.Consumer", "1.0.0")
+                    .AddProjectReference("../ProjectB/ProjectB.csproj"))
                 .BuildAsync(_fixture.NuGetFeedUrl);
 
             using var outputDir = solution.CreateOutputDir();
@@ -86,13 +99,28 @@ namespace CycloneDX.E2ETests.Tests
             Assert.True(result.Success,
                 $"Tool failed with exit code {result.ExitCode}.\nstderr:\n{result.StdErr}\nstdout:\n{result.StdOut}");
 
-            // Both versions of the shared package must be present in the BOM
-            Assert.Contains("TestPkg.Shared", result.BomContent);
-            Assert.Contains("1.0.0", result.BomContent);
-            Assert.Contains("2.0.0", result.BomContent);
+            // Both versions of the shared package must appear as distinct components in the BOM.
+            // Scanning a solution is an explicit union of all projects — duplicate versions of the
+            // same package across projects are expected and correct.
+            Assert.Contains("pkg:nuget/TestPkg.Shared@1.0.0", result.BomContent);
+            Assert.Contains("pkg:nuget/TestPkg.Shared@2.0.0", result.BomContent);
+            Assert.Contains("pkg:nuget/TestPkg.Consumer@1.0.0", result.BomContent);
 
-            // The consumer package must be present
-            Assert.Contains("TestPkg.Consumer", result.BomContent);
+            // The critical correctness check: TestPkg.Consumer's dependency edge must point to
+            // TestPkg.Shared 1.0.0 (what its nuspec declares), not 2.0.0.
+            // In the XML the dependencies section looks like:
+            //   <dependency ref="pkg:nuget/TestPkg.Consumer@1.0.0">
+            //     <dependency ref="pkg:nuget/TestPkg.Shared@1.0.0"/>
+            //   </dependency>
+            var consumerDepBlock = Regex.Match(
+                result.BomContent,
+                @"<dependency ref=""pkg:nuget/TestPkg\.Consumer@1\.0\.0"">(.*?)</dependency>",
+                RegexOptions.Singleline).Value;
+
+            Assert.False(string.IsNullOrEmpty(consumerDepBlock),
+                "No dependency block found for TestPkg.Consumer@1.0.0");
+            Assert.Contains("pkg:nuget/TestPkg.Shared@1.0.0", consumerDepBlock);
+            Assert.DoesNotContain("pkg:nuget/TestPkg.Shared@2.0.0", consumerDepBlock);
         }
     }
 }
