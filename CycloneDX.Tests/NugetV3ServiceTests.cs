@@ -978,8 +978,6 @@ namespace CycloneDX.Tests
             // <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>.
             // Without --include-license-text, Phase 3 is inactive and Phase 4 must NOT fall back
             // to this known-useless redirect URL — the component should have no license entry.
-            //
-            // This test FAILS until the aka.ms guard is implemented.
             var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
                 <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
                 <metadata>
@@ -1039,6 +1037,41 @@ namespace CycloneDX.Tests
             Assert.Single(component.Licenses);
             Assert.Equal(Convert.ToBase64String(licenseContents), component.Licenses.First().License.Text.Content);
             Assert.DoesNotContain("aka.ms", component.Licenses.First().License.Url ?? "");
+        }
+
+        [Fact]
+        public async Task GetComponent_FileLicense_AkaMsDeprecatedUrl_WithGitHub_SkipsApiCallAndEmitsNoLicense()
+        {
+            // When --enable-github-licenses is on and the only licenseUrl is the aka.ms stub,
+            // the tool must NOT pass that URL to the GitHub API (it is not a GitHub URL and
+            // the call would be wasted). No license node should appear in the BOM.
+            var nuspecFileContents = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                <package xmlns=""http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"">
+                <metadata>
+                    <id>testpackage</id>
+                    <license type=""file"">LICENSE.txt</license>
+                    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+                </metadata>
+                </package>";
+
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\testpackage.nuspec"), new MockFileData(nuspecFileContents) },
+                { XFS.Path(@"c:\nugetcache\testpackage\1.0.0\LICENSE.txt"), new MockFileData("The license") },
+            });
+
+            var mockGitHubService = new Mock<IGithubService>();
+
+            var nugetService = new NugetV3Service(null,
+                mockFileSystem,
+                new List<string> { XFS.Path(@"c:\nugetcache") },
+                mockGitHubService.Object,
+                new NullLogger(), false, includeLicenseText: false);
+
+            var component = await nugetService.GetComponentAsync("testpackage", "1.0.0", Component.ComponentScope.Required).ConfigureAwait(true);
+
+            Assert.Null(component.Licenses);
+            mockGitHubService.Verify(x => x.GetLicenseAsync("https://aka.ms/deprecateLicenseUrl"), Times.Never);
         }
     }
 }

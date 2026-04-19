@@ -54,17 +54,14 @@ not use `<license type="file">` or the file is not found in the cache.
 
 ### Phase 4 — License URL fallback
 
-Emits `License{Name="Unknown - See URL", Url=<licenseUrl>}` if `<licenseUrl>` is present.
-If no URL is present either, no license node is emitted.
+Emits `License{Name="Unknown - See URL", Url=<licenseUrl>}` if `<licenseUrl>` is present,
+**unless** the URL is `https://aka.ms/deprecateLicenseUrl`, in which case it is silently
+ignored and no license node is emitted.
 
----
+The `aka.ms/deprecateLicenseUrl` URL is a compatibility stub that NuGet's tooling
+auto-injects into the `<licenseUrl>` field whenever a package is packed with
+`<license type="file">`. This is [documented NuGet behavior][nuget-license-spec] —
+the URL redirects to a generic deprecation notice, not to the actual package license,
+and must never appear in a BOM.
 
-## Current behavior (pre phase 3)
-
-Phase 3 does not exist yet. Packages using `<license type="file">` therefore fall through to
-phase 4 with an empty `<licenseUrl>`, producing a useless stub entry — or no entry at all
-when GitHub resolution is on. Affected packages include Lucene.Net, LibGit2Sharp, and
-Oracle.ManagedDataAccess.Core.
-
-The null-URL stub (phase 4 firing with no URL) is also a pre-existing bug that will be fixed
-alongside phase 3.
+[nuget-license-spec]: https://github.com/NuGet/Home/wiki/Packaging-License-within-the-nupkg

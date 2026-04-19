@@ -289,7 +289,8 @@ namespace CycloneDX.Services
                 if (license == null)
                 {
                     var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
-                    if (!string.IsNullOrEmpty(licenseUrl))
+                    if (!string.IsNullOrEmpty(licenseUrl)
+                        && !licenseUrl.StartsWith("https://aka.ms/deprecateLicenseUrl", StringComparison.OrdinalIgnoreCase))
                     {
                         license = new License { Name = "Unknown - See URL", Url = licenseUrl.Trim() };
                     }
@@ -305,7 +306,8 @@ namespace CycloneDX.Services
             {
                 License license = null;
                 var licenseUrl = nuspecModel.nuspecReader.GetLicenseUrl();
-                if (!string.IsNullOrEmpty(licenseUrl))
+                if (!string.IsNullOrEmpty(licenseUrl)
+                    && !licenseUrl.StartsWith("https://aka.ms/deprecateLicenseUrl", StringComparison.OrdinalIgnoreCase))
                 {
                     license = await _githubService.GetLicenseAsync(licenseUrl).ConfigureAwait(false);
                 }
