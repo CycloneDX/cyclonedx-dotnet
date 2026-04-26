@@ -29,12 +29,10 @@ namespace CycloneDX.Services {
             switch (format)
             {
                 case OutputFileFormat.Json:
-                    CycloneDX.Json.Utils.UseUnsafeRelaxedJsonEscaping = false;
                     return Json.Serializer.Serialize(bom);
 
                 case OutputFileFormat.UnsafeJson:
-                    CycloneDX.Json.Utils.UseUnsafeRelaxedJsonEscaping = true;                    
-                    return Json.Serializer.Serialize(bom);
+                    return Json.Serializer.Serialize(bom, unsafeRelaxedJsonEscaping: true);
 
                 case OutputFileFormat.Xml:
                 default:
