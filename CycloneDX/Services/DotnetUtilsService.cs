@@ -132,13 +132,30 @@ namespace CycloneDX.Services
             }
         }
 
-        public DotnetUtilsResult Restore(string path, string framework, string runtime, string configuration = null)
+        public DotnetUtilsResult Restore(string path, string framework, string runtime)
+        {
+            return Restore(path, framework, runtime, null);
+        }
+
+        public DotnetUtilsResult Restore(string path, string framework, string runtime, string configuration)
         {
             var arguments = "restore";
-            if (!string.IsNullOrEmpty(framework)) arguments = $"{arguments} -p:TargetFramework={framework}";
-            if (runtime != null) arguments = $"{arguments} -r {runtime}";
-            if (!string.IsNullOrEmpty(configuration)) arguments = $"{arguments} -p:Configuration={configuration}";
-            if (!string.IsNullOrEmpty(path)) arguments = $"{arguments} \"{path}\"";
+            if (!string.IsNullOrEmpty(framework))
+            {
+                arguments = $"{arguments} -p:TargetFramework={framework}";
+            }
+            if (runtime != null)
+            {
+                arguments = $"{arguments} -r {runtime}";
+            }
+            if (!string.IsNullOrEmpty(configuration))
+            {
+                arguments = $"{arguments} -p:Configuration={configuration}";
+            }
+            if (!string.IsNullOrEmpty(path))
+            {
+                arguments = $"{arguments} \"{path}\"";
+            }
 
             var commandResult = _dotnetCommandService.Run(arguments);
 
