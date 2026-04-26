@@ -152,6 +152,11 @@ namespace CycloneDX.Services
         /// <returns></returns>
         public async Task<HashSet<DotnetDependency>> GetSolutionDotnetDependencys(string solutionFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime)
         {
+            return await GetSolutionDotnetDependencys(solutionFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, null).ConfigureAwait(false);
+        }
+
+        public async Task<HashSet<DotnetDependency>> GetSolutionDotnetDependencys(string solutionFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime, string configuration)
+        {
             if (!_fileSystem.File.Exists(solutionFilePath))
             {
                 Console.Error.WriteLine($"Solution file \"{solutionFilePath}\" does not exist");
@@ -181,7 +186,7 @@ namespace CycloneDX.Services
             foreach (var projectFilePath in projectQuery)
             {
                 Console.WriteLine();
-                var projectPackages = await _projectFileService.GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime).ConfigureAwait(false);
+                var projectPackages = await _projectFileService.GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, configuration).ConfigureAwait(false);
                 directReferencePackages.UnionWith(projectPackages.Where(p => p.IsDirectReference));
                 packages.UnionWith(projectPackages);
             }

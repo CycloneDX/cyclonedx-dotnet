@@ -107,7 +107,7 @@ namespace CycloneDX.Tests
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
-                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
             mockDotnetUtilsService
                  .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
@@ -145,7 +145,7 @@ namespace CycloneDX.Tests
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
-                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new ApplicationException("Restore should not be called"));
             mockDotnetUtilsService
                 .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
@@ -184,7 +184,7 @@ namespace CycloneDX.Tests
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
-                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
             mockDotnetUtilsService
                 .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
@@ -225,7 +225,7 @@ namespace CycloneDX.Tests
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
-                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
             mockDotnetUtilsService
                 .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
@@ -268,7 +268,7 @@ namespace CycloneDX.Tests
                 });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
-                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
             mockDotnetUtilsService
              .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
@@ -450,7 +450,7 @@ namespace CycloneDX.Tests
             });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
-                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
             mockDotnetUtilsService
                 .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
@@ -494,7 +494,7 @@ namespace CycloneDX.Tests
             });
             var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
             mockDotnetUtilsService
-                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new DotnetUtilsResult());
             mockDotnetUtilsService
                 .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
@@ -527,6 +527,44 @@ namespace CycloneDX.Tests
             }
 
             Assert.DoesNotContain("Consider removing --recursive", capturedError.ToString());
+        }
+
+        [Fact]
+        public async Task GetProjectDotnetDependencys_WithConfiguration_ForwardsConfigurationToRestore()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\Project\Project.csproj"), "<Project Sdk=\"Microsoft.NET.Sdk\" />" },
+                { XFS.Path(@"c:\Project\obj\project.assets.json"), "" },
+            });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            mockDotnetUtilsService
+                .Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult());
+            mockDotnetUtilsService
+                .Setup(s => s.GetAssetsPath(It.IsAny<string>()))
+                .Returns(new DotnetUtilsResult<string> { Result = "" });
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            mockProjectAssetsFileService
+                .Setup(s => s.GetDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Returns(new HashSet<DotnetDependency>());
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            await projectFileService.GetProjectDotnetDependencysAsync(
+                XFS.Path(@"c:\Project\Project.csproj"), "", false, null, null, "Release").ConfigureAwait(true);
+
+            mockDotnetUtilsService.Verify(
+                s => s.Restore(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    "Release"),
+                Times.Once);
         }
 
         // -----------------------------------------------------------------------

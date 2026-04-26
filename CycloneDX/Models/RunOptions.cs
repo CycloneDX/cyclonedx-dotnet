@@ -49,6 +49,7 @@ namespace CycloneDX.Models
         public string setVersion { get; set; }
         public Component.Classification setType { get; set; } = Component.Classification.Null;
         public bool setNugetPurl { get; set; }
+        public string configuration { get; set; }
         public string DependencyExcludeFilter { get; set; }
         public OutputFileFormat outputFormat { get; set; }
         public SpecificationVersion? specVersion { get; set; }
