@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1" xmlns="http://cyclonedx.org/schema/bom/1.7">
+  <metadata>
+    <timestamp>{scrubbed-timestamp}</timestamp>
+    <tools>
+      <components>
+        <component type="application">
+          <authors>
+            <author>
+              <name>CycloneDX</name>
+            </author>
+          </authors>
+          <name>CycloneDX module for .NET</name>
+          <version>{scrubbed-version}</version>
+          <externalReferences>
+            <reference type="website">
+              <url>https://github.com/CycloneDX/cyclonedx-dotnet</url>
+            </reference>
+          </externalReferences>
+        </component>
+      </components>
+    </tools>
+    <component type="application" bom-ref="LicenseSnapshotFileFlagOnSln@0.0.0">
+      <name>LicenseSnapshotFileFlagOnSln</name>
+      <version>{scrubbed-version}</version>
+    </component>
+  </metadata>
+  <components>
+    <component type="library" bom-ref="pkg:nuget/TestPkg.FileLicense@1.0.0">
+      <authors>
+        <author>
+          <name>CycloneDX E2E Tests</name>
+        </author>
+      </authors>
+      <name>TestPkg.FileLicense</name>
+      <version>{scrubbed-version}</version>
+      <description>Test package TestPkg.FileLicense</description>
+      <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">{scrubbed-hash}</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <name>TestPkg.FileLicense License</name>
+          <text content-type="text/plain" encoding="base64">TUlUIExpY2Vuc2UKCkNvcHlyaWdodCAoYykgQ3ljbG9uZURYIEUyRSBUZXN0cwoKUGVybWlzc2lvbiBpcyBoZXJlYnkgZ3JhbnRlZCwgZnJlZSBvZiBjaGFyZ2UsIHRvIGFueSBwZXJzb24gb2J0YWluaW5nIGEgY29weSBvZiB0aGlzIHNvZnR3YXJlLg==</text>
+        </license>
+      </licenses>
+      <purl>pkg:nuget/TestPkg.FileLicense@1.0.0</purl>
+    </component>
+  </components>
+  <dependencies>
+    <dependency ref="LicenseSnapshotFileFlagOnSln@0.0.0">
+      <dependency ref="pkg:nuget/TestPkg.FileLicense@1.0.0" />
+    </dependency>
+    <dependency ref="pkg:nuget/TestPkg.FileLicense@1.0.0" />
+  </dependencies>
+</bom>
