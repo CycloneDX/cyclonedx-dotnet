@@ -39,11 +39,6 @@
       <hashes>
         <hash alg="SHA-512">{scrubbed-hash}</hash>
       </hashes>
-      <licenses>
-        <license>
-          <name>Unknown - See URL</name>
-        </license>
-      </licenses>
       <purl>pkg:nuget/TestPkg.A@1.0.0</purl>
     </component>
     <component type="library" bom-ref="pkg:nuget/TestPkg.B@1.0.0">
@@ -59,11 +54,6 @@
       <hashes>
         <hash alg="SHA-512">{scrubbed-hash}</hash>
       </hashes>
-      <licenses>
-        <license>
-          <name>Unknown - See URL</name>
-        </license>
-      </licenses>
       <purl>pkg:nuget/TestPkg.B@1.0.0</purl>
     </component>
   </components>
