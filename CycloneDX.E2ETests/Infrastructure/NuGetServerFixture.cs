@@ -129,6 +129,43 @@ namespace CycloneDX.E2ETests.Infrastructure
                 "TestPkg.Consumer", "1.0.0",
                 dependencies: new[] { new NupkgDependency("TestPkg.Shared", "[1.0.0, 1.0.0]") }
             )).ConfigureAwait(false);
+
+            // TestPkg.SpdxLicense 1.0.0 — declares license via SPDX expression
+            await PushPackageAsync(NupkgBuilder.Build(
+                "TestPkg.SpdxLicense", "1.0.0",
+                license: NupkgLicense.Spdx("MIT")
+            )).ConfigureAwait(false);
+
+            // TestPkg.FileLicense 1.0.0 — declares license via embedded file (LICENSE.txt)
+            await PushPackageAsync(NupkgBuilder.Build(
+                "TestPkg.FileLicense", "1.0.0",
+                license: NupkgLicense.File("LICENSE.txt", System.Text.Encoding.UTF8.GetBytes(
+                    "MIT License\n\nCopyright (c) CycloneDX E2E Tests\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software."))
+            )).ConfigureAwait(false);
+
+            // TestPkg.FileLicenseMd 1.0.0 — license file with .md extension
+            await PushPackageAsync(NupkgBuilder.Build(
+                "TestPkg.FileLicenseMd", "1.0.0",
+                license: NupkgLicense.File("LICENSE.md", System.Text.Encoding.UTF8.GetBytes(
+                    "# MIT License\n\nCopyright (c) CycloneDX E2E Tests"))
+            )).ConfigureAwait(false);
+
+            // TestPkg.UrlLicense 1.0.0 — declares license via deprecated <licenseUrl>
+            await PushPackageAsync(NupkgBuilder.Build(
+                "TestPkg.UrlLicense", "1.0.0",
+                license: NupkgLicense.LicenseUrl("https://opensource.org/licenses/MIT")
+            )).ConfigureAwait(false);
+
+            // TestPkg.NoLicense 1.0.0 — no license metadata at all
+            await PushPackageAsync(NupkgBuilder.Build("TestPkg.NoLicense", "1.0.0")).ConfigureAwait(false);
+
+            // TestPkg.FileLicenseDeprecatedUrl 1.0.0 — <license type="file"> with the aka.ms stub
+            // URL that NuGet auto-inserts when packing. Phase 4 must NOT fall back to this URL.
+            await PushPackageAsync(NupkgBuilder.Build(
+                "TestPkg.FileLicenseDeprecatedUrl", "1.0.0",
+                license: NupkgLicense.FileWithDeprecatedUrl("LICENSE.txt", System.Text.Encoding.UTF8.GetBytes(
+                    "MIT License\n\nCopyright (c) CycloneDX E2E Tests\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software."))
+            )).ConfigureAwait(false);
         }
 
         public async ValueTask DisposeAsync()

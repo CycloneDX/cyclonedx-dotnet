@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serialNumber="urn:uuid:{scrubbed}" version="1" xmlns="http://cyclonedx.org/schema/bom/1.7">
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1" xmlns="http://cyclonedx.org/schema/bom/1.7">
   <metadata>
     <timestamp>{scrubbed-timestamp}</timestamp>
     <tools>
@@ -20,32 +20,37 @@
         </component>
       </components>
     </tools>
-    <component type="application" bom-ref="SinglePkgSln@0.0.0">
-      <name>SinglePkgSln</name>
+    <component type="application" bom-ref="LicenseSnapshotSpdxSln@0.0.0">
+      <name>LicenseSnapshotSpdxSln</name>
       <version>{scrubbed-version}</version>
     </component>
   </metadata>
   <components>
-    <component type="library" bom-ref="pkg:nuget/TestPkg.A@1.0.0">
+    <component type="library" bom-ref="pkg:nuget/TestPkg.SpdxLicense@1.0.0">
       <authors>
         <author>
           <name>CycloneDX E2E Tests</name>
         </author>
       </authors>
-      <name>TestPkg.A</name>
+      <name>TestPkg.SpdxLicense</name>
       <version>{scrubbed-version}</version>
-      <description>Test package TestPkg.A</description>
+      <description>Test package TestPkg.SpdxLicense</description>
       <scope>required</scope>
       <hashes>
         <hash alg="SHA-512">{scrubbed-hash}</hash>
       </hashes>
-      <purl>pkg:nuget/TestPkg.A@1.0.0</purl>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+      <purl>pkg:nuget/TestPkg.SpdxLicense@1.0.0</purl>
     </component>
   </components>
   <dependencies>
-    <dependency ref="pkg:nuget/TestPkg.A@1.0.0" />
-    <dependency ref="SinglePkgSln@0.0.0">
-      <dependency ref="pkg:nuget/TestPkg.A@1.0.0" />
+    <dependency ref="LicenseSnapshotSpdxSln@0.0.0">
+      <dependency ref="pkg:nuget/TestPkg.SpdxLicense@1.0.0" />
     </dependency>
+    <dependency ref="pkg:nuget/TestPkg.SpdxLicense@1.0.0" />
   </dependencies>
 </bom>

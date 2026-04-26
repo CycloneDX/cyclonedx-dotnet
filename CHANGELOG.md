@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **NuGet license file support** (#1011) — packages declaring `<license type="file">` now have their license file embedded as base64-encoded text in the BOM when `--include-license-text` is specified; without the flag the license is still detected but not embedded
+
+### Fixed
+
+- **Suppress `aka.ms/deprecateLicenseUrl` stub URL** (#1011) — NuGet auto-injects `https://aka.ms/deprecateLicenseUrl` into `<licenseUrl>` for packages packed with `<license type="file">`; this URL is now correctly ignored rather than being emitted as a license entry in the BOM (see [NuGet spec](https://github.com/NuGet/Home/wiki/Packaging-License-within-the-nupkg))
+- **Fix null-URL license stub** (#1011) — packages with no `<licenseUrl>` no longer produce a spurious `License { Name="Unknown - See URL", Url=null }` node in the BOM
+- **Fix `UNLICENSED` emitted as SPDX id** (#1004, fixes #915) — `UNLICENSED` is a NuGet-specific token that is not a valid SPDX identifier; it is now emitted as `license.name` instead of `license.id` to keep BOM output valid
+
 ## [6.1.1] - 2026-04-08
 
 ### Fixed
