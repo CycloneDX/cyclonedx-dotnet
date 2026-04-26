@@ -279,7 +279,7 @@
           "CycloneDX.Core": "[12.1.1, )",
           "NuGet.ProjectModel": "[7.0.1, )",
           "NuGet.Protocol": "[7.3.1, )",
-          "System.CommandLine": "[2.0.0, )",
+          "System.CommandLine": "[2.0.5, )",
           "System.IO.Abstractions": "[22.1.0, )"
         }
       },
@@ -313,9 +313,9 @@
       },
       "System.CommandLine": {
         "type": "CentralTransitive",
-        "requested": "[2.0.0, )",
-        "resolved": "2.0.0",
-        "contentHash": "Bjklzc5NoxqAGFi7BcGlY2TWAdB06Bq3a5sfRr3ubMRU80Mf98eyq3Y2UgR6xRV0TLznZmfe5T7mUjOunRNcdA=="
+        "requested": "[2.0.5, )",
+        "resolved": "2.0.5",
+        "contentHash": "2XtWAPk1G6arpe3OCFNrYYuf6iIboznxs2elJSGgd8e0euou7LfGYFon6hBEfDWNtOLr0M3+oUVgy1a5EGa41A=="
       },
       "System.IO.Abstractions": {
         "type": "CentralTransitive",
@@ -606,7 +606,7 @@
           "CycloneDX.Core": "[12.1.1, )",
           "NuGet.ProjectModel": "[7.0.1, )",
           "NuGet.Protocol": "[7.3.1, )",
-          "System.CommandLine": "[2.0.0, )",
+          "System.CommandLine": "[2.0.5, )",
           "System.IO.Abstractions": "[22.1.0, )"
         }
       },
@@ -640,9 +640,9 @@
       },
       "System.CommandLine": {
         "type": "CentralTransitive",
-        "requested": "[2.0.0, )",
-        "resolved": "2.0.0",
-        "contentHash": "Bjklzc5NoxqAGFi7BcGlY2TWAdB06Bq3a5sfRr3ubMRU80Mf98eyq3Y2UgR6xRV0TLznZmfe5T7mUjOunRNcdA=="
+        "requested": "[2.0.5, )",
+        "resolved": "2.0.5",
+        "contentHash": "2XtWAPk1G6arpe3OCFNrYYuf6iIboznxs2elJSGgd8e0euou7LfGYFon6hBEfDWNtOLr0M3+oUVgy1a5EGa41A=="
       },
       "System.IO.Abstractions": {
         "type": "CentralTransitive",
@@ -933,7 +933,7 @@
           "CycloneDX.Core": "[12.1.1, )",
           "NuGet.ProjectModel": "[7.0.1, )",
           "NuGet.Protocol": "[7.3.1, )",
-          "System.CommandLine": "[2.0.0, )",
+          "System.CommandLine": "[2.0.5, )",
           "System.IO.Abstractions": "[22.1.0, )"
         }
       },
@@ -967,9 +967,9 @@
       },
       "System.CommandLine": {
         "type": "CentralTransitive",
-        "requested": "[2.0.0, )",
-        "resolved": "2.0.0",
-        "contentHash": "Bjklzc5NoxqAGFi7BcGlY2TWAdB06Bq3a5sfRr3ubMRU80Mf98eyq3Y2UgR6xRV0TLznZmfe5T7mUjOunRNcdA=="
+        "requested": "[2.0.5, )",
+        "resolved": "2.0.5",
+        "contentHash": "2XtWAPk1G6arpe3OCFNrYYuf6iIboznxs2elJSGgd8e0euou7LfGYFon6hBEfDWNtOLr0M3+oUVgy1a5EGa41A=="
       },
       "System.IO.Abstractions": {
         "type": "CentralTransitive",
