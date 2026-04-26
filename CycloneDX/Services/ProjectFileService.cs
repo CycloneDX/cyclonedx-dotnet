@@ -66,6 +66,11 @@ namespace CycloneDX.Services
             {
                 return false;
             }
+            catch (FileNotFoundException /*ex*/)
+            {
+                // can only happen while testing (because it will be checked before this method is called)
+                return false;
+            }
 
             XmlDocument xmldoc = new XmlDocument();
             using var fileStream = _fileSystem.FileStream.New(projectFilePath, FileMode.Open, FileAccess.Read);
