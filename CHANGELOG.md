@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.0] - 2026-04-27
+
 ### Added
 
+- **`--configuration` / `-c` CLI option** (#1056, fixes #1028) — passes `-p:Configuration=<value>` to `dotnet restore` so MSBuild evaluates conditional `PackageReference` items during restore. Configuration-specific packages (e.g. debug-only `Avalonia.Diagnostics`) are no longer included in the SBOM when a Release configuration is requested.
 - **NuGet license file support** (#1011) — packages declaring `<license type="file">` now have their license file embedded as base64-encoded text in the BOM when `--include-license-text` is specified; without the flag the license is still detected but not embedded
 
 ### Fixed
@@ -16,6 +19,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Suppress `aka.ms/deprecateLicenseUrl` stub URL** (#1011) — NuGet auto-injects `https://aka.ms/deprecateLicenseUrl` into `<licenseUrl>` for packages packed with `<license type="file">`; this URL is now correctly ignored rather than being emitted as a license entry in the BOM (see [NuGet spec](https://github.com/NuGet/Home/wiki/Packaging-License-within-the-nupkg))
 - **Fix null-URL license stub** (#1011) — packages with no `<licenseUrl>` no longer produce a spurious `License { Name="Unknown - See URL", Url=null }` node in the BOM
 - **Fix `UNLICENSED` emitted as SPDX id** (#1004, fixes #915) — `UNLICENSED` is a NuGet-specific token that is not a valid SPDX identifier; it is now emitted as `license.name` instead of `license.id` to keep BOM output valid
+
+### Changed
+
+- **Refactor: replace optional `configuration` parameter with method overloads** — addresses Codacy "Use the overloading mechanism instead of the optional parameters" findings on `IDotnetUtilsService.Restore`, `IProjectFileService.GetProjectDotnetDependencysAsync` / `RecursivelyGetProjectDotnetDependencysAsync`, and `ISolutionFileService.GetSolutionDotnetDependencys`
+- **Upgrade CycloneDX.Core from 12.0.1 to 12.1.1** (#1084)
+- **Bump System.CommandLine from 2.0.0 to 2.0.5** (#1083)
+- **Migrate from deprecated `Utils.UseUnsafeRelaxedJsonEscaping` global flag**
+- **CI: consolidate `setup-dotnet` steps to avoid macOS timeout**
+
+### Documentation
+
+- **Add license-resolution reference** (`docs/license-resolution.md`) — documents the four-phase license resolution pipeline used by the tool
+
+### Tests
+
+- **End-to-end snapshot tests for license resolution and `--configuration`** — new Verify-based BOM snapshot tests covering `TestPkg.UrlLicense`, `TestPkg.SpdxLicense`, `TestPkg.FileLicense`, and conditional `PackageReference` scenarios with and without the `--configuration` flag
 
 ## [6.1.1] - 2026-04-08
 
