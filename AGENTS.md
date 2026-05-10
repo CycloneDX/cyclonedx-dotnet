@@ -44,4 +44,8 @@ dotnet restore   # no --locked-mode
 
 ## Commits
 
-Commits follow [Conventional Commits](https://www.conventionalcommits.org/). Commits require a `Signed-off-by` trailer. `CHANGELOG.md` is maintained manually — update it with user-facing changes.
+Commits follow [Conventional Commits](https://www.conventionalcommits.org/). `CHANGELOG.md` is maintained manually — update it with user-facing changes.
+
+**You MUST NOT create a commit unless the user explicitly asks you to commit.** Never commit as a side effect of completing a task.
+
+**You MUST NOT fabricate the `Signed-off-by` identity.** If the user wants to sign off the commit, ask them to confirm and then use `git commit -s` to let git append the trailer automatically from `git config user.name` and `git config user.email`. Never construct the trailer manually in the commit message.
