@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="CycloneDX.Tests" />
-    <InternalsVisibleTo Include="CycloneDX.IntegrationTests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 

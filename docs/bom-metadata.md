@@ -152,13 +152,13 @@ component version will be `1.2.3` without any extra flags.
 **Pin the version in CI without a template file**
 
 ```bash
-dotnet-CycloneDX MySolution.sln -o ./bom -sv "$VERSION"
+dotnet-CycloneDX MyApp.csproj -o ./bom -sv "$VERSION"
 ```
 
 **Use a static template for org-wide defaults, override version per build**
 
 ```bash
-dotnet-CycloneDX MySolution.sln -o ./bom \
+dotnet-CycloneDX MyApp.csproj -o ./bom \
   -imp ./company-metadata-template.xml \
   -sv "$VERSION"
 ```

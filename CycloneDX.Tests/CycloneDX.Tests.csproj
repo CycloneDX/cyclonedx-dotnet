@@ -81,7 +81,7 @@
     <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\project1csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\solution1sln.text">
+    <None Update="FunctionalTests\SolutionScan_MulitpleVersionsOfOnePackage\solution1sln.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\Issue830-rsMultipleFrameworks\project1csproj.xml">
@@ -184,6 +184,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="FunctionalTests\Issue1025-CaseInsensitivePackageNames\case-mismatch.assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue936-RemovedTransitiveDependency\project1assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue936-RemovedTransitiveDependency\project1csproj.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue936-RemovedTransitiveDependency\project2csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

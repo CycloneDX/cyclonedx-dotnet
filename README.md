@@ -61,6 +61,9 @@ dotnet-CycloneDX <path> -o <OUTPUT_DIRECTORY>
 
 > **Note:** If you encounter a "command not found" error after installation, try restarting your terminal. Also, ensure that the `~/.dotnet/tools` directory is included in your `PATH`.
 
+For guidance on what to point the tool at, how to restore, and how to set BOM metadata,
+see [docs/best-practices.md](docs/best-practices.md).
+
 #### Execution via Docker
 
 ```bash
