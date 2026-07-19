@@ -107,8 +107,27 @@ namespace CycloneDX.E2ETests.Infrastructure
             // TestPkg.C 1.0.0 — simple package, no deps (for multi-dep tests)
             await PushPackageAsync(NupkgBuilder.Build("TestPkg.C", "1.0.0")).ConfigureAwait(false);
 
-            // TestPkg.Dev 1.0.0 — intended to be used as a dev/build dependency
+            // TestPkg.Dev 1.0.0 — simple package retained for general filtering tests
             await PushPackageAsync(NupkgBuilder.Build("TestPkg.Dev", "1.0.0")).ConfigureAwait(false);
+
+            // TestPkg.BuildOnly 1.0.0 — private build package with no runtime assets
+            await PushPackageAsync(NupkgBuilder.Build("TestPkg.BuildOnly", "1.0.0", buildOnly: true)).ConfigureAwait(false);
+
+            // TestPkg.DevTransitive 1.0.0 — pulled in transitively by the build-only and runtime packages
+            await PushPackageAsync(NupkgBuilder.Build("TestPkg.DevTransitive", "1.0.0")).ConfigureAwait(false);
+
+            // TestPkg.BuildOnlyWithDep 1.0.0 — build-only dependency with a transitive dep
+            await PushPackageAsync(NupkgBuilder.Build(
+                "TestPkg.BuildOnlyWithDep", "1.0.0",
+                dependencies: new[] { new NupkgDependency("TestPkg.DevTransitive", "1.0.0") },
+                buildOnly: true
+            )).ConfigureAwait(false);
+
+            // TestPkg.RuntimeWithDep 1.0.0 — runtime dependency sharing the build-only package's transitive dep
+            await PushPackageAsync(NupkgBuilder.Build(
+                "TestPkg.RuntimeWithDep", "1.0.0",
+                dependencies: new[] { new NupkgDependency("TestPkg.DevTransitive", "1.0.0") }
+            )).ConfigureAwait(false);
 
             // TestPkg.Transitive 1.0.0 — used only as a transitive dep
             await PushPackageAsync(NupkgBuilder.Build("TestPkg.Transitive", "1.0.0")).ConfigureAwait(false);

@@ -135,6 +135,12 @@
     <None Update="FunctionalTests\TestcaseFiles\DevDependencies_WithPackageConfig_PackageConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="FunctionalTests\TestcaseFiles\DevDependencies_TransitiveOnlyViaDev.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\DevDependencies_SharedTransitive.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\TestcaseFiles\FloatingVersions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

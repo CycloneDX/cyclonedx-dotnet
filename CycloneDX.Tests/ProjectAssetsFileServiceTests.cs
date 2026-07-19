@@ -36,6 +36,63 @@ namespace CycloneDX.Tests
 {
     public class ProjectAssetsFileServiceTests
     {
+        [Fact]
+        public void SetIsDevDependency_PrivateRuntimePackage_IsNotDevDependency()
+        {
+            var dependency = new LibraryDependency
+            {
+                LibraryRange = new LibraryRange("Package", LibraryDependencyTarget.Package),
+                SuppressParent = LibraryIncludeFlags.All
+            };
+            var targetLibrary = new LockFileTargetLibrary
+            {
+                RuntimeAssemblies = [new LockFileItem("lib/net8.0/Package.dll")]
+            };
+            var library = new LockFileLibrary
+            {
+                Files = ["lib/net8.0/Package.dll"]
+            };
+
+            var service = new ProjectAssetsFileService(new MockFileSystem(), null);
+
+            Assert.False(service.SetIsDevDependency(dependency, targetLibrary, library));
+        }
+
+        [Fact]
+        public void SetIsDevDependency_PrivateBuildOnlyPackage_IsDevDependency()
+        {
+            var dependency = new LibraryDependency
+            {
+                LibraryRange = new LibraryRange("Package", LibraryDependencyTarget.Package),
+                IncludeType = LibraryIncludeFlags.Analyzers,
+                SuppressParent = LibraryIncludeFlags.All
+            };
+            var targetLibrary = new LockFileTargetLibrary();
+            var library = new LockFileLibrary
+            {
+                Files = ["analyzers/dotnet/cs/Package.dll"]
+            };
+
+            var service = new ProjectAssetsFileService(new MockFileSystem(), null);
+
+            Assert.True(service.SetIsDevDependency(dependency, targetLibrary, library));
+        }
+
+        [Fact]
+        public void SetIsDevDependency_PrivatePackageWithNoSelectedAssets_IsNotDevDependency()
+        {
+            var dependency = new LibraryDependency
+            {
+                LibraryRange = new LibraryRange("Package", LibraryDependencyTarget.Package),
+                SuppressParent = LibraryIncludeFlags.All
+            };
+            var targetLibrary = new LockFileTargetLibrary();
+            var library = new LockFileLibrary();
+
+            var service = new ProjectAssetsFileService(new MockFileSystem(), null);
+
+            Assert.False(service.SetIsDevDependency(dependency, targetLibrary, library));
+        }
 
         [Theory]
         [InlineData(".NETStandard", 2, 1, ".NETStandard,Version=v2.1")]
@@ -117,9 +174,9 @@ namespace CycloneDX.Tests
                                     {
                                         Name = "Package3",
                                         Version = new NuGet.Versioning.NuGetVersion("1.0.0"),
-                                        CompileTimeAssemblies =
+                                        Build =
                                         [
-                                            new LockFileItem("Package3.dll")
+                                            new LockFileItem("build/Package3.targets")
                                         ],
                                         Dependencies = []
                                     }
@@ -158,9 +215,9 @@ namespace CycloneDX.Tests
                                     {
                                         Name = "Package3",
                                         Version = new NuGet.Versioning.NuGetVersion("1.0.0"),
-                                        CompileTimeAssemblies =
+                                        Build =
                                         [
-                                            new LockFileItem("Package3.dll")
+                                            new LockFileItem("build/Package3.targets")
                                         ],
                                         Dependencies = []
                                     }

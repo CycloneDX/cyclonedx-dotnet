@@ -76,14 +76,17 @@ namespace CycloneDX.Services
                             Version = lockFileLibrary.Version.ToNormalizedString(),
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
-                            IsDevDependency = SetIsDevDependency(libs),
+                            IsDevDependency = SetIsDevDependency(libs, lockFileLibrary, library),
                             IsDirectReference = directDependencies?.Any(d => string.Compare(d.Name, lockFileLibrary.Name, true) == 0) ?? false,                            
                             DependencyType = (lockFileLibrary.Type != "project") ? DependencyType.Package : DependencyType.Project,
                             Path = Path.Combine(Path.GetDirectoryName(projectFilePath), library?.Path ?? "")
                         };
 
-                        // is this a test project dependency or only a development dependency
-                        if ( isTestProject)
+                        // Test-project packages are always excluded (whole-project decision).
+                        // Dev dependency scope is resolved later in Runner via BFS so that
+                        // transitive packages reachable through both a dev dep and a runtime
+                        // dep are correctly kept as scope=Required.
+                        if (isTestProject)
                         {
                             package.Scope = Component.ComponentScope.Excluded;
                         }
@@ -124,9 +127,37 @@ namespace CycloneDX.Services
         {
             return dependency?.ReferenceType == LibraryDependencyReferenceType.Direct;
         }
-        public bool SetIsDevDependency(LibraryDependency dependency)
+        public bool SetIsDevDependency(
+            LibraryDependency dependency,
+            LockFileTargetLibrary targetLibrary,
+            LockFileLibrary library)
         {
-            return dependency != null && dependency.SuppressParent != LibraryIncludeFlagUtils.DefaultSuppressParent;
+            if (dependency == null ||
+                dependency.SuppressParent == LibraryIncludeFlagUtils.DefaultSuppressParent ||
+                targetLibrary == null)
+            {
+                return false;
+            }
+
+            var hasSelectedAnalyzerAssets =
+                (dependency.IncludeType & LibraryIncludeFlags.Analyzers) != 0 &&
+                library?.Files.Any(path =>
+                    path.StartsWith("analyzers/", StringComparison.OrdinalIgnoreCase)) == true;
+            var hasBuildOnlyAssets = hasSelectedAnalyzerAssets ||
+                targetLibrary.Build.Count > 0 ||
+                targetLibrary.BuildMultiTargeting.Count > 0 ||
+                targetLibrary.ToolsAssemblies.Count > 0;
+            var hasRuntimeCapableAssets = targetLibrary.RuntimeAssemblies.Count > 0 ||
+                targetLibrary.CompileTimeAssemblies.Count > 0 ||
+                targetLibrary.NativeLibraries.Count > 0 ||
+                targetLibrary.RuntimeTargets.Count > 0 ||
+                targetLibrary.ResourceAssemblies.Count > 0 ||
+                targetLibrary.FrameworkAssemblies.Count > 0 ||
+                targetLibrary.FrameworkReferences.Count > 0 ||
+                targetLibrary.ContentFiles.Count > 0 ||
+                targetLibrary.EmbedAssemblies.Count > 0;
+
+            return hasBuildOnlyAssets && !hasRuntimeCapableAssets;
         }
 
         /// <summary>

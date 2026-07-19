@@ -28,7 +28,7 @@ namespace CycloneDX.Tests.FunctionalTests
         }
 
         [Fact]
-        public async Task DevDependenciesNormalyGoIntoTheBom()
+        public async Task DevDependenciesAreIncludedWithScopeExcluded()
         {
             var options = new RunOptions
             {
@@ -37,26 +37,26 @@ namespace CycloneDX.Tests.FunctionalTests
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
             Assert.True(bom.Components.Count == 1, $"Unexpected number of components. Expected 1, got {bom.Components.Count}");
-            Assert.Contains(bom.Components, c => string.Compare(c.Name, "SonarAnalyzer.CSharp", true) == 0 && c.Version == "9.16.0.82469");
-
+            var devDep = bom.Components.FirstOrDefault(c => string.Compare(c.Name, "SonarAnalyzer.CSharp", true) == 0 && c.Version == "9.16.0.82469");
+            Assert.NotNull(devDep);
+            Assert.Equal(Component.ComponentScope.Excluded, devDep.Scope);
         }
 
         [Fact]
-        public async Task DevDependenciesAreExcludedWithExcludeDevDependencies()
-        {            
+        public async Task ExcludeDevFlag_IsDeprecatedAndHasNoEffect()
+        {
             var options = new RunOptions
             {
                 excludeDev = true
             };
 
-
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
-            Assert.True(bom.Components.Count == 0);
-            
-
+            // flag is deprecated; dev dep must still appear with scope=excluded
+            Assert.True(bom.Components.Count == 1, $"Unexpected number of components. Expected 1, got {bom.Components.Count}");
+            var devDep = bom.Components.FirstOrDefault(c => string.Compare(c.Name, "SonarAnalyzer.CSharp", true) == 0 && c.Version == "9.16.0.82469");
+            Assert.NotNull(devDep);
+            Assert.Equal(Component.ComponentScope.Excluded, devDep.Scope);
         }
-
-
     }
 }

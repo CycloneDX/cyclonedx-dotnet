@@ -15,18 +15,20 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using CycloneDX.E2ETests.Builders;
 using CycloneDX.E2ETests.Infrastructure;
 using Xunit;
-using static VerifyXunit.Verifier;
 
 namespace CycloneDX.E2ETests.Tests
 {
     /// <summary>
-    /// Tests for dev/build-only dependencies (PrivateAssets="all").
-    /// Verifies that <c>--exclude-dev</c> omits packages that are exclusively
-    /// consumed at build time and not shipped with the application.
+    /// Tests that package assets determine runtime use independently of PrivateAssets.
+    /// Dev dependencies are always included in the BOM with scope="excluded".
     /// </summary>
     [Collection("E2E")]
     public sealed class DevDependencyTests
@@ -39,14 +41,14 @@ namespace CycloneDX.E2ETests.Tests
         }
 
         [Fact]
-        public async Task DevDependency_IncludedByDefault()
+        public async Task DevDependency_IncludedWithScopeExcluded()
         {
-            // Without --exclude-dev, dev dependencies SHOULD appear in the BOM
+            // Dev dependencies must appear in <components> with <scope>excluded</scope>
             using var solution = await new SolutionBuilder("DevDepDefaultSln")
                 .AddProject("MyApp", p => p
                     .WithTargetFramework("net8.0")
                     .AddPackage("TestPkg.A", "1.0.0")
-                    .AddPackage("TestPkg.Dev", "1.0.0", devDependency: true))
+                    .AddPackage("TestPkg.BuildOnly", "1.0.0", devDependency: true))
                 .BuildAsync(_fixture.NuGetFeedUrl);
 
             using var outputDir = solution.CreateOutputDir();
@@ -57,19 +59,23 @@ namespace CycloneDX.E2ETests.Tests
                 new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-            Assert.Contains("TestPkg.Dev", result.BomContent);
             Assert.Contains("TestPkg.A", result.BomContent);
+            Assert.Contains("TestPkg.BuildOnly", result.BomContent);
+            // Dev dep must appear with scope=excluded
+            Assert.Contains("<scope>excluded</scope>", result.BomContent);
+            // No formulation — dev deps stay in components
+            Assert.DoesNotContain("<formulation>", result.BomContent);
         }
 
         [Fact]
-        public async Task DevDependency_ExcludedWithFlag()
+        public async Task DevDependency_ScopeExcluded_RuntimePackage_ScopeRequired()
         {
-            // With --exclude-dev, packages marked PrivateAssets="all" should be absent
-            using var solution = await new SolutionBuilder("DevDepExcludeSln")
+            // Runtime packages must be scope=required; dev deps scope=excluded
+            using var solution = await new SolutionBuilder("DevDepScopeSln")
                 .AddProject("MyApp", p => p
                     .WithTargetFramework("net8.0")
                     .AddPackage("TestPkg.A", "1.0.0")
-                    .AddPackage("TestPkg.Dev", "1.0.0", devDependency: true))
+                    .AddPackage("TestPkg.BuildOnly", "1.0.0", devDependency: true))
                 .BuildAsync(_fixture.NuGetFeedUrl);
 
             using var outputDir = solution.CreateOutputDir();
@@ -77,27 +83,69 @@ namespace CycloneDX.E2ETests.Tests
             var result = await _fixture.Runner.RunAsync(
                 solution.SolutionFile,
                 outputDir.Path,
-                new ToolRunOptions
-                {
-                    NuGetFeedUrl = _fixture.NuGetFeedUrl,
-                    ExcludeDev = true
-                });
+                new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-            Assert.Contains("TestPkg.A", result.BomContent);
-            Assert.DoesNotContain("TestPkg.Dev", result.BomContent);
 
-            await Verify(result.BomContent);
+            // The runtime and build-only packages must have their corresponding scopes.
+            // The simplest check: both scope values are present in the BOM.
+            Assert.Contains("<scope>required</scope>", result.BomContent);
+            Assert.Contains("<scope>excluded</scope>", result.BomContent);
         }
 
         [Fact]
-        public async Task OnlyDevDependencies_ExcludeDevProducesEmptyComponents()
+        public async Task RuntimePackage_WithPrivateAssetsAll_IsRequired()
         {
-            // A project with only dev deps + --exclude-dev → no components section (or empty)
-            using var solution = await new SolutionBuilder("OnlyDevDepSln")
+            using var solution = await new SolutionBuilder("PrivateRuntimeAllSln")
                 .AddProject("MyApp", p => p
                     .WithTargetFramework("net8.0")
-                    .AddPackage("TestPkg.Dev", "1.0.0", devDependency: true))
+                    .AddPackage("TestPkg.A", "1.0.0", devDependency: true))
+                .BuildAsync(_fixture.NuGetFeedUrl);
+
+            Assert.True(PackageHasRuntimeAsset(solution, "MyApp", "TestPkg.A"));
+
+            using var outputDir = solution.CreateOutputDir();
+
+            var result = await _fixture.Runner.RunAsync(
+                solution.SolutionFile,
+                outputDir.Path,
+                new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
+
+            Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
+            Assert.Equal("required", GetComponentScope(result.BomContent, "TestPkg.A"));
+        }
+
+        [Fact]
+        public async Task RuntimePackage_WithPartialPrivateAssets_IsRequired()
+        {
+            using var solution = await new SolutionBuilder("PrivateRuntimePartialSln")
+                .AddProject("MyApp", p => p
+                    .WithTargetFramework("net8.0")
+                    .AddPackage("TestPkg.A", "1.0.0", privateAssets: "contentFiles"))
+                .BuildAsync(_fixture.NuGetFeedUrl);
+
+            Assert.True(PackageHasRuntimeAsset(solution, "MyApp", "TestPkg.A"));
+
+            using var outputDir = solution.CreateOutputDir();
+
+            var result = await _fixture.Runner.RunAsync(
+                solution.SolutionFile,
+                outputDir.Path,
+                new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
+
+            Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
+            Assert.Equal("required", GetComponentScope(result.BomContent, "TestPkg.A"));
+        }
+
+        [Fact]
+        public async Task ExcludeDevFlag_IsDeprecatedAndHasNoEffect()
+        {
+            // --exclude-dev is deprecated; passing it must not change the output
+            using var solution = await new SolutionBuilder("DevDepFlagSln")
+                .AddProject("MyApp", p => p
+                    .WithTargetFramework("net8.0")
+                    .AddPackage("TestPkg.A", "1.0.0")
+                    .AddPackage("TestPkg.BuildOnly", "1.0.0", devDependency: true))
                 .BuildAsync(_fixture.NuGetFeedUrl);
 
             using var outputDir = solution.CreateOutputDir();
@@ -112,7 +160,87 @@ namespace CycloneDX.E2ETests.Tests
                 });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-            Assert.DoesNotContain("TestPkg.Dev", result.BomContent);
+            // Dev dep must still be present with scope=excluded, not omitted
+            Assert.Contains("TestPkg.BuildOnly", result.BomContent);
+            Assert.Contains("<scope>excluded</scope>", result.BomContent);
+            Assert.DoesNotContain("<formulation>", result.BomContent);
+        }
+
+        [Fact]
+        public async Task TransitiveOfDevDependency_IncludedInComponents()
+        {
+            // A transitive dependency pulled in only through a dev dep must also
+            // appear in <components> (the BFS exclusion logic has been removed).
+            using var solution = await new SolutionBuilder("TransitiveDevDepSln")
+                .AddProject("MyApp", p => p
+                    .WithTargetFramework("net8.0")
+                    .AddPackage("TestPkg.A", "1.0.0")
+                    .AddPackage("TestPkg.BuildOnlyWithDep", "1.0.0", devDependency: true))
+                .BuildAsync(_fixture.NuGetFeedUrl);
+
+            using var outputDir = solution.CreateOutputDir();
+
+            var result = await _fixture.Runner.RunAsync(
+                solution.SolutionFile,
+                outputDir.Path,
+                new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
+
+            Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
+            Assert.Contains("TestPkg.A", result.BomContent);
+            Assert.Contains("TestPkg.BuildOnlyWithDep", result.BomContent);
+            Assert.Contains("TestPkg.DevTransitive", result.BomContent);
+            Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.BuildOnlyWithDep"));
+            Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.DevTransitive"));
+            Assert.DoesNotContain("<formulation>", result.BomContent);
+        }
+
+        [Fact]
+        public async Task TransitiveDependency_SharedWithRuntimeDependency_IsRequired()
+        {
+            using var solution = await new SolutionBuilder("SharedTransitiveDevDepSln")
+                .AddProject("MyApp", p => p
+                    .WithTargetFramework("net8.0")
+                    .AddPackage("TestPkg.BuildOnlyWithDep", "1.0.0", devDependency: true)
+                    .AddPackage("TestPkg.RuntimeWithDep", "1.0.0"))
+                .BuildAsync(_fixture.NuGetFeedUrl);
+
+            using var outputDir = solution.CreateOutputDir();
+
+            var result = await _fixture.Runner.RunAsync(
+                solution.SolutionFile,
+                outputDir.Path,
+                new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
+
+            Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
+            Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.BuildOnlyWithDep"));
+            Assert.Equal("required", GetComponentScope(result.BomContent, "TestPkg.RuntimeWithDep"));
+            Assert.Equal("required", GetComponentScope(result.BomContent, "TestPkg.DevTransitive"));
+        }
+
+        private static string GetComponentScope(string bomContent, string componentName)
+        {
+            var document = XDocument.Parse(bomContent);
+            var ns = document.Root!.Name.Namespace;
+            var component = document.Descendants(ns + "component")
+                .Single(c => c.Element(ns + "name")?.Value == componentName);
+
+            return component.Element(ns + "scope")!.Value;
+        }
+
+        private static bool PackageHasRuntimeAsset(
+            BuiltSolution solution,
+            string projectName,
+            string packageName)
+        {
+            var assetsPath = Path.Combine(solution.RootDir, projectName, "obj", "project.assets.json");
+            using var document = JsonDocument.Parse(File.ReadAllText(assetsPath));
+
+            return document.RootElement.GetProperty("targets")
+                .EnumerateObject()
+                .SelectMany(target => target.Value.EnumerateObject())
+                .Where(package => package.Name.StartsWith(packageName + "/", System.StringComparison.OrdinalIgnoreCase))
+                .Any(package => package.Value.TryGetProperty("runtime", out var runtime) &&
+                    runtime.EnumerateObject().Any());
         }
     }
 }
