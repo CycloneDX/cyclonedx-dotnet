@@ -15,7 +15,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using CycloneDX.E2ETests.Builders;
 using CycloneDX.E2ETests.Infrastructure;
 using Xunit;
@@ -141,7 +143,42 @@ namespace CycloneDX.E2ETests.Tests
             Assert.Contains("TestPkg.A", result.BomContent);
             Assert.Contains("TestPkg.DevWithDep", result.BomContent);
             Assert.Contains("TestPkg.DevTransitive", result.BomContent);
+            Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.DevWithDep"));
+            Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.DevTransitive"));
             Assert.DoesNotContain("<formulation>", result.BomContent);
+        }
+
+        [Fact]
+        public async Task TransitiveDependency_SharedWithRuntimeDependency_IsRequired()
+        {
+            using var solution = await new SolutionBuilder("SharedTransitiveDevDepSln")
+                .AddProject("MyApp", p => p
+                    .WithTargetFramework("net8.0")
+                    .AddPackage("TestPkg.DevWithDep", "1.0.0", devDependency: true)
+                    .AddPackage("TestPkg.RuntimeWithDep", "1.0.0"))
+                .BuildAsync(_fixture.NuGetFeedUrl);
+
+            using var outputDir = solution.CreateOutputDir();
+
+            var result = await _fixture.Runner.RunAsync(
+                solution.SolutionFile,
+                outputDir.Path,
+                new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl });
+
+            Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
+            Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.DevWithDep"));
+            Assert.Equal("required", GetComponentScope(result.BomContent, "TestPkg.RuntimeWithDep"));
+            Assert.Equal("required", GetComponentScope(result.BomContent, "TestPkg.DevTransitive"));
+        }
+
+        private static string GetComponentScope(string bomContent, string componentName)
+        {
+            var document = XDocument.Parse(bomContent);
+            var ns = document.Root!.Name.Namespace;
+            var component = document.Descendants(ns + "component")
+                .Single(c => c.Element(ns + "name")?.Value == componentName);
+
+            return component.Element(ns + "scope")!.Value;
         }
     }
 }

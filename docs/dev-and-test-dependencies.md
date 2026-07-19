@@ -64,8 +64,8 @@ var isDevDependency = reader["developmentDependency"] == "true";
 ### Default behaviour
 
 Dev dependencies are **always** included in the SBOM with `scope="excluded"`. No flag is
-needed — the scope is set at load time based on the `IsDevDependency` detection described
-above.
+needed. Dependencies reachable only through dev dependencies are also marked
+`scope="excluded"`.
 
 ### `--exclude-dev` / `-ed` (deprecated)
 
@@ -102,11 +102,14 @@ project, the production project's entry wins in the merged set (where it carries
 and is not added.
 
 For packages that appear **only** in test projects, every package from that project is
-marked `Scope = Excluded` — set on each `DotnetDependency` as it is loaded
-(`ProjectAssetsFileService.cs:85–89`):
+initially marked `Scope = Excluded` as it is loaded (`ProjectAssetsFileService.cs`).
+After all projects have been merged, `Runner.cs` traverses the dependency graph from direct
+non-dev packages that are not already test-excluded. Packages not reachable through those
+runtime paths remain `scope="excluded"`; a package also reachable through a production
+runtime path is `scope="required"`.
 
 ```csharp
-if (isTestProject || package.IsDevDependency)
+if (isTestProject)
 {
     package.Scope = Component.ComponentScope.Excluded;
 }

@@ -80,19 +80,25 @@ listed project are included.
    union-merged into a single package set. Equality is `(Name, Version)`.
 4. `IsDirectReference` is determined per-TFM from `ProjectFileDependencyGroups`.
 5. `IsDevDependency` is set when `SuppressParent != DefaultSuppressParent`
-   (corresponds to `<PrivateAssets>all</PrivateAssets>` / `developmentDependency="true"`).
+   (for example, `<PrivateAssets>all</PrivateAssets>`).
 6. Version ranges in dependency dictionaries are resolved to concrete versions already
    present in the package set.
 7. If `NETStandard.Library` appears in dependency dicts but not in the resolved set, all
    references to it are stripped (SDK-provided; not a real package in the output).
+
+After dependency collection and filtering, runtime scope is calculated by traversing from
+direct, non-dev packages that were not loaded from test projects. Packages not reachable
+through those runtime paths are assigned `Excluded`; packages reachable through both dev/test
+and runtime paths remain `Required`.
 
 If `project.assets.json` yields zero packages, the tool falls back to `packages.config` in
 the same directory.
 
 ### packages.config projects
 
-XML parsed directly. No restore, no assets file, no transitive graph. All packages are
-`Required` scope; `developmentDependency="true"` is read from the XML attribute.
+XML parsed directly. No restore, no assets file, no transitive graph.
+`developmentDependency="true"` is read from the XML attribute and those packages are assigned
+`Excluded` during the runtime-scope pass; other packages are `Required`.
 
 ### Multi-TFM aggregation
 
