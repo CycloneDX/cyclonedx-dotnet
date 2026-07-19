@@ -79,8 +79,10 @@ listed project are included.
 3. All `LockFileTarget` entries (one per TFM × RID combination) are iterated and
    union-merged into a single package set. Equality is `(Name, Version)`.
 4. `IsDirectReference` is determined per-TFM from `ProjectFileDependencyGroups`.
-5. `IsDevDependency` is set when `SuppressParent != DefaultSuppressParent`
-   (for example, `<PrivateAssets>all</PrivateAssets>`).
+5. `IsDevDependency` is set when `SuppressParent != DefaultSuppressParent` and the selected
+   assets are positively identified as build-only (analyzer, build, build-multitargeting, or
+   tools, with no runtime-capable assets). Private packages with runtime-capable or ambiguous
+   assets remain runtime dependencies.
 6. Version ranges in dependency dictionaries are resolved to concrete versions already
    present in the package set.
 7. If `NETStandard.Library` appears in dependency dicts but not in the resolved set, all

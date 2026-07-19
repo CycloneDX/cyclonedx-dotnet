@@ -24,7 +24,9 @@
       "sha512": "abc123==",
       "type": "package",
       "path": "sonaranalyzer.csharp/9.16.0.82469",
-      "files": []
+      "files": [
+        "analyzers/SonarAnalyzer.CSharp.dll"
+      ]
     },
     "Newtonsoft.Json/13.0.1": {
       "sha512": "ghi789==",

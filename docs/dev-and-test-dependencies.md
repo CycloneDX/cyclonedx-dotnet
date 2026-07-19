@@ -20,9 +20,8 @@ The tool treats these as separate concerns:
 
 ### What counts as a dev dependency
 
-A package is a dev dependency when the project explicitly marks it as private — meaning it
-is consumed during development or build but must not be propagated to consumers of the
-project.
+A package is a dev dependency when its resolved assets show that it is used only during
+development or build. Package propagation settings alone do not determine runtime use.
 
 **SDK-style projects (`PackageReference`)**
 
@@ -34,16 +33,23 @@ In the `.csproj` file, a package is marked private with:
 </PackageReference>
 ```
 
-The tool detects this by reading `project.assets.json` (via `NuGet.ProjectModel`) and
-checking the `SuppressParent` field on each `LibraryDependency`. When `PrivateAssets=all`
-is set, NuGet stores a non-default `SuppressParent` value in the assets file.
+The tool reads `project.assets.json` via `NuGet.ProjectModel`. A package with non-default
+`SuppressParent` is classified as a dev dependency only when restore selected analyzer,
+build, build-multitargeting, or tool assets and it selected no compile, runtime, native,
+runtime-target, resource, framework, content, or embedded assets. Analyzer selection combines
+the dependency's selected asset flags with analyzer paths in the package manifest because the
+NuGet model does not expose analyzer target assets directly. Private packages with
+runtime-capable or ambiguous assets remain runtime dependencies.
 
 Detection logic — `ProjectAssetsFileService.cs:127–130`:
 
 ```csharp
-public bool SetIsDevDependency(LibraryDependency dependency)
+public bool SetIsDevDependency(
+    LibraryDependency dependency,
+    LockFileTargetLibrary targetLibrary,
+    LockFileLibrary library)
 {
-    return dependency != null && dependency.SuppressParent != LibraryIncludeFlagUtils.DefaultSuppressParent;
+    // Private propagation plus positively identified build-only assets.
 }
 ```
 
@@ -136,7 +142,8 @@ if (excludeTestProjects && isTestProject)
 
 | Situation | Default output | `--exclude-dev` (deprecated) | `--exclude-test-projects` |
 |---|---|---|---|
-| Package with `PrivateAssets=all` | Included, `scope="excluded"` | (no effect) | (no effect) |
+| Build-only package with `PrivateAssets=all` | Included, `scope="excluded"` | (no effect) | (no effect) |
+| Runtime-capable package with `PrivateAssets=all` | Included, `scope="required"` | (no effect) | (no effect) |
 | Package in `packages.config` with `developmentDependency="true"` | Included, `scope="excluded"` | (no effect) | (no effect) |
 | Package only in a test project | Included, `scope="excluded"` | (no effect) | Omitted entirely |
 | Package in both a production and a test project | Included once, `scope="required"` | (no effect) | Included, `scope="required"` |
@@ -171,7 +178,7 @@ The CycloneDX specification (v1.6) defines three values for the `scope` field on
 | Situation | `scope` |
 |---|---|
 | Package only in a test project | `excluded` |
-| Dev dependency (`PrivateAssets=all` or `developmentDependency="true"`) | `excluded` |
+| Build-only private dependency or `developmentDependency="true"` | `excluded` |
 
 **Dev dependencies and `scope="excluded"`**
 
