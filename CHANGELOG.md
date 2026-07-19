@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Resolve dependency ranges with multiple matching package versions in solutions** (#1110) — solution scans no longer crash when more than one merged package version satisfies an unresolved NuGet dependency range; the BOM now retains an edge to every matching component
+
 ## [6.2.0] - 2026-04-27
 
 ### Added
