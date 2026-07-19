@@ -15,8 +15,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CycloneDX.Models;
+using CycloneDX.Models.Vulnerabilities;
 
 namespace CycloneDX.Interfaces
 {
@@ -24,5 +26,12 @@ namespace CycloneDX.Interfaces
     {
         Task<Component> GetComponentAsync(string name, string version, Component.ComponentScope? scope);
         Task<Component> GetComponentAsync(DotnetDependency DotnetDependency);
+
+        /// <summary>
+        /// Queries the configured NuGet feed for known vulnerabilities affecting the given components.
+        /// Makes a single network call regardless of how many components are supplied.
+        /// Returns an empty list (not null) when the feed does not support vulnerability data.
+        /// </summary>
+        Task<IReadOnlyList<Vulnerability>> GetVulnerabilitiesAsync(IEnumerable<Component> components);
     }
 }

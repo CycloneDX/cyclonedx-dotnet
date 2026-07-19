@@ -20,12 +20,14 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
+using CycloneDX.Models.Vulnerabilities;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Packaging;
@@ -547,6 +549,172 @@ namespace CycloneDX.Services
                     return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Fetches vulnerability data from the configured NuGet feed and returns CycloneDX
+        /// <see cref="Vulnerability"/> objects for each known vulnerability that affects one of
+        /// the supplied <paramref name="components"/>.
+        ///
+        /// The NuGet vulnerability API (<see cref="IVulnerabilityInfoResource"/>) downloads the
+        /// full vulnerability database in a single call; this method therefore makes exactly one
+        /// network round-trip regardless of how many components are supplied.
+        ///
+        /// Returns an empty list (never null) when:
+        /// <list type="bullet">
+        ///   <item>the feed does not support <see cref="IVulnerabilityInfoResource"/></item>
+        ///   <item>no vulnerabilities are found for any of the supplied components</item>
+        /// </list>
+        /// </summary>
+        /// <summary>
+        /// Returns the <see cref="IVulnerabilityInfoResource"/> for the configured feed, or
+        /// <see langword="null"/> when the feed does not expose one.  Exists as a separate
+        /// virtual method so that unit tests can substitute a mock resource without needing a
+        /// real <see cref="SourceRepository"/>.
+        /// </summary>
+        protected internal virtual Task<IVulnerabilityInfoResource> GetVulnerabilityResourceAsync() =>
+            _sourceRepository == null
+                ? Task.FromResult<IVulnerabilityInfoResource>(null)
+                : _sourceRepository.GetResourceAsync<IVulnerabilityInfoResource>(_cancellationToken);
+
+        public async Task<IReadOnlyList<Vulnerability>> GetVulnerabilitiesAsync(IEnumerable<Component> components)
+        {
+            // Some feeds (e.g. private registries) don't expose vulnerability data.
+            var vulnResource = await GetVulnerabilityResourceAsync().ConfigureAwait(false);
+
+            if (vulnResource == null)
+            {
+                return Array.Empty<Vulnerability>();
+            }
+
+            try
+            {
+                var result = await vulnResource
+                    .GetVulnerabilityInfoAsync(_sourceCacheContext, _logger, _cancellationToken)
+                    .ConfigureAwait(false);
+
+                if (result?.KnownVulnerabilities == null)
+                {
+                    return Array.Empty<Vulnerability>();
+                }
+
+                // KnownVulnerabilities is a list of dictionaries — one per "shard" file the feed uses
+                // to split its vulnerability data. Merge them into a single lookup keyed by package id.
+                var knownVulnerabilities = result.KnownVulnerabilities
+                    .SelectMany(shard => shard)
+                    .GroupBy(kvp => kvp.Key, kvp => kvp.Value, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.SelectMany(v => v).ToList(),
+                        StringComparer.OrdinalIgnoreCase);
+
+                var vulnerabilities = new List<Vulnerability>();
+
+                foreach (var component in components)
+                {
+                    if (string.IsNullOrEmpty(component.Name) || string.IsNullOrEmpty(component.Version))
+                        continue;
+
+                    if (!knownVulnerabilities.TryGetValue(component.Name, out var packageVulns))
+                        continue;
+
+                    if (!NuGetVersion.TryParse(component.Version, out var nugetVersion))
+                        continue;
+
+                    foreach (var vuln in packageVulns.Where(v => v.Versions.Satisfies(nugetVersion)))
+                    {
+                        var advisoryUrl = vuln.Url?.ToString();
+                        vulnerabilities.Add(new Vulnerability
+                        {
+                            // Use the advisory URL path as a short id (e.g. "GHSA-xxxx-yyyy-zzzz")
+                            // if it looks like a well-known advisory identifier, otherwise leave null
+                            // so the spec-required 'id' field is simply omitted.
+                            Id = TryExtractAdvisoryId(advisoryUrl),
+                            Source = new Source { Url = advisoryUrl },
+                            Advisories = advisoryUrl != null
+                                ? new List<Advisory> { new Advisory { Url = advisoryUrl } }
+                                : null,
+                            Ratings = new List<Rating>
+                            {
+                                new Rating
+                                {
+                                    Severity = MapNuGetSeverity(vuln.Severity),
+                                    // NuGet only provides a severity band, not a numeric score or
+                                    // a scoring method (CVSS etc.), so we deliberately leave those
+                                    // fields unset rather than fabricating values.
+                                }
+                            },
+                            Affects = new List<Affects>
+                            {
+                                new Affects
+                                {
+                                    Ref = component.BomRef,
+                                    Versions = new List<AffectedVersions>
+                                    {
+                                        new AffectedVersions
+                                        {
+                                            // Encode the NuGet version range as a vers: URI range spec
+                                            // (https://vers.fail/). The raw NuGet range is a reasonable
+                                            // approximation; full vers conversion is left as future work.
+                                            Range = vuln.Versions.ToShortString(),
+                                            Status = Status.Affected,
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+
+                return vulnerabilities;
+            }
+            catch (Exception ex)
+            {
+                await Console.Error.WriteLineAsync(
+                    $"Warning: could not fetch vulnerability data from NuGet feed: {ex.Message}")
+                    .ConfigureAwait(false);
+                return Array.Empty<Vulnerability>();
+            }
+        }
+
+        /// <summary>
+        /// Maps a NuGet <see cref="NuGet.Protocol.PackageVulnerabilitySeverity"/> value to the
+        /// equivalent CycloneDX <see cref="Severity"/>.
+        /// NuGet uses "Moderate" where CycloneDX uses "Medium".
+        /// </summary>
+        internal static Severity MapNuGetSeverity(NuGet.Protocol.PackageVulnerabilitySeverity severity) =>
+            severity switch
+            {
+                NuGet.Protocol.PackageVulnerabilitySeverity.Low      => Severity.Low,
+                NuGet.Protocol.PackageVulnerabilitySeverity.Moderate => Severity.Medium,
+                NuGet.Protocol.PackageVulnerabilitySeverity.High     => Severity.High,
+                NuGet.Protocol.PackageVulnerabilitySeverity.Critical => Severity.Critical,
+                _                                                     => Severity.Unknown,
+            };
+
+        /// <summary>
+        /// Tries to extract a short advisory identifier (e.g. "GHSA-xxxx-yyyy-zzzz" or
+        /// "CVE-2024-12345") from an advisory URL.  Returns null when no recognisable
+        /// identifier can be found, which is preferable to fabricating one.
+        /// </summary>
+        private static string TryExtractAdvisoryId(string advisoryUrl)
+        {
+            if (string.IsNullOrEmpty(advisoryUrl)) return null;
+
+            // GitHub Security Advisory: https://github.com/advisories/GHSA-xxxx-yyyy-zzzz
+            // OSV / GHSA direct:        https://osv.dev/vulnerability/GHSA-xxxx-yyyy-zzzz
+            // NVD CVE:                  https://nvd.nist.gov/vuln/detail/CVE-2024-12345
+            var segments = advisoryUrl.TrimEnd('/').Split('/');
+            var last = segments.LastOrDefault();
+            if (last != null &&
+                (last.StartsWith("GHSA-", StringComparison.OrdinalIgnoreCase) ||
+                 last.StartsWith("CVE-",  StringComparison.OrdinalIgnoreCase) ||
+                 last.StartsWith("OSV-",  StringComparison.OrdinalIgnoreCase)))
+            {
+                return last;
+            }
+
+            return null;
         }
     }
 }

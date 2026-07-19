@@ -29,6 +29,7 @@ using CycloneDX.Services;
 using static CycloneDX.Models.Component;
 using Json.Schema;
 using NuGet.Versioning;
+using CycloneDX.Models.Vulnerabilities;
 
 namespace CycloneDX
 {
@@ -465,6 +466,17 @@ namespace CycloneDX
             directDependencies.Ref = bom.Metadata.Component.BomRef;
             bom.Dependencies.Add(directDependencies);
             bom.Dependencies.Sort((x, y) => string.Compare(x.Ref, y.Ref, StringComparison.InvariantCultureIgnoreCase));
+
+            // Enrich the BOM with vulnerability data from the NuGet feed.
+            // This is a single network call that fetches the full vulnerability database once,
+            // then matches each resolved component against it in-memory.
+            var vulnerabilities = await nugetService
+                .GetVulnerabilitiesAsync(components)
+                .ConfigureAwait(false);
+            if (vulnerabilities.Count > 0)
+            {
+                bom.Vulnerabilities = vulnerabilities.ToList();
+            }
 
             LastGeneratedBom = bom;
 
