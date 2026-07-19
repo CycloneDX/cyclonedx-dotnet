@@ -356,12 +356,13 @@ namespace CycloneDX
                     foreach (var dep in package.Dependencies ?? [])
                     {
                         var lookupKey = (dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value?.ToLower(CultureInfo.InvariantCulture));
+                        var lookupKeys = new List<(string, string)>();
                         if (!bomRefLookup.ContainsKey(lookupKey))
                         {
                             var packageNameMatch = bomRefLookup.Where(x => x.Key.Item1 == dep.Key.ToLower(CultureInfo.InvariantCulture)).ToList();
                             if (packageNameMatch.Count == 1)
                             {
-                                lookupKey = packageNameMatch.First().Key;
+                                lookupKeys.Add(packageNameMatch.First().Key);
                             }
                             else if (packageNameMatch.Count > 1
                                 && VersionRange.TryParse(dep.Value, out var versionRange))
@@ -369,12 +370,12 @@ namespace CycloneDX
                                 // dep.Value is a version range stored verbatim from the nuspec (e.g. "[1.0.0]").
                                 // ResolveDependencyVersionRanges couldn't resolve it within this project's
                                 // assets because the satisfying version only exists in another project's assets.
-                                // Use the range to pick the correct candidate from the merged BOM.
-                                var rangeMatch = packageNameMatch.SingleOrDefault(
-                                    x => NuGetVersion.TryParse(x.Key.Item2, out var v) && versionRange.Satisfies(v));
-                                if (rangeMatch.Key != default)
-                                    lookupKey = rangeMatch.Key;
-                                else
+                                // The merged BOM does not retain project-specific resolution context,
+                                // so preserve every component version that satisfies the range.
+                                lookupKeys.AddRange(packageNameMatch
+                                    .Where(x => NuGetVersion.TryParse(x.Key.Item2, out var v) && versionRange.Satisfies(v))
+                                    .Select(x => x.Key));
+                                if (lookupKeys.Count == 0)
                                 {
                                     Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value}");
                                     return (int)ExitCode.UnableToLocateDependencyBomRef;
@@ -386,13 +387,20 @@ namespace CycloneDX
                                 return (int)ExitCode.UnableToLocateDependencyBomRef;
                             }
                         }
-
-                        var bomRef = bomRefLookup[lookupKey];
-                        transitiveDependencies.Add(bomRef);
-                        packageDependencies.Dependencies.Add(new Dependency
+                        else
                         {
-                            Ref = bomRef
-                        });
+                            lookupKeys.Add(lookupKey);
+                        }
+
+                        foreach (var resolvedLookupKey in lookupKeys)
+                        {
+                            var bomRef = bomRefLookup[resolvedLookupKey];
+                            transitiveDependencies.Add(bomRef);
+                            packageDependencies.Dependencies.Add(new Dependency
+                            {
+                                Ref = bomRef
+                            });
+                        }
                     }
                     dependencies.Add(packageDependencies);
                 }
