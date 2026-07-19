@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Represent development dependencies with excluded scope** — build-only private dependencies and packages reachable only through them are now included in the BOM with `scope="excluded"`; runtime-capable private packages remain `required`. The `--exclude-dev` option is deprecated and has no effect.
+
 ## [6.2.0] - 2026-04-27
 
 ### Added
