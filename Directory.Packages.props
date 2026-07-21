@@ -20,6 +20,6 @@
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="22.2.0" />
     <!-- E2E test dependencies -->
     <PackageVersion Include="Testcontainers" Version="4.13.0" />
-    <PackageVersion Include="Verify.XunitV3" Version="31.25.0" />
+    <PackageVersion Include="Verify.XunitV3" Version="31.27.0" />
   </ItemGroup>
 </Project>
