@@ -108,7 +108,31 @@ namespace CycloneDX.Services
             if (name?.Contains("$(MSBuildProjectName)") == true)
             {
                 var projectName = _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
-                name = name.Replace("$(MSBuildProjectName)", projectName);                
+                name = name.Replace("$(MSBuildProjectName)", projectName);
+            }
+
+            if (name?.Contains("$(RootNamespace)") == true)
+            {
+                // <AssemblyName>$(RootNamespace)</AssemblyName> is a common idiom, but the literal
+                // token is identical across every project that uses it. Left unresolved, two such
+                // projects collide as the same dictionary key in RecursivelyGetProjectReferencesAsync
+                // (see issue #917). Resolve it from the project's own <RootNamespace> element, same
+                // as MSBuild would; guard against <RootNamespace>$(AssemblyName)</RootNamespace>
+                // (the documented workaround for this same issue) so the two can't resolve each
+                // other into an infinite loop.
+                string rootNamespace = (xmldoc.SelectSingleNode("/Project/PropertyGroup/RootNamespace") as XmlElement)?.InnerText;
+                rootNamespace ??= (xmldoc.SelectSingleNode("/Project/PropertyGroup/msbuild:RootNamespace", namespaces) as XmlElement)?.InnerText;
+                rootNamespace ??= (xmldoc.SelectSingleNode("/msbuild:Project/msbuild:PropertyGroup/msbuild:RootNamespace", namespaces) as XmlElement)?.InnerText;
+
+                var projectName = _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
+                if (!string.IsNullOrEmpty(rootNamespace) && !rootNamespace.Contains("$(AssemblyName)"))
+                {
+                    name = name.Replace("$(RootNamespace)", rootNamespace);
+                }
+                else
+                {
+                    name = name.Replace("$(RootNamespace)", projectName);
+                }
             }
 
             name ??= _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);

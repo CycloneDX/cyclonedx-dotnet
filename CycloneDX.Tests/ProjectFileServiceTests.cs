@@ -372,6 +372,56 @@ namespace CycloneDX.Tests
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), item));
         }
 
+        /// <summary>
+        /// Reproduces issue #917: <AssemblyName>$(RootNamespace)</AssemblyName> is a common idiom
+        /// copy-pasted across projects. GetAssemblyNameAndVersion previously returned the raw,
+        /// unresolved literal "$(RootNamespace)" for every such project, so when a root project
+        /// references two or more of them, RecursivelyGetProjectReferencesAsync's
+        /// ToDictionary(project => project.name, ...) throws
+        /// "An item with the same key has already been added. Key: $(RootNamespace)" even though
+        /// the projects' actual (MSBuild-resolved) namespaces are different.
+        /// </summary>
+        [Fact]
+        public async Task RecursivelyGetProjectReferences_TwoReferencedProjectsUseRootNamespaceAssemblyNameIdiom_DoesNotThrow()
+        {
+            const string project2Xml = @"<Project>
+  <PropertyGroup>
+    <RootNamespace>Company.Project2</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+  </PropertyGroup>
+</Project>";
+            const string project3Xml = @"<Project>
+  <PropertyGroup>
+    <RootNamespace>Company.Project3</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+  </PropertyGroup>
+</Project>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+                {
+                    { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetProjectFileWithProjectReferences(
+                        new[] {
+                            @"..\Project2\Project2.csproj",
+                            @"..\Project3\Project3.csproj",
+                        })
+                    },
+                    { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), new MockFileData(project2Xml) },
+                    { XFS.Path(@"c:\SolutionPath\Project3\Project3.csproj"), new MockFileData(project3Xml) },
+                });
+            var mockDotnetUtilsService = new Mock<IDotnetUtilsService>();
+            var mockPackageFileService = new Mock<IPackagesFileService>();
+            var mockProjectAssetsFileService = new Mock<IProjectAssetsFileService>();
+            var projectFileService = new ProjectFileService(
+                mockFileSystem,
+                mockDotnetUtilsService.Object,
+                mockPackageFileService.Object,
+                mockProjectAssetsFileService.Object);
+
+            var projects = await projectFileService.RecursivelyGetProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj")).ConfigureAwait(true);
+
+            var names = projects.Select(p => p.Name).OrderBy(n => n).ToList();
+            Assert.Equal(new[] { "Company.Project2", "Company.Project3", "Project1" }, names);
+        }
+
         [Fact]
         public async Task RecursivelyGetProjectReferences_ReturnsCSAssemblyVersion()
         {
@@ -776,6 +826,53 @@ namespace CycloneDX.Tests
             var (name, _) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\ClassicProject.csproj"));
 
             Assert.Equal("MyClassicLibrary", name);
+        }
+
+        /// <summary>
+        /// <AssemblyName>$(RootNamespace)</AssemblyName> should resolve to the project's own
+        /// <RootNamespace> element, the same way MSBuild would evaluate it — not be returned as
+        /// the raw, unresolved "$(RootNamespace)" literal (issue #917).
+        /// </summary>
+        [Fact]
+        public void GetAssemblyNameAndVersion_ResolvesRootNamespaceToken()
+        {
+            const string csproj = @"<Project><PropertyGroup>
+    <RootNamespace>Company.Widgets</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+</PropertyGroup></Project>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\P\P.csproj"), new MockFileData(csproj) }
+            });
+            var svc = CreateProjectFileService(mockFileSystem);
+
+            var (name, _) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+
+            Assert.Equal("Company.Widgets", name);
+        }
+
+        /// <summary>
+        /// When <RootNamespace> is itself unresolvable — e.g. the documented workaround
+        /// "&lt;RootNamespace&gt;$(AssemblyName)&lt;/RootNamespace&gt;", which would resolve back
+        /// into itself — fall back to the project's file name, same as the existing
+        /// $(MSBuildProjectName) handling, instead of looping or keeping the raw token (which is
+        /// what caused issue #917's duplicate-key crash).
+        /// </summary>
+        [Fact]
+        public void GetAssemblyNameAndVersion_RootNamespaceTokenWithoutUsableRootNamespace_FallsBackToFileName()
+        {
+            const string csproj = @"<Project><PropertyGroup>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+</PropertyGroup></Project>";
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\P\Widgets.csproj"), new MockFileData(csproj) }
+            });
+            var svc = CreateProjectFileService(mockFileSystem);
+
+            var (name, _) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\Widgets.csproj"));
+
+            Assert.Equal("Widgets", name);
         }
     }
 }
