@@ -99,14 +99,38 @@ namespace CycloneDX
         }
 
         /// <summary>
+        /// Finds all dependencies that are not reachable from the direct references.
+        /// Call this before <see cref="ExcludePackages"/> to capture the packages that are
+        /// already orphaned, so that <see cref="RemoveOrphanedPackages"/> can leave them alone.
+        /// </summary>
+        /// <param name="packages">The set of dependencies to analyze.</param>
+        /// <returns>A set of unreachable dependencies.</returns>
+        internal static HashSet<DotnetDependency> FindUnreachableDependencies(HashSet<DotnetDependency> packages)
+        {
+            var reachablePackages = FindReachableDependencies(packages);
+            return packages.Where(p => !reachablePackages.Contains(p)).ToHashSet();
+        }
+
+        /// <summary>
         /// Removes orphaned packages from the provided set of dependencies.
         /// Orphaned packages are those that are not directly referenced or reachable from direct references.
         /// </summary>
         /// <param name="packages">The set of dependencies to filter.</param>
-        internal static void RemoveOrphanedPackages(HashSet<DotnetDependency> packages)
+        /// <param name="preExistingOrphans">
+        /// Packages that were already unreachable before the exclude filter was applied, as returned by
+        /// <see cref="FindUnreachableDependencies"/>. These are retained rather than removed: the tool cannot
+        /// tell a genuinely unused package from one whose incoming edges were lost while merging the
+        /// dependency graphs of several targets or projects. When null, every unreachable package is removed.
+        /// </param>
+        internal static void RemoveOrphanedPackages(HashSet<DotnetDependency> packages, HashSet<DotnetDependency> preExistingOrphans = null)
         {
             var reachablePackages = FindReachableDependencies(packages);
-            var orphanedPackages = packages.Except(reachablePackages).ToList();
+            var unreachablePackages = packages.Where(p => !reachablePackages.Contains(p)).ToList();
+
+            var orphanedPackages = preExistingOrphans == null
+                ? unreachablePackages
+                : unreachablePackages.Where(p => !preExistingOrphans.Contains(p)).ToList();
+            var retainedPackages = unreachablePackages.Count - orphanedPackages.Count;
 
             // Log the removed orphaned packages
             if (orphanedPackages.Count != 0)
@@ -124,8 +148,15 @@ namespace CycloneDX
                 Console.WriteLine("No orphaned packages were found.");
             }
 
+            if (retainedPackages != 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"{retainedPackages} package(s) were already unreachable before filtering and have been kept.");
+                Console.ResetColor();
+            }
+
             // Remove orphaned packages
-            packages.IntersectWith(reachablePackages);
+            packages.ExceptWith(orphanedPackages);
         }
     }
 }

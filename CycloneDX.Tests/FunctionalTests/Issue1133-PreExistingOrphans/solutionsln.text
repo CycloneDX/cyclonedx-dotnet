@@ -1,0 +1,5 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectA", "c:/ProjectPath/projectA/ProjectA.csproj", "{3EA60E8F-5BEE-465D-8440-013C12EB2C2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectB", "c:/ProjectPath/projectB/ProjectB.csproj", "{08F83629-063E-4E73-9312-8ECF76C372DC}"
+EndProject
