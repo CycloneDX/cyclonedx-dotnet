@@ -21,13 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **`--exclude-filter` no longer removes packages it did not orphan** (fixes #1133) — the orphan
-  sweep that runs with the filter now removes only packages the exclusion itself made unreachable.
-  Packages that were already unreachable are kept and reported: a missing incoming edge is not
-  proof that a package is unused, because edges are routinely lost when the dependency graphs of
-  several targets or projects are merged. Previously, passing any value to `--exclude-filter` —
-  including a package name absent from the graph — deleted every unreachable component, silently
-  dropping shipped packages from the BOM.
+- **`--exclude-filter` removes only what it orphans** (fixes #1133) — pre-existing orphans are kept
 
 ## [6.2.1] - 2026-10-11
 
