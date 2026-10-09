@@ -325,6 +325,12 @@ namespace CycloneDX
                     else if (package.DependencyType == DependencyType.Project)
                     {
                         component = projectFileService.GetComponent(package);
+                        // Treat project references like the root project: assume they are published as NuGet packages
+                        if (component != null && setNugetPurl)
+                        {
+                            component.Purl = Utils.GeneratePackageUrl(component.Name, component.Version);
+                            component.BomRef = component.Purl ?? component.BomRef;
+                        }
                     }
 
                     if (component != null)
