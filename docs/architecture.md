@@ -195,7 +195,9 @@ to keep the graph consistent.
 Project-type entries are resolved to `Component` objects (Type: Library) using metadata
 read directly from the `.csproj`/`.fsproj`/`.vbproj` XML. Version is sourced from
 `<Version>`, or `AssemblyVersion` in `AssemblyInfo.cs`, or `"1.0.0"` as fallback. These
-components get a `BomRef` but no NuGet PURL. Only valid when the input is a project file.
+components get a `BomRef` (`<name>@<version>`) but no NuGet PURL. With `--set-nuget-purl`,
+they instead get a guessed `pkg:nuget/<name>@<version>` PURL, which is also used as their
+`BomRef` (same as the metadata component). Only valid when the input is a project file.
 
 ---
 
@@ -223,7 +225,8 @@ After replacement, `SetMetadataComponentIfNecessary` fills blank fields only:
 
 `--set-name`, `--set-version`, `--set-type` override the above regardless of template content.
 `--set-nuget-purl` sets both `Purl` and `BomRef` of the metadata component to
-`pkg:nuget/<name>@<version>`.
+`pkg:nuget/<name>@<version>`. With `--include-project-references`, the project reference
+components get the same treatment (see [Project References](#project-references)).
 
 `Metadata.Timestamp` defaults to `DateTime.UtcNow` if not provided by the template.
 A `Tool` entry for `CycloneDX module for .NET` is always injected into `Metadata.Tools`.

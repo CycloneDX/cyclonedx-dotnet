@@ -21,7 +21,7 @@ These flags always win, regardless of what the metadata file says.
 | `--set-name` | `-sn` | _(filename)_ | Override the metadata component `<name>` |
 | `--set-version` | `-sv` | `0.0.0` | Override the metadata component `<version>` |
 | `--set-type` | `-st` | `Application` | Override the metadata component `type` attribute |
-| `--set-nuget-purl` | — | off | Generate a NuGet `pkg:nuget/<name>@<version>` purl and bom-ref if they are not already set |
+| `--set-nuget-purl` | — | off | Generate a NuGet `pkg:nuget/<name>@<version>` purl and bom-ref if they are not already set. With `--include-project-references`, project reference components get one as well |
 
 `--set-name`, `--set-version`, and `--set-type` override only the specific field
 they target; every other field from the template file (description, licenses,

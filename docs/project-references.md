@@ -76,6 +76,12 @@ component in the BOM, and the full multi-level dependency graph is preserved:
 MyApp → MyLib → SomeNuGetPackage
 ```
 
+By default, project components get a `bom-ref` of `<name>@<version>` and no
+purl. If the referenced projects are published as NuGet packages, add
+`--set-nuget-purl`: just like the metadata component, each project component then
+gets a guessed `pkg:nuget/<name>@<version>` purl, which is also used as its
+`bom-ref`.
+
 `-ipr` is only valid with a project file input. Passing it with a `.sln`,
 directory, or `packages.config` path is a hard error.
 

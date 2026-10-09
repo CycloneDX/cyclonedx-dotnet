@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **NuGet purl for project reference components** — when `--set-nuget-purl` is combined with `--include-project-references`, project reference components now get a guessed `pkg:nuget/<name>@<version>` purl (also used as their `bom-ref`), the same way the metadata component does. Previously they only got a `<name>@<version>` bom-ref and no purl
+
 ## [6.2.1] - 2026-10-11
 
 ### Fixed
