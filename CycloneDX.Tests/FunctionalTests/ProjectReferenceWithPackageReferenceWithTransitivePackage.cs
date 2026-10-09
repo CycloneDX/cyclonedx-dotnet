@@ -42,5 +42,32 @@ namespace CycloneDX.Tests.FunctionalTests
 
             FunctionalTestHelper.AssertHasDependencyWithChild(bom, "ClassLibrary1@1.0.0", "pkg:nuget/Moq@4.20.70", "expected dependency not found");
         }
+
+        [Fact(Timeout = 15000)]
+        public async Task ProjectReferenceWithPackageReferenceWithTransitivePackage_includeProjectReferences_HasNoPurlByDefault()
+        {
+            options.includeProjectReferences = true;
+
+            var bom = await FunctionalTestHelper.Test(assetsJson, options);
+
+            var classLibrary = Assert.Single(bom.Components, c => c.Name == "ClassLibrary1");
+            Assert.Null(classLibrary.Purl);
+            Assert.Equal("ClassLibrary1@1.0.0", classLibrary.BomRef);
+        }
+
+        [Fact(Timeout = 15000)]
+        public async Task ProjectReferenceWithPackageReferenceWithTransitivePackage_includeProjectReferences_SetNugetPurl()
+        {
+            options.includeProjectReferences = true;
+            options.setNugetPurl = true;
+
+            var bom = await FunctionalTestHelper.Test(assetsJson, options);
+
+            var classLibrary = Assert.Single(bom.Components, c => c.Name == "ClassLibrary1");
+            Assert.Equal("pkg:nuget/ClassLibrary1@1.0.0", classLibrary.Purl);
+            Assert.Equal("pkg:nuget/ClassLibrary1@1.0.0", classLibrary.BomRef);
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, bom.Metadata.Component.BomRef, "pkg:nuget/ClassLibrary1@1.0.0", "expected dependency on project reference not found");
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "pkg:nuget/ClassLibrary1@1.0.0", "pkg:nuget/Moq@4.20.70", "expected dependency of project reference not found");
+        }
     }
 }
