@@ -136,11 +136,17 @@ dependencies.
 (exact). Matched packages are removed from the set.
 
 **Step 2 — orphan removal**: BFS from all `IsDirectReference == true` packages through their
-`Dependencies` dicts. Any package not reachable from a direct reference is removed.
-Orphan names are printed to console.
+`Dependencies` dicts, run once before step 1 and once after. Only packages that step 1 made
+unreachable are removed, and their names are printed to console. Packages that were already
+unreachable before the filter ran are kept, and their count is reported.
 
 A transitive dependency shared between an excluded package and a non-excluded package is
 kept, because it remains reachable via the non-excluded path.
+
+Keeping the pre-existing orphans is deliberate. A package with no incoming edge is not
+necessarily unused: edges are lost whenever packages from several targets or projects are
+merged (see the union note above), so removing everything unreachable also removed genuinely
+shipped packages.
 
 ---
 

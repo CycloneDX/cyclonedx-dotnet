@@ -1,0 +1,84 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "Shared/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Leaf": "1.0.0"
+        },
+        "compile": {
+          "lib/net8.0/Shared.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/Shared.dll": {}
+        }
+      },
+      "Leaf/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Leaf.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/Leaf.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Shared/1.0.0": {
+      "sha512": "",
+      "type": "package",
+      "path": "shared/1.0.0",
+      "files": [
+        "lib/net8.0/Shared.dll"
+      ]
+    },
+    "Leaf/2.0.0": {
+      "sha512": "",
+      "type": "package",
+      "path": "leaf/2.0.0",
+      "files": [
+        "lib/net8.0/Leaf.dll"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "Shared >= 1.0.0",
+      "Leaf >= 2.0.0"
+    ]
+  },
+  "packageFolders": {},
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectName": "ProjectA",
+      "projectStyle": "PackageReference",
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {}
+        }
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "dependencies": {
+          "Shared": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          },
+          "Leaf": {
+            "target": "Package",
+            "version": "[2.0.0, )"
+          }
+        }
+      }
+    }
+  }
+}

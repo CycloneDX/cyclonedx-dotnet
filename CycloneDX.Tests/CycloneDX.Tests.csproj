@@ -203,4 +203,22 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="FunctionalTests\Issue1133-PreExistingOrphans\solutionsln.text">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue1133-PreExistingOrphans\projectAcsproj.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue1133-PreExistingOrphans\projectBcsproj.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue1133-PreExistingOrphans\projectAassets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue1133-PreExistingOrphans\projectBassets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -247,8 +247,10 @@ namespace CycloneDX
             {
                 if (!string.IsNullOrEmpty(options.DependencyExcludeFilter))
                 {
+                    // Packages that are already unreachable are not the filter's to remove.
+                    var preExistingOrphans = ExcludeFilterHelper.FindUnreachableDependencies(packages);
                     ExcludeFilterHelper.ExcludePackages(packages, options.DependencyExcludeFilter);
-                    ExcludeFilterHelper.RemoveOrphanedPackages(packages);
+                    ExcludeFilterHelper.RemoveOrphanedPackages(packages, preExistingOrphans);
                 }
             }
             catch (ArgumentException e)
