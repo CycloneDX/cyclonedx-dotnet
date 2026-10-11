@@ -9,16 +9,15 @@ using Xunit;
 namespace CycloneDX.Tests.FunctionalTests
 {
     /// <summary>
-    /// Regression test: --exclude-filter must not delete packages that were already unreachable.
+    /// Regression tests for filtering a solution that resolves a shared dependency to two versions.
     ///
     /// Two projects of one solution reference Shared@1.0.0, which declares a dependency on Leaf with the
     /// open range [1.0.0, ). ProjectA also pins Leaf 2.0.0, so the range resolves to 2.0.0 there, while it
-    /// resolves to 1.0.0 in ProjectB. Both resolutions are correct in their own context, but the merged set
-    /// keeps one entry per (name, version), so only one project's edges survive and Leaf@1.0.0 ends up
-    /// referenced by nothing.
+    /// resolves to 1.0.0 in ProjectB. Previously the merge lost one project's edges, leaving Leaf@1.0.0
+    /// unreachable before filtering. The merge now preserves both edges, so excluding Shared should
+    /// remove Leaf@1.0.0 while keeping the directly referenced Leaf@2.0.0.
     ///
-    /// --exclude-filter must not delete it: the package is shipped, and the missing edge is an artefact of
-    /// merging two resolution contexts, not evidence that nothing uses it.
+    /// Pre-existing orphan retention is covered separately by ExcludeFilterHelperTests.
     /// </summary>
     public class Issue1133_PreExistingOrphans
     {
@@ -51,8 +50,7 @@ namespace CycloneDX.Tests.FunctionalTests
         }
 
         /// <summary>
-        /// Without a filter, both versions of Leaf are reported; Leaf@1.0.0 has no parent.
-        /// This documents the state the filter must not act on.
+        /// Without a filter, both versions of Leaf are reported.
         /// </summary>
         [Fact]
         public async Task WithoutFilter_BothLeafVersionsArePresent()
@@ -68,7 +66,7 @@ namespace CycloneDX.Tests.FunctionalTests
         /// A filter that matches nothing must not change the component list.
         /// </summary>
         [Fact]
-        public async Task FilterMatchingNothing_KeepsPreExistingOrphan()
+        public async Task FilterMatchingNothing_KeepsBothLeafVersions()
         {
             var bom = await FunctionalTestHelper.Test(Options("DoesNotExist"), GetMockFS());
 
@@ -78,8 +76,8 @@ namespace CycloneDX.Tests.FunctionalTests
 
         /// <summary>
         /// Packages the filter names are still removed, and so are the packages it orphans.
-        /// Shared is the only parent of Leaf@2.0.0's edge, but Leaf@2.0.0 is a direct reference of
-        /// ProjectA, so only Shared itself goes.
+        /// Leaf@1.0.0 is reachable only through Shared, but Leaf@2.0.0 is a direct reference of
+        /// ProjectA, so Shared and Leaf@1.0.0 go while Leaf@2.0.0 stays.
         /// </summary>
         [Fact]
         public async Task ExcludedPackage_IsStillRemoved()
@@ -87,7 +85,7 @@ namespace CycloneDX.Tests.FunctionalTests
             var bom = await FunctionalTestHelper.Test(Options("Shared"), GetMockFS());
 
             Assert.DoesNotContain(bom.Components, c => c.Name == "Shared");
-            Assert.Contains(bom.Components, c => c.Name == "Leaf" && c.Version == "1.0.0");
+            Assert.DoesNotContain(bom.Components, c => c.Name == "Leaf" && c.Version == "1.0.0");
             Assert.Contains(bom.Components, c => c.Name == "Leaf" && c.Version == "2.0.0");
         }
     }
