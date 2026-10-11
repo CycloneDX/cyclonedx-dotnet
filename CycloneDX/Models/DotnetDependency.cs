@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace CycloneDX.Models
 {
@@ -34,12 +35,73 @@ namespace CycloneDX.Models
         public string Version { get; set; }
         public bool IsDirectReference { get; set; }
         public bool IsDevDependency { get; set; }
+        // Known local occurrences are classified before project/framework graphs are merged.
+        // Null keeps the legacy/no-graph fallback available to the caller.
+        public bool? IsRuntimeReachable { get; set; }
+        // Test-project exclusion affects runtime scope, not development-dependency filtering.
+        public bool? IsNonDevelopmentReachable { get; set; }
         public DependencyType DependencyType { get; set; }
         public Component.ComponentScope? Scope { get; set; }
         public string Path { get; set; }
 
 
         public Dictionary<string, string> Dependencies { get; set; } //key: name ~ value: version
+
+        public HashSet<KeyValuePair<string, string>> AdditionalDependencyEdges { get; } = new();
+
+        // Only edges from sources reached in their original target graph belong here.
+        // These retain provenance for resolving missing local dependencies after merging.
+        public HashSet<KeyValuePair<string, string>> RuntimeUnresolvedDependencyEdges { get; } = new();
+        public HashSet<KeyValuePair<string, string>> NonDevelopmentUnresolvedDependencyEdges { get; } = new();
+
+        public IEnumerable<KeyValuePair<string, string>> GetDependencyEdges()
+        {
+            return (Dependencies ?? new Dictionary<string, string>()).Concat(AdditionalDependencyEdges).Distinct();
+        }
+
+        public void AddDependencyEdge(string name, string version)
+        {
+            Dependencies ??= new Dictionary<string, string>();
+            if (!Dependencies.TryGetValue(name, out var existingVersion))
+                Dependencies.Add(name, version);
+            else if (existingVersion != version)
+                AdditionalDependencyEdges.Add(new KeyValuePair<string, string>(name, version));
+        }
+
+        /// <summary>Merge occurrences without losing classification, roots, or graph edges.</summary>
+        public static void MergeInto(HashSet<DotnetDependency> packages, IEnumerable<DotnetDependency> incoming)
+        {
+            foreach (var dependency in incoming)
+            {
+                if (!packages.TryGetValue(dependency, out var existing))
+                {
+                    packages.Add(dependency);
+                    continue;
+                }
+
+                existing.IsDirectReference |= dependency.IsDirectReference;
+                existing.IsDevDependency &= dependency.IsDevDependency;
+                if (existing.IsRuntimeReachable.HasValue && dependency.IsRuntimeReachable.HasValue)
+                    existing.IsRuntimeReachable |= dependency.IsRuntimeReachable;
+                else
+                    existing.IsRuntimeReachable = null;
+                if (existing.IsNonDevelopmentReachable.HasValue && dependency.IsNonDevelopmentReachable.HasValue)
+                    existing.IsNonDevelopmentReachable |= dependency.IsNonDevelopmentReachable;
+                else
+                    existing.IsNonDevelopmentReachable = null;
+                if (dependency.Scope == Component.ComponentScope.Required || !existing.Scope.HasValue)
+                    existing.Scope = dependency.Scope;
+
+                existing.RuntimeUnresolvedDependencyEdges.UnionWith(dependency.RuntimeUnresolvedDependencyEdges);
+                existing.NonDevelopmentUnresolvedDependencyEdges.UnionWith(dependency.NonDevelopmentUnresolvedDependencyEdges);
+
+                existing.Dependencies ??= new Dictionary<string, string>();
+                foreach (var edge in dependency.GetDependencyEdges().ToList())
+                {
+                    existing.AddDependencyEdge(edge.Key, edge.Value);
+                }
+            }
+        }
 
         public override bool Equals(object obj)
         {

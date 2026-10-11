@@ -247,8 +247,10 @@ namespace CycloneDX
             {
                 if (!string.IsNullOrEmpty(options.DependencyExcludeFilter))
                 {
+                    // Packages that are already unreachable are not the filter's to remove.
+                    var preExistingOrphans = ExcludeFilterHelper.FindUnreachableDependencies(packages);
                     ExcludeFilterHelper.ExcludePackages(packages, options.DependencyExcludeFilter);
-                    ExcludeFilterHelper.RemoveOrphanedPackages(packages);
+                    ExcludeFilterHelper.RemoveOrphanedPackages(packages, preExistingOrphans);
                 }
             }
             catch (ArgumentException e)
@@ -264,7 +266,7 @@ namespace CycloneDX
             // But a corresponding entry under libraries is missing.
             // This results in a state where there is a dependency on a package but no corresponding package.
             // To resolve this, we remove such dependencies.
-            var allDependencies = packages.Where(p => p.Dependencies is not null).SelectMany(p => p.Dependencies!.Keys).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var allDependencies = packages.SelectMany(p => p.GetDependencyEdges()).Select(d => d.Key).ToHashSet(StringComparer.OrdinalIgnoreCase);
             var dependenciesWithoutPackages = allDependencies.Except(packages.Select(p => p.Name), StringComparer.OrdinalIgnoreCase).ToHashSet(StringComparer.OrdinalIgnoreCase);
             Console.ForegroundColor = ConsoleColor.Yellow;
             foreach (var package in packages)
@@ -276,6 +278,7 @@ namespace CycloneDX
 
                 foreach (var dep in dependenciesWithoutPackages)
                 {
+                    package.AdditionalDependencyEdges.RemoveWhere(edge => string.Equals(edge.Key, dep, StringComparison.OrdinalIgnoreCase));
                     if (package.Dependencies.Remove(dep))
                     {
                         await Console.Out.WriteLineAsync($"Removed transitive dependency {dep} from {package.Name}");
@@ -296,16 +299,85 @@ namespace CycloneDX
 
             if (excludeDev)
             {
-                foreach (var item in packages.Where(p => p.IsDevDependency))
-                {
-                    item.Scope = ComponentScope.Excluded;
-                }
-                await Console.Out.WriteLineAsync($"{packages.Where(p => p.IsDevDependency).Count()} packages being excluded as DevDependencies");
+                await Console.Out.WriteLineAsync("Warning: --exclude-dev is deprecated but still filters development-only dependencies. Omit the flag to document them with scope=\"excluded\".");
             }
 
+            // Assets-backed entries carry target-local classification so unrelated merged
+            // development edges cannot turn into runtime paths. Only edges unresolved in
+            // a runtime context need completion against the merged inventory.
+            {
+                var runtimeReachable = new HashSet<DotnetDependency>();
+                var bfsQueue = new Queue<DotnetDependency>();
+                var promoted = new HashSet<DotnetDependency>();
 
+                bool anyDirectReference = packages.Any(p => p.IsDirectReference);
 
+                // Seed: direct runtime packages are runtime roots.
+                foreach (var pkg in packages)
+                {
+                    bool isRuntimeSeed = pkg.IsRuntimeReachable ?? (anyDirectReference
+                        ? pkg.IsDirectReference && !pkg.IsDevDependency && pkg.Scope != Component.ComponentScope.Excluded
+                        : !pkg.IsDevDependency && pkg.Scope != Component.ComponentScope.Excluded);
 
+                    if (isRuntimeSeed && runtimeReachable.Add(pkg))
+                        bfsQueue.Enqueue(pkg);
+                }
+
+                foreach (var edge in packages.SelectMany(p => p.RuntimeUnresolvedDependencyEdges))
+                {
+                    foreach (var child in ResolveDependencyPackages(packages, edge))
+                    {
+                        promoted.Add(child);
+                        if (runtimeReachable.Add(child))
+                            bfsQueue.Enqueue(child);
+                    }
+                }
+
+                // BFS: follow Dependencies of runtime-reachable packages.
+                while (bfsQueue.Count > 0)
+                {
+                    var current = bfsQueue.Dequeue();
+                    foreach (var dep in current.GetDependencyEdges())
+                    {
+                        foreach (var child in ResolveDependencyPackages(packages, dep))
+                        {
+                            // Known target-local classifications must not be overwritten
+                            // by unrelated merged edges. Unresolved edges are classified
+                            // here using the same resolution as the emitted graph.
+                            if (child.IsRuntimeReachable == false && !promoted.Contains(current))
+                                continue;
+                            var newlyPromoted = promoted.Contains(current) && promoted.Add(child);
+                            if (runtimeReachable.Add(child) || newlyPromoted)
+                                bfsQueue.Enqueue(child);
+                        }
+                    }
+                }
+
+                // Any package not reached by the BFS is only reachable through dev/test
+                // paths — mark it excluded.
+                foreach (var pkg in packages)
+                {
+                    pkg.Scope = runtimeReachable.Contains(pkg)
+                        ? Component.ComponentScope.Required : Component.ComponentScope.Excluded;
+                }
+            }
+
+            if (excludeDev)
+            {
+                // Preserve the historical omission of test-project-only packages too.
+                var retained = packages.Where(p => p.Scope != Component.ComponentScope.Excluded).ToHashSet();
+                foreach (var package in retained)
+                {
+                    var edges = package.GetDependencyEdges().SelectMany(edge =>
+                        ResolveDependencyPackages(packages, edge).Where(retained.Contains)
+                            .Select(child => new KeyValuePair<string, string>(child.Name, child.Version))).ToList();
+                    package.Dependencies?.Clear();
+                    package.AdditionalDependencyEdges.Clear();
+                    foreach (var edge in edges)
+                        package.AddDependencyEdge(edge.Key, edge.Value);
+                }
+                packages = retained;
+            }
             // get all the components and dependency graph from the NuGet packages
             var components = new HashSet<Component>();
             var dependencies = new List<Dependency>();
@@ -325,13 +397,24 @@ namespace CycloneDX
                     else if (package.DependencyType == DependencyType.Project)
                     {
                         component = projectFileService.GetComponent(package);
+                        if (component != null && options.includeProjectReferences && setNugetPurl)
+                        {
+                            if (string.IsNullOrEmpty(component.Purl))
+                            {
+                                component.Purl = Utils.GeneratePackageUrl(component.Name, component.Version);
+                            }
+                            if (!string.IsNullOrEmpty(component.Purl)
+                                && (string.IsNullOrEmpty(component.BomRef)
+                                    || component.BomRef == $"{component.Name}@{component.Version}"))
+                            {
+                                component.BomRef = component.Purl;
+                            }
+                        }
                     }
 
                     if (component != null)
                     {
-                        if ((component.Scope != Component.ComponentScope.Excluded || !excludeDev)
-                            &&
-                            (options.includeProjectReferences || package.DependencyType == DependencyType.Package))
+                        if (options.includeProjectReferences || package.DependencyType == DependencyType.Package)
                         {
                             components.Add(component);
                         }
@@ -345,7 +428,7 @@ namespace CycloneDX
                 }
 
                 // now that we have all the bom ref lookups we need to enumerate all the dependencies
-                foreach (var package in packages.Where(p => !excludeDev || packageToComponent[p].Scope != Component.ComponentScope.Excluded))
+                foreach (var package in packages)
                 {
                     var packageDependencies = new Dependency
                     {
@@ -353,15 +436,16 @@ namespace CycloneDX
                         Dependencies = new List<Dependency>()
                     };
 
-                    foreach (var dep in package.Dependencies ?? [])
+                    foreach (var dep in package.GetDependencyEdges())
                     {
                         var lookupKey = (dep.Key.ToLower(CultureInfo.InvariantCulture), dep.Value?.ToLower(CultureInfo.InvariantCulture));
+                        var lookupKeys = new List<(string, string)>();
                         if (!bomRefLookup.ContainsKey(lookupKey))
                         {
                             var packageNameMatch = bomRefLookup.Where(x => x.Key.Item1 == dep.Key.ToLower(CultureInfo.InvariantCulture)).ToList();
                             if (packageNameMatch.Count == 1)
                             {
-                                lookupKey = packageNameMatch.First().Key;
+                                lookupKeys.Add(packageNameMatch.First().Key);
                             }
                             else if (packageNameMatch.Count > 1
                                 && VersionRange.TryParse(dep.Value, out var versionRange))
@@ -369,12 +453,12 @@ namespace CycloneDX
                                 // dep.Value is a version range stored verbatim from the nuspec (e.g. "[1.0.0]").
                                 // ResolveDependencyVersionRanges couldn't resolve it within this project's
                                 // assets because the satisfying version only exists in another project's assets.
-                                // Use the range to pick the correct candidate from the merged BOM.
-                                var rangeMatch = packageNameMatch.SingleOrDefault(
-                                    x => NuGetVersion.TryParse(x.Key.Item2, out var v) && versionRange.Satisfies(v));
-                                if (rangeMatch.Key != default)
-                                    lookupKey = rangeMatch.Key;
-                                else
+                                // The merged BOM does not retain project-specific resolution context,
+                                // so preserve every component version that satisfies the range.
+                                lookupKeys.AddRange(packageNameMatch
+                                    .Where(x => NuGetVersion.TryParse(x.Key.Item2, out var v) && versionRange.Satisfies(v))
+                                    .Select(x => x.Key));
+                                if (lookupKeys.Count == 0)
                                 {
                                     Console.Error.WriteLine($"Unable to locate valid bom ref for {dep.Key} {dep.Value}");
                                     return (int)ExitCode.UnableToLocateDependencyBomRef;
@@ -386,13 +470,20 @@ namespace CycloneDX
                                 return (int)ExitCode.UnableToLocateDependencyBomRef;
                             }
                         }
-
-                        var bomRef = bomRefLookup[lookupKey];
-                        transitiveDependencies.Add(bomRef);
-                        packageDependencies.Dependencies.Add(new Dependency
+                        else
                         {
-                            Ref = bomRef
-                        });
+                            lookupKeys.Add(lookupKey);
+                        }
+
+                        foreach (var resolvedLookupKey in lookupKeys)
+                        {
+                            var bomRef = bomRefLookup[resolvedLookupKey];
+                            transitiveDependencies.Add(bomRef);
+                            packageDependencies.Dependencies.Add(new Dependency
+                            {
+                                Ref = bomRef
+                            });
+                        }
                     }
                     dependencies.Add(packageDependencies);
                 }
@@ -530,11 +621,25 @@ namespace CycloneDX
 
 
 
+        private static IEnumerable<DotnetDependency> ResolveDependencyPackages(
+            HashSet<DotnetDependency> packages, KeyValuePair<string, string> edge)
+        {
+            var candidates = packages.Where(p => string.Equals(p.Name, edge.Key, StringComparison.OrdinalIgnoreCase)).ToList();
+            var exact = candidates.Where(p => string.Equals(p.Version, edge.Value, StringComparison.OrdinalIgnoreCase)).ToList();
+            if (exact.Count > 0)
+                return exact;
+            if (candidates.Count == 1)
+                return candidates;
+            if (VersionRange.TryParse(edge.Value, out var range))
+                return candidates.Where(p => NuGetVersion.TryParse(p.Version, out var version) && range.Satisfies(version));
+            return Array.Empty<DotnetDependency>();
+        }
+
         private static HashSet<DotnetDependency> RemoveProjectReferencesAndMakeTheirDependenciesDirect(HashSet<DotnetDependency> packages)
         {
             var projectReferences = packages.Where(p => p.DependencyType == DependencyType.Project);
             // Change all packages that are refered to by a project to direct dependency
-            var dependenciesOfProjects = projectReferences.SelectMany(p => p.Dependencies);
+            var dependenciesOfProjects = projectReferences.SelectMany(p => p.GetDependencyEdges());
             var newDirectDependencies = packages.Join(dependenciesOfProjects, p => p.Name + '@' + p.Version, d => d.Key + '@' + d.Value, (p, _) => p);
             newDirectDependencies.ToList().ForEach(p => p.IsDirectReference = true);
             //remove all dependencies of packages to project references (https://github.com/CycloneDX/cyclonedx-dotnet/issues/785)
@@ -544,6 +649,7 @@ namespace CycloneDX
                 foreach (var refName in projectReferencesNames)
                 {
                     package.Dependencies?.Remove(refName);
+                    package.AdditionalDependencyEdges.RemoveWhere(edge => edge.Key == refName);
                 }
             }
 

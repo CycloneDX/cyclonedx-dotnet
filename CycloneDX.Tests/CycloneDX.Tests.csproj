@@ -135,6 +135,12 @@
     <None Update="FunctionalTests\TestcaseFiles\DevDependencies_WithPackageConfig_PackageConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="FunctionalTests\TestcaseFiles\DevDependencies_TransitiveOnlyViaDev.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\TestcaseFiles\DevDependencies_SharedTransitive.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="FunctionalTests\TestcaseFiles\FloatingVersions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -197,6 +203,24 @@
     </None>
     <None Update="FunctionalTests\Issue1126-ExcludeFilterNonNormalizedFramework\net48.assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="FunctionalTests\Issue1133-PreExistingOrphans\solutionsln.text">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue1133-PreExistingOrphans\projectAcsproj.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue1133-PreExistingOrphans\projectBcsproj.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue1133-PreExistingOrphans\projectAassets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FunctionalTests\Issue1133-PreExistingOrphans\projectBassets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

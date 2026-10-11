@@ -67,7 +67,7 @@ namespace CycloneDX
             var runtime = new Option<string>("--runtime", "-rt") { Description = "The runtime to use. If not defined, all will be aggregated." };
             var outputDirectory = new Option<string>("--output", "-o") { Description = "The directory to write the BOM" };
             var outputFilename = new Option<string>("--filename", "-fn") { Description = "Optionally provide a filename for the BOM (default: bom.xml or bom.json)" };
-            var excludeDev = new Option<bool>("--exclude-dev", "-ed") { Description = "Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)" };
+            var excludeDev = new Option<bool>("--exclude-dev", "-ed") { Description = "(Deprecated, still filters) Omit development and test-only dependencies, retaining dependencies shared with production runtime use." };
             var excludetestprojects = new Option<bool>("--exclude-test-projects", "-t") { Description = "Exclude test projects from the BOM" };
             var baseUrl = new Option<string>("--url", "-u") { Description = "Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json" };
             var baseUrlUS = new Option<string>("--baseUrlUsername", "-us") { Description = "Alternative NuGet repository username. Falls back to the CYCLONEDX_NUGET_USERNAME environment variable." };
@@ -89,7 +89,7 @@ namespace CycloneDX
             var setVersion = new Option<string>("--set-version", "-sv") { Description = "Override the default BOM metadata component version (defaults to 0.0.0)." };
             var includeProjectReferences = new Option<bool>("--include-project-references", "-ipr") { Description = "Include project references as components (can only be used with project files)." };
             var setType = new Option<Component.Classification>("--set-type", "-st") { Description = "Override the default BOM metadata component type (defaults to application).", DefaultValueFactory = _ => Component.Classification.Application };
-            var setNugetPurl = new Option<bool>("--set-nuget-purl", null) { Description = "Override the default BOM metadata component bom ref and PURL as NuGet package." };
+            var setNugetPurl = new Option<bool>("--set-nuget-purl", null) { Description = "Generate missing NuGet PURLs for the metadata component and included project references. Preserve existing PURLs and bom refs, except missing or default project bom refs use the PURL (requires --include-project-references)." };
             var excludeFilter = new Option<string>("--exclude-filter", "-ef") { Description = "A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2' or 'name1,name2' (to exclude all versions). Transitive dependencies will also be removed." };
             var outputFormat = new Option<OutputFileFormat>("--output-format", "-F") { Description = "Select the BOM output format: auto (default), xml, json, or unsafeJson (relaxed escaping)." };
             var specVersion = new Option<string>("--spec-version", "-spv") { Description = $"Which version of CycloneDX spec to use. [default: {SpecificationVersionHelpers.VersionString(SpecificationVersionHelpers.CurrentVersion)}]" };

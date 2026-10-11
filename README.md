@@ -91,7 +91,7 @@ Options:
   -rt, --runtime <runtime>                                                     The runtime to use. If not defined, all will be aggregated.
   -o, --output <output>                                                        The directory to write the BOM
   -fn, --filename <filename>                                                   Optionally provide a filename for the BOM (default: bom.xml or bom.json)
-  -ed, --exclude-dev                                                           Exclude development dependencies from the BOM (see https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference)
+  -ed, --exclude-dev                                                           (Deprecated, still filters) Omit development and test-only dependencies, retaining dependencies shared with production runtime use.
   -t, --exclude-test-projects                                                  Exclude test projects from the BOM
   -u, --url <url>                                                              Alternative NuGet repository URL to https://<yoururl>/nuget/<yourrepository>/v3/index.json
   -us, --baseUrlUsername <baseUrlUsername>                                     Alternative NuGet repository username (env: CYCLONEDX_NUGET_USERNAME)
@@ -116,11 +116,21 @@ Options:
                      Machine_Learning_Model|Null|Operating_System|Platform>
   -ef, --exclude-filter <exclude-filter>                                       A comma separated list of dependencies to exclude in form 'name1@version1,name2@version2' or 'name1,name2' (to exclude all versions). Transitive dependencies will also be removed.
   -F, --output-format <Auto|Json|UnsafeJson|Xml>                               Select the BOM output format: auto (default), xml, json, or unsafeJson (relaxed escaping). [default: Auto]                            
-  --set-nuget-purl                                                             Override the default BOM metadata component bom ref and PURL as NuGet package.
+  --set-nuget-purl                                                             Generate missing NuGet PURLs for the metadata component and included project references. Preserve existing PURLs and bom refs, except missing or default project bom refs use the PURL (requires --include-project-references).
   -spv, --spec-version <1.0|1.1|1.2|1.3|1.4|1.5|1.6|1.7>                       Which version of CycloneDX spec to use. [default: 1.7]
   --version                                                                    Show version information
   -?, -h, --help                                                               Show help and usage information
 ```
+
+Development-only dependencies and their development-only transitives are included by
+default with `scope="excluded"`; packages shared with production runtime use remain
+`scope="required"`. Classification uses the assets selected by restore, not
+`PrivateAssets="all"` alone. The deprecated `--exclude-dev` option **still filters**
+development and test-project-only dependencies and emits a warning on stdout. Ordinary
+runtime packages used only in test projects have excluded scope by default and are also
+omitted under `--exclude-dev`; production-shared packages are retained. Use
+`--exclude-test-projects` to skip test projects entirely during collection. See
+[Dev and Test Dependency Handling](docs/dev-and-test-dependencies.md) for details.
 
 *   `-ef, --exclude-filter`  
     The exclude filter may be used to exclude any packages, which are resolved by NuGet, but do not exist

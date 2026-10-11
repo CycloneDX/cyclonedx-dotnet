@@ -79,27 +79,51 @@ listed project are included.
 3. All `LockFileTarget` entries (one per TFM × RID combination) are iterated and
    union-merged into a single package set. Equality is `(Name, Version)`.
 4. `IsDirectReference` is determined per-TFM from `ProjectFileDependencyGroups`.
-5. `IsDevDependency` is set when `SuppressParent != DefaultSuppressParent`
-   (corresponds to `<PrivateAssets>all</PrivateAssets>` / `developmentDependency="true"`).
+5. `IsDevDependency` reflects the assets selected by restore, not `PrivateAssets` or
+   `SuppressParent` alone. Analyzer, build, build-transitive, build-multitargeting and tool
+   assets without selected runtime-capable assets identify development use. Explicitly
+   selecting no assets, or selecting only non-runtime asset categories, also identifies
+   development use. Compile, runtime, native, resource, runtime-target, framework, content
+   and embedded assets are runtime-capable; ambiguous asset-less packages remain non-dev
+   when runtime-capable categories are allowed. Analyzer detection combines selected asset
+   flags with analyzer paths in the package manifest.
 6. Version ranges in dependency dictionaries are resolved to concrete versions already
    present in the package set.
 7. If `NETStandard.Library` appears in dependency dicts but not in the resolved set, all
    references to it are stripped (SDK-provided; not a real package in the output).
+
+Reachability is calculated within each selected target before merging. Traversal from direct,
+non-dev references identifies non-development use, including ordinary dependencies of test
+projects. Production runtime reachability excludes test-project roots. Packages reachable
+only through dev/test paths have scope `Excluded`; production-runtime-shared packages have
+scope `Required`. Merging the same `(Name, Version)` preserves reachability and dependency
+edges from all occurrences rather than depending on encounter order.
+Unresolved edges originating in a production runtime path are resolved against the merged
+package set. Their matching packages and descendants gain runtime reachability even when
+those identities were supplied only by development occurrences in another target.
+
+`--exclude-dev` is deprecated but still filters: it emits a warning on stdout and removes
+development-only roots and their exclusively development-used transitives, as well as
+ordinary runtime packages used only in test projects. Packages shared with production
+runtime use remain `Required` and are retained. `--exclude-test-projects` skips test
+projects entirely during collection. See
+[Dev and Test Dependency Handling](dev-and-test-dependencies.md) for examples.
 
 If `project.assets.json` yields zero packages, the tool falls back to `packages.config` in
 the same directory.
 
 ### packages.config projects
 
-XML parsed directly. No restore, no assets file, no transitive graph. All packages are
-`Required` scope; `developmentDependency="true"` is read from the XML attribute.
+XML parsed directly. No restore, no assets file, no transitive graph.
+`developmentDependency="true"` is read from the XML attribute and those packages are assigned
+`Excluded` during the runtime-scope pass; other packages are `Required`.
 
 ### Multi-TFM aggregation
 
 A project targeting multiple frameworks produces one `LockFileTarget` per framework.
-All are merged by union. If the same package appears in multiple targets with different
-transitive dependency sets, the first-encountered instance wins (HashSet semantics). This
-is a known limitation tracked by issue #911.
+All are merged by package identity `(Name, Version)`, preserving dependency edges and
+reachability from each target. Runtime use in any selected target keeps a shared package
+`Required` and prevents `--exclude-dev` from removing it.
 
 ---
 
@@ -112,11 +136,17 @@ dependencies.
 (exact). Matched packages are removed from the set.
 
 **Step 2 — orphan removal**: BFS from all `IsDirectReference == true` packages through their
-`Dependencies` dicts. Any package not reachable from a direct reference is removed.
-Orphan names are printed to console.
+`Dependencies` dicts, run once before step 1 and once after. Only packages that step 1 made
+unreachable are removed, and their names are printed to console. Packages that were already
+unreachable before the filter ran are kept, and their count is reported.
 
 A transitive dependency shared between an excluded package and a non-excluded package is
 kept, because it remains reachable via the non-excluded path.
+
+Keeping the pre-existing orphans is deliberate. A package with no incoming edge is not
+necessarily unused: edges are lost whenever packages from several targets or projects are
+merged (see the union note above), so removing everything unreachable also removed genuinely
+shipped packages.
 
 ---
 
@@ -195,7 +225,17 @@ to keep the graph consistent.
 Project-type entries are resolved to `Component` objects (Type: Library) using metadata
 read directly from the `.csproj`/`.fsproj`/`.vbproj` XML. Version is sourced from
 `<Version>`, or `AssemblyVersion` in `AssemblyInfo.cs`, or `"1.0.0"` as fallback. These
-components get a `BomRef` but no NuGet PURL. Only valid when the input is a project file.
+components normally get a `BomRef` of `<name>@<version>` but no NuGet PURL.
+Only valid when the input is a project file.
+
+When both `--include-project-references` and `--set-nuget-purl` are enabled,
+each non-null project component gets a generated `pkg:nuget/<name>@<version>` PURL
+only if its PURL is null or empty. Existing nonempty PURLs are preserved.
+If a PURL is available, it replaces only a null/empty `BomRef` or the default
+`<name>@<version>` reference; custom references are preserved. If generation
+returns null, the original reference remains unchanged. This happens before
+`bomRefLookup` is populated so dependency edges use the final reference.
+Neither flag alone changes project identifiers, and NuGet package behavior is unchanged.
 
 ---
 
@@ -222,8 +262,11 @@ After replacement, `SetMetadataComponentIfNecessary` fills blank fields only:
 - `Metadata.Component.Type` ← `Application` if currently `Null`
 
 `--set-name`, `--set-version`, `--set-type` override the above regardless of template content.
-`--set-nuget-purl` sets both `Purl` and `BomRef` of the metadata component to
-`pkg:nuget/<name>@<version>`.
+`--set-nuget-purl` generates `pkg:nuget/<name>@<version>` only when the metadata
+component's `Purl` is null or empty, and uses that PURL as `BomRef` only when
+`BomRef` is null or empty. Existing metadata PURLs and references (including
+`<name>@<version>`) are preserved. The default-project-reference replacement
+rule above does not apply to the root metadata component.
 
 `Metadata.Timestamp` defaults to `DateTime.UtcNow` if not provided by the template.
 A `Tool` entry for `CycloneDX module for .NET` is always injected into `Metadata.Tools`.
@@ -252,7 +295,6 @@ contains attacker-controlled content from an untrusted NuGet feed.
 
 | Issue | Description |
 |---|---|
-| #911 | Multi-TFM projects: transitive dep sets from different frameworks are merged by union; first-seen version wins if versions conflict. |
 | GitHub refSpec | Only `master` and `main` refs are resolved for license lookup. All other refs return no license. Upstream GitHub API limitation. |
 | Rate limiting | GitHub API rate-limit (`403`) is an immediate fatal error. Use `--github-bearer-token` in CI or `--enable-github-licenses` only when authenticated. |
 | packages.config | No transitive graph available — only explicitly listed packages appear in the BOM. |

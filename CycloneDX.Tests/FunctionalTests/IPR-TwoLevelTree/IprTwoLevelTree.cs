@@ -72,5 +72,32 @@ namespace CycloneDX.Tests.FunctionalTests
             FunctionalTestHelper.AssertHasDependencyWithChild(bom, "project2@1.0.0", "project3@1.0.0");
             FunctionalTestHelper.AssertHasDependencyWithChild(bom, "project3@1.0.0", "pkg:nuget/log4net@2.0.15");
         }
+
+        [Fact]
+        public async Task DependencyGraphWithNugetPurl()
+        {
+            var options = new RunOptions
+            {
+                scanProjectReferences = true,
+                includeProjectReferences = true,
+                setNugetPurl = true,
+                SolutionOrProjectFile = MockUnixSupport.Path("c:/project1/project1.csproj")
+
+            };
+
+            var bom = await FunctionalTestHelper.Test(options, getMockFS());
+
+            foreach (var name in new[] { "project2", "project3" })
+            {
+                var project = Assert.Single(bom.Components, c => c.Name == name);
+                Assert.Equal($"pkg:nuget/{name}@1.0.0", project.Purl);
+                Assert.Equal(project.Purl, project.BomRef);
+            }
+            Assert.Equal(3, bom.Components.Count);
+            Assert.Equal(4, bom.Dependencies.Count);
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "pkg:nuget/project1@0.0.0", "pkg:nuget/project2@1.0.0");
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "pkg:nuget/project2@1.0.0", "pkg:nuget/project3@1.0.0");
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, "pkg:nuget/project3@1.0.0", "pkg:nuget/log4net@2.0.15");
+        }
     }
 }
