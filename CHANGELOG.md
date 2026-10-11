@@ -7,9 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.1] - 2026-10-11
+
 ### Fixed
 
 - **Resolve dependency ranges with multiple matching package versions in solutions** (#1110) — solution scans no longer crash when more than one merged package version satisfies an unresolved NuGet dependency range; the BOM now retains an edge to every matching component
+- **Fix hash computation for uncached NuGet packages** (#1099).
+
+### Changed
+
+- Update dependencies, including Testcontainers to 4.16.0 to resolve SSH.NET security advisories in the E2E test infrastructure.
 
 ## [6.2.0] - 2026-04-27
 
