@@ -227,6 +227,14 @@ namespace CycloneDX.Services
                 {
                     Console.WriteLine("  Found packages.config. Will attempt to process");
                     packages = await _packagesFileService.GetDotnetDependencysAsync(packagesPath).ConfigureAwait(false);
+                    if (isTestProject)
+                    {
+                        foreach (var package in packages)
+                        {
+                            package.IsRuntimeReachable = false;
+                            package.Scope = Component.ComponentScope.Excluded;
+                        }
+                    }
                 }
             }
             return packages;
@@ -315,22 +323,15 @@ namespace CycloneDX.Services
                 //Add dependencies for dependency graph
                 foreach (var dependency in projectDotnetDependencys)
                 {
-                    if (project.Dependencies.TryGetValue(dependency.Name, out string version))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine($"Warning: trying to add {dependency.Name}@{dependency.Version} as a dependency to {project.Name}, but it was already with version {version}");
-                        Console.ResetColor();
-                        continue;
-                    }
-                    project.Dependencies.Add(dependency.Name, dependency.Version);
+                    project.AddDependencyEdge(dependency.Name, dependency.Version);
                 }
 
-                dotnetDependencys.UnionWith(projectDotnetDependencys);
+                DotnetDependency.MergeInto(dotnetDependencys, projectDotnetDependencys);
             }
 
             //When there is a project.assets.json, the project references are already added, so check before adding
             var allAddedDepedencyNames = dotnetDependencys.Select(dep => dep.Name);
-            dotnetDependencys.UnionWith(projectReferences.Where(pr => !allAddedDepedencyNames.Contains(pr.Name)));
+            DotnetDependency.MergeInto(dotnetDependencys, projectReferences.Where(pr => !allAddedDepedencyNames.Contains(pr.Name)));
 
             return dotnetDependencys;
         }

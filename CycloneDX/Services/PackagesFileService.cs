@@ -59,15 +59,18 @@ namespace CycloneDX.Services
                     {
                         if (reader.IsStartElement() && reader.Name == "package")
                         {
+                            var isDevDependency = reader["developmentDependency"] == "true";
                             var newPackage = new DotnetDependency
                             {
                                 Name = reader["id"],
                                 Version = reader["version"],
-                                IsDevDependency = reader["developmentDependency"] == "true",
+                                IsDevDependency = isDevDependency,
+                                IsNonDevelopmentReachable = !isDevDependency,
+                                IsRuntimeReachable = !isDevDependency,
                                 Scope = Component.ComponentScope.Required
                             };
                             await Console.Out.WriteLineAsync($"\tFound Package:{newPackage.Name}");
-                            packages.Add(newPackage);                            
+                            DotnetDependency.MergeInto(packages, new[] { newPackage });
                         }
                     }
                 }
@@ -88,7 +91,7 @@ namespace CycloneDX.Services
             foreach (var packageFile in packageFiles)
             {
                 var newPackages = await GetDotnetDependencysAsync(packageFile).ConfigureAwait(false);
-                packages.UnionWith(newPackages);
+                DotnetDependency.MergeInto(packages, newPackages);
             }
 
             return packages;

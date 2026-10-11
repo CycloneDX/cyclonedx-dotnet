@@ -180,22 +180,11 @@ namespace CycloneDX.Services
                 Console.WriteLine($"  {projectPaths.Count} project(s) found");
             }
 
-            // Process first all productive projects, then test projects (scope order)
-            var projectQuery = from p in projectPaths orderby _projectFileService.IsTestProject(p) select p;
-            var directReferencePackages = new HashSet<DotnetDependency>();
-            foreach (var projectFilePath in projectQuery)
+            foreach (var projectFilePath in projectPaths)
             {
                 Console.WriteLine();
                 var projectPackages = await _projectFileService.GetProjectDotnetDependencysAsync(projectFilePath, baseIntermediateOutputPath, excludeTestProjects, framework, runtime, configuration).ConfigureAwait(false);
-                directReferencePackages.UnionWith(projectPackages.Where(p => p.IsDirectReference));
-                packages.UnionWith(projectPackages);
-            }
-
-            // Ensure packages which were discovered later are reflected as direct references in the final list.
-            foreach (var directPackage in directReferencePackages)
-            {
-                packages.TryGetValue(directPackage, out var package);
-                package.IsDirectReference = true;
+                DotnetDependency.MergeInto(packages, projectPackages);
             }
 
             return packages;

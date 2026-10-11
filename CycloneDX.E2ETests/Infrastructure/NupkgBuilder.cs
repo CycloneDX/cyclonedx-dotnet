@@ -31,7 +31,8 @@ namespace CycloneDX.E2ETests.Infrastructure
             string version,
             string description = null,
             NupkgDependency[] dependencies = null,
-            NupkgLicense license = null)
+            NupkgLicense license = null,
+            bool buildOnly = false)
         {
             description ??= $"Test package {id}";
 
@@ -45,13 +46,22 @@ namespace CycloneDX.E2ETests.Infrastructure
                 using (var writer = new StreamWriter(nuspecEntry.Open(), Encoding.UTF8))
                     writer.Write(nuspec);
 
-                // Placeholder lib assemblies — required for dotnet restore to resolve the package
-                foreach (var tfm in new[] { "net8.0", "net9.0", "net10.0" })
+                if (buildOnly)
                 {
-                    var dllEntry = archive.CreateEntry($"lib/{tfm}/{id}.dll", CompressionLevel.Optimal);
-                    using var dllStream = dllEntry.Open();
-                    var placeholder = Encoding.UTF8.GetBytes($"placeholder-{id}-{version}");
-                    dllStream.Write(placeholder, 0, placeholder.Length);
+                    var targetsEntry = archive.CreateEntry($"build/{id}.targets", CompressionLevel.Optimal);
+                    using var writer = new StreamWriter(targetsEntry.Open(), Encoding.UTF8);
+                    writer.Write("<Project />");
+                }
+                else
+                {
+                    // Placeholder lib assemblies — required for dotnet restore to resolve the package
+                    foreach (var tfm in new[] { "net8.0", "net9.0", "net10.0" })
+                    {
+                        var dllEntry = archive.CreateEntry($"lib/{tfm}/{id}.dll", CompressionLevel.Optimal);
+                        using var dllStream = dllEntry.Open();
+                        var placeholder = Encoding.UTF8.GetBytes($"placeholder-{id}-{version}");
+                        dllStream.Write(placeholder, 0, placeholder.Length);
+                    }
                 }
 
                 // If a file license is specified, embed the license file in the .nupkg
