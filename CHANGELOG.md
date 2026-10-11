@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **NuGet purl for project reference components** (#1137, fixes #1136) — when `--set-nuget-purl`
+  is combined with `--include-project-references`, only missing project purls are generated.
+  Missing or default `<name>@<version>` bom-refs use the available purl; existing purls and
+  custom bom-refs are preserved. Dependency edges use the final references. Root metadata
+  and NuGet package identifier behavior is unchanged.
+
 ## [6.2.1] - 2026-10-11
 
 ### Fixed

@@ -325,6 +325,19 @@ namespace CycloneDX
                     else if (package.DependencyType == DependencyType.Project)
                     {
                         component = projectFileService.GetComponent(package);
+                        if (component != null && options.includeProjectReferences && setNugetPurl)
+                        {
+                            if (string.IsNullOrEmpty(component.Purl))
+                            {
+                                component.Purl = Utils.GeneratePackageUrl(component.Name, component.Version);
+                            }
+                            if (!string.IsNullOrEmpty(component.Purl)
+                                && (string.IsNullOrEmpty(component.BomRef)
+                                    || component.BomRef == $"{component.Name}@{component.Version}"))
+                            {
+                                component.BomRef = component.Purl;
+                            }
+                        }
                     }
 
                     if (component != null)

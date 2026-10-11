@@ -195,7 +195,17 @@ to keep the graph consistent.
 Project-type entries are resolved to `Component` objects (Type: Library) using metadata
 read directly from the `.csproj`/`.fsproj`/`.vbproj` XML. Version is sourced from
 `<Version>`, or `AssemblyVersion` in `AssemblyInfo.cs`, or `"1.0.0"` as fallback. These
-components get a `BomRef` but no NuGet PURL. Only valid when the input is a project file.
+components normally get a `BomRef` of `<name>@<version>` but no NuGet PURL.
+Only valid when the input is a project file.
+
+When both `--include-project-references` and `--set-nuget-purl` are enabled,
+each non-null project component gets a generated `pkg:nuget/<name>@<version>` PURL
+only if its PURL is null or empty. Existing nonempty PURLs are preserved.
+If a PURL is available, it replaces only a null/empty `BomRef` or the default
+`<name>@<version>` reference; custom references are preserved. If generation
+returns null, the original reference remains unchanged. This happens before
+`bomRefLookup` is populated so dependency edges use the final reference.
+Neither flag alone changes project identifiers, and NuGet package behavior is unchanged.
 
 ---
 
@@ -222,8 +232,11 @@ After replacement, `SetMetadataComponentIfNecessary` fills blank fields only:
 - `Metadata.Component.Type` ← `Application` if currently `Null`
 
 `--set-name`, `--set-version`, `--set-type` override the above regardless of template content.
-`--set-nuget-purl` sets both `Purl` and `BomRef` of the metadata component to
-`pkg:nuget/<name>@<version>`.
+`--set-nuget-purl` generates `pkg:nuget/<name>@<version>` only when the metadata
+component's `Purl` is null or empty, and uses that PURL as `BomRef` only when
+`BomRef` is null or empty. Existing metadata PURLs and references (including
+`<name>@<version>`) are preserved. The default-project-reference replacement
+rule above does not apply to the root metadata component.
 
 `Metadata.Timestamp` defaults to `DateTime.UtcNow` if not provided by the template.
 A `Tool` entry for `CycloneDX module for .NET` is always injected into `Metadata.Tools`.
