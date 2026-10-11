@@ -32,14 +32,13 @@ namespace CycloneDX.E2ETests.Builders
     {
         public string Id { get; }
         public string Version { get; }
-        /// <summary>When true, adds PrivateAssets="all" — makes it a dev/build-only dependency.</summary>
-        public bool IsDevDependency { get; }
+        public string PrivateAssets { get; }
 
-        public PackageRef(string id, string version, bool isDevDependency = false)
+        public PackageRef(string id, string version, string privateAssets = null)
         {
             Id = id;
             Version = version;
-            IsDevDependency = isDevDependency;
+            PrivateAssets = privateAssets;
         }
     }
 
@@ -68,7 +67,13 @@ namespace CycloneDX.E2ETests.Builders
 
         public ProjectOptions AddPackage(string id, string version, bool devDependency = false)
         {
-            Packages.Add(new PackageRef(id, version, devDependency));
+            Packages.Add(new PackageRef(id, version, devDependency ? "all" : null));
+            return this;
+        }
+
+        public ProjectOptions AddPackage(string id, string version, string privateAssets)
+        {
+            Packages.Add(new PackageRef(id, version, privateAssets));
             return this;
         }
 
@@ -241,8 +246,8 @@ namespace CycloneDX.E2ETests.Builders
                 sb.AppendLine("  <ItemGroup>");
                 foreach (var pkg in proj.Packages)
                 {
-                    if (pkg.IsDevDependency)
-                        sb.AppendLine($"    <PackageReference Include=\"{pkg.Id}\" Version=\"{pkg.Version}\" PrivateAssets=\"all\" />");
+                    if (pkg.PrivateAssets != null)
+                        sb.AppendLine($"    <PackageReference Include=\"{pkg.Id}\" Version=\"{pkg.Version}\" PrivateAssets=\"{pkg.PrivateAssets}\" />");
                     else
                         sb.AppendLine($"    <PackageReference Include=\"{pkg.Id}\" Version=\"{pkg.Version}\" />");
                 }

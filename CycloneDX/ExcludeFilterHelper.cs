@@ -85,7 +85,7 @@ namespace CycloneDX
                 var current = queue.Dequeue();
                 reachableDependencies.Add(current);
 
-                foreach (var dependency in current.Dependencies)
+                foreach (var dependency in current.GetDependencyEdges())
                 {
                     var key = new DotnetDependency { Name = dependency.Key, Version = dependency.Value };
                     if (packages.TryGetValue(key, out var actualDependency) && !reachableDependencies.Contains(actualDependency))

@@ -16,6 +16,7 @@
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
 using System.Collections.Generic;
+using System.Linq;
 using System.IO.Abstractions.TestingHelpers;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
@@ -29,6 +30,83 @@ namespace CycloneDX.Tests
 {
     public class SolutionFileServiceTests
     {
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(true, true)]
+        public async Task MixedSdkLegacyMerge_LegacyRootsAreExplicitAndTestScopeIsPreserved(bool reverse, bool isLegacyTestProject)
+        {
+            var sdkProject = "<Project Path=\"sdk/sdk.csproj\" />";
+            var legacyProject = "<Project Path=\"legacy/legacy.csproj\" />";
+            var fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                ["/solution/test.slnx"] = $"<Solution>\n{(reverse ? legacyProject : sdkProject)}\n{(reverse ? sdkProject : legacyProject)}\n</Solution>",
+                ["/solution/sdk/sdk.csproj"] = Helpers.GetEmptyProjectFile(),
+                ["/solution/sdk/obj/project.assets.json"] = "{}",
+                ["/solution/legacy/legacy.csproj"] = $"<Project><PropertyGroup><IsTestProject>{isLegacyTestProject.ToString().ToLowerInvariant()}</IsTestProject></PropertyGroup></Project>",
+                ["/solution/legacy/packages.config"] = "<packages><package id=\"Shared\" version=\"1.0.0\" /><package id=\"LegacyOnly\" version=\"1.0.0\" /><package id=\"LegacyDev\" version=\"1.0.0\" developmentDependency=\"true\" /></packages>"
+            });
+            var utils = new Mock<IDotnetUtilsService>();
+            utils.Setup(s => s.GetAssetsPath(It.IsAny<string>())).Returns(new DotnetUtilsResult<string> { Result = "" });
+            var assets = new Mock<IProjectAssetsFileService>();
+            assets.Setup(s => s.GetDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(() => new HashSet<DotnetDependency>());
+            assets.Setup(s => s.GetDotnetDependencys("/solution/sdk/sdk.csproj", It.IsAny<string>(), false)).Returns(() => new HashSet<DotnetDependency>
+            {
+                new() { Name = "SdkRoot", Version = "1.0.0", IsDirectReference = true, IsNonDevelopmentReachable = true, IsRuntimeReachable = true, Scope = Component.ComponentScope.Required },
+                new() { Name = "Shared", Version = "1.0.0", IsDevDependency = true, IsNonDevelopmentReachable = false, IsRuntimeReachable = false, Scope = Component.ComponentScope.Excluded }
+            });
+            var projectService = new ProjectFileService(fileSystem, utils.Object, new PackagesFileService(fileSystem), assets.Object) { DisablePackageRestore = true };
+            var packages = await new SolutionFileService(fileSystem, projectService)
+                .GetSolutionDotnetDependencys("/solution/test.slnx", null, false, null, null).ConfigureAwait(true);
+            foreach (var name in new[] { "Shared", "LegacyOnly" })
+            {
+                var package = packages.Single(p => p.Name == name);
+                Assert.True(package.IsNonDevelopmentReachable);
+                Assert.Equal(!isLegacyTestProject, package.IsRuntimeReachable);
+                Assert.Equal(isLegacyTestProject ? Component.ComponentScope.Excluded : Component.ComponentScope.Required, package.Scope);
+            }
+            var legacyDev = packages.Single(p => p.Name == "LegacyDev");
+            Assert.False(legacyDev.IsNonDevelopmentReachable);
+            Assert.False(legacyDev.IsRuntimeReachable);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task SolutionMerge_RuntimeUseAndDirectFlagsAreOrderIndependent(bool reverse)
+        {
+            var fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                ["/solution/test.slnx"] = "<Solution>\n<Project Path=\"first.csproj\" />\n<Project Path=\"second.csproj\" />\n</Solution>",
+                ["/solution/first.csproj"] = Helpers.GetEmptyProjectFile(),
+                ["/solution/second.csproj"] = Helpers.GetEmptyProjectFile()
+            });
+            var dev = new HashSet<DotnetDependency>
+            {
+                new() { Name = "Shared", Version = "1.0.0", IsDevDependency = true, IsDirectReference = true,
+                    IsRuntimeReachable = false, Scope = Component.ComponentScope.Excluded,
+                    Dependencies = new Dictionary<string, string> { ["Child"] = "1.0.0" } }
+            };
+            var runtime = new HashSet<DotnetDependency>
+            {
+                new() { Name = "Shared", Version = "1.0.0", IsRuntimeReachable = true, Scope = Component.ComponentScope.Required,
+                    Dependencies = new Dictionary<string, string> { ["Child"] = "2.0.0" } }
+            };
+            var projectService = new Mock<IProjectFileService>();
+            projectService.Setup(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>())).ReturnsAsync(new HashSet<DotnetDependency>());
+            projectService.Setup(s => s.GetProjectDotnetDependencysAsync("/solution/first.csproj", null, false, null, null, null)).ReturnsAsync(reverse ? runtime : dev);
+            projectService.Setup(s => s.GetProjectDotnetDependencysAsync("/solution/second.csproj", null, false, null, null, null)).ReturnsAsync(reverse ? dev : runtime);
+            var package = Assert.Single(await new SolutionFileService(fileSystem, projectService.Object)
+                .GetSolutionDotnetDependencys("/solution/test.slnx", null, false, null, null).ConfigureAwait(true));
+            Assert.True(package.IsRuntimeReachable);
+            Assert.True(package.IsDirectReference);
+            Assert.False(package.IsDevDependency);
+            Assert.Equal(Component.ComponentScope.Required, package.Scope);
+            Assert.Contains(new KeyValuePair<string, string>("Child", "1.0.0"), package.GetDependencyEdges());
+            Assert.Contains(new KeyValuePair<string, string>("Child", "2.0.0"), package.GetDependencyEdges());
+        }
+
         [Fact]
         public async Task GetSolutionXProjectReferences_ReturnsProjectThatExists()
         {

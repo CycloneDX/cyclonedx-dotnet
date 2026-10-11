@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   custom bom-refs are preserved. Dependency edges use the final references. Root metadata
   and NuGet package identifier behavior is unchanged.
 
+### Changed
+
+- **Represent development dependencies with excluded scope** — development dependencies and packages reachable only through them are included by default with `scope="excluded"`; runtime-shared packages remain `required`. The deprecated `--exclude-dev` option continues to filter, omitting development-only and test-project-only packages (including ordinary runtime dependencies of test projects), while retaining packages shared with production runtime use.
+
 ## [6.2.1] - 2026-10-11
 
 ### Fixed

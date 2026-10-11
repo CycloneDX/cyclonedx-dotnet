@@ -27,6 +27,25 @@ namespace CycloneDX.Tests
 {
     public class PackagesFileServiceTests
     {
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task RecursiveMerge_RuntimeReferenceWins(bool reverse)
+        {
+            var dev = new MockFileData("<packages><package id=\"Shared\" version=\"1.0.0\" developmentDependency=\"true\" /></packages>");
+            var runtime = new MockFileData("<packages><package id=\"Shared\" version=\"1.0.0\" /></packages>");
+            var fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                ["/solution/first/packages.config"] = reverse ? runtime : dev,
+                ["/solution/second/packages.config"] = reverse ? dev : runtime
+            });
+            var package = Assert.Single(await new PackagesFileService(fileSystem).RecursivelyGetDotnetDependencysAsync("/solution").ConfigureAwait(true));
+            Assert.False(package.IsDevDependency);
+            Assert.True(package.IsNonDevelopmentReachable);
+            Assert.True(package.IsRuntimeReachable);
+            Assert.Equal(Component.ComponentScope.Required, package.Scope);
+        }
+
         [Fact]
         public async Task GetDotnetDependencys_ReturnsDotnetDependency()
         {

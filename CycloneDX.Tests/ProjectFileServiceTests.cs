@@ -483,6 +483,46 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task RecursiveMerge_PreservesRuntimeUseAndMultipleChildVersions()
+        {
+            var fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                ["/solution/root/root.csproj"] = Helpers.GetProjectFileWithProjectReferences(new[] { "../child/child.csproj" }),
+                ["/solution/child/child.csproj"] = Helpers.GetEmptyProjectFile(),
+                ["/solution/root/obj/project.assets.json"] = "{}",
+                ["/solution/child/obj/project.assets.json"] = "{}"
+            });
+            var utils = new Mock<IDotnetUtilsService>();
+            utils.Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new DotnetUtilsResult());
+            utils.Setup(s => s.GetAssetsPath(It.IsAny<string>())).Returns(new DotnetUtilsResult<string> { Result = "" });
+            var assets = new Mock<IProjectAssetsFileService>();
+            assets.Setup(s => s.GetDotnetDependencys("/solution/root/root.csproj", It.IsAny<string>(), false)).Returns(new HashSet<DotnetDependency>
+            {
+                new() { Name = "Shared", Version = "1.0.0", IsDevDependency = true, IsRuntimeReachable = false,
+                    Scope = Component.ComponentScope.Excluded, Dependencies = new Dictionary<string, string> { ["Child"] = "1.0.0" } }
+            });
+            assets.Setup(s => s.GetDotnetDependencys("/solution/child/child.csproj", It.IsAny<string>(), false)).Returns(new HashSet<DotnetDependency>
+            {
+                new() { Name = "Shared", Version = "1.0.0", IsRuntimeReachable = true, Scope = Component.ComponentScope.Required,
+                    Dependencies = new Dictionary<string, string> { ["Child"] = "2.0.0" } },
+                new() { Name = "Child", Version = "1.0.0" },
+                new() { Name = "Child", Version = "2.0.0" }
+            });
+            var service = new ProjectFileService(fileSystem, utils.Object, new Mock<IPackagesFileService>().Object, assets.Object);
+            var packages = await service.RecursivelyGetProjectDotnetDependencysAsync("/solution/root/root.csproj", "", false, "", "").ConfigureAwait(true);
+            var shared = packages.Single(p => p.Name == "Shared");
+            Assert.True(shared.IsRuntimeReachable);
+            Assert.False(shared.IsDevDependency);
+            Assert.True(shared.IsDirectReference);
+            Assert.Equal(Component.ComponentScope.Required, shared.Scope);
+            Assert.Contains(new KeyValuePair<string, string>("Child", "1.0.0"), shared.GetDependencyEdges());
+            Assert.Contains(new KeyValuePair<string, string>("Child", "2.0.0"), shared.GetDependencyEdges());
+            var project = packages.Single(p => p.DependencyType == DependencyType.Project);
+            Assert.Contains(new KeyValuePair<string, string>("Child", "1.0.0"), project.GetDependencyEdges());
+            Assert.Contains(new KeyValuePair<string, string>("Child", "2.0.0"), project.GetDependencyEdges());
+        }
+
+        [Fact]
         public async Task RecursivelyGetProjectDotnetDependencys_WithoutAssetsFile_DoesNotWriteRecursiveWarning()
         {
             // Arrange – root project has no project.assets.json (e.g. packages.config style).

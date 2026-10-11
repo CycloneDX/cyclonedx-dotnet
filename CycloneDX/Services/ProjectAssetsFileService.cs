@@ -56,7 +56,8 @@ namespace CycloneDX.Services
                     var targetFramework = assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
                     var dependencies = targetFramework.Dependencies;
                     var directDependencies = assetsFile.ProjectFileDependencyGroups
-                        .Where(f => f.FrameworkName == targetRuntime.Name)?.SelectMany(p => p.Dependencies)
+                        .Where(f => f.FrameworkName == targetRuntime.TargetFramework.GetShortFolderName() ||
+                            f.FrameworkName == targetRuntime.TargetFramework.ToString()).SelectMany(p => p.Dependencies)
                         .Select(d =>
                         {
                             var x = d.Split(" ");
@@ -66,7 +67,7 @@ namespace CycloneDX.Services
 
                     foreach (var lockFileLibrary in targetRuntime.Libraries)
                     {
-                        var libs = dependencies.FirstOrDefault(ld => ld.Name.Equals(lockFileLibrary.Name));
+                        var libs = dependencies.FirstOrDefault(ld => ld.Name.Equals(lockFileLibrary.Name, StringComparison.OrdinalIgnoreCase));
                         //try to find dependency in the library section, to get its path
                         var library = assetsFile.Libraries.FirstOrDefault(lib => lib.Name == lockFileLibrary.Name && lib.Version == lockFileLibrary.Version);
 
@@ -76,14 +77,17 @@ namespace CycloneDX.Services
                             Version = lockFileLibrary.Version.ToNormalizedString(),
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
-                            IsDevDependency = SetIsDevDependency(libs),
-                            IsDirectReference = directDependencies?.Any(d => string.Compare(d.Name, lockFileLibrary.Name, true) == 0) ?? false,                            
+                            IsDevDependency = SetIsDevDependency(libs, lockFileLibrary, library),
+                            IsDirectReference = SetIsDirectReference(libs) || directDependencies.Any(d => string.Equals(d.Name, lockFileLibrary.Name, StringComparison.OrdinalIgnoreCase)),
                             DependencyType = (lockFileLibrary.Type != "project") ? DependencyType.Package : DependencyType.Project,
                             Path = Path.Combine(Path.GetDirectoryName(projectFilePath), library?.Path ?? "")
                         };
 
-                        // is this a test project dependency or only a development dependency
-                        if ( isTestProject)
+                        // Test-project packages are always excluded (whole-project decision).
+                        // Dev dependency scope is resolved later in Runner via BFS so that
+                        // transitive packages reachable through both a dev dep and a runtime
+                        // dep are correctly kept as scope=Required.
+                        if (isTestProject)
                         {
                             package.Scope = Component.ComponentScope.Excluded;
                         }
@@ -113,8 +117,8 @@ namespace CycloneDX.Services
                     }
 
                     ResolveDependencyVersionRanges(runtimePackages);
-
-                    packages.UnionWith(runtimePackages);
+                    SetRuntimeReachability(runtimePackages, isTestProject);
+                    DotnetDependency.MergeInto(packages, runtimePackages);
                 }
             }
 
@@ -124,9 +128,93 @@ namespace CycloneDX.Services
         {
             return dependency?.ReferenceType == LibraryDependencyReferenceType.Direct;
         }
-        public bool SetIsDevDependency(LibraryDependency dependency)
+        public bool SetIsDevDependency(
+            LibraryDependency dependency,
+            LockFileTargetLibrary targetLibrary,
+            LockFileLibrary library)
         {
-            return dependency != null && dependency.SuppressParent != LibraryIncludeFlagUtils.DefaultSuppressParent;
+            if (targetLibrary == null)
+            {
+                return false;
+            }
+
+            var selected = dependency?.IncludeType ?? LibraryIncludeFlags.All;
+            if (selected == LibraryIncludeFlags.None)
+                return true;
+
+            var hasSelectedAnalyzerAssets =
+                (selected & LibraryIncludeFlags.Analyzers) != 0 &&
+                library?.Files.Any(path =>
+                    IsAsset(path) && path.StartsWith("analyzers/", StringComparison.OrdinalIgnoreCase)) == true;
+            var hasBuildOnlyAssets = hasSelectedAnalyzerAssets ||
+                ((selected & (LibraryIncludeFlags.Build | LibraryIncludeFlags.BuildTransitive)) != 0 && targetLibrary.Build.Any(item => IsAsset(item.Path))) ||
+                ((selected & LibraryIncludeFlags.Build) != 0 && targetLibrary.BuildMultiTargeting.Any(item => IsAsset(item.Path))) ||
+                targetLibrary.ToolsAssemblies.Any(item => IsAsset(item.Path));
+            var hasRuntimeCapableAssets =
+                ((selected & LibraryIncludeFlags.Runtime) != 0 &&
+                    (targetLibrary.RuntimeAssemblies.Any(item => IsAsset(item.Path)) || targetLibrary.ResourceAssemblies.Any(item => IsAsset(item.Path)) ||
+                     targetLibrary.RuntimeTargets.Any(item => IsAsset(item.Path) && (!item.Properties.TryGetValue("assetType", out var assetType) || assetType != "native")))) ||
+                ((selected & LibraryIncludeFlags.Compile) != 0 &&
+                    (targetLibrary.CompileTimeAssemblies.Any(item => IsAsset(item.Path)) || targetLibrary.FrameworkAssemblies.Any(IsAsset) ||
+                     targetLibrary.FrameworkReferences.Any(IsAsset) || targetLibrary.EmbedAssemblies.Any(item => IsAsset(item.Path)))) ||
+                ((selected & LibraryIncludeFlags.Native) != 0 &&
+                    (targetLibrary.NativeLibraries.Any(item => IsAsset(item.Path)) || targetLibrary.RuntimeTargets.Any(item =>
+                        IsAsset(item.Path) && item.Properties.TryGetValue("assetType", out var assetType) && assetType == "native"))) ||
+                ((selected & LibraryIncludeFlags.ContentFiles) != 0 && targetLibrary.ContentFiles.Any(item => IsAsset(item.Path)));
+
+            var runtimeCategories = LibraryIncludeFlags.Compile | LibraryIncludeFlags.Runtime |
+                LibraryIncludeFlags.Native | LibraryIncludeFlags.ContentFiles;
+            return !hasRuntimeCapableAssets && (hasBuildOnlyAssets || (selected & runtimeCategories) == 0);
+        }
+
+        private static bool IsAsset(string path)
+        {
+            return !string.IsNullOrEmpty(path) &&
+                !string.Equals(path.Replace('\\', '/').Split('/').Last(), "_._", StringComparison.Ordinal);
+        }
+
+        private static void SetRuntimeReachability(HashSet<DotnetDependency> packages, bool isTestProject)
+        {
+            var lookup = packages.ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
+            var reachable = new HashSet<DotnetDependency>();
+            var queue = new Queue<DotnetDependency>();
+            foreach (var package in packages.Where(p => p.IsDirectReference && !p.IsDevDependency))
+            {
+                reachable.Add(package);
+                queue.Enqueue(package);
+            }
+            while (queue.Count > 0)
+            {
+                var source = queue.Dequeue();
+                foreach (var edge in source.GetDependencyEdges())
+                {
+                    var candidates = lookup[edge.Key].ToList();
+                    var matches = candidates.Where(p => p.Version == edge.Value).ToList();
+                    if (matches.Count == 0 && VersionRange.TryParse(edge.Value, out var range))
+                        matches = candidates.Where(p => NuGetVersion.TryParse(p.Version, out var version) && range.Satisfies(version)).ToList();
+                    if (matches.Count == 0)
+                    {
+                        source.NonDevelopmentUnresolvedDependencyEdges.Add(edge);
+                        if (!isTestProject)
+                            source.RuntimeUnresolvedDependencyEdges.Add(edge);
+                    }
+                    // Keep the historical one-name scope fallback, but do not let it
+                    // erase an unsatisfied range needed for post-merge resolution.
+                    if (matches.Count == 0 && candidates.Count == 1)
+                        matches = candidates;
+                    foreach (var child in matches)
+                    {
+                        if (reachable.Add(child))
+                            queue.Enqueue(child);
+                    }
+                }
+            }
+            foreach (var package in packages)
+            {
+                package.IsNonDevelopmentReachable = reachable.Contains(package);
+                package.IsRuntimeReachable = !isTestProject && package.IsNonDevelopmentReachable.Value;
+                package.Scope = package.IsRuntimeReachable.Value ? Component.ComponentScope.Required : Component.ComponentScope.Excluded;
+            }
         }
 
         /// <summary>
