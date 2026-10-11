@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.CommandLine;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CycloneDX.Models;
@@ -41,6 +42,26 @@ namespace CycloneDX.Tests.FunctionalTests
             Assert.Contains(bom.Components, c => string.Compare(c.Name, "Castle.Core", true) == 0 && c.Version == "5.1.1");
 
             FunctionalTestHelper.AssertHasDependencyWithChild(bom, "ClassLibrary1@1.0.0", "pkg:nuget/Moq@4.20.70", "expected dependency not found");
+        }
+
+        [Fact]
+        public void ApplyNugetPurlToProjectReference_DoesNotOverwriteExistingValues()
+        {
+            var component = new Component
+            {
+                Name = "ClassLibrary1",
+                Version = "1.0.0",
+                Purl = "custom:purl",
+                BomRef = "custom:bom-ref"
+            };
+
+            var applyMethod = typeof(Runner).GetMethod("ApplyNugetPurlIfNecessary", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.NotNull(applyMethod);
+
+            applyMethod.Invoke(null, new object[] { component, true });
+
+            Assert.Equal("custom:purl", component.Purl);
+            Assert.Equal("custom:bom-ref", component.BomRef);
         }
     }
 }
