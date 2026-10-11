@@ -23,6 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **`--exclude-filter` removes only what it orphans** (fixes #1133) — pre-existing orphans are kept
 
+- **`--exclude-filter` removed all packages for some target frameworks** (#1126) — for projects
+  targeting e.g. `net48`, `netstandard2.0`, `Net8.0` or `net8.0-windows10.0.19041.0`, no package
+  was detected as a direct reference, so `--exclude-filter` removed every package as an orphan.
+  Resolved by the NuGet.ProjectModel 7.6.0 update, which no longer normalizes target names in
+  `project.assets.json`; a regression test has been added.
+
 ## [6.2.1] - 2026-10-11
 
 ### Fixed

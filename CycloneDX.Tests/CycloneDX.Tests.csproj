@@ -201,6 +201,9 @@
     <None Update="FunctionalTests\Issue936-RemovedTransitiveDependency\project2csproj.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="FunctionalTests\Issue1126-ExcludeFilterNonNormalizedFramework\net48.assets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
