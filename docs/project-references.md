@@ -76,11 +76,26 @@ component in the BOM, and the full multi-level dependency graph is preserved:
 MyApp → MyLib → SomeNuGetPackage
 ```
 
-By default, project components get a `bom-ref` of `<name>@<version>` and no
-purl. If the referenced projects are published as NuGet packages, add
-`--set-nuget-purl`: just like the metadata component, each project component then
-gets a guessed `pkg:nuget/<name>@<version>` purl, which is also used as its
-`bom-ref`.
+### NuGet PURLs for included projects
+
+By default, included project components have a bom-ref of `<name>@<version>`
+and no generated NuGet PURL. To generate missing project PURLs, enable both flags:
+
+```bash
+dotnet-CycloneDX MyApp.csproj -o ./bom --include-project-references --set-nuget-purl
+```
+
+For a project component named `MyLib` with version `1.2.3`, a missing (null or
+empty) PURL becomes `pkg:nuget/MyLib@1.2.3`. Existing nonempty PURLs are never
+overwritten. When a PURL is available, a missing bom-ref or the default
+`MyLib@1.2.3` bom-ref becomes that PURL; any custom bom-ref is preserved.
+If PURL generation returns null, the original bom-ref is retained. Dependency
+edges use the final bom-ref, including preserved custom references.
+
+`--include-project-references` alone leaves project identifiers unchanged.
+`--set-nuget-purl` alone still only fills missing root metadata identifiers;
+it does not include project components. Root metadata preserves all nonempty
+bom-refs, even `<name>@<version>`, and NuGet package identifiers are unchanged.
 
 `-ipr` is only valid with a project file input. Passing it with a `.sln`,
 directory, or `packages.config` path is a hard error.
@@ -94,6 +109,7 @@ directory, or `packages.config` path is a hard error.
 | Modern SDK-style project, you want all NuGet packages | _(none needed)_ |
 | Referenced project uses `packages.config` | `--recursive` |
 | You want referenced projects listed as BOM components | `--recursive --include-project-references` |
+| You want missing NuGet PURLs generated for included projects | `--include-project-references --set-nuget-purl` |
 | Solution file input | _(none; solution path already aggregates all projects) _ |
 
 ---
@@ -106,3 +122,5 @@ directory, or `packages.config` path is a hard error.
   or when combined with `--include-project-references`.
 - `--include-project-references` controls whether project nodes appear as BOM
   components. It does not affect which NuGet packages are included.
+- Combined with `--set-nuget-purl`, it generates missing project PURLs and
+  replaces missing/default project bom-refs, preserving existing PURLs and custom refs.

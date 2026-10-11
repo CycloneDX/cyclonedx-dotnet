@@ -53,6 +53,8 @@ namespace CycloneDX.Tests.FunctionalTests
             var classLibrary = Assert.Single(bom.Components, c => c.Name == "ClassLibrary1");
             Assert.Null(classLibrary.Purl);
             Assert.Equal("ClassLibrary1@1.0.0", classLibrary.BomRef);
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, bom.Metadata.Component.BomRef, classLibrary.BomRef);
+            FunctionalTestHelper.AssertHasDependencyWithChild(bom, classLibrary.BomRef, "pkg:nuget/Moq@4.20.70");
         }
 
         [Fact(Timeout = 15000)]

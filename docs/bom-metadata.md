@@ -14,18 +14,28 @@ four sources.  They are applied in priority order — highest first:
 
 ## Source 1 — CLI arguments
 
-These flags always win, regardless of what the metadata file says.
+The name, version, and type flags always win, regardless of what the metadata
+file says. `--set-nuget-purl` only fills missing identifiers as described below.
 
 | Flag | Short | Default | Description |
 |---|---|---|---|
 | `--set-name` | `-sn` | _(filename)_ | Override the metadata component `<name>` |
 | `--set-version` | `-sv` | `0.0.0` | Override the metadata component `<version>` |
 | `--set-type` | `-st` | `Application` | Override the metadata component `type` attribute |
-| `--set-nuget-purl` | — | off | Generate a NuGet `pkg:nuget/<name>@<version>` purl and bom-ref if they are not already set. With `--include-project-references`, project reference components get one as well |
+| `--set-nuget-purl` | — | off | Generate a missing NuGet `pkg:nuget/<name>@<version>` purl; fill a missing metadata bom-ref from the purl. Also applies to included project references with `--include-project-references` (see below) |
 
 `--set-name`, `--set-version`, and `--set-type` override only the specific field
 they target; every other field from the template file (description, licenses,
 authors, etc.) is preserved unchanged.
+
+For the root metadata component, `--set-nuget-purl` preserves every nonempty
+purl and bom-ref, including a bom-ref of `<name>@<version>`. For referenced
+project components, both `--include-project-references` and `--set-nuget-purl`
+are required: missing purls are generated, existing nonempty purls are kept,
+and a missing or default `<name>@<version>` bom-ref is replaced by the available
+purl. Custom project bom-refs are preserved. If PURL generation returns null,
+the original project bom-ref is retained. NuGet package identifiers are unchanged.
+See [project references](project-references.md) for examples.
 
 ---
 
@@ -133,8 +143,8 @@ When both a template file and CLI arguments are provided, the merge rules are:
 | type | no | no/null | any | `Application` |
 
 All other metadata fields (description, licenses, authors, purl, bom-ref, etc.)
-are always taken entirely from the template file; there are no CLI args to
-override them individually.
+are preserved from the template file. `--set-nuget-purl` can fill missing purl
+and bom-ref values, but does not override nonempty metadata identifiers.
 
 ---
 
@@ -173,4 +183,8 @@ dotnet-CycloneDX MyLib.csproj -o ./bom \
   -sn "MyLib" -sv "2.0.0" --set-nuget-purl
 ```
 
-This sets `bom-ref` and `purl` to `pkg:nuget/MyLib@2.0.0`.
+When neither identifier is already set, this sets the metadata `bom-ref` and
+`purl` to `pkg:nuget/MyLib@2.0.0`. Existing nonempty metadata identifiers are
+preserved. To also generate missing PURLs for referenced projects, add
+`--include-project-references`; their default bom-refs become their PURLs,
+while custom bom-refs remain unchanged.

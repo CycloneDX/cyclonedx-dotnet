@@ -87,9 +87,14 @@ namespace CycloneDX.Tests.FunctionalTests
 
             var bom = await FunctionalTestHelper.Test(options, getMockFS());
 
-            var project2 = Assert.Single(bom.Components, c => c.Name == "project2");
-            Assert.Equal("pkg:nuget/project2@1.0.0", project2.Purl);
-            Assert.Equal("pkg:nuget/project2@1.0.0", project2.BomRef);
+            foreach (var name in new[] { "project2", "project3" })
+            {
+                var project = Assert.Single(bom.Components, c => c.Name == name);
+                Assert.Equal($"pkg:nuget/{name}@1.0.0", project.Purl);
+                Assert.Equal(project.Purl, project.BomRef);
+            }
+            Assert.Equal(3, bom.Components.Count);
+            Assert.Equal(4, bom.Dependencies.Count);
             FunctionalTestHelper.AssertHasDependencyWithChild(bom, "pkg:nuget/project1@0.0.0", "pkg:nuget/project2@1.0.0");
             FunctionalTestHelper.AssertHasDependencyWithChild(bom, "pkg:nuget/project2@1.0.0", "pkg:nuget/project3@1.0.0");
             FunctionalTestHelper.AssertHasDependencyWithChild(bom, "pkg:nuget/project3@1.0.0", "pkg:nuget/log4net@2.0.15");
