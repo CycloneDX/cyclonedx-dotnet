@@ -51,7 +51,8 @@ namespace CycloneDX.Tests
             utils.Setup(s => s.GetAssetsPath(It.IsAny<string>())).Returns(new DotnetUtilsResult<string> { Result = "" });
             var assets = new Mock<IProjectAssetsFileService>();
             assets.Setup(s => s.GetDotnetDependencys(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(() => new HashSet<DotnetDependency>());
-            assets.Setup(s => s.GetDotnetDependencys("/solution/sdk/sdk.csproj", It.IsAny<string>(), false)).Returns(() => new HashSet<DotnetDependency>
+            var sdkProjectPath = fileSystem.Path.GetFullPath("/solution/sdk/sdk.csproj");
+            assets.Setup(s => s.GetDotnetDependencys(sdkProjectPath, It.IsAny<string>(), false)).Returns(() => new HashSet<DotnetDependency>
             {
                 new() { Name = "SdkRoot", Version = "1.0.0", IsDirectReference = true, IsNonDevelopmentReachable = true, IsRuntimeReachable = true, Scope = Component.ComponentScope.Required },
                 new() { Name = "Shared", Version = "1.0.0", IsDevDependency = true, IsNonDevelopmentReachable = false, IsRuntimeReachable = false, Scope = Component.ComponentScope.Excluded }
@@ -59,6 +60,8 @@ namespace CycloneDX.Tests
             var projectService = new ProjectFileService(fileSystem, utils.Object, new PackagesFileService(fileSystem), assets.Object) { DisablePackageRestore = true };
             var packages = await new SolutionFileService(fileSystem, projectService)
                 .GetSolutionDotnetDependencys("/solution/test.slnx", null, false, null, null).ConfigureAwait(true);
+            assets.Verify(s => s.GetDotnetDependencys(sdkProjectPath, It.IsAny<string>(), false), Times.Once);
+            Assert.Contains(packages, p => p.Name == "SdkRoot");
             foreach (var name in new[] { "Shared", "LegacyOnly" })
             {
                 var package = packages.Single(p => p.Name == name);
@@ -95,8 +98,10 @@ namespace CycloneDX.Tests
             };
             var projectService = new Mock<IProjectFileService>();
             projectService.Setup(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>())).ReturnsAsync(new HashSet<DotnetDependency>());
-            projectService.Setup(s => s.GetProjectDotnetDependencysAsync("/solution/first.csproj", null, false, null, null, null)).ReturnsAsync(reverse ? runtime : dev);
-            projectService.Setup(s => s.GetProjectDotnetDependencysAsync("/solution/second.csproj", null, false, null, null, null)).ReturnsAsync(reverse ? dev : runtime);
+            var firstProjectPath = fileSystem.Path.GetFullPath("/solution/first.csproj");
+            var secondProjectPath = fileSystem.Path.GetFullPath("/solution/second.csproj");
+            projectService.Setup(s => s.GetProjectDotnetDependencysAsync(firstProjectPath, null, false, null, null, null)).ReturnsAsync(reverse ? runtime : dev);
+            projectService.Setup(s => s.GetProjectDotnetDependencysAsync(secondProjectPath, null, false, null, null, null)).ReturnsAsync(reverse ? dev : runtime);
             var package = Assert.Single(await new SolutionFileService(fileSystem, projectService.Object)
                 .GetSolutionDotnetDependencys("/solution/test.slnx", null, false, null, null).ConfigureAwait(true));
             Assert.True(package.IsRuntimeReachable);

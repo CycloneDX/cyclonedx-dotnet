@@ -496,12 +496,14 @@ namespace CycloneDX.Tests
             utils.Setup(s => s.Restore(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new DotnetUtilsResult());
             utils.Setup(s => s.GetAssetsPath(It.IsAny<string>())).Returns(new DotnetUtilsResult<string> { Result = "" });
             var assets = new Mock<IProjectAssetsFileService>();
-            assets.Setup(s => s.GetDotnetDependencys("/solution/root/root.csproj", It.IsAny<string>(), false)).Returns(new HashSet<DotnetDependency>
+            var rootProjectPath = fileSystem.Path.GetFullPath("/solution/root/root.csproj");
+            var childProjectPath = fileSystem.Path.GetFullPath("/solution/child/child.csproj");
+            assets.Setup(s => s.GetDotnetDependencys(rootProjectPath, It.IsAny<string>(), false)).Returns(new HashSet<DotnetDependency>
             {
                 new() { Name = "Shared", Version = "1.0.0", IsDevDependency = true, IsRuntimeReachable = false,
                     Scope = Component.ComponentScope.Excluded, Dependencies = new Dictionary<string, string> { ["Child"] = "1.0.0" } }
             });
-            assets.Setup(s => s.GetDotnetDependencys("/solution/child/child.csproj", It.IsAny<string>(), false)).Returns(new HashSet<DotnetDependency>
+            assets.Setup(s => s.GetDotnetDependencys(childProjectPath, It.IsAny<string>(), false)).Returns(new HashSet<DotnetDependency>
             {
                 new() { Name = "Shared", Version = "1.0.0", IsRuntimeReachable = true, Scope = Component.ComponentScope.Required,
                     Dependencies = new Dictionary<string, string> { ["Child"] = "2.0.0" } },
@@ -509,7 +511,7 @@ namespace CycloneDX.Tests
                 new() { Name = "Child", Version = "2.0.0" }
             });
             var service = new ProjectFileService(fileSystem, utils.Object, new Mock<IPackagesFileService>().Object, assets.Object);
-            var packages = await service.RecursivelyGetProjectDotnetDependencysAsync("/solution/root/root.csproj", "", false, "", "").ConfigureAwait(true);
+            var packages = await service.RecursivelyGetProjectDotnetDependencysAsync(rootProjectPath, "", false, "", "").ConfigureAwait(true);
             var shared = packages.Single(p => p.Name == "Shared");
             Assert.True(shared.IsRuntimeReachable);
             Assert.False(shared.IsDevDependency);

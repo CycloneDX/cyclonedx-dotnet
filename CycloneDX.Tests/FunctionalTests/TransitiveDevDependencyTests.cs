@@ -138,6 +138,7 @@ namespace CycloneDX.Tests.FunctionalTests
             {
                 [solutionPath] = new MockFileData("")
             });
+            solutionPath = fileSystem.Path.GetFullPath(solutionPath);
             var solutionService = new Mock<ISolutionFileService>();
             solutionService.Setup(s => s.GetSolutionDotnetDependencys(
                 solutionPath, It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>(),

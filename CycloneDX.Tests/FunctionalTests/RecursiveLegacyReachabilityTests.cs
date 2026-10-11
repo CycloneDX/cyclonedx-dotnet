@@ -35,7 +35,7 @@ namespace CycloneDX.Tests.FunctionalTests
         [InlineData(true)]
         public async Task SyntheticProjectRoot_DoesNotPromoteKnownDevelopmentChild(bool excludeDev)
         {
-            const string projectPath = "/solution/root.csproj";
+            var projectPath = MockUnixSupport.Path("c:/solution/root.csproj");
             var project = new DotnetDependency
             {
                 Name = "ReferencedProject", Version = "1.0.0", DependencyType = DependencyType.Project,
@@ -50,6 +50,7 @@ namespace CycloneDX.Tests.FunctionalTests
                 new() { Name = "Dev", Version = "1.0.0", IsDevDependency = true, IsRuntimeReachable = false, IsNonDevelopmentReachable = false, Scope = Component.ComponentScope.Excluded }
             };
             var fileSystem = new MockFileSystem(new Dictionary<string, MockFileData> { [projectPath] = "<Project />" });
+            projectPath = fileSystem.Path.GetFullPath(projectPath);
             var projectService = new Mock<IProjectFileService>();
             projectService.Setup(s => s.RecursivelyGetProjectDotnetDependencysAsync(projectPath,
                 It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(packages);
