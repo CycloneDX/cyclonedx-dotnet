@@ -299,16 +299,14 @@ namespace CycloneDX.E2ETests.Tests
             {
                 Assert.DoesNotContain("TestPkg.RuntimeWithDep", result.BomContent);
                 Assert.DoesNotContain("TestPkg.DevTransitive", result.BomContent);
+                Assert.DoesNotContain("TestPkg.BuildOnly", result.BomContent);
             }
             else
             {
                 Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.RuntimeWithDep"));
                 Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.DevTransitive"));
-            }
-            if (excludeDev || excludeTestProjects)
-                Assert.DoesNotContain("TestPkg.BuildOnly", result.BomContent);
-            else
                 Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.BuildOnly"));
+            }
             AssertDependencyGraphHasNoDanglingReferences(result.BomContent);
         }
 
