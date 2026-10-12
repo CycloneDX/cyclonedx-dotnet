@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.3.0] - 2026-10-12
+
 ### Added
 
 - **NuGet purl for project reference components** (#1137, fixes #1136) — when `--set-nuget-purl`
@@ -17,19 +19,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Represent development dependencies with excluded scope** — development dependencies and packages reachable only through them are included by default with `scope="excluded"`; runtime-shared packages remain `required`. The deprecated `--exclude-dev` option continues to filter, omitting development-only and test-project-only packages (including ordinary runtime dependencies of test projects), while retaining packages shared with production runtime use.
+- **Represent development dependencies with excluded scope** (#1138) — development dependencies
+  and packages reachable only through them are included by default with `scope="excluded"`;
+  runtime-shared packages remain `required`. The deprecated `--exclude-dev` option continues to
+  filter, omitting development-only and test-project-only packages (including ordinary runtime
+  dependencies of test projects), while retaining packages shared with production runtime use.
 
 ### Fixed
 
-- **Resolve `$(RootNamespace)` in project assembly names** (#1128, fixes #917) — substitute the project's explicit root namespace, including `$(MSBuildProjectName)` within it, so referenced projects using this pattern no longer collide under an unresolved name. Missing, empty, or `$(AssemblyName)`-referencing root namespaces fall back to the project filename. This is best-effort substitution, not general MSBuild property evaluation.
+- **Resolve `$(RootNamespace)` in project assembly names** (#1128, fixes #917) — substitute the
+  project's explicit root namespace, including `$(MSBuildProjectName)` within it, so referenced
+  projects using this pattern no longer collide under an unresolved name. Missing, empty, or
+  `$(AssemblyName)`-referencing root namespaces fall back to the project filename. This is
+  best-effort substitution, not general MSBuild property evaluation.
 
-- **`--exclude-filter` removes only what it orphans** (fixes #1133) — pre-existing orphans are kept
+- **`--exclude-filter` removes only what it orphans** (#1135, fixes #1133) — pre-existing orphans
+  are kept.
 
-- **`--exclude-filter` removed all packages for some target frameworks** (#1126) — for projects
-  targeting e.g. `net48`, `netstandard2.0`, `Net8.0` or `net8.0-windows10.0.19041.0`, no package
-  was detected as a direct reference, so `--exclude-filter` removed every package as an orphan.
-  Resolved by the NuGet.ProjectModel 7.6.0 update, which no longer normalizes target names in
-  `project.assets.json`; a regression test has been added.
+- **Regression coverage for `--exclude-filter` on non-normalized target frameworks** (#1131,
+  fixes #1126) — verifies that direct references remain detected for `net48`, `netstandard2.0`,
+  `Net8.0` and `net8.0-windows10.0.19041.0`, rather than removing every package as an orphan.
+  The underlying fix comes from NuGet.ProjectModel 7.6.0, already included in 6.2.1.
 
 ## [6.2.1] - 2026-10-11
 
