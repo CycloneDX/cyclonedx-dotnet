@@ -336,6 +336,23 @@ namespace CycloneDX.E2ETests.Builders
         public string ProjectFile(string projectName) =>
             Path.Combine(_dir.Path, projectName, $"{projectName}.csproj");
 
+        /// <summary>Reads restored assets only from within this solution's directory.</summary>
+        public string ReadProjectAssets(string projectName)
+        {
+            // Temp roots are environment-controlled. Canonicalize before enforcing a
+            // directory boundary, so rooted names, traversal and sibling prefixes cannot
+            // redirect this read outside the generated solution. This is lexical
+            // containment, not protection against symlinks or a hostile temp-root owner.
+            var root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(_dir.Path)) + Path.DirectorySeparatorChar;
+            var assetsPath = Path.GetFullPath(Path.Combine(root, projectName, "obj", "project.assets.json"));
+            var comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+            if (assetsPath.Length < root.Length ||
+                string.Compare(assetsPath, 0, root, 0, root.Length, comparison) != 0)
+                throw new ArgumentException("Project assets must be inside the solution directory.", nameof(projectName));
+
+            return File.ReadAllText(assetsPath);
+        }
+
         /// <summary>A fresh temp output directory for BOM output (caller must dispose separately).</summary>
         public TempDirectory CreateOutputDir() => new();
 

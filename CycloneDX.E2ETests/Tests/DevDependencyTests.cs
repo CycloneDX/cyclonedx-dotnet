@@ -468,8 +468,7 @@ namespace CycloneDX.E2ETests.Tests
                     builder.AddProject("Production", p => p.AddPackage(parent, "1.0.0"));
                 using var solution = await builder.BuildAsync(_fixture.NuGetFeedUrl);
 
-                using var assets = JsonDocument.Parse(File.ReadAllText(
-                    Path.Combine(solution.RootDir, "Consumer", "obj", "project.assets.json")));
+                using var assets = JsonDocument.Parse(solution.ReadProjectAssets("Consumer"));
                 var target = assets.RootElement.GetProperty("targets").GetProperty("net8.0");
                 var wrapper = target.GetProperty(parent + "/1.0.0");
                 Assert.Equal(new[] { $"buildTransitive/{parent}.targets" },
@@ -574,8 +573,7 @@ namespace CycloneDX.E2ETests.Tests
             string projectName,
             string packageName)
         {
-            var assetsPath = Path.Combine(solution.RootDir, projectName, "obj", "project.assets.json");
-            using var document = JsonDocument.Parse(File.ReadAllText(assetsPath));
+            using var document = JsonDocument.Parse(solution.ReadProjectAssets(projectName));
 
             return document.RootElement.GetProperty("targets")
                 .EnumerateObject()
