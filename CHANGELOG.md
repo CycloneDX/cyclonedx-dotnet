@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Retain runtime aggregation wrappers conservatively** (#1139) — build-only wrappers with
+  positive runtime-capable dependency evidence in the same restored target are now retained
+  with their runtime closure by `--exclude-dev`. Explicit development-only asset selections,
+  standalone build-only packages without such evidence, and analyzer/tool-only roots remain
+  development roots; separate production runtime sharing still wins, and test-project-only
+  use is still filtered. `PrivateAssets` controls propagation, not development intent.
+  Ambiguous build-tool closures may also be retained; this is not
+  publish-output analysis.
+
 ## [6.3.0] - 2026-10-12
 
 ### Added

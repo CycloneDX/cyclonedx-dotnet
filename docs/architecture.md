@@ -79,18 +79,46 @@ listed project are included.
 3. All `LockFileTarget` entries (one per TFM × RID combination) are iterated and
    union-merged into a single package set. Equality is `(Name, Version)`.
 4. `IsDirectReference` is determined per-TFM from `ProjectFileDependencyGroups`.
-5. `IsDevDependency` reflects the assets selected by restore, not `PrivateAssets` or
-   `SuppressParent` alone. Analyzer, build, build-transitive, build-multitargeting and tool
-   assets without selected runtime-capable assets identify development use. Explicitly
+5. Initial `IsDevDependency` reflects each package's own assets selected by restore, not
+   `PrivateAssets` or `SuppressParent` alone. Analyzer, build, build-transitive,
+   build-multitargeting and tool assets without selected runtime-capable assets identify
+   development use. Explicitly
    selecting no assets, or selecting only non-runtime asset categories, also identifies
    development use. Compile, runtime, native, resource, runtime-target, framework, content
    and embedded assets are runtime-capable; ambiguous asset-less packages remain non-dev
    when runtime-capable categories are allowed. Analyzer detection combines selected asset
    flags with analyzer paths in the package manifest.
 6. Version ranges in dependency dictionaries are resolved to concrete versions already
-   present in the package set.
+   present in the target's package set.
 7. If `NETStandard.Library` appears in dependency dicts but not in the resolved set, all
    references to it are stripped (SDK-provided; not a real package in the output).
+
+After own-selected-assets classification and dependency range resolution, a graph refinement
+runs within each `LockFileTarget`, before runtime reachability and `DotnetDependency.MergeInto`.
+It changes eligible build-only wrapper occurrences to `IsDevDependency=false` when their
+target-local dependency closure supplies positive evidence in an allowed runtime-capable
+category. This retains runtime aggregation wrappers that carry only build/build-transitive/
+build-multitargeting assets themselves, without making every build-only package non-dev.
+
+- Candidates must have real selected build assets, allow runtime-capable categories, and
+  have no selected analyzer/tool evidence. Standalone build-only packages without positive
+  descendants, explicitly no-assets or development-only selections, and mixed build-plus-
+  analyzer/tool candidates without their own runtime evidence remain development use.
+- Positive evidence comes from the restored target-library inventory: **Compile** (including
+  framework assemblies/references and embedded assets), **Runtime** (including resources and
+  non-native runtime targets), **Native** (including native runtime targets), and **ContentFiles**.
+  Empty paths, `_._` placeholders, unknown assets, and merely being classified non-dev are not
+  positive evidence. The candidate's allowed-category mask must intersect this evidence;
+  allowing Native alone cannot be justified by managed Runtime assets.
+- Evidence follows case-insensitive, version/range-compatible dependency edges only within
+  the current target. Missing or unsatisfied edges do not use the ordinary reachability pass's
+  single-name fallback. A descendant's separate direct-reference selection is not a global
+  restriction on other incoming paths; its restored target inventory supplies the available
+  evidence. No edge-selection information absent from the assets file is inferred.
+- Analyzer/tool occurrences with no runtime-capable inventory are boundaries in the evidence
+  search. These boundaries do not alter ordinary forward runtime reachability. A reverse-edge
+  worklist propagates category evidence through nested wrappers and cycles; cycles without
+  real evidence cannot promote themselves. Evidence is never borrowed from merged targets.
 
 Reachability is calculated within each selected target before merging. Traversal from direct,
 non-dev references identifies non-development use, including ordinary dependencies of test
@@ -98,6 +126,8 @@ projects. Production runtime reachability excludes test-project roots. Packages 
 only through dev/test paths have scope `Excluded`; production-runtime-shared packages have
 scope `Required`. Merging the same `(Name, Version)` preserves reachability and dependency
 edges from all occurrences rather than depending on encounter order.
+Promoted wrappers in test projects gain non-development reachability, not production runtime
+reachability: their test-only closure remains `Excluded` unless shared with production runtime use.
 Unresolved edges originating in a production runtime path are resolved against the merged
 package set. Their matching packages and descendants gain runtime reachability even when
 those identities were supplied only by development occurrences in another target.
@@ -108,6 +138,14 @@ ordinary runtime packages used only in test projects. Packages shared with produ
 runtime use remain `Required` and are retained. `--exclude-test-projects` skips test
 projects entirely during collection. See
 [Dev and Test Dependency Handling](dev-and-test-dependencies.md) for examples.
+
+This is conservative classification of restored assets and dependency graphs, not a
+publish-output scanner or an interpretation of MSBuild targets. Ordinary dependency edges
+do not encode application-runtime versus build-tool intent, so indistinguishable build-tool
+closures may also be retained as `Required`. `PrivateAssets` controls propagation to consumers,
+not current-project intent, and does not guarantee exclusion. The #1139 regressions cover an
+ONNX-shaped reduced assets fixture and synthetic local-feed restore/CLI XML and JSON closure;
+they do not establish real ONNX application publish contents.
 
 If `project.assets.json` yields zero packages, the tool falls back to `packages.config` in
 the same directory.
