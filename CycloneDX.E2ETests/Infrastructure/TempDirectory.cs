@@ -36,6 +36,20 @@ namespace CycloneDX.E2ETests.Infrastructure
             Directory.CreateDirectory(Path);
         }
 
+        /// <summary>Creates a temporary child within an existing test-owned directory.</summary>
+        public TempDirectory(TempDirectory parent)
+        {
+            var root = System.IO.Path.TrimEndingDirectorySeparator(System.IO.Path.GetFullPath(parent.Path)) + System.IO.Path.DirectorySeparatorChar;
+            var child = System.IO.Path.GetFullPath(System.IO.Path.Combine(root, "cdx-e2e-" + System.IO.Path.GetRandomFileName()));
+            var comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+            if (child.Length < root.Length ||
+                string.Compare(child, 0, root, 0, root.Length, comparison) != 0)
+                throw new ArgumentException("Temporary child must be inside the parent directory.", nameof(parent));
+
+            Path = child;
+            Directory.CreateDirectory(child);
+        }
+
         public string Combine(params string[] parts) =>
             System.IO.Path.Combine(new[] { Path }.Concat(parts).ToArray());
 

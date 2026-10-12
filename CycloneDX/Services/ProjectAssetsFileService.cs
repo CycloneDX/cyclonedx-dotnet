@@ -53,6 +53,7 @@ namespace CycloneDX.Services
                 foreach (var targetRuntime in assetsFile.Targets)
                 {
                     var runtimePackages = new HashSet<DotnetDependency>();
+                    var assetContexts = new Dictionary<DotnetDependency, (LibraryIncludeFlags Allowed, AssetEvidence Selected, AssetEvidence Inventory)>();
                     var targetFramework = assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
                     var dependencies = targetFramework.Dependencies;
                     var directDependencies = assetsFile.ProjectFileDependencyGroups
@@ -69,7 +70,7 @@ namespace CycloneDX.Services
                     {
                         var libs = dependencies.FirstOrDefault(ld => ld.Name.Equals(lockFileLibrary.Name, StringComparison.OrdinalIgnoreCase));
                         //try to find dependency in the library section, to get its path
-                        var library = assetsFile.Libraries.FirstOrDefault(lib => lib.Name == lockFileLibrary.Name && lib.Version == lockFileLibrary.Version);
+                        var library = assetsFile.Libraries.FirstOrDefault(lib => string.Equals(lib.Name, lockFileLibrary.Name, StringComparison.OrdinalIgnoreCase) && lib.Version == lockFileLibrary.Version);
 
                         var package = new DotnetDependency
                         {
@@ -97,6 +98,9 @@ namespace CycloneDX.Services
                             package.Dependencies.Add(dep.Id, dep.VersionRange?.ToNormalizedString());
                         }
                         runtimePackages.Add(package);
+                        var selected = libs?.IncludeType ?? LibraryIncludeFlags.All;
+                        assetContexts.Add(package, (selected, AnalyzeAssets(lockFileLibrary, library, selected),
+                            AnalyzeAssets(lockFileLibrary, library, LibraryIncludeFlags.All)));
                     }
 
                     var allDependencies = runtimePackages.SelectMany(y => y.Dependencies.Keys).Distinct();
@@ -117,6 +121,7 @@ namespace CycloneDX.Services
                     }
 
                     ResolveDependencyVersionRanges(runtimePackages);
+                    PromoteRuntimeMetapackages(runtimePackages, assetContexts);
                     SetRuntimeReachability(runtimePackages, isTestProject);
                     DotnetDependency.MergeInto(packages, runtimePackages);
                 }
@@ -142,29 +147,88 @@ namespace CycloneDX.Services
             if (selected == LibraryIncludeFlags.None)
                 return true;
 
-            var hasSelectedAnalyzerAssets =
+            var evidence = AnalyzeAssets(targetLibrary, library, selected);
+            return evidence.Categories == LibraryIncludeFlags.None &&
+                (evidence.Build || evidence.Analyzers || evidence.Tools || (selected & RuntimeCategories) == 0);
+        }
+
+        private const LibraryIncludeFlags RuntimeCategories = LibraryIncludeFlags.Compile | LibraryIncludeFlags.Runtime |
+            LibraryIncludeFlags.Native | LibraryIncludeFlags.ContentFiles;
+
+        private sealed record AssetEvidence(LibraryIncludeFlags Categories, bool Build, bool Analyzers, bool Tools);
+
+        private static AssetEvidence AnalyzeAssets(LockFileTargetLibrary targetLibrary, LockFileLibrary library, LibraryIncludeFlags selected)
+        {
+            var analyzers =
                 (selected & LibraryIncludeFlags.Analyzers) != 0 &&
                 library?.Files.Any(path =>
                     IsAsset(path) && path.StartsWith("analyzers/", StringComparison.OrdinalIgnoreCase)) == true;
-            var hasBuildOnlyAssets = hasSelectedAnalyzerAssets ||
+            var build =
                 ((selected & (LibraryIncludeFlags.Build | LibraryIncludeFlags.BuildTransitive)) != 0 && targetLibrary.Build.Any(item => IsAsset(item.Path))) ||
-                ((selected & LibraryIncludeFlags.Build) != 0 && targetLibrary.BuildMultiTargeting.Any(item => IsAsset(item.Path))) ||
-                targetLibrary.ToolsAssemblies.Any(item => IsAsset(item.Path));
-            var hasRuntimeCapableAssets =
-                ((selected & LibraryIncludeFlags.Runtime) != 0 &&
-                    (targetLibrary.RuntimeAssemblies.Any(item => IsAsset(item.Path)) || targetLibrary.ResourceAssemblies.Any(item => IsAsset(item.Path)) ||
-                     targetLibrary.RuntimeTargets.Any(item => IsAsset(item.Path) && (!item.Properties.TryGetValue("assetType", out var assetType) || assetType != "native")))) ||
-                ((selected & LibraryIncludeFlags.Compile) != 0 &&
-                    (targetLibrary.CompileTimeAssemblies.Any(item => IsAsset(item.Path)) || targetLibrary.FrameworkAssemblies.Any(IsAsset) ||
-                     targetLibrary.FrameworkReferences.Any(IsAsset) || targetLibrary.EmbedAssemblies.Any(item => IsAsset(item.Path)))) ||
-                ((selected & LibraryIncludeFlags.Native) != 0 &&
-                    (targetLibrary.NativeLibraries.Any(item => IsAsset(item.Path)) || targetLibrary.RuntimeTargets.Any(item =>
-                        IsAsset(item.Path) && item.Properties.TryGetValue("assetType", out var assetType) && assetType == "native"))) ||
-                ((selected & LibraryIncludeFlags.ContentFiles) != 0 && targetLibrary.ContentFiles.Any(item => IsAsset(item.Path)));
+                ((selected & LibraryIncludeFlags.Build) != 0 && targetLibrary.BuildMultiTargeting.Any(item => IsAsset(item.Path)));
+            var categories = LibraryIncludeFlags.None;
+            if ((selected & LibraryIncludeFlags.Runtime) != 0 &&
+                (targetLibrary.RuntimeAssemblies.Any(item => IsAsset(item.Path)) || targetLibrary.ResourceAssemblies.Any(item => IsAsset(item.Path)) ||
+                 targetLibrary.RuntimeTargets.Any(item => IsAsset(item.Path) && (!item.Properties.TryGetValue("assetType", out var assetType) || assetType != "native"))))
+                categories |= LibraryIncludeFlags.Runtime;
+            if ((selected & LibraryIncludeFlags.Compile) != 0 &&
+                (targetLibrary.CompileTimeAssemblies.Any(item => IsAsset(item.Path)) || targetLibrary.FrameworkAssemblies.Any(IsAsset) ||
+                 targetLibrary.FrameworkReferences.Any(IsAsset) || targetLibrary.EmbedAssemblies.Any(item => IsAsset(item.Path))))
+                categories |= LibraryIncludeFlags.Compile;
+            if ((selected & LibraryIncludeFlags.Native) != 0 &&
+                (targetLibrary.NativeLibraries.Any(item => IsAsset(item.Path)) || targetLibrary.RuntimeTargets.Any(item =>
+                    IsAsset(item.Path) && item.Properties.TryGetValue("assetType", out var assetType) && assetType == "native")))
+                categories |= LibraryIncludeFlags.Native;
+            if ((selected & LibraryIncludeFlags.ContentFiles) != 0 && targetLibrary.ContentFiles.Any(item => IsAsset(item.Path)))
+                categories |= LibraryIncludeFlags.ContentFiles;
+            return new AssetEvidence(categories, build, analyzers, targetLibrary.ToolsAssemblies.Any(item => IsAsset(item.Path)));
+        }
 
-            var runtimeCategories = LibraryIncludeFlags.Compile | LibraryIncludeFlags.Runtime |
-                LibraryIncludeFlags.Native | LibraryIncludeFlags.ContentFiles;
-            return !hasRuntimeCapableAssets && (hasBuildOnlyAssets || (selected & runtimeCategories) == 0);
+        private static void PromoteRuntimeMetapackages(HashSet<DotnetDependency> packages,
+            Dictionary<DotnetDependency, (LibraryIncludeFlags Allowed, AssetEvidence Selected, AssetEvidence Inventory)> contexts)
+        {
+            var lookup = packages.ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
+            var predecessors = packages.ToDictionary(p => p, _ => new List<DotnetDependency>());
+            var evidence = packages.ToDictionary(p => p, p => contexts[p].Inventory.Categories);
+            foreach (var source in packages)
+            {
+                var inventory = contexts[source].Inventory;
+                // Inventory, not a different direct reference's IncludeType, governs this
+                // dependency path. Pure analyzer/tool occurrences are evidence boundaries.
+                if (inventory.Categories == LibraryIncludeFlags.None && (inventory.Analyzers || inventory.Tools))
+                    continue;
+                foreach (var edge in source.GetDependencyEdges())
+                {
+                    foreach (var child in lookup[edge.Key].Where(p => p.Version == edge.Value ||
+                        (VersionRange.TryParse(edge.Value, out var range) &&
+                         NuGetVersion.TryParse(p.Version, out var version) && range.Satisfies(version))))
+                        predecessors[child].Add(source);
+                }
+            }
+
+            // Only real assets seed the monotone worklist; empty cycles cannot justify
+            // themselves. No historical single-name fallback or merged-target evidence.
+            var queue = new Queue<DotnetDependency>(packages.Where(p => evidence[p] != LibraryIncludeFlags.None));
+            while (queue.Count > 0)
+            {
+                var child = queue.Dequeue();
+                foreach (var source in predecessors[child])
+                {
+                    var combined = evidence[source] | evidence[child];
+                    if (combined == evidence[source])
+                        continue;
+                    evidence[source] = combined;
+                    queue.Enqueue(source);
+                }
+            }
+            foreach (var package in packages)
+            {
+                var context = contexts[package];
+                if (package.IsDevDependency && context.Selected.Build &&
+                    !context.Selected.Analyzers && !context.Selected.Tools &&
+                    (context.Allowed & RuntimeCategories & evidence[package]) != 0)
+                    package.IsDevDependency = false;
+            }
         }
 
         private static bool IsAsset(string path)

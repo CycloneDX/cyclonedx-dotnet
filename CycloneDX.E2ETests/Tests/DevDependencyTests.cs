@@ -167,15 +167,28 @@ namespace CycloneDX.E2ETests.Tests
         }
 
         [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public async Task TransitiveOfDevDependency_FilteredOnlyWithExcludeDev(bool excludeDev)
+        [InlineData(false, false)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(true, true)]
+        public async Task TransitiveOfDevDependency_FilteredOnlyWithExcludeDev(bool excludeDev, bool restricted)
         {
+            // devDependency supplies only PrivateAssets=all: propagation is not development
+            // intent. Only an explicit build-only selection excludes this runtime-bearing closure.
             using var solution = await new SolutionBuilder("TransitiveDevDepSln")
-                .AddProject("MyApp", p => p
-                    .WithTargetFramework("net8.0")
-                    .AddPackage("TestPkg.A", "1.0.0")
-                    .AddPackage("TestPkg.BuildOnlyWithDep", "1.0.0", devDependency: true))
+                .AddProject("MyApp", p =>
+                {
+                    p.WithTargetFramework("net8.0").AddPackage("TestPkg.A", "1.0.0");
+                    if (restricted)
+                        p.WithRawXml("""
+                            <ItemGroup>
+                              <PackageReference Include="TestPkg.BuildOnlyWithDep" Version="1.0.0"
+                                                PrivateAssets="all" IncludeAssets="build;buildTransitive" />
+                            </ItemGroup>
+                            """);
+                    else
+                        p.AddPackage("TestPkg.BuildOnlyWithDep", "1.0.0", devDependency: true);
+                })
                 .BuildAsync(_fixture.NuGetFeedUrl);
 
             using var outputDir = solution.CreateOutputDir();
@@ -187,30 +200,44 @@ namespace CycloneDX.E2ETests.Tests
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
             Assert.Equal("required", GetComponentScope(result.BomContent, "TestPkg.A"));
-            if (excludeDev)
+            if (excludeDev && restricted)
             {
                 Assert.DoesNotContain("TestPkg.BuildOnlyWithDep", result.BomContent);
                 Assert.DoesNotContain("TestPkg.DevTransitive", result.BomContent);
             }
             else
             {
-                Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.BuildOnlyWithDep"));
-                Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.DevTransitive"));
+                Assert.Equal(restricted ? "excluded" : "required", GetComponentScope(result.BomContent, "TestPkg.BuildOnlyWithDep"));
+                Assert.Equal(restricted ? "excluded" : "required", GetComponentScope(result.BomContent, "TestPkg.DevTransitive"));
+                AssertDependencyEdge(result.BomContent, "TestPkg.BuildOnlyWithDep", "TestPkg.DevTransitive");
             }
             AssertDependencyGraphHasNoDanglingReferences(result.BomContent);
             Assert.DoesNotContain("<formulation>", result.BomContent);
         }
 
         [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public async Task TransitiveDependency_SharedWithRuntimeDependency_IsRequired(bool excludeDev)
+        [InlineData(false, false)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(true, true)]
+        public async Task TransitiveDependency_SharedWithRuntimeDependency_IsRequired(bool excludeDev, bool restricted)
         {
             using var solution = await new SolutionBuilder("SharedTransitiveDevDepSln")
-                .AddProject("MyApp", p => p
-                    .WithTargetFramework("net8.0")
-                    .AddPackage("TestPkg.BuildOnlyWithDep", "1.0.0", devDependency: true)
-                    .AddPackage("TestPkg.RuntimeWithDep", "1.0.0"))
+                .AddProject("MyApp", p =>
+                {
+                    p.WithTargetFramework("net8.0").AddPackage("TestPkg.RuntimeWithDep", "1.0.0");
+                    // PrivateAssets alone retains the ambiguous wrapper; explicit selection
+                    // preserves genuinely development-only filtering even with a shared child.
+                    if (restricted)
+                        p.WithRawXml("""
+                            <ItemGroup>
+                              <PackageReference Include="TestPkg.BuildOnlyWithDep" Version="1.0.0"
+                                                PrivateAssets="all" IncludeAssets="build;buildTransitive" />
+                            </ItemGroup>
+                            """);
+                    else
+                        p.AddPackage("TestPkg.BuildOnlyWithDep", "1.0.0", devDependency: true);
+                })
                 .BuildAsync(_fixture.NuGetFeedUrl);
 
             using var outputDir = solution.CreateOutputDir();
@@ -221,10 +248,13 @@ namespace CycloneDX.E2ETests.Tests
                 new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl, ExcludeDev = excludeDev });
 
             Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
-            if (excludeDev)
+            if (excludeDev && restricted)
                 Assert.DoesNotContain("TestPkg.BuildOnlyWithDep", result.BomContent);
             else
-                Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.BuildOnlyWithDep"));
+            {
+                Assert.Equal(restricted ? "excluded" : "required", GetComponentScope(result.BomContent, "TestPkg.BuildOnlyWithDep"));
+                AssertDependencyEdge(result.BomContent, "TestPkg.BuildOnlyWithDep", "TestPkg.DevTransitive");
+            }
             Assert.Equal("required", GetComponentScope(result.BomContent, "TestPkg.RuntimeWithDep"));
             Assert.Equal("required", GetComponentScope(result.BomContent, "TestPkg.DevTransitive"));
             var document = XDocument.Parse(result.BomContent);
@@ -378,9 +408,149 @@ namespace CycloneDX.E2ETests.Tests
             Assert.Equal("excluded", GetComponentScope(result.BomContent, "TestPkg.A"));
         }
 
+        [Theory]
+        [InlineData("xml", false)]
+        [InlineData("xml", true)]
+        [InlineData("json", false)]
+        [InlineData("json", true)]
+        public async Task RuntimeMetapackage_RestoredClosureRespectsSelectionAndTestUse(string format, bool excludeDev)
+        {
+            // Unique IDs prevent global NuGet cache/feed collisions. These tiny payloads prove
+            // restore inventories and CLI classification, not executable or publish contents.
+            var parent = "TestPkg.RuntimeWrapper." + System.Guid.NewGuid().ToString("N");
+            var managed = parent + ".Managed";
+            var transitive = parent + ".Transitive";
+            var native = parent + ".Native";
+            await _fixture.PushPackageAsync(NupkgBuilder.Build(transitive, "1.0.0"));
+            await _fixture.PushPackageAsync(NupkgBuilder.Build(managed, "1.0.0",
+                dependencies: new[] { new NupkgDependency(transitive, "1.0.0") }));
+
+            using var nativeStream = new MemoryStream();
+            nativeStream.Write(NupkgBuilder.Build(native, "1.0.0", buildOnly: true));
+            using (var archive = new System.IO.Compression.ZipArchive(nativeStream,
+                System.IO.Compression.ZipArchiveMode.Update, leaveOpen: true))
+            {
+                archive.GetEntry($"build/{native}.targets")!.Delete();
+                using var writer = new StreamWriter(archive.CreateEntry($"runtimes/linux-x64/native/lib{native}.so").Open());
+                writer.Write("synthetic native payload");
+            }
+            await _fixture.PushPackageAsync(nativeStream.ToArray());
+
+            using var parentStream = new MemoryStream();
+            parentStream.Write(NupkgBuilder.Build(parent, "1.0.0", buildOnly: true,
+                dependencies: new[] { new NupkgDependency(managed, "1.0.0"), new NupkgDependency(native, "1.0.0") }));
+            using (var archive = new System.IO.Compression.ZipArchive(parentStream,
+                System.IO.Compression.ZipArchiveMode.Update, leaveOpen: true))
+            {
+                archive.GetEntry($"build/{parent}.targets")!.Delete();
+                using var writer = new StreamWriter(archive.CreateEntry($"buildTransitive/{parent}.targets").Open());
+                writer.Write("<Project />");
+            }
+            await _fixture.PushPackageAsync(parentStream.ToArray());
+
+            foreach (var use in new[] { "Production", "Restricted", "TestOnly", "Shared" })
+            {
+                var builder = new SolutionBuilder("RuntimeWrapper" + use).AddProject("Consumer", p =>
+                {
+                    if (use == "TestOnly" || use == "Shared")
+                        p.AsTestProject();
+                    if (use == "Restricted")
+                        p.WithRawXml($"""
+                            <ItemGroup>
+                              <PackageReference Include="{parent}" Version="1.0.0"
+                                                IncludeAssets="build;buildTransitive" />
+                            </ItemGroup>
+                            """);
+                    else
+                        p.AddPackage(parent, "1.0.0");
+                });
+                if (use == "Shared")
+                    builder.AddProject("Production", p => p.AddPackage(parent, "1.0.0"));
+                using var solution = await builder.BuildAsync(_fixture.NuGetFeedUrl);
+
+                using var assets = JsonDocument.Parse(solution.ReadProjectAssets("Consumer"));
+                var target = assets.RootElement.GetProperty("targets").GetProperty("net8.0");
+                var wrapper = target.GetProperty(parent + "/1.0.0");
+                Assert.Equal(new[] { $"buildTransitive/{parent}.targets" },
+                    wrapper.GetProperty("build").EnumerateObject().Select(a => a.Name).ToArray());
+                foreach (var category in new[] { "compile", "runtime", "runtimeTargets", "native", "resource", "contentFiles", "frameworkAssemblies", "embed" })
+                    Assert.False(wrapper.TryGetProperty(category, out var ownAssets) && ownAssets.EnumerateObject().Any(),
+                        $"Wrapper unexpectedly has own {category} assets");
+                Assert.Equal(new[] { managed, native }, wrapper.GetProperty("dependencies").EnumerateObject().Select(d => d.Name).OrderBy(n => n).ToArray());
+                Assert.Equal(new[] { transitive }, target.GetProperty(managed + "/1.0.0")
+                    .GetProperty("dependencies").EnumerateObject().Select(d => d.Name).ToArray());
+                if (use != "Restricted")
+                {
+                    foreach (var dllPackage in new[] { managed, transitive })
+                        Assert.Contains(target.GetProperty(dllPackage + "/1.0.0").GetProperty("runtime").EnumerateObject(),
+                            a => a.Name == $"lib/net8.0/{dllPackage}.dll");
+                    var nativeAsset = target.GetProperty(native + "/1.0.0").GetProperty("runtimeTargets")
+                        .GetProperty($"runtimes/linux-x64/native/lib{native}.so");
+                    Assert.Equal("native", nativeAsset.GetProperty("assetType").GetString());
+                    Assert.Equal("linux-x64", nativeAsset.GetProperty("rid").GetString());
+                }
+
+                using var outputDir = solution.CreateOutputDir();
+                var result = await _fixture.Runner.RunAsync(solution.SolutionFile, outputDir.Path,
+                    new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl, OutputFormat = format, ExcludeDev = excludeDev });
+                Assert.True(result.Success, $"{use}: Tool failed:\n{result.StdErr}");
+                var required = use == "Production" || use == "Shared";
+                foreach (var package in new[] { parent, managed, transitive, native })
+                {
+                    if (excludeDev && !required)
+                        Assert.DoesNotContain(package, result.BomContent);
+                    else
+                        Assert.Equal(required ? "required" : "excluded", GetComponentScope(result.BomContent, package));
+                }
+                if (!excludeDev || required)
+                {
+                    AssertDependencyEdge(result.BomContent, parent, managed);
+                    AssertDependencyEdge(result.BomContent, parent, native);
+                    AssertDependencyEdge(result.BomContent, managed, transitive);
+                }
+                AssertDependencyGraphHasNoDanglingReferences(result.BomContent);
+            }
+        }
+
+        // Normalize only the component/edge fields used by assertions; no snapshot or
+        // serialization comparison can mask a missing component, scope, or dependency edge.
+        private static XDocument ReadBomGraph(string bomContent)
+        {
+            if (bomContent.TrimStart().StartsWith("<", System.StringComparison.Ordinal))
+                return XDocument.Parse(bomContent);
+            using var json = JsonDocument.Parse(bomContent);
+            XElement Component(JsonElement c) => new XElement("component",
+                new XAttribute("bom-ref", c.GetProperty("bom-ref").GetString()!),
+                new XElement("name", c.GetProperty("name").GetString()),
+                new XElement("scope", c.TryGetProperty("scope", out var scope) ? scope.GetString() : null));
+            var root = new XElement("bom",
+                new XElement("components", json.RootElement.GetProperty("components").EnumerateArray().Select(Component)),
+                new XElement("dependencies", json.RootElement.GetProperty("dependencies").EnumerateArray().Select(d =>
+                    new XElement("dependency", new XAttribute("ref", d.GetProperty("ref").GetString()!),
+                        d.TryGetProperty("dependsOn", out var children)
+                            ? children.EnumerateArray().Select(c => new XElement("dependency", new XAttribute("ref", c.GetString()!)))
+                            : Enumerable.Empty<XElement>()))));
+            if (json.RootElement.TryGetProperty("metadata", out var metadata) && metadata.TryGetProperty("component", out var component))
+                root.Add(new XElement("metadata", Component(component)));
+            return new XDocument(root);
+        }
+
+        private static void AssertDependencyEdge(string bomContent, string parent, string child)
+        {
+            var document = ReadBomGraph(bomContent);
+            var ns = document.Root!.Name.Namespace;
+            string Ref(string name) => document.Descendants(ns + "component")
+                .Single(c => c.Element(ns + "name")?.Value == name).Attribute("bom-ref")!.Value;
+            var parentRef = Ref(parent);
+            var childRef = Ref(child);
+            Assert.Contains(document.Descendants(ns + "dependency"), d =>
+                d.Attribute("ref")?.Value == parentRef &&
+                d.Elements(ns + "dependency").Any(c => c.Attribute("ref")?.Value == childRef));
+        }
+
         private static void AssertDependencyGraphHasNoDanglingReferences(string bomContent)
         {
-            var document = XDocument.Parse(bomContent);
+            var document = ReadBomGraph(bomContent);
             var ns = document.Root!.Name.Namespace;
             var refs = document.Descendants(ns + "component")
                 .Select(c => c.Attribute("bom-ref")?.Value).Where(r => r != null).ToHashSet();
@@ -390,7 +560,7 @@ namespace CycloneDX.E2ETests.Tests
 
         private static string GetComponentScope(string bomContent, string componentName)
         {
-            var document = XDocument.Parse(bomContent);
+            var document = ReadBomGraph(bomContent);
             var ns = document.Root!.Name.Namespace;
             var component = document.Descendants(ns + "component")
                 .Single(c => c.Element(ns + "name")?.Value == componentName);
@@ -403,8 +573,7 @@ namespace CycloneDX.E2ETests.Tests
             string projectName,
             string packageName)
         {
-            var assetsPath = Path.Combine(solution.RootDir, projectName, "obj", "project.assets.json");
-            using var document = JsonDocument.Parse(File.ReadAllText(assetsPath));
+            using var document = JsonDocument.Parse(solution.ReadProjectAssets(projectName));
 
             return document.RootElement.GetProperty("targets")
                 .EnumerateObject()
