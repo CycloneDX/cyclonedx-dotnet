@@ -31,10 +31,11 @@ namespace CycloneDX.E2ETests.Tests
         [InlineData("Unused/../Consumer")]
         public void ReadProjectAssets_ReadsWithinSolution(string projectName)
         {
-            using var solution = new BuiltSolution(new TempDirectory(), "unused.sln", new List<string>());
-            var assetsDirectory = Path.Combine(solution.RootDir, "Consumer", "obj");
+            using var parent = new TempDirectory();
+            using var solution = new BuiltSolution(new TempDirectory(parent), "unused.sln", new List<string>());
+            var assetsDirectory = BoundedPath(parent.Path, Path.Combine(solution.RootDir, "Consumer", "obj"));
             Directory.CreateDirectory(assetsDirectory);
-            File.WriteAllText(Path.Combine(assetsDirectory, "project.assets.json"), "{\"targets\":{}}");
+            File.WriteAllText(BoundedPath(parent.Path, Path.Combine(assetsDirectory, "project.assets.json")), "{\"targets\":{}}");
 
             Assert.Equal("{\"targets\":{}}", solution.ReadProjectAssets(projectName));
         }
@@ -44,21 +45,37 @@ namespace CycloneDX.E2ETests.Tests
         [InlineData(true)]
         public void ReadProjectAssets_RejectsEscapeToSiblingWithMatchingPrefix(bool absolute)
         {
-            using var solution = new BuiltSolution(new TempDirectory(), "unused.sln", new List<string>());
+            using var parent = new TempDirectory();
+            using var solution = new BuiltSolution(new TempDirectory(parent), "unused.sln", new List<string>());
             // A plain prefix check would incorrectly allow this sibling directory.
             var sibling = solution.RootDir + "-outside";
             try
             {
-                Directory.CreateDirectory(Path.Combine(sibling, "obj"));
-                File.WriteAllText(Path.Combine(sibling, "obj", "project.assets.json"), "outside");
+                Directory.CreateDirectory(BoundedPath(parent.Path, Path.Combine(sibling, "obj")));
+                File.WriteAllText(BoundedPath(parent.Path, Path.Combine(sibling, "obj", "project.assets.json")), "outside");
                 var projectName = absolute ? sibling : Path.GetRelativePath(solution.RootDir, sibling);
 
                 Assert.Throws<ArgumentException>(() => solution.ReadProjectAssets(projectName));
             }
             finally
             {
-                Directory.Delete(sibling, recursive: true);
+                Directory.Delete(BoundedPath(parent.Path, sibling), recursive: true);
             }
+        }
+
+        // The escape fixture is outside the solution but must stay inside our owned
+        // parent, including during recursive cleanup. This is lexical containment;
+        // it does not defend against symlinks or a hostile temp-root owner.
+        private static string BoundedPath(string parentDirectory, string candidate)
+        {
+            var root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(parentDirectory)) + Path.DirectorySeparatorChar;
+            var path = Path.GetFullPath(candidate);
+            var comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+            if (path.Length < root.Length ||
+                string.Compare(path, 0, root, 0, root.Length, comparison) != 0)
+                throw new ArgumentException("Fixture path must be inside the test-owned parent directory.", nameof(candidate));
+
+            return path;
         }
     }
 }
