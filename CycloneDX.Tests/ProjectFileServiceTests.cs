@@ -381,18 +381,20 @@ namespace CycloneDX.Tests
         /// "An item with the same key has already been added. Key: $(RootNamespace)" even though
         /// the projects' actual (MSBuild-resolved) namespaces are different.
         /// </summary>
-        [Fact]
-        public async Task RecursivelyGetProjectReferences_TwoReferencedProjectsUseRootNamespaceAssemblyNameIdiom_DoesNotThrow()
+        [Theory]
+        [InlineData("Company.Project2", "Company.Project3")]
+        [InlineData("Company.$(MSBuildProjectName)", "Company.$(MSBuildProjectName)")]
+        public async Task RecursivelyGetProjectReferences_TwoReferencedProjectsUseRootNamespaceAssemblyNameIdiom_DoesNotThrow(string project2Namespace, string project3Namespace)
         {
-            const string project2Xml = @"<Project>
+            string project2Xml = $@"<Project>
   <PropertyGroup>
-    <RootNamespace>Company.Project2</RootNamespace>
+    <RootNamespace>{project2Namespace}</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
   </PropertyGroup>
 </Project>";
-            const string project3Xml = @"<Project>
+            string project3Xml = $@"<Project>
   <PropertyGroup>
-    <RootNamespace>Company.Project3</RootNamespace>
+    <RootNamespace>{project3Namespace}</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
   </PropertyGroup>
 </Project>";
@@ -830,23 +832,25 @@ namespace CycloneDX.Tests
 
         /// <summary>
         /// <AssemblyName>$(RootNamespace)</AssemblyName> should resolve to the project's own
-        /// <RootNamespace> element, the same way MSBuild would evaluate it — not be returned as
+        /// <RootNamespace> element using best-effort substitution — not be returned as
         /// the raw, unresolved "$(RootNamespace)" literal (issue #917).
         /// </summary>
-        [Fact]
-        public void GetAssemblyNameAndVersion_ResolvesRootNamespaceToken()
+        [Theory]
+        [InlineData("Company.Widgets")]
+        [InlineData("Company.$(MSBuildProjectName)")]
+        public void GetAssemblyNameAndVersion_ResolvesRootNamespaceToken(string rootNamespace)
         {
-            const string csproj = @"<Project><PropertyGroup>
-    <RootNamespace>Company.Widgets</RootNamespace>
+            string csproj = $@"<Project><PropertyGroup>
+    <RootNamespace>{rootNamespace}</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
 </PropertyGroup></Project>";
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
             {
-                { XFS.Path(@"c:\P\P.csproj"), new MockFileData(csproj) }
+                { XFS.Path(@"c:\P\Widgets.csproj"), new MockFileData(csproj) }
             });
             var svc = CreateProjectFileService(mockFileSystem);
 
-            var (name, _) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+            var (name, _) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\Widgets.csproj"));
 
             Assert.Equal("Company.Widgets", name);
         }
@@ -858,10 +862,14 @@ namespace CycloneDX.Tests
         /// $(MSBuildProjectName) handling, instead of looping or keeping the raw token (which is
         /// what caused issue #917's duplicate-key crash).
         /// </summary>
-        [Fact]
-        public void GetAssemblyNameAndVersion_RootNamespaceTokenWithoutUsableRootNamespace_FallsBackToFileName()
+        [Theory]
+        [InlineData("")]
+        [InlineData("<RootNamespace />")]
+        [InlineData("<RootNamespace>$(AssemblyName)</RootNamespace>")]
+        public void GetAssemblyNameAndVersion_RootNamespaceTokenWithoutUsableRootNamespace_FallsBackToFileName(string rootNamespaceElement)
         {
-            const string csproj = @"<Project><PropertyGroup>
+            string csproj = $@"<Project><PropertyGroup>
+    {rootNamespaceElement}
     <AssemblyName>$(RootNamespace)</AssemblyName>
 </PropertyGroup></Project>";
             var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>

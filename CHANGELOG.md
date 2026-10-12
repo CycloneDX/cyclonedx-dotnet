@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Resolve `$(RootNamespace)` in project assembly names** (#1128, fixes #917) — substitute the project's explicit root namespace, including `$(MSBuildProjectName)` within it, so referenced projects using this pattern no longer collide under an unresolved name. Missing, empty, or `$(AssemblyName)`-referencing root namespaces fall back to the project filename. This is best-effort substitution, not general MSBuild property evaluation.
+
 - **`--exclude-filter` removes only what it orphans** (fixes #1133) — pre-existing orphans are kept
 
 - **`--exclude-filter` removed all packages for some target frameworks** (#1126) — for projects

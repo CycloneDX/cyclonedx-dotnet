@@ -105,19 +105,14 @@ namespace CycloneDX.Services
             name ??= (xmldoc.SelectSingleNode("/msbuild:Project/msbuild:PropertyGroup/msbuild:AssemblyName", namespaces) as XmlElement)?.InnerText;
                 
 
-            if (name?.Contains("$(MSBuildProjectName)") == true)
-            {
-                var projectName = _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
-                name = name.Replace("$(MSBuildProjectName)", projectName);
-            }
-
             if (name?.Contains("$(RootNamespace)") == true)
             {
                 // <AssemblyName>$(RootNamespace)</AssemblyName> is a common idiom, but the literal
                 // token is identical across every project that uses it. Left unresolved, two such
                 // projects collide as the same dictionary key in RecursivelyGetProjectReferencesAsync
-                // (see issue #917). Resolve it from the project's own <RootNamespace> element, same
-                // as MSBuild would; guard against <RootNamespace>$(AssemblyName)</RootNamespace>
+                // (see issue #917). Use best-effort substitution from the project's own
+                // <RootNamespace> element, not full MSBuild evaluation; guard against
+                // <RootNamespace>$(AssemblyName)</RootNamespace>
                 // (the documented workaround for this same issue) so the two can't resolve each
                 // other into an infinite loop.
                 string rootNamespace = (xmldoc.SelectSingleNode("/Project/PropertyGroup/RootNamespace") as XmlElement)?.InnerText;
@@ -133,6 +128,13 @@ namespace CycloneDX.Services
                 {
                     name = name.Replace("$(RootNamespace)", projectName);
                 }
+            }
+
+            // RootNamespace substitution can introduce this known token too.
+            if (name?.Contains("$(MSBuildProjectName)") == true)
+            {
+                var projectName = _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
+                name = name.Replace("$(MSBuildProjectName)", projectName);
             }
 
             name ??= _fileSystem.Path.GetFileNameWithoutExtension(projectFilePath);
