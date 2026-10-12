@@ -7,7 +7,7 @@ four sources.  They are applied in priority order — highest first:
 |---|---|---|
 | 1 (highest) | CLI arguments | `--set-name`, `--set-version`, `--set-type` |
 | 2 | Metadata template file | `--import-metadata-path <file.xml>` |
-| 3 | Project file `<Version>` | Read automatically from `.csproj`/`.fsproj`/`.vbproj` |
+| 3 | Project `Version` | Evaluated automatically for `.csproj`/`.fsproj`/`.vbproj` |
 | 4 (lowest) | Hardcoded defaults | Name from filename; version `0.0.0`; type `Application` |
 
 ---
@@ -95,9 +95,19 @@ Two fields are always managed automatically by the tool:
 ## Source 3 — Project file version (automatic, `.csproj` only)
 
 When scanning a `.csproj`, `.fsproj`, or `.vbproj` file and `--set-version` is
-not provided, the tool reads the version from the project file and uses it as
-the metadata component version.  It checks the following XML properties in
-priority order, using the first one that has a value:
+not provided, the tool uses the `Version` property evaluated by MSBuild (see
+[Project Evaluation](architecture.md#project-evaluation)) as the metadata component version.
+The evaluation also sees values set in imported files such as `Directory.Build.props`,
+property references (e.g. `$(Major).5.6`) and `VersionPrefix`/`VersionSuffix`.
+`--configuration` and `--framework` are applied, so conditional values (e.g. a version that is
+only set for `Release`) resolve as in that build.
+
+MSBuild evaluates `Version` to `1.0.0` when nothing sets it, which cannot be told
+apart from an explicit `1.0.0`. In that case, or when the evaluation fails (e.g. because an
+import cannot be resolved, or the .NET SDK is older than 8), the tool reads the version from the
+project file XML instead; a failed evaluation prints a notice naming the project and the MSBuild
+error. It checks the following XML properties in priority order, using the first one that has a
+value:
 
 | Priority | Property | Typical use |
 |---|---|---|
