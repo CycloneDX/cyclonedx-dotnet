@@ -518,10 +518,12 @@ namespace CycloneDX.Services
         public async Task<HashSet<DotnetDependency>> RecursivelyGetProjectReferencesAsync(string projectFilePath)
         {
             var projectReferences = new HashSet<DotnetDependency>();
+            var rootProjectFile = _fileSystem.FileInfo.New(projectFilePath).FullName;
+            var projectReferenceGraph = await GetProjectReferenceGraphAsync(rootProjectFile).ConfigureAwait(false);
 
             // Initialize the queue with the current project file
             var files = new Queue<string>();
-            files.Enqueue(_fileSystem.FileInfo.New(projectFilePath).FullName);
+            files.Enqueue(rootProjectFile);
 
             var visitedProjectFiles = new HashSet<string>();
 
@@ -535,7 +537,7 @@ namespace CycloneDX.Services
                 }
 
                 // Find all project references inside of currentFile
-                var foundProjectReferences = await GetProjectReferencesAsync(currentFile).ConfigureAwait(false);
+                var foundProjectReferences = projectReferenceGraph[currentFile];
 
                 var nameAndVersion = GetAssemblyNameAndVersion(currentFile);
 
@@ -565,6 +567,33 @@ namespace CycloneDX.Services
             }
 
             return projectReferences;
+        }
+
+        /// <summary>
+        /// Reads the references of the project and of every project it references, directly or indirectly,
+        /// from the project files. Because each reference found is queued for evaluation, the first evaluation
+        /// then covers the whole graph instead of one level of references at a time.
+        /// </summary>
+        private async Task<Dictionary<string, HashSet<string>>> GetProjectReferenceGraphAsync(string projectFilePath)
+        {
+            var graph = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+            var files = new Queue<string>();
+            files.Enqueue(projectFilePath);
+            while (files.Count > 0)
+            {
+                var currentFile = files.Dequeue();
+                if (!Utils.IsSupportedProjectType(currentFile) || graph.ContainsKey(currentFile))
+                {
+                    continue;
+                }
+
+                graph[currentFile] = await GetProjectReferencesAsync(currentFile).ConfigureAwait(false);
+                foreach (var projectReferencePath in graph[currentFile])
+                {
+                    files.Enqueue(projectReferencePath);
+                }
+            }
+            return graph;
         }
 
 
