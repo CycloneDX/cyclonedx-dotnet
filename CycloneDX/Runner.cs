@@ -435,7 +435,7 @@ namespace CycloneDX
                         Ref = bomRefLookup[(package.Name.ToLower(CultureInfo.InvariantCulture), package.Version.ToLower(CultureInfo.InvariantCulture))],
                         Dependencies = new List<Dependency>()
                     };
-                    // Merged edges from different projects can resolve to the same component;
+                    // Merged edges from different projects can resolve to the same component.
                     // dependsOn must contain unique refs.
                     var addedBomRefs = new HashSet<string>();
 
