@@ -1076,6 +1076,33 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public async Task ProjectReferencesOfAllLevels_AreEvaluatedInOneBatch()
+        {
+            // A -> B -> C -> D: every level used to start its own MSBuild evaluation
+            var projectA = XFS.Path(@"c:\S\A\A.csproj");
+            var projectB = XFS.Path(@"c:\S\B\B.csproj");
+            var projectC = XFS.Path(@"c:\S\C\C.csproj");
+            var projectD = XFS.Path(@"c:\S\D\D.csproj");
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { projectA, Helpers.GetProjectFileWithProjectReferences(new[] { @"..\B\B.csproj" }) },
+                { projectB, Helpers.GetProjectFileWithProjectReferences(new[] { @"..\C\C.csproj" }) },
+                { projectC, Helpers.GetProjectFileWithProjectReferences(new[] { @"..\D\D.csproj" }) },
+                { projectD, Helpers.GetEmptyProjectFile() }
+            });
+            var evaluation = CreateProjectEvaluationService(path => Evaluated(new Dictionary<string, string> { ["Version"] = "2.0.0" }));
+            var svc = new ProjectFileService(mockFileSystem, new Mock<IDotnetUtilsService>().Object, new Mock<IPackagesFileService>().Object, new Mock<IProjectAssetsFileService>().Object, evaluation.Object);
+
+            var projects = await svc.RecursivelyGetProjectReferencesAsync(projectA).ConfigureAwait(true);
+
+            Assert.Equal(new[] { "A@2.0.0", "B@2.0.0", "C@2.0.0", "D@2.0.0" }, projects.Select(p => $"{p.Name}@{p.Version}").OrderBy(p => p));
+            evaluation.Verify(m => m.EvaluateProjects(
+                It.Is<IEnumerable<string>>(paths => paths.OrderBy(p => p).SequenceEqual(new[] { projectA, projectB, projectC, projectD })),
+                It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            evaluation.VerifyNoOtherCalls();
+        }
+
+        [Fact]
         public void QueuedProjects_AreEvaluatedInOneBatch()
         {
             var projectX = XFS.Path(@"c:\S\X\X.csproj");
