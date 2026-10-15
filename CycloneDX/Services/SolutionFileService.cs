@@ -60,6 +60,8 @@ namespace CycloneDX.Services
                 projects = await GetProjectsForSolutionX(solutionFilePath).ConfigureAwait(false);
             }
 
+            // Evaluate the projects of the solution in one MSBuild process
+            _projectFileService.QueueEvaluation(projects);
             foreach (var project in projects.ToArray())
             {
                 var projectReferences = await _projectFileService.RecursivelyGetProjectReferencesAsync(project).ConfigureAwait(false);

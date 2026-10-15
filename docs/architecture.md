@@ -66,6 +66,27 @@ listed project are included.
 
 ---
 
+## Project Evaluation
+
+Project properties are evaluated by MSBuild, so values from imports such as
+`Directory.Build.props`, property references and conditions are resolved. Every project found so
+far (the projects of a solution, project references of all levels, which are read from the
+project files first) is evaluated in the same `dotnet msbuild` call, using the .NET SDK the
+dotnet CLI resolves for the working directory
+(honoring `global.json`; .NET 8 SDK or newer). A generated helper project calls a target in each
+project that returns the evaluated `Version`, `PackageId`, `AssemblyName`, `IsTestProject` and
+`ProjectAssetsFile` properties and the `PackageReference` items. The target is added through the
+SDK hooks `CustomAfterMicrosoftCommonTargets` and `CustomAfterMicrosoftCommonCrossTargetingTargets`.
+A project that sets one of these properties itself is evaluated without its own file.
+`--configuration` and `--framework` are passed as the global properties `Configuration` and
+`TargetFramework`, like to `dotnet restore`.
+
+A project that cannot be evaluated (e.g. a missing import, or an older SDK) does not affect the
+others. Its values are read from the project file XML instead, and a notice with the MSBuild
+error is printed. Project references are always read from the project file XML.
+
+---
+
 ## Dependency Collection
 
 ### PackageReference projects
@@ -75,7 +96,9 @@ listed project are included.
 2. `project.assets.json` is located:
    - `<--base-intermediate-output-path>/obj/<projectName>/project.assets.json`, or
    - `<projectDir>/obj/project.assets.json`, or
-   - queried via `dotnet msbuild -getProperty:ProjectAssetsFile`.
+   - the evaluated `ProjectAssetsFile` property (see [Project Evaluation](#project-evaluation)), or
+   - queried via `dotnet msbuild -getProperty:ProjectAssetsFile` when the project could not be
+     evaluated.
 3. All `LockFileTarget` entries (one per TFM × RID combination) are iterated and
    union-merged into a single package set. Equality is `(Name, Version)`.
 4. `IsDirectReference` is determined per-TFM from `ProjectFileDependencyGroups`.
@@ -261,8 +284,11 @@ to keep the graph consistent.
 ### With `--include-project-references`
 
 Project-type entries are resolved to `Component` objects (Type: Library) using metadata
-read directly from the `.csproj`/`.fsproj`/`.vbproj` XML. Version is sourced from
-`<Version>`, or `AssemblyVersion` in `AssemblyInfo.cs`, or `"1.0.0"` as fallback. These
+evaluated by MSBuild (see [Project Evaluation](#project-evaluation)): the name is `PackageId`
+(falling back to `AssemblyName`), matching the names NuGet writes to `project.assets.json`, and
+the version is `Version`. If the evaluation fails or yields the SDK default version `1.0.0`, the
+`.csproj`/`.fsproj`/`.vbproj` XML is read instead: version is sourced from `<Version>`, or
+`AssemblyVersion` in `AssemblyInfo.cs`, or `"1.0.0"` as fallback. These
 components normally get a `BomRef` of `<name>@<version>` but no NuGet PURL.
 Only valid when the input is a project file.
 

@@ -111,7 +111,10 @@ when their selected assets are runtime-capable. Deprecation does not make the op
 
 ## Test projects
 
-A project is recognized as a test project when its project XML contains either:
+A project is recognized as a test project when MSBuild evaluates `IsTestProject` to `true`, or
+its evaluated `PackageReference` items include `Microsoft.NET.Test.Sdk`, also when these are set
+in an imported file such as `Directory.Build.props`. When the project cannot be evaluated, its
+project XML is checked for either:
 
 - a `PackageReference` to `Microsoft.NET.Test.Sdk`; or
 - `<IsTestProject>true</IsTestProject>` in a property group.
