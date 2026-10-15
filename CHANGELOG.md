@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Duplicate refs in `dependsOn`** (fixes #1143, regression from 6.3.0) — when projects of one
+  solution resolve the same package dependency differently (e.g. it is missing from one
+  project's graph due to `PrivateAssets="all"`), the merged edges could point to the same
+  component twice, producing a BOM that fails CycloneDX schema validation. Each ref is now
+  listed once.
+
 ## [6.3.1] - 2026-10-12
 
 ### Fixed
