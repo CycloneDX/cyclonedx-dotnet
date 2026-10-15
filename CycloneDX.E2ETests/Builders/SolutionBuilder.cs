@@ -115,6 +115,7 @@ namespace CycloneDX.E2ETests.Builders
     {
         private readonly string _solutionName;
         private readonly List<ProjectOptions> _projects = new();
+        private readonly Dictionary<string, string> _files = new();
         private string _nugetFeedUrl;
 
         public SolutionBuilder(string solutionName = "TestSolution")
@@ -128,6 +129,16 @@ namespace CycloneDX.E2ETests.Builders
             var opts = new ProjectOptions(name);
             configure?.Invoke(opts);
             _projects.Add(opts);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a file relative to the solution directory, written before the restore, e.g. a
+        /// <c>Directory.Build.props</c> that applies to all projects.
+        /// </summary>
+        public SolutionBuilder AddFile(string relativePath, string content)
+        {
+            _files[relativePath] = content;
             return this;
         }
 
@@ -173,6 +184,13 @@ namespace CycloneDX.E2ETests.Builders
             {
                 // Write NuGet.Config so restore uses only our BaGetter feed
                 WriteNuGetConfig(dir.Path, feedUrl);
+
+                foreach (var file in _files)
+                {
+                    var filePath = Path.Combine(dir.Path, file.Key);
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                    File.WriteAllText(filePath, file.Value, Encoding.UTF8);
+                }
 
                 // Write each project
                 foreach (var proj in _projects)
