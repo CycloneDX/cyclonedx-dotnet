@@ -90,13 +90,13 @@ namespace CycloneDX.Services
         }
 
         private static EvaluatedProject Evaluate(
-            Func<DotnetUtilsResult<EvaluatedProject>> evaluate, Action<string> reportEvaluationError)
+            Func<DotnetUtilsResult<EvaluatedProject>> evaluation, Action<string> reportEvaluationError)
         {
-            if (evaluate is null)
+            if (evaluation is null)
             {
                 return null;
             }
-            var result = evaluate();
+            var result = evaluation();
             if (result is { Success: true, Result: not null })
             {
                 return result.Result;
