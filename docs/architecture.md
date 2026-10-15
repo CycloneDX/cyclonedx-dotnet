@@ -70,8 +70,9 @@ listed project are included.
 
 Project properties are evaluated by MSBuild, so values from imports such as
 `Directory.Build.props`, property references and conditions are resolved. Every project found so
-far (the projects of a solution, discovered project references) is evaluated in the same
-`dotnet msbuild` call, using the .NET SDK the dotnet CLI resolves for the working directory
+far (the projects of a solution, project references of all levels, which are read from the
+project files first) is evaluated in the same `dotnet msbuild` call, using the .NET SDK the
+dotnet CLI resolves for the working directory
 (honoring `global.json`; .NET 8 SDK or newer). A generated helper project calls a target in each
 project that returns the evaluated `Version`, `PackageId`, `AssemblyName`, `IsTestProject` and
 `ProjectAssetsFile` properties and the `PackageReference` items. The target is added through the
