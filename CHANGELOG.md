@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- Update transitive `System.Security.Cryptography.Pkcs` from 8.0.1 to 8.0.2 to address
+  CVE-2026-70162 and CVE-2026-84008.
+
 ## [6.3.1] - 2026-10-12
 
 ### Fixed
