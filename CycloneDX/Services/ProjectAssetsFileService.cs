@@ -54,17 +54,20 @@ namespace CycloneDX.Services
                 {
                     var runtimePackages = new HashSet<DotnetDependency>();
                     var assetContexts = new Dictionary<DotnetDependency, (LibraryIncludeFlags Allowed, AssetEvidence Selected, AssetEvidence Inventory)>();
-                    var targetFramework = assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
+                    // Assets v4 keys targets and dependency groups by alias, not by the resolved TFM.
+                    var usesTargetAlias = assetsFile.Version >= 4 && !string.IsNullOrEmpty(targetRuntime.TargetAlias);
+                    var targetFramework = usesTargetAlias
+                        ? assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetAlias)
+                        : assetsFile.PackageSpec.GetTargetFramework(targetRuntime.TargetFramework);
                     var dependencies = targetFramework.Dependencies;
                     var directDependencies = assetsFile.ProjectFileDependencyGroups
-                        .Where(f => f.FrameworkName == targetRuntime.TargetFramework.GetShortFolderName() ||
-                            f.FrameworkName == targetRuntime.TargetFramework.ToString()).SelectMany(p => p.Dependencies)
-                        .Select(d =>
-                        {
-                            var x = d.Split(" ");
-                            return new { Name = x.First() };
-
-                        });
+                        .Where(f => usesTargetAlias
+                            ? string.Equals(f.FrameworkName, targetRuntime.TargetAlias, StringComparison.OrdinalIgnoreCase)
+                            : f.FrameworkName == targetRuntime.TargetFramework.GetShortFolderName() ||
+                                f.FrameworkName == targetRuntime.TargetFramework.ToString())
+                        .SelectMany(f => f.Dependencies)
+                        .Select(d => d.Split(' ')[0])
+                        .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
                     foreach (var lockFileLibrary in targetRuntime.Libraries)
                     {
@@ -79,7 +82,7 @@ namespace CycloneDX.Services
                             Scope = Component.ComponentScope.Required,
                             Dependencies = new Dictionary<string, string>(),
                             IsDevDependency = SetIsDevDependency(libs, lockFileLibrary, library),
-                            IsDirectReference = SetIsDirectReference(libs) || directDependencies.Any(d => string.Equals(d.Name, lockFileLibrary.Name, StringComparison.OrdinalIgnoreCase)),
+                            IsDirectReference = SetIsDirectReference(libs) || directDependencies.Contains(lockFileLibrary.Name),
                             DependencyType = (lockFileLibrary.Type != "project") ? DependencyType.Package : DependencyType.Project,
                             Path = Path.Combine(Path.GetDirectoryName(projectFilePath), library?.Path ?? "")
                         };

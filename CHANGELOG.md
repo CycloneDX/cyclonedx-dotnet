@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep runtime packages from project references in scope when .NET 11 uses a target framework alias in `project.assets.json` (#1147).
+
 ### Security
 
 - Update transitive `System.Security.Cryptography.Pkcs` from 8.0.1 to 8.0.2 to address
