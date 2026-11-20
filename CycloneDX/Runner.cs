@@ -57,7 +57,8 @@ namespace CycloneDX
             projectAssetsFileService ??= new ProjectAssetsFileService(this.fileSystem, () => new AssetFileReader());
             this.dotnetUtilsService = dotnetUtilsService ?? new DotnetUtilsService(this.fileSystem, this.dotnetCommandService);
             this.packagesFileService = packagesFileService ?? new PackagesFileService(this.fileSystem);
-            this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, projectAssetsFileService);
+            this.projectFileService = projectFileService ?? new ProjectFileService(this.fileSystem, this.dotnetUtilsService, this.packagesFileService, projectAssetsFileService,
+                new ProjectEvaluationService(this.fileSystem, this.dotnetCommandService));
             this.solutionFileService = solutionFileService ?? new SolutionFileService(this.fileSystem, this.projectFileService);
             this.nugetServiceFactory = nugetServiceFactory ?? new NugetV3ServiceFactory();
         }
@@ -95,6 +96,8 @@ namespace CycloneDX
 
             dotnetCommandService.TimeoutMilliseconds = dotnetCommandTimeout;
             projectFileService.DisablePackageRestore = disablePackageRestore;
+            projectFileService.EvaluationFramework = framework;
+            projectFileService.EvaluationConfiguration = configuration;
 
             // retrieve nuget package cache paths
             var packageCachePathsResult = dotnetUtilsService.GetPackageCachePaths();

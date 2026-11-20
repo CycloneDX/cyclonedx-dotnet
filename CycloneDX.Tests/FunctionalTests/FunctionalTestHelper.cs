@@ -74,14 +74,37 @@ namespace CycloneDX.Tests.FunctionalTests
             mockFileSystem, expectedExitCode);
 
 
+        /// <summary>
+        /// Uses the given MSBuild evaluation, because the real one cannot see the projects of the mock file system.
+        /// </summary>
+        public static async Task<Bom> Test(RunOptions options, IProjectEvaluationService projectEvaluationService, MockFileSystem mockFileSystem)
+            => await Test(options, CreateMockNugetServiceFactory(), CreateProjectFileService(mockFileSystem, projectEvaluationService), mockFileSystem, ExitCode.OK).ConfigureAwait(false);
+
+
+        private static ProjectFileService CreateProjectFileService(MockFileSystem mockFileSystem, IProjectEvaluationService projectEvaluationService)
+            => new ProjectFileService(
+                mockFileSystem,
+                new DotnetUtilsService(mockFileSystem, new DotnetCommandService()),
+                new PackagesFileService(mockFileSystem),
+                new ProjectAssetsFileService(mockFileSystem, () => new AssetFileReader()),
+                projectEvaluationService);
+
+
+        /// <summary>
+        /// The projects only exist in the mock file system, which MSBuild cannot evaluate, so read the project files.
+        /// </summary>
         public static async Task<Bom> Test(RunOptions options, INugetServiceFactory nugetService, MockFileSystem mockFileSystem, ExitCode expectedExitCode = ExitCode.OK)
+            => await Test(options, nugetService, CreateProjectFileService(mockFileSystem, null), mockFileSystem, expectedExitCode).ConfigureAwait(false);
+
+
+        private static async Task<Bom> Test(RunOptions options, INugetServiceFactory nugetService, IProjectFileService projectFileService, MockFileSystem mockFileSystem, ExitCode expectedExitCode)
         {
             options.enableGithubLicenses = true;
             options.outputDirectory ??= "/bom/";
             options.SolutionOrProjectFile ??= MockUnixSupport.Path("c:/ProjectPath/Project.csproj");
             options.disablePackageRestore = true;
 
-            Runner runner = new Runner(mockFileSystem, null, null, null, null, null, null, nugetService);
+            Runner runner = new Runner(mockFileSystem, null, null, null, null, projectFileService, null, nugetService);
             int exitCode = await runner.HandleCommandAsync(options);
 
             Assert.Equal((int)expectedExitCode, exitCode);

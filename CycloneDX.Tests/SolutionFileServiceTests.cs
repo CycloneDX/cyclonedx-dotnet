@@ -15,6 +15,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO.Abstractions.TestingHelpers;
@@ -132,6 +133,36 @@ namespace CycloneDX.Tests
 
             Assert.Collection(projects,
                 item => Assert.Equal(XFS.Path(@"c:\SolutionPath\Project\Project.csproj"), item));
+        }
+
+        [Fact]
+        public async Task GetSolutionProjectReferences_QueuesAllProjectsForOneEvaluationBatch()
+        {
+            var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                { XFS.Path(@"c:\SolutionPath\SolutionFile.slnx"), new MockFileData(@"<Solution>
+  <Project Path=""Project1\Project1.csproj"" />
+  <Project Path=""Project2\Project2.csproj"" />
+</Solution>")},
+                { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), Helpers.GetEmptyProjectFile() },
+                { XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj"), Helpers.GetEmptyProjectFile() },
+            });
+            var queuedBeforeWalking = new List<string>();
+            var mockProjectFileService = new Mock<IProjectFileService>();
+            mockProjectFileService
+                .Setup(s => s.QueueEvaluation(It.IsAny<IEnumerable<string>>()))
+                .Callback<IEnumerable<string>>(queuedBeforeWalking.AddRange);
+            mockProjectFileService
+                .Setup(s => s.RecursivelyGetProjectReferencesAsync(It.IsAny<string>()))
+                .Callback(() => Assert.Equal(2, queuedBeforeWalking.Count))
+                .ReturnsAsync(new HashSet<DotnetDependency>());
+            var solutionFileService = new SolutionFileService(mockFileSystem, mockProjectFileService.Object);
+
+            await solutionFileService.GetSolutionProjectReferencesAsync(XFS.Path(@"c:\SolutionPath\SolutionFile.slnx")).ConfigureAwait(true);
+
+            Assert.Equal(
+                new[] { XFS.Path(@"c:\SolutionPath\Project1\Project1.csproj"), XFS.Path(@"c:\SolutionPath\Project2\Project2.csproj") },
+                queuedBeforeWalking.OrderBy(path => path, StringComparer.Ordinal));
         }
 
         [Fact]

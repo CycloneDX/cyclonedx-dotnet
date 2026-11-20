@@ -24,6 +24,11 @@ namespace CycloneDX.Interfaces
     public interface IProjectFileService
     {
         bool DisablePackageRestore { get; set; }
+        string EvaluationFramework { get; set; }
+        string EvaluationConfiguration { get; set; }
+
+        /// <summary>Adds projects to the next MSBuild evaluation, so that they are evaluated in the same process.</summary>
+        void QueueEvaluation(IEnumerable<string> projectFilePaths);
         Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime);
         Task<HashSet<DotnetDependency>> GetProjectDotnetDependencysAsync(string projectFilePath, string baseIntermediateOutputPath, bool excludeTestProjects, string framework, string runtime, string configuration);
         Task<HashSet<string>> GetProjectReferencesAsync(string projectFilePath);
