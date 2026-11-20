@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Keep runtime packages from project references in scope when .NET 11 uses a target framework alias in `project.assets.json` (#1147).
 - **Duplicate refs in `dependsOn`** (fixes #1143, regression from 6.3.0) — when projects of one
   solution resolve the same package dependency differently (e.g. it is missing from one
   project's graph due to `PrivateAssets="all"`), the merged edges could point to the same
