@@ -51,8 +51,8 @@ namespace CycloneDX.Services
         /// <summary>Whether MSBuild evaluated the project.</summary>
         public bool IsEvaluated => _evaluated.Value != null;
 
-        /// <summary>The evaluated value, or the declared one when the evaluation has none.</summary>
-        public string GetProperty(string name) => GetEvaluatedProperty(name) ?? GetDeclaredProperty(name);
+        /// <summary>The evaluated value, or the declared one when the project was not evaluated.</summary>
+        public string GetProperty(string name) => IsEvaluated ? GetEvaluatedProperty(name) : GetDeclaredProperty(name);
 
         /// <summary>The value evaluated by MSBuild; null when it is empty or the project was not evaluated.</summary>
         public string GetEvaluatedProperty(string name)

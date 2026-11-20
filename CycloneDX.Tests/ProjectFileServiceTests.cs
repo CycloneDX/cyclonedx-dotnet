@@ -1169,6 +1169,16 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public void IsTestProject_EvaluatedAsUnset_IgnoresConditionalDeclaration()
+        {
+            var (svc, _) = CreateProjectFileServiceWithEvaluatedProperties(
+                "<Project><PropertyGroup Condition=\"'$(Configuration)' == 'Release'\"><IsTestProject>true</IsTestProject></PropertyGroup></Project>",
+                new Dictionary<string, string> { ["IsTestProject"] = "" });
+
+            Assert.False(svc.IsTestProject(XFS.Path(@"c:\P\P.csproj")));
+        }
+
+        [Fact]
         public void GetProjectAssetsFilePath_UsesEvaluatedProjectAssetsFile_InsteadOfDotnetCli()
         {
             var projectPath = XFS.Path(@"c:\P\P.csproj");
