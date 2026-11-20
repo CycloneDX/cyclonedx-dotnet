@@ -38,6 +38,9 @@ namespace CycloneDX.Services
         private const string EvaluateTarget = "CycloneDXEvaluate";
         private const string GetValuesTarget = "CycloneDXGetProjectValues";
 
+        /// <summary>"true" when Version or VersionPrefix is set before the SDK defaults Version to 1.0.0.</summary>
+        public const string VersionSetProperty = "CycloneDXVersionSet";
+
         private readonly IFileSystem _fileSystem;
         private readonly IDotnetCommandService _dotnetCommandService;
 
@@ -96,6 +99,7 @@ namespace CycloneDX.Services
             _fileSystem.Directory.CreateDirectory(directory);
             try
             {
+                _fileSystem.File.WriteAllText(_fileSystem.Path.Combine(directory, "cyclonedx.props"), CreateProps());
                 _fileSystem.File.WriteAllText(_fileSystem.Path.Combine(directory, "cyclonedx.targets"), CreateTargets(propertyNames, itemTypes));
                 _fileSystem.File.WriteAllText(evaluateProject, CreateEvaluateProject(projects));
 
@@ -123,6 +127,16 @@ namespace CycloneDX.Services
             }
         }
 
+        // Imported before the SDK targets, i.e. before the SDK default for Version
+        private static string CreateProps()
+        {
+            return new XElement("Project",
+                new XElement("PropertyGroup",
+                    new XElement(VersionSetProperty,
+                        new XAttribute("Condition", "'$(Version)$(VersionPrefix)' != ''"),
+                        "true"))).ToString();
+        }
+
         // Imported into every project; returns the project path with the values as metadata
         private static string CreateTargets(IEnumerable<string> propertyNames, IEnumerable<string> itemTypes)
         {
@@ -139,6 +153,7 @@ namespace CycloneDX.Services
         // Calls the target in each project separately, so that a project that cannot be loaded does not stop the others
         private static string CreateEvaluateProject(IEnumerable<string> projects)
         {
+            const string props = "$(MSBuildThisFileDirectory)cyclonedx.props";
             const string targets = "$(MSBuildThisFileDirectory)cyclonedx.targets";
             return new XElement("Project",
                 new XElement("ItemGroup", projects.Select(project =>
@@ -149,7 +164,7 @@ namespace CycloneDX.Services
                     new XElement("MSBuild",
                         new XAttribute("Projects", "%(ProjectToEvaluate.Identity)"),
                         new XAttribute("Targets", GetValuesTarget),
-                        new XAttribute("Properties", $"CustomAfterMicrosoftCommonTargets={targets};CustomAfterMicrosoftCommonCrossTargetingTargets={targets}"),
+                        new XAttribute("Properties", $"BeforeMicrosoftNETSdkTargets={props};CustomAfterMicrosoftCommonTargets={targets};CustomAfterMicrosoftCommonCrossTargetingTargets={targets}"),
                         new XAttribute("ContinueOnError", "ErrorAndContinue"),
                         new XElement("Output",
                             new XAttribute("TaskParameter", "TargetOutputs"),

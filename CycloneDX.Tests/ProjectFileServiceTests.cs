@@ -973,6 +973,30 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public void GetAssemblyNameAndVersion_ExplicitSdkDefaultVersion_IsUsed()
+        {
+            var (svc, _) = CreateProjectFileServiceWithEvaluatedProperties(
+                "<Project><PropertyGroup /></Project>",
+                new Dictionary<string, string> { ["Version"] = "1.0.0", ["CycloneDXVersionSet"] = "true" });
+
+            var (_, version) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+
+            Assert.Equal("1.0.0", version);
+        }
+
+        [Fact]
+        public void GetAssemblyNameAndVersion_EvaluatedSdkDefaultVersion_IgnoresConditionalDeclaration()
+        {
+            var (svc, _) = CreateProjectFileServiceWithEvaluatedProperties(
+                "<Project><PropertyGroup Condition=\"'$(Configuration)' == 'Release'\"><Version>3.0.0</Version></PropertyGroup></Project>",
+                new Dictionary<string, string> { ["Version"] = "1.0.0", ["CycloneDXVersionSet"] = "" });
+
+            var (_, version) = svc.GetAssemblyNameAndVersion(XFS.Path(@"c:\P\P.csproj"));
+
+            Assert.Null(version);
+        }
+
+        [Fact]
         public void GetAssemblyNameAndVersion_EvaluationFails_FallsBackToProjectFile()
         {
             var (svc, _) = CreateProjectFileServiceWithEvaluatedProperties(

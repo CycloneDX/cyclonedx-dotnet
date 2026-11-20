@@ -77,6 +77,7 @@ dotnet CLI resolves for the working directory
 project that returns the evaluated `Version`, `PackageId`, `AssemblyName`, `IsTestProject` and
 `ProjectAssetsFile` properties and the `PackageReference` items. The target is added through the
 SDK hooks `CustomAfterMicrosoftCommonTargets` and `CustomAfterMicrosoftCommonCrossTargetingTargets`.
+`BeforeMicrosoftNETSdkTargets` records whether a version is set before the SDK default `1.0.0`.
 A project that sets one of these properties itself is evaluated without its own file.
 `--configuration` and `--framework` are passed as the global properties `Configuration` and
 `TargetFramework`, like to `dotnet restore`.
@@ -286,8 +287,8 @@ to keep the graph consistent.
 Project-type entries are resolved to `Component` objects (Type: Library) using metadata
 evaluated by MSBuild (see [Project Evaluation](#project-evaluation)): the name is `PackageId`
 (falling back to `AssemblyName`), matching the names NuGet writes to `project.assets.json`, and
-the version is `Version`. If the evaluation fails or yields the SDK default version `1.0.0`, the
-`.csproj`/`.fsproj`/`.vbproj` XML is read instead: version is sourced from `<Version>`, or
+the version is `Version` (the SDK default `1.0.0` only if set explicitly). If the evaluation fails,
+the `.csproj`/`.fsproj`/`.vbproj` XML is read instead: version is sourced from `<Version>`, or
 `AssemblyVersion` in `AssemblyInfo.cs`, or `"1.0.0"` as fallback. These
 components normally get a `BomRef` of `<name>@<version>` but no NuGet PURL.
 Only valid when the input is a project file.

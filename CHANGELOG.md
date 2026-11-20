@@ -17,8 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   versions, duplicate `-rs -ipr` project nodes with unresolved `$(…)` versions, and test projects
   missed by `--exclude-test-projects`. All projects are evaluated together in one
   `dotnet msbuild` call (.NET 8 SDK or newer), with `--configuration` and `--framework` applied.
-  A project that cannot be evaluated, or evaluates to the SDK default `1.0.0`, is read from the
-  project file as before; a failed evaluation prints a notice with the MSBuild error
+  A project that cannot be evaluated is read from the project file as before; a failed evaluation
+  prints a notice with the MSBuild error. The SDK default version `1.0.0` counts only when set
+  explicitly.
 
 ## [6.3.1] - 2026-10-12
 

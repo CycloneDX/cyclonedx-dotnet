@@ -43,12 +43,11 @@ namespace CycloneDX.Services
             Async = true
         };
 
-        // SDK-style projects evaluate Version to 1.0.0 when nothing sets it. That cannot be told
-        // apart from an explicit 1.0.0, so it is treated as unset and the project file fallbacks apply.
+        // SDK-style projects evaluate Version to 1.0.0 when nothing sets it; it only counts when set explicitly
         private const string MSBuildDefaultVersion = "1.0.0";
 
         // Requested together, so each project is evaluated once
-        private static readonly string[] EvaluatedPropertyNames = { "Version", "PackageId", "AssemblyName", "IsTestProject", "ProjectAssetsFile" };
+        private static readonly string[] EvaluatedPropertyNames = { "Version", ProjectEvaluationService.VersionSetProperty, "PackageId", "AssemblyName", "IsTestProject", "ProjectAssetsFile" };
         private static readonly string[] EvaluatedItemTypes = { "PackageReference" };
 
         private IFileSystem _fileSystem;
@@ -214,15 +213,18 @@ namespace CycloneDX.Services
 
             // Extract Version — evaluated, else try each declared property in priority order before falling back to AssemblyInfo
             string version = project.GetEvaluatedProperty("Version");
-            if (version == MSBuildDefaultVersion)
+            if (version == MSBuildDefaultVersion && project.GetEvaluatedProperty(ProjectEvaluationService.VersionSetProperty) == null)
             {
                 version = null;
             }
-            version ??=
-                project.GetDeclaredProperty("Version") ??
-                project.GetDeclaredProperty("AssemblyVersion") ??
-                project.GetDeclaredProperty("ProjectVersion") ??
-                project.GetDeclaredProperty("PackageVersion");
+            if (!project.IsEvaluated)
+            {
+                version =
+                    project.GetDeclaredProperty("Version") ??
+                    project.GetDeclaredProperty("AssemblyVersion") ??
+                    project.GetDeclaredProperty("ProjectVersion") ??
+                    project.GetDeclaredProperty("PackageVersion");
+            }
 
             if (version == null)
             {

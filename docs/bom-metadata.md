@@ -102,8 +102,8 @@ property references (e.g. `$(Major).5.6`) and `VersionPrefix`/`VersionSuffix`.
 `--configuration` and `--framework` are applied, so conditional values (e.g. a version that is
 only set for `Release`) resolve as in that build.
 
-MSBuild evaluates `Version` to `1.0.0` when nothing sets it, which cannot be told
-apart from an explicit `1.0.0`. In that case, or when the evaluation fails (e.g. because an
+MSBuild evaluates `Version` to `1.0.0` when nothing sets it; the tool uses it only if it is set
+explicitly (else see `AssemblyInfo` below). When the evaluation fails (e.g. because an
 import cannot be resolved, or the .NET SDK is older than 8), the tool reads the version from the
 project file XML instead; a failed evaluation prints a notice naming the project and the MSBuild
 error. It checks the following XML properties in priority order, using the first one that has a

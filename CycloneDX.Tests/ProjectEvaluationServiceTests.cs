@@ -209,6 +209,22 @@ namespace CycloneDX.Tests
         }
 
         [Fact]
+        public void EvaluateProjects_Dotnet_TellsAnExplicitVersionFromTheSdkDefault()
+        {
+            var explicitVersion = WriteProject("Explicit", "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net8.0</TargetFramework><Version>1.0.0</Version></PropertyGroup></Project>");
+            var sdkDefault = WriteProject("Default", "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net8.0</TargetFramework></PropertyGroup></Project>");
+
+            var results = new ProjectEvaluationService(new FileSystem(), new DotnetCommandService())
+                .EvaluateProjects(new[] { explicitVersion, sdkDefault }, new[] { "Version", "CycloneDXVersionSet" }, ItemTypes, null, null);
+
+            Assert.True(results[explicitVersion].Success, results[explicitVersion].ErrorMessage);
+            Assert.Equal("1.0.0", results[explicitVersion].Result.Properties["Version"]);
+            Assert.Equal("true", results[explicitVersion].Result.Properties["CycloneDXVersionSet"]);
+            Assert.Equal("1.0.0", results[sdkDefault].Result.Properties["Version"]);
+            Assert.Equal("", results[sdkDefault].Result.Properties["CycloneDXVersionSet"]);
+        }
+
+        [Fact]
         public void EvaluateProjects_Dotnet_ProjectPathWithSpecialCharacters()
         {
             var project = WriteProject("100% R&D;$(Odd)'s @Lib", "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net8.0</TargetFramework><Version>7.8.9</Version></PropertyGroup></Project>");
