@@ -39,7 +39,7 @@ namespace CycloneDX.Services
         private const string GetValuesTarget = "CycloneDXGetProjectValues";
 
         /// <summary>"true" when Version or VersionPrefix is set before the SDK defaults Version to 1.0.0.</summary>
-        public const string VersionSetProperty = "CycloneDXVersionSet";
+        public static string VersionSetProperty => "CycloneDXVersionSet";
 
         private readonly IFileSystem _fileSystem;
         private readonly IDotnetCommandService _dotnetCommandService;
