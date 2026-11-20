@@ -98,6 +98,86 @@ namespace CycloneDX.E2ETests.Tests
         }
 
         [Fact]
+        public async Task ExplicitVersionMatchingSdkDefaultFromDirectoryBuildProps_IsUsed()
+        {
+            using var solution = await new SolutionBuilder("ExplicitDefaultVersionSln")
+                .AddFile("Directory.Build.props", """
+                    <Project>
+                      <PropertyGroup>
+                        <Version>1.0.0</Version>
+                      </PropertyGroup>
+                    </Project>
+                    """)
+                .AddProject("App")
+                .BuildAsync(_fixture.NuGetFeedUrl);
+
+            using var outputDir = solution.CreateOutputDir();
+            var result = await _fixture.Runner.RunAsync(
+                solution.ProjectFile("App"),
+                outputDir.Path,
+                new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl, OutputFormat = "json" });
+
+            Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
+            using var bom = JsonDocument.Parse(result.BomContent);
+            var root = bom.RootElement.GetProperty("metadata").GetProperty("component");
+            Assert.Equal("1.0.0", root.GetProperty("version").GetString());
+        }
+
+        [Fact]
+        public async Task ProjectWithInactiveIsTestProjectCondition_IsNotExcluded()
+        {
+            using var solution = await new SolutionBuilder("ConditionalTestProjectSln")
+                .AddProject("App", p => p
+                    .AddPackage("TestPkg.A", "1.0.0")
+                    .WithRawXml("""
+                        <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+                          <IsTestProject>true</IsTestProject>
+                        </PropertyGroup>
+                        """))
+                .BuildAsync(_fixture.NuGetFeedUrl, restoreConfiguration: "Debug");
+
+            using var outputDir = solution.CreateOutputDir();
+            var result = await _fixture.Runner.RunAsync(
+                solution.SolutionFile,
+                outputDir.Path,
+                new ToolRunOptions
+                {
+                    NuGetFeedUrl = _fixture.NuGetFeedUrl,
+                    Configuration = "Debug",
+                    ExcludeTestProjects = true
+                });
+
+            Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
+            Assert.Contains("TestPkg.A", result.BomContent);
+        }
+
+        [Fact]
+        public async Task TestProjectsMarkedOnlyInDirectoryBuildProps_AreExcluded()
+        {
+            using var solution = await new SolutionBuilder("IsTestProjectFromPropsSln")
+                .AddFile("Directory.Build.props", """
+                    <Project>
+                      <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
+                        <IsTestProject>true</IsTestProject>
+                      </PropertyGroup>
+                    </Project>
+                    """)
+                .AddProject("App", p => p.AddPackage("TestPkg.A", "1.0.0"))
+                .AddProject("App.Tests", p => p.AddPackage("TestPkg.C", "1.0.0"))
+                .BuildAsync(_fixture.NuGetFeedUrl);
+
+            using var outputDir = solution.CreateOutputDir();
+            var result = await _fixture.Runner.RunAsync(
+                solution.SolutionFile,
+                outputDir.Path,
+                new ToolRunOptions { NuGetFeedUrl = _fixture.NuGetFeedUrl, ExcludeTestProjects = true });
+
+            Assert.True(result.Success, $"Tool failed:\n{result.StdErr}");
+            Assert.Contains("TestPkg.A", result.BomContent);
+            Assert.DoesNotContain("TestPkg.C", result.BomContent);
+        }
+
+        [Fact]
         public async Task TestProjectsGettingTheTestSdkFromDirectoryBuildProps_AreExcluded()
         {
             // Every *.Tests project gets its test packages from the Directory.Build.props, so its
