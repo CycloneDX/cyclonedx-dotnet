@@ -21,6 +21,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   prints a notice with the MSBuild error. The SDK default version `1.0.0` counts only when set
   explicitly.
 
+## [6.3.2] - 2026-11-20
+
+### Fixed
+
+- Give the Docker image a writable home directory when running with a non-root UID so .NET can initialize NuGet.
+- Keep runtime packages from project references in scope when .NET 11 uses a target framework alias in `project.assets.json` (#1147).
+- **Duplicate refs in `dependsOn`** (fixes #1143, regression from 6.3.0) — when projects of one
+  solution resolve the same package dependency differently (e.g. it is missing from one
+  project's graph due to `PrivateAssets="all"`), the merged edges could point to the same
+  component twice, producing a BOM that fails CycloneDX schema validation. Each ref is now
+  listed once.
+
+### Security
+
+- Update transitive `System.Security.Cryptography.Pkcs` from 8.0.1 to 8.0.2 to address
+  CVE-2026-70162 and CVE-2026-84008.
+
 ## [6.3.1] - 2026-10-12
 
 ### Fixed

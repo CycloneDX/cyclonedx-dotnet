@@ -6,7 +6,7 @@
 
 - `CycloneDX/` — CLI tool, `net8.0;net9.0;net10.0`
 - `CycloneDX.Tests/` — xunit 2.x, `net8.0;net9.0;net10.0`
-- `CycloneDX.E2ETests/` — xunit v3, `net10.0` only, requires Docker
+- `CycloneDX.E2ETests/` — xunit v3, runs on `net10.0`, requires Docker and the .NET 11 SDK for restoring test projects
 
 ## Build
 

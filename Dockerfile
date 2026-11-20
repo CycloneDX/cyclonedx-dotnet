@@ -20,7 +20,9 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS final
 
 WORKDIR /work
 
-ENV DOTNET_CLI_HOME=/tmp/dotnet-home \
+# An arbitrary UID may otherwise get HOME=/, which is not writable.
+ENV HOME=/tmp/dotnet-home \
+    DOTNET_CLI_HOME=/tmp/dotnet-home \
     NUGET_PACKAGES=/tmp/nuget-packages \
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
     DOTNET_NOLOGO=1 \
