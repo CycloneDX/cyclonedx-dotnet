@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
+using CycloneDX.Models.Vulnerabilities;
 using CycloneDX.Services;
 using Moq;
 using Xunit;
@@ -31,6 +33,10 @@ namespace CycloneDX.Tests.FunctionalTests
                     }));
 
             var nugetService = mockNugetService.Object;
+
+            mockNugetService
+                .Setup(s => s.GetVulnerabilitiesAsync(It.IsAny<IEnumerable<Component>>()))
+                .ReturnsAsync(Array.Empty<Vulnerability>());
 
             var mockNugetServiceFactory = new Mock<INugetServiceFactory>();
             mockNugetServiceFactory.Setup(s => s.Create(

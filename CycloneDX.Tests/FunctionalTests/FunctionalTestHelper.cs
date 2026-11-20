@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CycloneDX.Interfaces;
 using CycloneDX.Models;
+using CycloneDX.Models.Vulnerabilities;
 using CycloneDX.Services;
 using Moq;
 using Xunit;
@@ -31,6 +32,10 @@ namespace CycloneDX.Tests.FunctionalTests
                         BomRef = $"pkg:nuget/{dep.Name}@{dep.Version}",
                         Scope = dep.Scope
                     }));
+
+            mockNugetService
+                .Setup(s => s.GetVulnerabilitiesAsync(It.IsAny<IEnumerable<Component>>()))
+                .ReturnsAsync(Array.Empty<Vulnerability>());
 
             var nugetService = mockNugetService.Object;
 
